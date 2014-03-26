@@ -7,7 +7,6 @@
 #' @param all if true, download all data.  Be careful because this can take some time, these files can be 100's of megabytes.
 #' @details You must make sure that you have set up a valid download directory.  This must be set as options(prism.path = "YOURPATH")
 #' 
-#' @import httr
 #' @export
 get_prism_normal <- function(type, resolution, month =  NULL , annual =  FALSE, all = FALSE){
   
@@ -16,19 +15,36 @@ get_prism_normal <- function(type, resolution, month =  NULL , annual =  FALSE, 
   type <- match.args(type, c("ppt","tmean","tmin","tmax"))
   res<- match.args(resolution, c("4km","800m"))
   
-  if(!is.null(month))
+  if(annual && all){
+    stop("Annual data is included in all, both cannot be set to TRUE")
+  }
   
-  base <- "ftp://prism.nacse.org/normals_"
+  if(!is.null(month)){
+    month <- mon_to_string(month)
+    files <- vector()
+    for(i in month){
+      files <- c(files,paste("PRISM_",type,"_30yr_normal_", res,"M2_",i,"_bil.zip",sep=""))
+    }
+  } else if(annual){
+    files <- paste("PRISM_",type,"_30yr_normal_", res,"M2_annual_bil.zip",sep="")    
+  } else if(all){
+    files <- paste("PRISM_",type,"_30yr_normal_", res,"M2_all_bil.zip",sep="")
+  }
   
   
+  base <- "ftp://prism.nacse.org"
+  full_path <- paste(base,paste("normals_",res,sep=""),type,"",sep="/")
   
+  outFile <- paste(options("prism.path"),files,sep="/")
+  download.file(url = paste(full_path,files,sep=""), destfile = outFile, method = "curl")
+  unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )  
   
   
 }
 
 #' helper function for handling months
-#' @description 
-
+#' @description Handle numeric month to string conversions
+#' 
 mon_to_string <- function(month){
   out <- vector()
   for(i in month){
