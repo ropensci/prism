@@ -51,10 +51,10 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
 #' 
 mon_to_string <- function(month){
   out <- vector()
-  for(i in month){
-    if(i < 1 || i > 12){stop("Please enter a valid numeric month")}
-    if(i < 10){ out[i] <- paste("0",i,sep="")}
-    else { out[i] <- paste0(i) }
+  for(i in 1:length(month)){
+    if(month[i] < 1 || month[i] > 12){stop("Please enter a valid numeric month")}
+    if(month[i] < 10){ out[i] <- paste("0",month[i],sep="")}
+    else { out[i] <- paste0(month[i]) }
   }
   return(out)
 }

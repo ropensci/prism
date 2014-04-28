@@ -22,16 +22,10 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
   
   type <- match.arg(type, c("ppt","tmean","tmin","tmax"))
  
-  
-  
-    for(i in month){
-      files <- c(files,paste("PRISM_",type,"_30yr_normal_", res,"M2_",i,"_bil.zip",sep=""))
-    }
-
   download_pb <- txtProgressBar(min = 0, max = length(dates), style = 3)
   
   base <- "ftp://prism.nacse.org/daily"
-
+  
   for(i in 1:length(dates)){
     #parse date
     dstring <- strsplit(as.character(dates[i]),"-")[[1]]
