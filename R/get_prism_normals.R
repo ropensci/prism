@@ -3,11 +3,15 @@
 #' @param type The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
 #' @param resolution The spatial resolution of the data, must be either "4km" or "800m"
 #' @param month a numeric value for month, can be a numeric vector of months.
-#' @param annual if true download annual data
-#' @param all if true, download all data.  Be careful because this can take some time, these files can be 100's of megabytes.
-#' @param keepZip if true, leave the downloaded zip files in your 'prism.path', if FALSE, they will be deleted
+#' @param annual if TRUE download annual data
+#' @param all if TRUE, download all data.  Be careful because this can take some time, these files can be 100's of megabytes.
+#' @param keepZip if TRUE, leave the downloaded zip files in your 'prism.path', if FALSE, they will be deleted
 #' @details You must make sure that you have set up a valid download directory.  This must be set as options(prism.path = "YOURPATH")
+#' @examples \dontrun{
+#' ### Get 30 year normal values for rainfall
+#' get_prism_monthlys(type="ppt", months = 1, keepZip=F)
 #' 
+#' }
 #' @export
 get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE, all = FALSE, keepZip = TRUE){
   
