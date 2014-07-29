@@ -21,7 +21,7 @@ get_prism_monthlys <- function(type, years = NULL, months = NULL, all = FALSE ,k
   
 ###
 if(!all && min(as.numeric(years)) > 1980){
-  download_pb <- txtProgressBar(min = 0, max = length(years) + length(months), style = 3)
+  download_pb <- txtProgressBar(min = 0, max = length(years) * length(months), style = 3)
 
   base <- "ftp://prism.nacse.org/monthly"
   for(i in 1:length(years)){ 
