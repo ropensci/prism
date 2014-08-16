@@ -16,18 +16,15 @@ prism_image <- function(prismfile, col = "heat"){
   pname <- paste0(strsplit(prismfile,"_")[[1]][2:6],collapse = "_")
   
   col = match.arg(col,c("heat","redblue"))
-  prism_cols <- 1405
-  prism_rows <- 621
-  prism_data <- readGDAL(prismfile,silent = TRUE)
-  prism_image <- prism_data@data$band1
-  prism_image <- prism_image[length(prism_image):1]
-  prism_image <- matrix(prism_image, nrow = prism_rows, ncol = prism_cols,byrow=T)
-  prism_image <- t(prism_image)
-  prism_image <- prism_image[dim(prism_image)[1]:1,]
+  out <- raster(prismfile)
+  out <- data.frame(rasterToPoints(out))
+  colnames(out) <- c("x","y","data")
+    
   if(col == "heat"){
-    image(prism_image,main = pname )
+    prPlot <- ggplot() + geom_raster(data = out, aes(x=x,y=y,fill=data))+theme_bw()+scale_fill_gradient(low = "yellow", high="red") + xlab("Longitude") + ylab("Latitude")+ggtitle(pname)  
+    print(prPlot)
   } else {
-    tc <- colorRampPalette(c("blue","red"),space="rgb")
-    image(prism_image,col=tc(12),main=pname)
+    prPlot <- ggplot() + geom_raster(data = out, aes(x=x,y=y,fill=data))+theme_bw()+scale_fill_gradient(low = "red", high="blue") + xlab("Longitude") + ylab("Latitude")+ggtitle(pname)  
+    print(prPlot)
   }
 }

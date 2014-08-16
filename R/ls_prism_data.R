@@ -1,7 +1,6 @@
 #' List available datasets
 #' @description List the available data sets to load that have already been downloaded.
 #' @param absPath TRUE if you want to return the absolute path.
-#' @details 
 #' @examples \dontrun{
 #' ls_prism_data()
 #' }

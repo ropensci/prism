@@ -22,13 +22,13 @@ get_prism_monthlys <- function(type, year = NULL, month = NULL, all = FALSE ,kee
 ###
 if(!all && min(as.numeric(year)) > 1980){
   download_pb <- txtProgressBar(min = 0, max = length(year) * length(month), style = 3)
-
+  counter <- 1
   base <- "ftp://prism.nacse.org/monthly"
   for(i in 1:length(year)){ 
     for(j in 1:length(month)){
     #parse date
    ystring <- as.character(year[i])
-
+     
     full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
     fileName <- paste("PRISM_",type,"_stable_4kmM2_",paste(ystring,mon_to_string(month[j]),sep=""),"_bil.zip",sep="")
     if(length(prism_check(fileName)) == 1){
@@ -41,7 +41,8 @@ if(!all && min(as.numeric(year)) > 1980){
         file.remove(outFile)
       }
     }
-    setTxtProgressBar(download_pb, i)
+    setTxtProgressBar(download_pb, counter)
+   counter <- counter + 1
   }
   }
   close(download_pb)
