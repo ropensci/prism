@@ -12,7 +12,7 @@
 #' 
 #' }
 #' @export
-get_prism_monthlys <- function(type, years = NULL, months = NULL, all = FALSE ,keepZip = TRUE){
+get_prism_monthlys <- function(type, year = NULL, month = NULL, all = FALSE ,keepZip = TRUE){
 
   ### parameter and error handling
   
@@ -20,24 +20,26 @@ get_prism_monthlys <- function(type, years = NULL, months = NULL, all = FALSE ,k
 
   
 ###
-if(!all && min(as.numeric(years)) > 1980){
-  download_pb <- txtProgressBar(min = 0, max = length(years) * length(months), style = 3)
+if(!all && min(as.numeric(year)) > 1980){
+  download_pb <- txtProgressBar(min = 0, max = length(year) * length(month), style = 3)
 
   base <- "ftp://prism.nacse.org/monthly"
-  for(i in 1:length(years)){ 
-    for(j in 1:length(months)){
+  for(i in 1:length(year)){ 
+    for(j in 1:length(month)){
     #parse date
-   ystring <- as.character(years[i])
+   ystring <- as.character(year[i])
 
     full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
-    fileName <- paste("PRISM_",type,"_stable_4kmM2_",paste(ystring,mon_to_string(months[j]),sep=""),"_bil.zip",sep="")
-    outFile <- paste(options("prism.path"),fileName,sep="/")
+    fileName <- paste("PRISM_",type,"_stable_4kmM2_",paste(ystring,mon_to_string(month[j]),sep=""),"_bil.zip",sep="")
+    if(length(prism_check(fileName)) == 1){
+      outFile <- paste(options("prism.path"),fileName,sep="/")
     
-    download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
-    unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
+      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
+      unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
     
-    if(!keepZip){
-      file.remove(outFile)
+      if(!keepZip){
+        file.remove(outFile)
+      }
     }
     setTxtProgressBar(download_pb, i)
   }
@@ -61,17 +63,18 @@ if( min(as.numeric(years)) <= 1980){
       full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
       
       fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_bil.zip",sep="")
-      
-      if(as.numeric(years[i]) > 1980){ fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_all_bil.zip",sep="") }
-      
-      
-      outFile <- paste(options("prism.path"),fileName,sep="/")
-      
-      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
-      unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
-      
-      if(!keepZip){
-        file.remove(outFile)
+      if(length(prism_check(fileName)) == 1){
+        if(as.numeric(years[i]) > 1980){ fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_all_bil.zip",sep="") }
+        
+        
+        outFile <- paste(options("prism.path"),fileName,sep="/")
+        
+        download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
+        unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
+        
+        if(!keepZip){
+          file.remove(outFile)
+        }
       }
       setTxtProgressBar(download_pb, i)
     }
@@ -90,14 +93,15 @@ if(all && min(as.numeric(years)) > 1980){
     
     fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_all_bil.zip",sep="") 
     
-    
-    outFile <- paste(options("prism.path"),fileName,sep="/")
-    
-    download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
-    unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
-    
-    if(!keepZip){
-      file.remove(outFile)
+    if(length(prism_check(fileName)) == 1){
+      outFile <- paste(options("prism.path"),fileName,sep="/")
+      
+      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
+      unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
+      
+      if(!keepZip){
+        file.remove(outFile)
+      }
     }
     setTxtProgressBar(download_pb, i)
   }

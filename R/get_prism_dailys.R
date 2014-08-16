@@ -33,13 +33,15 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     if(as.numeric(dstring[1]) < 1981){stop("You must ask for data after 1981")}
     full_path <- paste(base,paste(type,dstring[1],sep="/"),sep="/")
     fileName <- paste("PRISM_",type,"_stable_4kmD1_",paste(dstring,collapse=""),"_bil.zip",sep="")
-    outFile <- paste(options("prism.path"),fileName,sep="/")
-    
-    download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
-    unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
-    
-    if(!keepZip){
-      file.remove(outFile)
+    if(length(prism_check(fileName)) == 1){
+      outFile <- paste(options("prism.path"),fileName,sep="/")
+      
+      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
+      unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
+      
+      if(!keepZip){
+        file.remove(outFile)
+      }
     }
     setTxtProgressBar(download_pb, i)
   }

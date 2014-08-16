@@ -9,7 +9,7 @@
 #' @details You must make sure that you have set up a valid download directory.  This must be set as options(prism.path = "YOURPATH")
 #' @examples \dontrun{
 #' ### Get 30 year normal values for rainfall
-#' get_prism_monthlys(type="ppt", months = 1, keepZip=F)
+#' get_prism_normals(type="ppt",resolution = "4km",month = 1, keepZip=F)
 #' 
 #' }
 #' @export
@@ -25,11 +25,14 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   }
   
   if(!is.null(month)){
+    mpb <- txtProgressBar(min = 0, max = length(month), style = 3)
     month <- mon_to_string(month)
     files <- vector()
-    for(i in month){
-      files <- c(files,paste("PRISM_",type,"_30yr_normal_", res,"M2_",i,"_bil.zip",sep=""))
+    for(i in 1:length(month)){
+      files <- c(files,paste("PRISM_",type,"_30yr_normal_", res,"M2_",month[i],"_bil.zip",sep=""))
+      setTxtProgressBar(mpb, i)
     }
+    close(mpb)
   } else if(annual){
     files <- paste("PRISM_",type,"_30yr_normal_", res,"M2_annual_bil.zip",sep="")    
   } else if(all){
@@ -39,6 +42,8 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   
   base <- "ftp://prism.nacse.org"
   full_path <- paste(base,paste("normals_",res,sep=""),type,"",sep="/")
+  ## Trim files
+  files <- prism_check(files)
   for(i in files){
   outFile <- paste(options("prism.path"),i,sep="/")
   download.file(url = paste(full_path,i,sep=""), destfile = outFile, method = "curl",quiet=T)
@@ -52,7 +57,7 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
 
 #' helper function for handling months
 #' @description Handle numeric month to string conversions
-#' 
+#' @export
 mon_to_string <- function(month){
   out <- vector()
   for(i in 1:length(month)){
@@ -61,4 +66,15 @@ mon_to_string <- function(month){
     else { out[i] <- paste0(month[i]) }
   }
   return(out)
+}
+
+#' Helper function to check if files already exist
+#' @description check if files exist
+#' @export
+
+prism_check <- function(f){
+  out <- ls_prism_data()
+  f <- unlist(sapply(f,strsplit,split=".zip"))
+  tf <- unlist(lapply(sapply(f,grepl,x=out,simplify=F),sum))
+  return(f[!tf])
 }
