@@ -17,4 +17,5 @@ LazyData: yes
 VignetteBuilder: knitr
 Imports:
     ggplot2,
-    raster
+    raster,
+    XML
