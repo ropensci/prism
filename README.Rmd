@@ -48,7 +48,7 @@ ls_prism_data(name = TRUE)
 
 You can easily make a quick plot of your data to using the output of `ls_prism_data()`
 
-```{r quick plot}
+```{r quick plot,fig.height=5,fig.width=8}
 prism_image(ls_prism_data()[1])
 
 ```
@@ -78,7 +78,7 @@ p + stat_smooth(method="lm",se=F) + theme_bw() + ggtitle("Average January temper
 
 Lastly it's easy to just load up the prism data with the raster package.  This time what we'll look at January temperature anomalies.  To do this we'll examine the difference between January 2013 and the 30 year normals for January.  Conveniently, we've already downloaded both of these files.  We just need to grab them out of our list.
 
-```{r raster math}
+```{r raster math,fig.height=5,fig.width=8}
 library(raster)
 ### I got these just by looking at the list output
 jnorm <- ls_prism_data(absPath=T)[1]
