@@ -18,6 +18,7 @@ This is meant for rapid vizualization, but more detailed plots will require othe
 }
 \examples{
 \dontrun{
+get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 image_prism(ls_prism_data()[1])
 }
 }

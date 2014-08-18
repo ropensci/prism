@@ -3,7 +3,7 @@
 \alias{ls_prism_data}
 \title{List available datasets}
 \usage{
-ls_prism_data(absPath = F)
+ls_prism_data(absPath = F, name = F)
 }
 \arguments{
 \item{absPath}{TRUE if you want to return the absolute path.}
@@ -13,7 +13,15 @@ List the available data sets to load that have already been downloaded.
 }
 \examples{
 \dontrun{
+### Just get file names, used in many other prism* fxn
+get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 ls_prism_data()
+
+### Get absolute path values for use with other data
+ls_prism_data(absPath = T)
+
+### See prism files you have with title of data product
+ls_prism_data(name=T)
 }
 }
 

@@ -29,7 +29,7 @@ prism_slice <- function(location,prismfile){
   ifelse(grepl("temp",meta_d[[1]][3]),u <- "(C)", u <- "(mm)")
   
   
-  out <- ggplot(data,aes(x=date,y=data))+geom_path()+geom_point()+xlab("Date") + ylab(paste(meta_d[[1]][3],u,collapse=""))
+  out <- ggplot(data,aes(x=date,y=data))+geom_path()+geom_point()+xlab("Date") + ylab(paste(meta_d[[1]][3],u,sep=""))
   
   return(out)
 }
