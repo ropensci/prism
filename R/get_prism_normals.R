@@ -42,12 +42,14 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   
   for(i in 1:length(files)){
     outFile <- paste(options("prism.path"),files[i],sep="/")
-    download.file(url = paste(full_path,files[i],sep=""), destfile = outFile, method = "curl",quiet=T)
-    unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] ) 
-    setTxtProgressBar(mpb, i)
-    if(!keepZip){
-      file.remove(outFile)
-      }
+    if(length(files>0)){
+      download.file(url = paste(full_path,files[i],sep=""), destfile = outFile, method = "curl",quiet=T)
+      unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] ) 
+      setTxtProgressBar(mpb, i)
+      if(!keepZip){
+        file.remove(outFile)
+        }
+    }
   }
   close(mpb)
   
@@ -75,5 +77,5 @@ prism_check <- function(f){
   out <- ls_prism_data()
   f <- unlist(sapply(f,strsplit,split=".zip"))
   tf <- unlist(lapply(sapply(f,grepl,x=out,simplify=F),sum))
-  return(f[!tf])
+  return(names(tf)[!tf])
 }

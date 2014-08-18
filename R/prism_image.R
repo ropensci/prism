@@ -5,17 +5,17 @@
 #' @details This is meant for rapid vizualization, but more detailed plots will require other methods
 #' @examples \dontrun{
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
-#' image_prism(ls_prism_data()[1])
+#' prism_image(ls_prism_data()[1])
 #' }
 #' @export
 
 prism_image <- function(prismfile, col = "heat"){
+  prismfilexml <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".xml",sep="")
+  pname <- prism_md(prismfilexml)[2]
   if(length(prismfile) != 1){
     stop("You can only quick image one at a time")
   }
-  prismfile <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".bil",sep="")
-  pname <- paste0(strsplit(prismfile,"_")[[1]][2:6],collapse = "_")
-  
+  prismfile <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".bil",sep="")  
   col = match.arg(col,c("heat","redblue"))
   out <- raster(prismfile)
   out <- data.frame(rasterToPoints(out))
