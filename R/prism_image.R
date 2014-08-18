@@ -4,6 +4,7 @@
 #' @param col the color pattern to use.  The default is heat, the other valid option is "redblue"
 #' @details This is meant for rapid vizualization, but more detailed plots will require other methods
 #' @examples \dontrun{
+#' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 #' image_prism(ls_prism_data()[1])
 #' }
 #' @export
