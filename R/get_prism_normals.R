@@ -39,7 +39,7 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   for(i in 1:length(files)){
     outFile <- paste(options("prism.path"),files[i],sep="/")
     if(length(files>0)){
-      download.file(url = paste(full_path,files[i],sep=""), destfile = outFile, method = "curl",quiet=T)
+      download.file(url = paste(full_path,files[i],sep=""), destfile = outFile,quiet=T)
       unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] ) 
       setTxtProgressBar(mpb, i)
       if(!keepZip){

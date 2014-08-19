@@ -24,7 +24,8 @@ Data is available from 1891 until 2014, however you have to download all data fo
 \dontrun{
 ### Get all the data for January from 1990 to 2000
 get_prism_monthlys(type="tmean", year = 1990:2000, month = 1, keepZip=F)
-
+### Get year averages by leaving out a month parameter
+get_prism_monthlys(type="tmean", year = 1990:2000, keepZip=F)
 }
 }
 

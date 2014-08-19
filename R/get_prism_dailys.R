@@ -37,7 +37,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     if(length(prism_check(fileName)) == 1){
       outFile <- paste(options("prism.path"),fileName,sep="/")
       
-      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
+      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, quiet=T)
       unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
       
       if(!keepZip){

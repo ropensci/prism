@@ -34,7 +34,7 @@ if(!is.null(month) && min(as.numeric(year)) > 1980){
     if(length(prism_check(fileName)) == 1){
       outFile <- paste(options("prism.path"),fileName,sep="/")
     
-      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
+      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, quiet=T)
       unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
     
       if(!keepZip){
@@ -70,7 +70,7 @@ if( min(as.numeric(year)) <= 1980){
         
         outFile <- paste(options("prism.path"),fileName,sep="/")
         
-        download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
+        download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, quiet=T)
         unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
         
         if(!keepZip){
@@ -97,7 +97,7 @@ if(is.null(month) && min(as.numeric(year)) > 1980){
     if(length(prism_check(fileName)) == 1){
       outFile <- paste(options("prism.path"),fileName,sep="/")
       
-      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, method = "curl",quiet=T)
+      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile,quiet=T)
       unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
       
       if(!keepZip){
