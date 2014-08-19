@@ -1,8 +1,0 @@
-options(prism.path= "~/Documents/scratch/prismpath")
-library(devtools)
-dev_mode()
-install(".")
-library(prism)
-get_prism_normals("tmean","4km", annual = T)
-ls_prism_data()
-prism_image(ls_prism_data()[1])
