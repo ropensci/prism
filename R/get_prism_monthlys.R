@@ -8,7 +8,8 @@
 #' @examples \dontrun{
 #' ### Get all the data for January from 1990 to 2000
 #' get_prism_monthlys(type="tmean", year = 1990:2000, month = 1, keepZip=F)
-#' 
+#' ### Get year averages by leaving out a month parameter
+#' get_prism_monthlys(type="tmean", year = 1990:2000, keepZip=F)
 #' }
 #' @export
 get_prism_monthlys <- function(type, year = NULL, month = NULL ,keepZip = TRUE){
@@ -19,7 +20,7 @@ get_prism_monthlys <- function(type, year = NULL, month = NULL ,keepZip = TRUE){
 
   
 ###
-if(!all && min(as.numeric(year)) > 1980){
+if(!is.null(month) && min(as.numeric(year)) > 1980){
   download_pb <- txtProgressBar(min = 0, max = length(year) * length(month), style = 3)
   counter <- 1
   base <- "ftp://prism.nacse.org/monthly"
@@ -51,20 +52,20 @@ if(!all && min(as.numeric(year)) > 1980){
 
 ### Handle years before 1981
 
-if( min(as.numeric(years)) <= 1980){
+if( min(as.numeric(year)) <= 1980){
   
-  download_pb <- txtProgressBar(min = 0, max = length(years), style = 3)
+  download_pb <- txtProgressBar(min = 0, max = length(year), style = 3)
   
   base <- "ftp://prism.nacse.org/monthly"
-  for(i in 1:length(years)){ 
+  for(i in 1:length(year)){ 
 
-      ystring <- as.character(years[i])
+      ystring <- as.character(year[i])
       
       full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
       
       fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_bil.zip",sep="")
       if(length(prism_check(fileName)) == 1){
-        if(as.numeric(years[i]) > 1980){ fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_all_bil.zip",sep="") }
+        if(as.numeric(year[i]) > 1980){ fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_all_bil.zip",sep="") }
         
         
         outFile <- paste(options("prism.path"),fileName,sep="/")
@@ -82,16 +83,16 @@ if( min(as.numeric(years)) <= 1980){
   close(download_pb)  
 }
 
-if(all && min(as.numeric(years)) > 1980){
-  download_pb <- txtProgressBar(min = 0, max = length(years), style = 3)
+if(is.null(month) && min(as.numeric(year)) > 1980){
+  download_pb <- txtProgressBar(min = 0, max = length(year), style = 3)
   
   base <- "ftp://prism.nacse.org/monthly"
-  for(i in 1:length(years)){ 
-    ystring <- as.character(years[i])
+  for(i in 1:length(year)){ 
+    ystring <- as.character(year[i])
     
     full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
     
-    fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_all_bil.zip",sep="") 
+    fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_bil.zip",sep="") 
     
     if(length(prism_check(fileName)) == 1){
       outFile <- paste(options("prism.path"),fileName,sep="/")

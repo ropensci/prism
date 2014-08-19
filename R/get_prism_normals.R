@@ -19,10 +19,6 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   type <- match.arg(type, c("ppt","tmean","tmin","tmax"))
   res<- match.arg(resolution, c("4km","800m"))
   
-  if(annual && all){
-    stop("Annual data is included in all, both cannot be set to TRUE")
-  }
-  
   if(!is.null(month)){
     month <- mon_to_string(month)
     files <- vector()
