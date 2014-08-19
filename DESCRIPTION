@@ -12,10 +12,10 @@ Date: 2014-03-24
 Authors@R: person("Hart", "Edmund", role = c("aut","cre"),email =
     "Edmund.m.hart@gmail.com")
 License: MIT + file LICENSE
-LazyLoad: yes
-LazyData: yes
-VignetteBuilder: knitr
 Imports:
     ggplot2,
     raster,
     XML
+LazyLoad: yes
+LazyData: yes
+VignetteBuilder: knitr

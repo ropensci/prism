@@ -4,7 +4,7 @@
 \title{Download data for 30 year normals of climate variables}
 \usage{
 get_prism_normals(type, resolution, month = NULL, annual = FALSE,
-  all = FALSE, keepZip = TRUE)
+  keepZip = TRUE)
 }
 \arguments{
 \item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".}
@@ -14,8 +14,6 @@ get_prism_normals(type, resolution, month = NULL, annual = FALSE,
 \item{month}{a numeric value for month, can be a numeric vector of months.}
 
 \item{annual}{if TRUE download annual data}
-
-\item{all}{if TRUE, download all data.  Be careful because this can take some time, these files can be 100's of megabytes.}
 
 \item{keepZip}{if TRUE, leave the downloaded zip files in your 'prism.path', if FALSE, they will be deleted}
 }
