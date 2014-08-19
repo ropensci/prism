@@ -3,3 +3,6 @@ prism.Rproj
 .Rproj.user
 .Rdata
 .Rhistory
+.DS_Store
+*~
+prismDataScratch.R
