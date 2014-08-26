@@ -1,6 +1,6 @@
 #' Quick image plot
 #' @description Quickly make an image plot of a data set.  
-#' @param f the name of a file to be plotted, this is most easily gotten through ls_prism_data()
+#' @param prismfile the name of a file to be plotted, this is most easily gotten through ls_prism_data()
 #' @param col the color pattern to use.  The default is heat, the other valid option is "redblue"
 #' @details This is meant for rapid vizualization, but more detailed plots will require other methods
 #' @examples \dontrun{

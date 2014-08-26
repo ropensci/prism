@@ -5,7 +5,17 @@
 \usage{
 mon_to_string(month)
 }
+\arguments{
+\item{month}{a numeric vector of months (month must be > 0 and <= 12)}
+}
+\value{
+a character vector (same length as \code{month}) with 2 char month strings.
+}
 \description{
 Handle numeric month to string conversions
+}
+\examples{
+mon_to_string(month = c(1, 3, 2))
+mon_to_string(month = 12)
 }
 

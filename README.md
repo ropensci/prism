@@ -97,7 +97,7 @@ You can easily make a quick plot of your data to using the output of `ls_prism_d
 prism_image(ls_prism_data()[1])
 ```
 
-![plot of chunk quick plot](figure/quick plot.png)
+![plot of chunk quick plot](figure/quick_plot.png)
 
 Monthly and daily data is also easily accessible. Below we'll get January data for the years 1990 to 2000. We an also grab data from June 1 to June 14 2013.
 
@@ -132,7 +132,7 @@ p <- prism_slice(boulder,to_slice)
 p + stat_smooth(method="lm",se=F) + theme_bw() + ggtitle("Average January temperature in Boulder, CO 1982-2014")
 ```
 
-![plot of chunk plot Boulder](figure/plot Boulder.png)
+![plot of chunk plot Boulder](figure/plot_Boulder.png)
 
 Lastly it's easy to just load up the prism data with the raster package.  This time what we'll look at January temperature anomalies.  To do this we'll examine the difference between January 2013 and the 30 year normals for January.  Conveniently, we've already downloaded both of these files.  We just need to grab them out of our list.
 
@@ -164,6 +164,6 @@ anom_rast <- overlay(j2013_rast,jnorm_rast,fun = anomCalc)
 plot(anom_rast)
 ```
 
-![plot of chunk raster math](figure/raster math.png)
+![plot of chunk raster math](figure/raster_math.png)
 
 The plot shows that January 2013 was warmer than the average over the last 30 years.  It also shows how easy it is to use the raster library to work with prism data.  The package provides a simple framework to work with a large number of rasters that you can easily download and vizualize or use with other data sets.

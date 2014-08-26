@@ -29,6 +29,7 @@ Data is available in 3 different forms as mentioned above.  Each one has it's ow
 Normals are based on the years 1981 - 2010, and can be downloaded in two resolutions, `4km` and `800m`, and a resolution must be specified.  Normals can also be downloaded for a given month, vector of months, or an average for all 30 years.
 
 ```{r get normals}
+library(prism)
 options(prism.path = "~/prismtmp")
 get_prism_normals(type="tmean",resolution = "4km",month = 1:6, keepZip=F)
 
@@ -52,7 +53,7 @@ ls_prism_data(name = TRUE)
 
 You can easily make a quick plot of your data to using the output of `ls_prism_data()`
 
-```{r quick plot,fig.height=5,fig.width=8}
+```{r quick_plot,fig.height=5,fig.width=8}
 prism_image(ls_prism_data()[1])
 
 ```
@@ -70,19 +71,20 @@ You can also visualize a single point across a set of rasters.  This procedure w
 
 Let's get make a plot of January temperatures is Boulder between 1982 and 2014.  First we'll grab all the data from the US, and then give our function a point to get data from.  The point must be a vector in the form of longitude, latitude.
 
-```{r plot Boulder}
+```{r plot_Boulder}
 boulder <- c(-105.2797,40.0176)
 ## Get data.
 get_prism_monthlys(type="tmean", year = 1982:2014, month = 1, keepZip=F)
 ## We'll use regular expressions to grep through the list and get data only from the month of January
 to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data(),value=T)
+library(ggplot2)
 p <- prism_slice(boulder,to_slice)
 p + stat_smooth(method="lm",se=F) + theme_bw() + ggtitle("Average January temperature in Boulder, CO 1982-2014")
 ```
 
 Lastly it's easy to just load up the prism data with the raster package.  This time what we'll look at January temperature anomalies.  To do this we'll examine the difference between January 2013 and the 30 year normals for January.  Conveniently, we've already downloaded both of these files.  We just need to grab them out of our list.
 
-```{r raster math,fig.height=5,fig.width=8}
+```{r raster_math,fig.height=5,fig.width=8}
 library(raster)
 ### I got these just by looking at the list output
 jnorm <- ls_prism_data(absPath=T)[1]

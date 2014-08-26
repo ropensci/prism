@@ -6,7 +6,7 @@
 prism_image(prismfile, col = "heat")
 }
 \arguments{
-\item{f}{the name of a file to be plotted, this is most easily gotten through ls_prism_data()}
+\item{prismfile}{the name of a file to be plotted, this is most easily gotten through ls_prism_data()}
 
 \item{col}{the color pattern to use.  The default is heat, the other valid option is "redblue"}
 }
