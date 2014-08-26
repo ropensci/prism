@@ -54,6 +54,11 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
 
 #' helper function for handling months
 #' @description Handle numeric month to string conversions
+#' @param month a numeric vector of months (month must be > 0 and <= 12)
+#' @return a character vector (same length as \code{month}) with 2 char month strings.
+#' @examples
+#' mon_to_string(month = c(1, 3, 2))
+#' mon_to_string(month = 12)
 #' @export
 mon_to_string <- function(month){
   out <- vector()
@@ -67,11 +72,13 @@ mon_to_string <- function(month){
 
 #' Helper function to check if files already exist
 #' @description check if files exist
+#' @param prismfile a list of full paths for prism files
+#' @return a character vector of file names that already exist
 #' @export
 
-prism_check <- function(f){
+prism_check <- function(prismfile){
   out <- ls_prism_data()
-  f <- unlist(sapply(f,strsplit,split=".zip"))
+  f <- unlist(sapply(prismfile,strsplit,split=".zip"))
   tf <- unlist(lapply(sapply(f,grepl,x=out,simplify=F),sum))
   return(names(tf)[!tf])
 }
