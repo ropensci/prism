@@ -77,6 +77,7 @@ boulder <- c(-105.2797,40.0176)
 get_prism_monthlys(type="tmean", year = 1982:2014, month = 1, keepZip=F)
 ## We'll use regular expressions to grep through the list and get data only from the month of January
 to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data(),value=T)
+library(ggplot2)
 p <- prism_slice(boulder,to_slice)
 p + stat_smooth(method="lm",se=F) + theme_bw() + ggtitle("Average January temperature in Boulder, CO 1982-2014")
 ```
