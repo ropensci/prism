@@ -3,7 +3,13 @@
 \alias{prism_check}
 \title{Helper function to check if files already exist}
 \usage{
-prism_check(f)
+prism_check(prismfile)
+}
+\arguments{
+\item{prismfile}{a list of full paths for prism files}
+}
+\value{
+a character vector of file names that already exist
 }
 \description{
 check if files exist

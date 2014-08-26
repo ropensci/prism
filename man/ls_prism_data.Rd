@@ -7,6 +7,11 @@ ls_prism_data(absPath = F, name = F)
 }
 \arguments{
 \item{absPath}{TRUE if you want to return the absolute path.}
+
+\item{name}{TRUE if you want titles of data products.}
+}
+\value{
+list of downloaded prism datasets.
 }
 \description{
 List the available data sets to load that have already been downloaded.
