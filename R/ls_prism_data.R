@@ -1,6 +1,7 @@
 #' List available datasets
 #' @description List the available data sets to load that have already been downloaded.
 #' @param absPath TRUE if you want to return the absolute path.
+#' @param name TRUE if you want titles of data products.
 #' @examples \dontrun{
 #' ### Just get file names, used in many other prism* fxn
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
