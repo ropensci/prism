@@ -10,7 +10,7 @@
 #' @export
 
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL, keepZip = TRUE){
-  
+  path_check()
   if(!is.null(dates) && !is.null(maxDate)){
     stop("You can enter a date range or a vector of dates, but not both")
   }

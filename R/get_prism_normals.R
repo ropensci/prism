@@ -15,7 +15,7 @@
 get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,  keepZip = TRUE){
   
   ### parameter and error handling
-  
+  path_check()
   type <- match.arg(type, c("ppt","tmean","tmin","tmax"))
   res<- match.arg(resolution, c("4km","800m"))
   
