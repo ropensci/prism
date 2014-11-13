@@ -31,25 +31,26 @@ Normals are based on the years 1981 - 2010, and can be downloaded in two resolut
 
 
 ```r
+library(prism)
 options(prism.path = "~/prismtmp")
 get_prism_normals(type="tmean",resolution = "4km",month = 1:6, keepZip=F)
 ```
 
 The first thing to note is that you'll need to set a local location to work with this data.  Second is the option `keepZip`.  If this is `TRUE` the zip file will remain on your machine, otherwise it will be automatically deleted.
 
-You can also view all the data you have downloaded with a simple command `ls_prism_data()`.  By default this just gives a list of file names.  All the internal functions in the package work off of this simple list of files.  
+You can also view all the data you have downloaded with a simple command `ls_prism_data()`.  By default this just gives a list of file names.  All the internal functions in the package work off of this simple list of files.
 
 ```r
 ls_prism_data()
 ```
 
 ```
-##  [1] "PRISM_tmean_30yr_normal_4kmM2_01_bil"
-##  [2] "PRISM_tmean_30yr_normal_4kmM2_02_bil"
-##  [3] "PRISM_tmean_30yr_normal_4kmM2_03_bil"
-##  [4] "PRISM_tmean_30yr_normal_4kmM2_04_bil"
-##  [5] "PRISM_tmean_30yr_normal_4kmM2_05_bil"
-##  [6] "PRISM_tmean_30yr_normal_4kmM2_06_bil"
+##  [1] "PRISM_tmean_30yr_normal_4kmM2_01_bil" 
+##  [2] "PRISM_tmean_30yr_normal_4kmM2_02_bil" 
+##  [3] "PRISM_tmean_30yr_normal_4kmM2_03_bil" 
+##  [4] "PRISM_tmean_30yr_normal_4kmM2_04_bil" 
+##  [5] "PRISM_tmean_30yr_normal_4kmM2_05_bil" 
+##  [6] "PRISM_tmean_30yr_normal_4kmM2_06_bil" 
 
 ```
 
@@ -81,13 +82,14 @@ ls_prism_data(name = TRUE)
 ## 5   PRISM_tmean_30yr_normal_4kmM2_05_bil
 ## 6   PRISM_tmean_30yr_normal_4kmM2_06_bil
 
-##                                                               Product name
-## 1     United States Average January Mean Temperature, 1981-2010 (4km; BIL)
-## 2    United States Average February Mean Temperature, 1981-2010 (4km; BIL)
-## 3       United States Average March Mean Temperature, 1981-2010 (4km; BIL)
-## 4       United States Average April Mean Temperature, 1981-2010 (4km; BIL)
-## 5         United States Average May Mean Temperature, 1981-2010 (4km; BIL)
-## 6        United States Average June Mean Temperature, 1981-2010 (4km; BIL)
+##                                                                     Product name
+## 1           United States Average January Mean Temperature, 1981-2010 (4km; BIL)
+## 2          United States Average February Mean Temperature, 1981-2010 (4km; BIL)
+## 3             United States Average March Mean Temperature, 1981-2010 (4km; BIL)
+## 4             United States Average April Mean Temperature, 1981-2010 (4km; BIL)
+## 5               United States Average May Mean Temperature, 1981-2010 (4km; BIL)
+## 6              United States Average June Mean Temperature, 1981-2010 (4km; BIL)
+
 ```
 
 You can easily make a quick plot of your data to using the output of `ls_prism_data()`
@@ -97,7 +99,7 @@ You can easily make a quick plot of your data to using the output of `ls_prism_d
 prism_image(ls_prism_data()[1])
 ```
 
-![plot of chunk quick plot](figure/quick_plot.png)
+![plot of chunk quick_plot](figure/quick_plot.png) 
 
 Monthly and daily data is also easily accessible. Below we'll get January data for the years 1990 to 2000. We an also grab data from June 1 to June 14 2013.
 
@@ -105,7 +107,6 @@ Monthly and daily data is also easily accessible. Below we'll get January data f
 ```r
 get_prism_monthlys(type="tmean", year = 1990:2000, month = 1, keepZip=F)
 ```
-
 
 ```r
 get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
@@ -128,11 +129,12 @@ get_prism_monthlys(type="tmean", year = 1982:2014, month = 1, keepZip=F)
 ```r
 ## We'll use regular expressions to grep through the list and get data only from the month of January
 to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data(),value=T)
+library(ggplot2)
 p <- prism_slice(boulder,to_slice)
 p + stat_smooth(method="lm",se=F) + theme_bw() + ggtitle("Average January temperature in Boulder, CO 1982-2014")
 ```
 
-![plot of chunk plot Boulder](figure/plot_Boulder.png)
+![plot of chunk plot_Boulder](figure/plot_Boulder.png) 
 
 Lastly it's easy to just load up the prism data with the raster package.  This time what we'll look at January temperature anomalies.  To do this we'll examine the difference between January 2013 and the 30 year normals for January.  Conveniently, we've already downloaded both of these files.  We just need to grab them out of our list.
 
@@ -164,6 +166,6 @@ anom_rast <- overlay(j2013_rast,jnorm_rast,fun = anomCalc)
 plot(anom_rast)
 ```
 
-![plot of chunk raster math](figure/raster_math.png)
+![plot of chunk raster_math](figure/raster_math.png) 
 
 The plot shows that January 2013 was warmer than the average over the last 30 years.  It also shows how easy it is to use the raster library to work with prism data.  The package provides a simple framework to work with a large number of rasters that you can easily download and vizualize or use with other data sets.
