@@ -15,7 +15,7 @@ path_check <- function(){
   }
   ## Check if path exists
   
-  if(!file.exists(user_path)){
+  if(!file.exists(file.path(user_path))){
     dir.create(user_path)
   }
 }
