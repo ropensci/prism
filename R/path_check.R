@@ -8,6 +8,7 @@ path_check <- function(){
     message("You have not set a path to hold your prism files")
     user_path <- readline("Please enter the full path to download files to (hit enter to use default '~/prismtmp'): ")
     user_path <- ifelse(grepl("",user_path),paste(Sys.getenv("HOME"),"prismtmp",sep="/"),user_path)
+    options(prism.path = user_path)
   }
   if(!is.null(getOption('prism.path'))){
     user_path <- getOption('prism.path')

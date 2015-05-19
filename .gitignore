@@ -6,3 +6,4 @@ prism.Rproj
 .DS_Store
 *~
 prismDataScratch.R
+.httr-oauth
