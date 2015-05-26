@@ -10,12 +10,11 @@
 #' }
 #' @export
 get_prism_annual <- function(type, year = NULL ,keepZip = TRUE){
-  
   ### parameter and error handling
   path_check()
   type <- match.arg(type, c("ppt","tmean","tmin","tmax"))
   
-
+  
   
   ### Check year
   ### Check months
@@ -29,33 +28,34 @@ get_prism_annual <- function(type, year = NULL ,keepZip = TRUE){
   }
   
   
-
-
-if(min(as.numeric(year)) > 1980){
-  download_pb <- txtProgressBar(min = 0, max = length(year), style = 3)
   
-  base <- "ftp://prism.nacse.org/monthly"
-  for(i in 1:length(year)){ 
-    ystring <- as.character(year[i])
+  
+  if(min(as.numeric(year)) > 1980){
+    download_pb <- txtProgressBar(min = 0, max = length(year), style = 3)
     
-    full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
-    
-    fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_bil.zip",sep="") 
-    
-    if(length(prism_check(fileName)) == 1){
-      outFile <- paste(options("prism.path"),fileName,sep="/")
+    base <- "ftp://prism.nacse.org/monthly"
+    for(i in 1:length(year)){
+      ystring <- as.character(year[i])
       
-      download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile,quiet=T)
-      unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
+      full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
       
-      if(!keepZip){
-        file.remove(outFile)
+      fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_bil.zip",sep="") 
+      
+      if(length(prism_check(fileName)) == 1){
+        outFile <- paste(options("prism.path"),fileName,sep="/")
+        
+        download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile,quiet=T)
+        unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
+        
+        if(!keepZip){
+          file.remove(outFile)
+        }
       }
+      setTxtProgressBar(download_pb, i)
     }
-    setTxtProgressBar(download_pb, i)
+    
+    close(download_pb)  
+    
+    
   }
-  
-  close(download_pb)  
-  
-  
 }
