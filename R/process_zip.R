@@ -5,15 +5,16 @@
 #' @details This should match all other files post 1980
 #' @example /dontrun {
 #' process_zip("PRISM_tmean_stable_4kmM2_1980_all_bil","PRISM_tmean_stable_4kmM2_198001_bil")
+#' process_zip("PRISM_tmean_stable_4kmM2_1980_all_bil",c("PRISM_tmean_stable_4kmM2_198001_bil","PRISM_tmean_stable_4kmM2_198002_bil"))
 #' }
 #' @export
 
 process_zip <- function(pfile,name){
-  tmpwd <- list.files(paste(options("prism.path")[[1]],file,sep="/"))
+  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
   ##Remove all.xml file
   file.remove(paste(options("prism.path")[[1]],file,grep("all",tmpwd,value = T),sep="/"))
   ## Get new list of files after removing all.xml
-  tmpwd <- list.files(paste(options("prism.path")[[1]],file,sep="/"))
+  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
 
   fstrip <- strsplit(tmpwd,"\\.")
   fstrip <- unlist(lapply(fstrip,function(x) return(x[1])))
@@ -32,7 +33,7 @@ process_zip <- function(pfile,name){
   }
   ### Remove all files so the directory can be created.
   ## Update file list
-  tmpwd <- list.files(paste(options("prism.path")[[1]],file,sep="/"))
+  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
   ## Now loop delete them all
   sapply(tmpwd,function(x){
     file.remove(paste(options("prism.path")[[1]],pfile,x,sep="/"))
@@ -43,3 +44,4 @@ process_zip <- function(pfile,name){
 
 
 }
+
