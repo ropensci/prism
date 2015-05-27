@@ -17,21 +17,29 @@
 #' @export
 
 ls_prism_data <- function(absPath = F, name = F){
-  files <- list.files(options("prism.path")[[1]])
+  if (is.null(getOption('prism.path'))) {
+    path_check()
+  }
+  files <- list.files(getOption('prism.path'))
   if(absPath){
-    files <- files[grep("zip",files,invert=T)]
-    return(paste(options("prism.path")[[1]],files,paste(files,".bil",sep=""),sep="/"))
+    files <- files[grep("zip", files, invert=TRUE)]
+    return(paste(getOption('prism.path'), files, 
+                 paste0(files, ".bil"), sep="/"))
   } else if(name){
-    prismfilexml <- paste(options("prism.path")[[1]],"/",ls_prism_data(),"/",ls_prism_data(),".xml",sep="")
+    prismfilexml <- paste0(getOption('prism.path'), 
+                           "/", ls_prism_data(), 
+                           "/", ls_prism_data(), ".xml")
              
-    meta_d <- sapply(prismfilexml,prism_md,simplify=F)
-    pname <- unlist(lapply(meta_d,function(x){return(x[2])}))
-    out <- as.data.frame(cbind(files[grep("zip",files,invert=T)],pname))
+    meta_d <- sapply(prismfilexml, prism_md, simplify=FALSE)
+    pname <- unlist(lapply(meta_d, function(x) x[2]))
+    out <- as.data.frame(cbind(files[grep("zip", 
+                                          files, 
+                                          invert=TRUE)], 
+                               pname))
     rownames(out) <- 1:dim(out)[1]
-    colnames(out) <- c("File name","Product name")
+    colnames(out) <- c("File name", "Product name")
     return(out)
-    
-    
-  } else {return(files[grep("zip",files,invert=T)])}
-
+  } else {
+    return(files[grep("zip", files, invert=TRUE)])
+  }
 }

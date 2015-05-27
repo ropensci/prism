@@ -54,8 +54,6 @@ get_prism_annual <- function(type, year = NULL ,keepZip = TRUE){
       setTxtProgressBar(download_pb, i)
     }
     
-    close(download_pb)  
-    
-    
+    close(download_pb)
   }
 }
