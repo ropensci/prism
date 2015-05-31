@@ -7,11 +7,15 @@
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 #' prism_image(ls_prism_data()[1])
 #' }
+#' @import ggplot2
 #' @export
 
 prism_image <- function(prismfile, col = "heat"){
+  
+  ### This works for recent data but a new file needs to be created for 
   prismfilexml <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".xml",sep="")
   pname <- prism_md(prismfilexml)[2]
+  
   if(length(prismfile) != 1){
     stop("You can only quick image one at a time")
   }

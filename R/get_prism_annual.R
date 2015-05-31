@@ -19,16 +19,6 @@ get_prism_annual <- function(type, year = NULL ,keepZip = TRUE){
   ### Check year
   ### Check months
   
-  if(!is.numeric(year)){
-    stop("You must enter a numeric month between 1 and 12")
-  }
-  
-  if(year < 1895 || month > 12){
-    stop("You must enter a month between 1 and 12")
-  }
-  
-  
-  
   
   if(min(as.numeric(year)) > 1980){
     download_pb <- txtProgressBar(min = 0, max = length(year), style = 3)
@@ -56,4 +46,51 @@ get_prism_annual <- function(type, year = NULL ,keepZip = TRUE){
     
     close(download_pb)
   }
-}
+  
+  
+  
+  ### Handle data before 1981
+  
+  if(min(as.numeric(year)) <= 1980){
+    download_pb <- txtProgressBar(min = 0, max = length(year), style = 3)
+    
+    base <- "ftp://prism.nacse.org/monthly"
+    for(i in 1:length(year)){
+      ystring <- as.character(year[i])
+      
+      full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
+      
+      fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_all_bil.zip",sep="") 
+      
+      if(length(prism_check(fileName)) == 1){
+        outFile <- paste(options("prism.path"),fileName,sep="/")
+        
+        tryCatch({
+          
+          download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, quiet=T)
+          unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
+          if(!keepZip){
+            file.remove(outFile)
+          }
+        },
+        error = function(e){
+          stop(" \n Error: Requested file cannot be found on the server")
+        }
+        )
+        
+        ### Now process the data by month
+        ## First get the name of the directory with the data
+        all_file <- strsplit(fileName,'[.]')[[1]][1]
+        to_split <- gsub("_all","",all_file)
+        process_zip(all_file,to_split)
+        
+        
+        }
+      }
+      setTxtProgressBar(download_pb, i)
+    }
+    
+    close(download_pb)
+  }
+  
+  

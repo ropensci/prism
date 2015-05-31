@@ -34,19 +34,3 @@ prism_slice <- function(location,prismfile){
   
   return(out)
 }
-
-#' Extract select prism metadata
-#' @description used to extract some prism metadata used in other fxns
-#' @param f a location of xml metadata.
-#' @return a character vector of metadata.
-#' 
-#' @export
-
-prism_md <- function(f){
-  m <- xmlParse(f)
-  m <- xmlToList(m)
-  date <- m$idinfo$timeperd$timeinfo$rngdates$begdate
-  prod_title <- m$idinfo$citation$citeinfo$title 
-  prod_name <- strsplit(m$eainfo$detailed$attr$attrlabl,'\\(')[[1]][1]
-  return(c(date,prod_title,prod_name))
-}
