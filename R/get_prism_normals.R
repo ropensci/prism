@@ -26,15 +26,18 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
       files <- c(files,paste("PRISM_",type,"_30yr_normal_", res,"M2_",month[i],"_bil.zip",sep=""))
     }
   } else if(annual){
-    files <- paste("PRISM_",type,"_30yr_normal_", res,"M2_annual_bil.zip",sep="")    
+    files <- paste("PRISM_",type,"_30yr_normal_", res,"M2_annual_bil.zip",sep="")  
+    
   } 
   
+  # set length of progress bar
+  pblen <- max(length(month),length(annual))
   
   base <- "ftp://prism.nacse.org"
   full_path <- paste(base,paste("normals_",res,sep=""),type,"",sep="/")
   ## Trim files
   files <- prism_check(files)
-  mpb <- txtProgressBar(min = 0, max = length(month), style = 3)
+  mpb <- txtProgressBar(min = 0, max = pblen, style = 3)
   
   for(i in 1:length(files)){
     outFile <- paste(options("prism.path"),files[i],sep="/")

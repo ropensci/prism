@@ -13,8 +13,7 @@
 prism_image <- function(prismfile, col = "heat"){
   
   ### This works for recent data but a new file needs to be created for 
-  prismfilexml <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".xml",sep="")
-  pname <- prism_md(prismfilexml)[2]
+  pname <- unlist(prism_md(prismfile))
   
   if(length(prismfile) != 1){
     stop("You can only quick image one at a time")

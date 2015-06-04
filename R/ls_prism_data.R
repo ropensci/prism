@@ -2,7 +2,7 @@
 #' @description List the available data sets to load that have already been downloaded.
 #' @param absPath TRUE if you want to return the absolute path.
 #' @param name TRUE if you want file names and titles of data products.
-#' @return list of downloaded prism datasets, OR a data.frame of downloaded datasets (if \code{name} == TRUE)
+#' @return  a data frame of downloaded datasets 
 #' @examples \dontrun{
 #' ### Just get file names, used in many other prism* fxn
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
@@ -21,25 +21,20 @@ ls_prism_data <- function(absPath = F, name = F){
     path_check()
   }
   files <- list.files(getOption('prism.path'))
+  files <- files[grep("zip", files, invert=TRUE)]
+  fullPath <- paste(getOption('prism.path'), files, 
+                    paste0(files, ".bil"), sep="/")
+  meta_d <- unlist(prism_md(files))
+  out <- data.frame(files,stringsAsFactors = F)
+  
   if(absPath){
-    files <- files[grep("zip", files, invert=TRUE)]
-    return(paste(getOption('prism.path'), files, 
-                 paste0(files, ".bil"), sep="/"))
-  } else if(name){
-    prismfilexml <- paste0(getOption('prism.path'), 
-                           "/", ls_prism_data(), 
-                           "/", ls_prism_data(), ".xml")
-             
-    meta_d <- sapply(prismfilexml, prism_md, simplify=FALSE)
-    pname <- unlist(lapply(meta_d, function(x) x[2]))
-    out <- as.data.frame(cbind(files[grep("zip", 
-                                          files, 
-                                          invert=TRUE)], 
-                               pname))
-    rownames(out) <- 1:dim(out)[1]
-    colnames(out) <- c("File name", "Product name")
-    return(out)
-  } else {
-    return(files[grep("zip", files, invert=TRUE)])
+  out$abs_path <- fullPath
+  } 
+  
+  if(name){
+    out$product_name <- meta_d
+   
   }
+    return(out)
+  
 }
