@@ -3,9 +3,9 @@
 #' @param pfile the name of the file, should include "all", that is unzipped
 #' @param name a vector of names of files that you want to save.
 #' @details This should match all other files post 1980
-#' @example /dontrun {
-#' process_zip("PRISM_tmean_stable_4kmM2_1980_all_bil","PRISM_tmean_stable_4kmM2_198001_bil")
-#' process_zip("PRISM_tmean_stable_4kmM2_1980_all_bil",c("PRISM_tmean_stable_4kmM2_198001_bil","PRISM_tmean_stable_4kmM2_198002_bil"))
+#' @examples \dontrun{
+#' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil','PRISM_tmean_stable_4kmM2_198001_bil')
+#' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
 #' }
 #' @export
 
@@ -13,7 +13,7 @@ process_zip <- function(pfile,name){
   stop("Fix errors in process_zip")
   tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
   ##Remove all.xml file
-  file.remove(paste(options("prism.path")[[1]],file,grep("all",tmpwd,value = T),sep="/"))
+  file.remove(paste(options("prism.path")[[1]],pfile,grep("all",tmpwd,value = T),sep="/"))
   ## Get new list of files after removing all.xml
   tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
 
