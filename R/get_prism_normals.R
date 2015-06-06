@@ -1,7 +1,8 @@
 #' Download data for 30 year normals of climate variables
 #' @description Download data from the prism project for 30 year normals at 4km or 800m grid cell resolution for precipitation, mean, min and max temperature
-#' @param type The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
-#' @param resolution The spatial resolution of the data, must be either "4km" or "800m"
+#' @param type The type of data to download, must be "ppt", "tmean", "tmin", "tmax", or "all",
+#'        which downloads "ppt", "tmin", and "tmax". Note that tmean == mean(tmin, tmax).
+#' @param resolution The spatial resolution of the data, must be either "4km" or "800m".
 #' @param month a numeric value for month, can be a numeric vector of months.
 #' @param annual if TRUE download annual data
 #' @param keepZip if TRUE, leave the downloaded zip files in your 'prism.path', if FALSE, they will be deleted
@@ -13,7 +14,6 @@
 #' }
 #' @export
 get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,  keepZip = TRUE){
-  
   ### parameter and error handling
   path_check()
   type <- match.arg(type, c("ppt","tmean","tmin","tmax"))
@@ -75,10 +75,13 @@ mon_to_string <- function(month){
 #' @param prismfile a list of full paths for prism files
 #' @return a character vector of file names that already exist
 #' @export
-
 prism_check <- function(prismfile){
-  out <- ls_prism_data()
-  f <- unlist(sapply(prismfile,strsplit,split=".zip"))
-  tf <- unlist(lapply(sapply(f,grepl,x=out,simplify=F),sum))
-  return(names(tf)[!tf])
+  file_bases <- unlist(sapply(prismfile, strsplit, split=".zip"))
+  which_downloaded <- sapply(file_bases, function(base) {
+    # Look inside the folder to see if the .bil is there
+    # Won't be able to check for all other files. Unlikely to matter.
+    ls_folder <- list.files(file.path(getOption("prism.path"), base))
+    any(grepl("\\.bil", ls_folder))
+  })
+  prismfile[!which_downloaded]
 }

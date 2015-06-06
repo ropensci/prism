@@ -10,6 +10,7 @@
 #' @export
 
 process_zip <- function(pfile,name){
+  stop("Fix errors in process_zip")
   tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
   ##Remove all.xml file
   file.remove(paste(options("prism.path")[[1]],file,grep("all",tmpwd,value = T),sep="/"))
