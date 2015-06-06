@@ -34,7 +34,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     # If the requested dates fall in the last 6 months,
     # some may show as provisional. Since this takes time,
     # only want to do this if data is from the last 6 months.
-    filenames <- get_recent_filenames_d(type = type)
+    filenames <- get_recent_filenames(type = type, frequency = "daily")
     for(i in 1:length(dates)){
       # parse date
       dstring <- strsplit(as.character(dates[i]), "-")[[1]]

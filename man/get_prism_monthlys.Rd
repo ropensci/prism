@@ -26,7 +26,7 @@ at 4km grid cell resolution for precipitation, mean, min, and max temperature
 \details{
 Data is available from 1891 until 2014, however you have to download all
 data for years prior to 1981.
-Thefore if you enter a vector of years that bounds 1981,
+Therefore if you enter a vector of years that bounds 1981,
 you will automatically download all data for all years in the vector.
 If the "all" parameter is set to TRUE, it will override any months
 entered and download all data. Data will be downloaded for all months

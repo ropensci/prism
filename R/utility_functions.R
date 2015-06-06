@@ -1,15 +1,20 @@
 #' @title Get daily data file names for last 2 years  
 #' @description Utility function to download all filenames
 #' for the last two years. This is to determine which are
-#' currently showing as provisional, early, or stable. 
-get_recent_filenames_d <- function(type) {
-  base <- "ftp://prism.nacse.org/daily"
-  
-  full_path_this <- paste(base, type, year(Sys.Date()), "", sep = "/")
+#' currently showing as provisional, early, or stable.
+#' @inheritParams get_prism_dailys
+#' @param frequency \code{character} for the frequency. One of
+#' "daily" or "monthly". 
+get_recent_filenames <- function(type, frequency) {
+  frequency <- match.arg(frequency, c("daily", "monthly"))
+
+  full_path_this <- paste("ftp://prism.nacse.org", frequency, 
+                          type, year(Sys.Date()), "", sep = "/")
   filenames_this <- getURL(full_path_this, ftp.use.epsv = FALSE, dirlistonly = TRUE)
   filenames_this <- strsplit(filenames_this, split = "\r\n")[[1]]
   
-  full_path_last <- paste(base, type, year(Sys.Date()) - 1, "", sep = "/")
+  full_path_last <- paste("ftp://prism.nacse.org", frequency, 
+                          type, year(Sys.Date()) - 1, "", sep = "/")
   filenames_last <- getURL(full_path_last, ftp.use.epsv = FALSE, dirlistonly = TRUE)
   # Stores all the filenames for this and last year
   c(filenames_this, strsplit(filenames_last, split = "\r\n")[[1]])
