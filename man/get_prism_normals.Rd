@@ -8,9 +8,10 @@ get_prism_normals(type, resolution, month = NULL, annual = FALSE,
   keepZip = TRUE)
 }
 \arguments{
-\item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".}
+\item{type}{The type of data to download, must be "ppt", "tmean", "tmin", "tmax", or "all",
+which downloads "ppt", "tmin", and "tmax". Note that tmean == mean(tmin, tmax).}
 
-\item{resolution}{The spatial resolution of the data, must be either "4km" or "800m"}
+\item{resolution}{The spatial resolution of the data, must be either "4km" or "800m".}
 
 \item{month}{a numeric value for month, can be a numeric vector of months.}
 

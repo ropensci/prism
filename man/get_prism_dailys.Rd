@@ -8,7 +8,8 @@ get_prism_dailys(type, minDate = NULL, maxDate = NULL, dates = NULL,
   keepZip = TRUE)
 }
 \arguments{
-\item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".}
+\item{type}{The type of data to download, must be "ppt", "tmean", "tmin", "tmax", or "all",
+which downloads "ppt", "tmin", and "tmax". Note that tmean == mean(tmin, tmax).}
 
 \item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start to download data.}
 

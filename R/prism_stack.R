@@ -6,7 +6,6 @@
 #' mystack <- prism_stack(ls_prism_data()[1:14])
 #' }
 #' @export
-
 prism_stack <- function(prismfile){
   prismfile <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".bil",sep="")
   masterRaster <- stack(raster(prismfile[1]))

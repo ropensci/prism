@@ -1,4 +1,3 @@
-
 #' Extract select prism metadata
 #' @description used to extract some prism metadata used in other fxns
 #' @param f a simple directory name

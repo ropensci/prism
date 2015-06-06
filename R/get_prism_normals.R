@@ -54,37 +54,3 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   
   
 }
-
-#' helper function for handling months
-#' @description Handle numeric month to string conversions
-#' @param month a numeric vector of months (month must be > 0 and <= 12)
-#' @return a character vector (same length as \code{month}) with 2 char month strings.
-#' @examples
-#' mon_to_string(month = c(1, 3, 2))
-#' mon_to_string(month = 12)
-#' @export
-mon_to_string <- function(month){
-  out <- vector()
-  for(i in 1:length(month)){
-    if(month[i] < 1 || month[i] > 12){stop("Please enter a valid numeric month")}
-    if(month[i] < 10){ out[i] <- paste("0",month[i],sep="")}
-    else { out[i] <- paste0(month[i]) }
-  }
-  return(out)
-}
-
-#' Helper function to check if files already exist
-#' @description check if files exist
-#' @param prismfile a list of full paths for prism files
-#' @return a character vector of file names that already exist
-#' @export
-prism_check <- function(prismfile){
-  file_bases <- unlist(sapply(prismfile, strsplit, split=".zip"))
-  which_downloaded <- sapply(file_bases, function(base) {
-    # Look inside the folder to see if the .bil is there
-    # Won't be able to check for all other files. Unlikely to matter.
-    ls_folder <- list.files(file.path(getOption("prism.path"), base))
-    any(grepl("\\.bil", ls_folder))
-  })
-  prismfile[!which_downloaded]
-}

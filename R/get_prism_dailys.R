@@ -34,16 +34,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     # If the requested dates fall in the last 6 months,
     # some may show as provisional. Since this takes time,
     # only want to do this if data is from the last 6 months.
-    if (max(dates) > Sys.Date() - 190) {
-      full_path_this <- paste(base, type, year(Sys.Date()), "", sep = "/")
-      filenames_this <- getURL(full_path_this, ftp.use.epsv = FALSE, dirlistonly = TRUE)
-      filenames_this <- strsplit(filenames_this, split = "\r\n")[[1]]
-      
-      full_path_last <- paste(base, type, year(Sys.Date()) - 1, "", sep = "/")
-      filenames_last <- getURL(full_path_last, ftp.use.epsv = FALSE, dirlistonly = TRUE)
-      # Stores all the filenames for this and last year
-      filenames <- c(filenames_this, strsplit(filenames_last, split = "\r\n")[[1]])
-    }
+    filenames <- get_recent_filenames_d(type = type)
     for(i in 1:length(dates)){
       # parse date
       dstring <- strsplit(as.character(dates[i]), "-")[[1]]

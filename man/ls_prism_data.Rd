@@ -12,7 +12,7 @@ ls_prism_data(absPath = F, name = F)
 \item{name}{TRUE if you want file names and titles of data products.}
 }
 \value{
-list of downloaded prism datasets, OR a data.frame of downloaded datasets (if \code{name} == TRUE)
+a data frame of downloaded datasets
 }
 \description{
 List the available data sets to load that have already been downloaded.

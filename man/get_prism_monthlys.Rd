@@ -7,19 +7,32 @@
 get_prism_monthlys(type, year = NULL, month = NULL, keepZip = TRUE)
 }
 \arguments{
-\item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".}
+\item{type}{The type of data to download, must be "ppt", "tmean", "tmin", "tmax", or "all",
+which downloads "ppt", "tmin", and "tmax". Note that tmean == mean(tmin, tmax).}
 
-\item{year}{a valid numeric year, or vector of years, to download data for.  If no month is specified, year averages for that year will be downloaded}
+\item{year}{a valid numeric year, or vector of years,
+to download data for. If no month is specified, year
+averages for that year will be downloaded}
 
 \item{month}{a valid numeric month, or vector of months.}
 
-\item{keepZip}{if true, leave the downloaded zip files in your 'prism.path', if FALSE, they will be deleted}
+\item{keepZip}{if true, leave the downloaded zip files
+in your 'prism.path', if FALSE, they will be deleted}
 }
 \description{
-Download monthly data from the prism project at 4km grid cell resolution for precipitation, mean, min and max temperature
+Download monthly data from the prism project
+at 4km grid cell resolution for precipitation, mean, min, and max temperature
 }
 \details{
-Data is available from 1891 until 2014, however you have to download all data for years prior to 1981.  Thefore if you enter a vector of years that bounds 1981, you will automatically download all data for all years in the vector.  If the "all" parameter is set to TRUE, it will override any months entered and download all data. Data will be downloaded for all months in all the years in the vectors supplied. You must make sure that you have set up a valid download directory.  This must be set as options(prism.path = "YOURPATH")
+Data is available from 1891 until 2014, however you have to download all
+data for years prior to 1981.
+Thefore if you enter a vector of years that bounds 1981,
+you will automatically download all data for all years in the vector.
+If the "all" parameter is set to TRUE, it will override any months
+entered and download all data. Data will be downloaded for all months
+in all the years in the vectors supplied. You must make sure
+that you have set up a valid download directory.
+This must be set as options(prism.path = "YOURPATH")
 }
 \examples{
 \dontrun{
