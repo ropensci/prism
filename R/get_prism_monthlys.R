@@ -64,6 +64,7 @@ get_prism_monthlys <- function(type, year = NULL, month = NULL, keepZip = TRUE){
     for(i in 1:length(year)){
       #parse date
       full_path <- paste(base, type, year[i], sep = "/")
+      
       if(min(as.numeric(year[i])) > 1980) {
         for(j in 1:length(month)){
           if (max(year) >= year(Sys.Date() - 190)){
@@ -121,22 +122,33 @@ get_prism_monthlys <- function(type, year = NULL, month = NULL, keepZip = TRUE){
             current_net2_status <- setInternet2(NA)
             setInternet2(FALSE)
           }
-          tryCatch({
-            download.file(url = paste(full_path, fileName, sep="/"), 
-                          destfile = outFile, quiet=TRUE, mode = "wb")
-            unzip(outFile, exdir = strsplit(outFile,".zip")[[1]])
-            if(!keepZip){
-              file.remove(outFile)
-            }
-          }, error = function(e) {
-            stop(" \n Error: Requested file cannot be found on the server")
-          })
+          tryNumber <- 1
+          downloaded <- FALSE
+          while(tryNumber < 11 & !downloaded){
+            downloaded <- TRUE
+            tryCatch({
+              download.file(url = paste(full_path, fileName, sep="/"),
+                            destfile = outFile, quiet=TRUE, mode = "wb")
+              if(!keepZip){
+                file.remove(outFile)
+              }
+            }, error = function(e) {
+              downloaded <<- FALSE
+            })
+            tryNumber <- tryNumber + 1
+          }
           if (Sys.info()["sysname"] == "Windows") {
             setInternet2(current_net2_status)
           }
           
-          ### Now process the data by month
-          ## First get the name of the directory with the data
+          if (!downloaded){
+            warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
+                           ", and year = ", year[j]))
+          } else {
+            unzip(outFile, exdir = strsplit(outFile,".zip")[[1]])
+          }
+          # Now process the data by month
+          # First get the name of the directory with the data
           all_file <- strsplit(fileName, '[.]')[[1]][1]
           to_split <- sapply(month, function(x) gsub("_all", sprintf("%02d", x), all_file))
           process_zip(all_file, to_split)
