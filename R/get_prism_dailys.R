@@ -40,7 +40,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
       dstring <- strsplit(as.character(dates[i]), "-")[[1]]
       if(as.numeric(dstring[1]) < 1981) stop("You must ask for data after 1981")
       
-      if(dates[i] > Sys.Date() - 190) {
+      if(dates[i] > Sys.Date() - 250) {
         index <- grep(gsub("-", "", dates[i]), filenames)
         if (length(index) == 0) {
           # Handle dates that are unavailable
@@ -78,6 +78,9 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
         
         if (!downloaded) {
           warning(paste0("Downloading failed for type = ", type, " and date = ", dates[i]))
+          if (file.exists(outFile)){
+            file.remove(outFile)
+          }
         } else {
           unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]])
           

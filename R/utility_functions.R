@@ -5,6 +5,8 @@
 #' @inheritParams get_prism_dailys
 #' @param frequency \code{character} for the frequency. One of
 #' "daily" or "monthly". 
+#' @importFrom RCurl getURL
+#' @importFrom lubridate year
 get_recent_filenames <- function(type, frequency) {
   frequency <- match.arg(frequency, c("daily", "monthly"))
 
