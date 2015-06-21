@@ -24,7 +24,7 @@
 #' @export
 get_prism_monthlys <- function(type, year = NULL, month = NULL, keepZip = TRUE){
   ### parameter and error handling
-  prism:::path_check()
+  path_check()
   type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax", "all"))
   if (type == "all") {
     get_prism_monthlys(type = "ppt", year = year, month = month, 

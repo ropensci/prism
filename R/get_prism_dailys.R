@@ -10,7 +10,7 @@
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL, keepZip = TRUE){
-  prism:::path_check()
+  path_check()
   if(!is.null(dates) && !is.null(maxDate)){
     stop("You can enter a date range or a vector of dates, but not both")
   }
@@ -54,7 +54,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
       }
       
       full_path <- paste(base, type, year(dates[i]), sep = "/")
-      if(length(prism:::prism_check(fileName)) == 1){
+      if(length(prism_check(fileName)) == 1){
         outFile <- paste(options("prism.path"), fileName, sep = "/")
         tryNumber <- 1
         downloaded <- FALSE
