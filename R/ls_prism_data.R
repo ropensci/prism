@@ -22,6 +22,8 @@ ls_prism_data <- function(absPath = F, name = F){
   }
   files <- list.files(getOption('prism.path'))
   files <- files[grep("zip", files, invert=TRUE)]
+  # Attempt to ensure that only PRISM files are counted. 
+  files <- files[grep("PRISM", files)]
   fullPath <- paste(getOption('prism.path'), files, 
                     paste0(files, ".bil"), sep="/")
   meta_d <- unlist(prism_md(files))
