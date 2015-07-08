@@ -10,7 +10,7 @@ Currently the package is only available on github and installable with `devtools
 
 ```r
 library(devtools)
-install_github(ropensci/prism)
+install_github("ropensci/prism")
 library(prism)
 ```
 
