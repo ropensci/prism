@@ -17,8 +17,7 @@ Imports:
     raster,
     XML,
     RCurl,
-    lubridate,
-    rgdal
+    lubridate
 Depends: 
     knitr
 LazyLoad: yes

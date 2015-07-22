@@ -2,9 +2,9 @@
 #' @description Download monthly data from the prism project 
 #' at 4km grid cell resolution for precipitation, mean, min, and max temperature
 #' @inheritParams get_prism_dailys
-#' @param year a valid numeric year, or vector of years, 
-#' to download data for. If no month is specified, year 
-#' averages for that year will be downloaded
+#' @param years a valid numeric years, or vector of years, 
+#' to download data for. If no month is specified, years 
+#' averages for that years will be downloaded
 #' @param month a valid numeric month, or vector of months.
 #' @param keepZip if true, leave the downloaded zip files 
 #' in your 'prism.path', if FALSE, they will be deleted
@@ -19,19 +19,19 @@
 #' This must be set as options(prism.path = "YOURPATH")
 #' @examples \dontrun{
 #' ### Get all the data for January from 1990 to 2000
-#' get_prism_monthlys(type="tmean", year = 1990:2000, month = 1, keepZip=F)
+#' get_prism_monthlys(type="tmean", years = 1990:2000, month = 1, keepZip=F)
 #' }
 #' @export
-get_prism_monthlys <- function(type, year = NULL, month = NULL, keepZip = TRUE){
+get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE){
   ### parameter and error handling
   path_check()
   type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax", "all"))
   if (type == "all") {
-    get_prism_monthlys(type = "ppt", year = year, month = month, 
+    get_prism_monthlys(type = "ppt", years = years, month = month, 
                        keepZip = keepZip)
-    get_prism_monthlys(type = "tmin", year = year, month = month, 
+    get_prism_monthlys(type = "tmin", years = years, month = month, 
                        keepZip = keepZip)
-    get_prism_monthlys(type = "tmax", year = year, month = month, 
+    get_prism_monthlys(type = "tmax", years = years, month = month, 
                        keepZip = keepZip)
   } else {
     
@@ -45,34 +45,39 @@ get_prism_monthlys <- function(type, year = NULL, month = NULL, keepZip = TRUE){
     }
     
     ### Check year
-    if(!is.numeric(year)){
+    if(!is.numeric(years)){
       stop("You must enter a numeric year from 1895 onwards.")
     }
     
     ### Check months
-    if(any(year < 1895)){
+    if(any(years < 1895)){
       stop("You must enter a year from 1895 onwards.")
     }
     
+    ### Get processing version in case the name has changed
+    
+    
     ### Handle data after 1980
-    download_pb <- txtProgressBar(min = 0, max = length(year) * length(month), style = 3)
+    download_pb <- txtProgressBar(min = 0, max = length(years) * length(month), style = 3)
     counter <- 1
     base <- "ftp://prism.nacse.org/monthly"
-    if (max(year) >= year(Sys.Date() - 190)) {
+    if (max(years) >= year(Sys.Date() - 190)) {
       filenames <- get_recent_filenames(type = type, frequency = "monthly")
     }
-    for(i in 1:length(year)){
+    for(i in 1:length(years)){
       #parse date
-      full_path <- paste(base, type, year[i], sep = "/")
+      full_path <- paste(base, type, years[i], sep = "/")
       
-      if(min(as.numeric(year[i])) > 1980) {
+      if(years[i] > 1980) {
+        proc_ver <- extract_version(type = type,temporal = "monthly",yr = years[i])
+        
         for(j in 1:length(month)){
-          if (max(year) >= year(Sys.Date() - 190)){
-            fileName <- filenames[grep(paste0(year[i], mon_to_string(month[j])),
+          if (max(years) >= year(Sys.Date() - 190)){
+            fileName <- filenames[grep(paste0(years[i], mon_to_string(month[j])),
                              filenames)]
           } else {
-            fileName <- paste0("PRISM_", type, "_stable_4kmM2_", 
-                               year[i], mon_to_string(month[j]), 
+            fileName <- paste0("PRISM_", type, "_stable_",proc_ver,"_", 
+                               years[i], mon_to_string(month[j]), 
                                "_bil.zip")
           }
           if(length(prism_check(fileName)) == 1){
@@ -99,7 +104,7 @@ get_prism_monthlys <- function(type, year = NULL, month = NULL, keepZip = TRUE){
             }
             if (!downloaded) {
               warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
-                             ", and year = ", year[j]))
+                             ", and year = ", years[i]))
             } else {
               unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]])
               if(!keepZip){
@@ -114,7 +119,8 @@ get_prism_monthlys <- function(type, year = NULL, month = NULL, keepZip = TRUE){
         # Handle years before 1981.  
         # The whole years worth of data needs to be downloaded, 
         # then extracted, and copied into the main directory.
-        fileName <- paste0("PRISM_", type, "_stable_4kmM2_", year[i], "_all_bil.zip") 
+        proc_ver <- extract_version(type = type,temporal = "monthly",yr = years[i])
+        fileName <- paste0("PRISM_", type, "_stable_",proc_ver,"_", years[i], "_all_bil.zip") 
         if(length(prism_check(fileName)) == 1){
           outFile <- paste(options("prism.path"), fileName, sep="/")
           
@@ -143,7 +149,7 @@ get_prism_monthlys <- function(type, year = NULL, month = NULL, keepZip = TRUE){
           
           if (!downloaded){
             warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
-                           ", and year = ", year[j]))
+                           ", and years = ", years[i]))
           } else {
             unzip(outFile, exdir = strsplit(outFile,".zip")[[1]])
           }
