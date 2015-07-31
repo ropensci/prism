@@ -7,6 +7,7 @@
 #' "daily" or "monthly". 
 #' @importFrom RCurl getURL
 #' @importFrom lubridate year
+#' @export
 get_recent_filenames <- function(type, frequency) {
   frequency <- match.arg(frequency, c("daily", "monthly"))
 
@@ -29,6 +30,7 @@ get_recent_filenames <- function(type, frequency) {
 #' @examples
 #' mon_to_string(month = c(1, 3, 2))
 #' mon_to_string(month = 12)
+#' @export
 mon_to_string <- function(month){
   out <- vector()
   for(i in 1:length(month)){
@@ -41,6 +43,7 @@ mon_to_string <- function(month){
 
 #' handle existing directory
 #' @description create new directory for user if they don't have one to store prism files
+#' @export
 path_check <- function(){
   user_path <- NULL
   if(is.null(getOption('prism.path'))){
@@ -71,6 +74,7 @@ path_check <- function(){
 #' @description check if files exist
 #' @param prismfile a list of full paths for prism files
 #' @return a character vector of file names that already exist
+#' @export
 prism_check <- function(prismfile){
   file_bases <- unlist(sapply(prismfile, strsplit, split=".zip"))
   which_downloaded <- sapply(file_bases, function(base) {
@@ -91,6 +95,8 @@ prism_check <- function(prismfile){
 #' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil','PRISM_tmean_stable_4kmM2_198001_bil')
 #' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
 #' }
+#' @export
+
 process_zip <- function(pfile,name){
   stop("Fix errors in process_zip")
   tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
@@ -138,12 +144,16 @@ process_zip <- function(pfile,name){
 #' @export
 extract_version <- function(type,temporal,yr){
   base <- paste("ftp://prism.nacse.org/",temporal,"/",type,"/",yr,"/",sep="")
-  dirlist <- getURL(base,ftp.use.epsv=FALSE,dirlistonly = TRUE)
+  dirlist <- tryCatch({
+    getURL(base,ftp.use.epsv=FALSE,dirlistonly = TRUE)},
+    error = function(e){
+      print("Error resolving FTP host, please try again in a few moments")
+    })
   # Get the first split and take the last element
   sp1 <- unlist(strsplit(dirlist,"PRISM_"))
   sp2 <- unlist(strsplit(sp1[length(sp1)],"zip"))[1]
   #Now we have an exemplar listing
-  sp1 <- unlist(strsplit(sp2,"stable_"))[2]
+  sp1 <- unlist(strsplit(sp2,"[A-Za-z]_"))[3]
   sp2 <- unlist(strsplit(sp1,"_[0-9]{4,8}"))
   return(sp2[1])
 }
