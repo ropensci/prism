@@ -24,6 +24,9 @@
 #' @export
 get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE){
   ### parameter and error handling
+  ## Set the frequency to get the file name listing
+  freq <- "monthly"
+  
   path_check()
   type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax", "all"))
   if (type == "all") {
@@ -54,32 +57,28 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
       stop("You must enter a year from 1895 onwards.")
     }
     
-    ### Get processing version in case the name has changed
     
     
     ### Handle data after 1980
     download_pb <- txtProgressBar(min = 0, max = length(years) * length(month), style = 3)
     counter <- 1
     base <- "ftp://prism.nacse.org/monthly"
-    if (max(years) >= year(Sys.Date() - 190)) {
-      filenames <- get_recent_filenames(type = type, frequency = "monthly")
-    }
+  
     for(i in 1:length(years)){
       #parse date
       full_path <- paste(base, type, years[i], sep = "/")
       
       if(years[i] > 1980) {
-        proc_ver <- extract_version(type = type,temporal = "monthly",yr = years[i])
         
+        fileName <- get_filenames(type,freq,years[i])
+        ### subset the list of files down to the ones we want to download
+        match_list <- paste(years[i],formatC(month, width = 2, format = "d", flag = "0"),sep="")
         for(j in 1:length(month)){
-          if (max(years) >= year(Sys.Date() - 190)){
-            fileName <- filenames[grep(paste0(years[i], mon_to_string(month[j])),
-                             filenames)]
-          } else {
+  
             fileName <- paste0("PRISM_", type, "_stable_",proc_ver,"_", 
                                years[i], mon_to_string(month[j]), 
                                "_bil.zip")
-          }
+          
           if(length(prism_check(fileName)) == 1){
             outFile <- paste(options("prism.path"), fileName, sep="/")
             tryNumber <- 1
