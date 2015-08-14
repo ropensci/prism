@@ -71,18 +71,18 @@ path_check <- function(){
 
 #' Helper function to check if files already exist
 #' @description check if files exist
-#' @param prismfile a list of full paths for prism files
+#' @param prismfiles a list of full paths for prism files
 #' @return a character vector of file names that already exist
 #' @export
-prism_check <- function(prismfile){
-  file_bases <- unlist(sapply(prismfile, strsplit, split=".zip"))
+prism_check <- function(prismfiles){
+  file_bases <- unlist(sapply(prismfiles, strsplit, split=".zip"))
   which_downloaded <- sapply(file_bases, function(base) {
     # Look inside the folder to see if the .bil is there
     # Won't be able to check for all other files. Unlikely to matter.
     ls_folder <- list.files(file.path(getOption("prism.path"), base))
     any(grepl("\\.bil", ls_folder))
   })
-  prismfile[!which_downloaded]
+  prismfiles[!which_downloaded]
 }
 
 #' Process pre 1980 files
@@ -128,31 +128,4 @@ process_zip <- function(pfile,name){
   })
   
   
-  file.remove(paste(options("prism.path")[[1]],pfile,sep="/"),recursive = T)
-  
-  
-}
-
-
-#' Get the resolution text string
-#' @description To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing
-#' @param type the type of data you're downloading, should be tmax, tmin etc...
-#' @param temporal The temporal resolution of the data, monthly, daily, etc...
-#' @param yr the year of data that's being requested, in numeric form
-#' @importFrom RCurl getURL
-#' @export
-extract_version <- function(type,temporal,yr){
-  base <- paste("ftp://prism.nacse.org/",temporal,"/",type,"/",yr,"/",sep="")
-  dirlist <- tryCatch({
-    getURL(base,ftp.use.epsv=FALSE,dirlistonly = TRUE)},
-    error = function(e){
-      print("Error resolving FTP host, please try again in a few moments")
-    })
-  # Get the first split and take the last element
-  sp1 <- unlist(strsplit(dirlist,"PRISM_"))
-  sp2 <- unlist(strsplit(sp1[length(sp1)],"zip"))[1]
-  #Now we have an exemplar listing
-  sp1 <- unlist(strsplit(sp2,"[A-Za-z]_"))[3]
-  sp2 <- unlist(strsplit(sp1,"_[0-9]{4,8}"))
-  return(sp2[1])
-}
+  file.remove(paste(options("prism.path")[[1]],pfile,sep="/"),recursive = T)}

@@ -73,14 +73,15 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
         fileName <- get_filenames(type,freq,years[i])
         ### subset the list of files down to the ones we want to download
         match_list <- paste(years[i],formatC(month, width = 2, format = "d", flag = "0"),sep="")
-        for(j in 1:length(month)){
-  
-            fileName <- paste0("PRISM_", type, "_stable_",proc_ver,"_", 
-                               years[i], mon_to_string(month[j]), 
-                               "_bil.zip")
-          
-          if(length(prism_check(fileName)) == 1){
-            outFile <- paste(options("prism.path"), fileName, sep="/")
+        
+        fileName <- grep(paste(match_list,collapse="|"),fileName,value = TRUE)
+        ### Check for existing file names  that are already downloaded
+        fileName <- prism_check(fileName)
+        
+          if(length(fileName) >= 1){
+            
+            for(j in 1:length(fileName)) {
+            outFile <- paste(options("prism.path"), fileName[j], sep="/")
             tryNumber <- 1
             downloaded <- FALSE
             
@@ -91,7 +92,7 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
             while(tryNumber < 11 & !downloaded){
               downloaded <- TRUE
               tryCatch(
-                download.file(url = paste(full_path, fileName, sep = "/"), 
+                download.file(url = paste(full_path, fileName[j], sep = "/"), 
                               destfile = outFile, mode = "wb", quiet = TRUE), 
                 error = function(e){
                   downloaded <<- FALSE
@@ -110,10 +111,11 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
                 file.remove(outFile)
               }
             }
-          }
+          
           setTxtProgressBar(download_pb, counter)
           counter <- counter + 1
-        }
+            }
+          }
       } else {
         # Handle years before 1981.  
         # The whole years worth of data needs to be downloaded, 
