@@ -97,7 +97,6 @@ prism_check <- function(prismfiles){
 #' @export
 
 process_zip <- function(pfile,name){
-  stop("Fix errors in process_zip")
   tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
   ##Remove all.xml file
   file.remove(paste(options("prism.path")[[1]],pfile,grep("all",tmpwd,value = T),sep="/"))
@@ -128,4 +127,6 @@ process_zip <- function(pfile,name){
   })
   
   
-  file.remove(paste(options("prism.path")[[1]],pfile,sep="/"),recursive = T)}
+  file.remove(paste(options("prism.path")[[1]],pfile,sep="/"),recursive = T)
+
+}

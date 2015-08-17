@@ -120,9 +120,9 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
         # Handle years before 1981.  
         # The whole years worth of data needs to be downloaded, 
         # then extracted, and copied into the main directory.
-        proc_ver <- extract_version(type = type,temporal = "monthly",yr = years[i])
-        fileName <- paste0("PRISM_", type, "_stable_",proc_ver,"_", years[i], "_all_bil.zip") 
-        if(length(prism_check(fileName)) == 1){
+        fileName <- get_filenames(type,freq,years[i])
+        
+        
           outFile <- paste(options("prism.path"), fileName, sep="/")
           
           if (Sys.info()["sysname"] == "Windows") {
@@ -136,9 +136,6 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
             tryCatch({
               download.file(url = paste(full_path, fileName, sep="/"),
                             destfile = outFile, quiet=TRUE, mode = "wb")
-              if(!keepZip){
-                file.remove(outFile)
-              }
             }, error = function(e) {
               downloaded <<- FALSE
             })
@@ -153,13 +150,16 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
                            ", and years = ", years[i]))
           } else {
             unzip(outFile, exdir = strsplit(outFile,".zip")[[1]])
+            if(!keepZip){
+              file.remove(outFile)
+            }
           }
           # Now process the data by month
           # First get the name of the directory with the data
           all_file <- strsplit(fileName, '[.]')[[1]][1]
           to_split <- sapply(month, function(x) gsub("_all", sprintf("%02d", x), all_file))
           process_zip(all_file, to_split)
-        }
+        
         setTxtProgressBar(download_pb, i)
       }
       close(download_pb)
