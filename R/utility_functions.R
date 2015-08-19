@@ -26,9 +26,10 @@ get_recent_filenames <- function(type, frequency) {
 #' @description Handle numeric month to string conversions
 #' @param month a numeric vector of months (month must be > 0 and <= 12)
 #' @return a character vector (same length as \code{month}) with 2 char month strings.
-#' @examples
-#' mon_to_string(month = c(1, 3, 2))
-#' mon_to_string(month = 12)
+#' @examples \dontrun{
+#'   mon_to_string(month = c(1, 3, 2))
+#'   mon_to_string(month = 12)
+#' }
 mon_to_string <- function(month){
   out <- vector()
   for(i in 1:length(month)){
