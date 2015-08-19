@@ -4,15 +4,15 @@
 \alias{get_prism_monthlys}
 \title{Download monthly prism data}
 \usage{
-get_prism_monthlys(type, year = NULL, month = NULL, keepZip = TRUE)
+get_prism_monthlys(type, years = NULL, month = NULL, keepZip = TRUE)
 }
 \arguments{
 \item{type}{The type of data to download, must be "ppt", "tmean", "tmin", "tmax", or "all",
 which downloads "ppt", "tmin", and "tmax". Note that tmean == mean(tmin, tmax).}
 
-\item{year}{a valid numeric year, or vector of years,
-to download data for. If no month is specified, year
-averages for that year will be downloaded}
+\item{years}{a valid numeric years, or vector of years,
+to download data for. If no month is specified, years
+averages for that years will be downloaded}
 
 \item{month}{a valid numeric month, or vector of months.}
 
@@ -37,7 +37,7 @@ This must be set as options(prism.path = "YOURPATH")
 \examples{
 \dontrun{
 ### Get all the data for January from 1990 to 2000
-get_prism_monthlys(type="tmean", year = 1990:2000, month = 1, keepZip=F)
+get_prism_monthlys(type="tmean", years = 1990:2000, month = 1, keepZip=F)
 }
 }
 
