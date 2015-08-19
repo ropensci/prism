@@ -91,41 +91,43 @@ prism_check <- function(prismfile){
 #' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil','PRISM_tmean_stable_4kmM2_198001_bil')
 #' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
 #' }
-process_zip <- function(pfile,name){
-  stop("Fix errors in process_zip")
-  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
-  ##Remove all.xml file
-  file.remove(paste(options("prism.path")[[1]],pfile,grep("all",tmpwd,value = T),sep="/"))
-  ## Get new list of files after removing all.xml
-  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
+process_zip <- function(pfile, name){
+  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
   
-  fstrip <- strsplit(tmpwd,"\\.")
-  fstrip <- unlist(lapply(fstrip,function(x) return(x[1])))
+  # Remove all.xml file
+  file.remove(paste(options("prism.path")[[1]], pfile, grep("all", tmpwd, value = T), sep="/"))
+  
+  # Get new list of files after removing all.xml
+  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
+  
+  fstrip <- strsplit(tmpwd, "\\.")
+  fstrip <- unlist(lapply(fstrip, function(x) return(x[1])))
   unames <- unique(fstrip)
-  unames <- unames[unames%in%name]
+  unames <- unames[unames %in% name]
   for(j in 1:length(unames)){
-    newdir <- paste(options("prism.path")[[1]],unames[j],sep="/")
-    dir.create(newdir)
-    f2copy <- grep(unames[j],tmpwd,value=T)
-    sapply(f2copy,function(x){file.copy(from = paste(options("prism.path")[[1]],pfile,x,sep="/"),to = paste(newdir,x,sep="/")) })
-    sapply(f2copy,function(x){file.remove(paste(options("prism.path")[[1]],pfile,x,sep="/")) })
-    
-    
-    ### We lose all our metadata, so we need to rewrite it
-    
+    newdir <- paste(options("prism.path")[[1]], unames[j], sep="/")
+    tryCatch(dir.create(newdir), error = function(e) e,
+             warning = function(w){
+               warning(paste(newdir, "already exists. Overwriting existing data."))
+             })
+    f2copy <- grep(unames[j], tmpwd, value = TRUE)
+    sapply(f2copy, function(x){
+      file.copy(from = paste(options("prism.path")[[1]], pfile, x, sep="/"),
+                to = paste(newdir, x, sep="/")) 
+    })
+    sapply(f2copy, function(x){
+      file.remove(paste(options("prism.path")[[1]], pfile, x, sep="/"))
+    })
+    # We lose all our metadata, so we need to rewrite it
   }
-  ### Remove all files so the directory can be created.
-  ## Update file list
-  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
+  # Remove all files so the directory can be created.
+  # Update file list
+  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
   ## Now loop delete them all
-  sapply(tmpwd,function(x){
-    file.remove(paste(options("prism.path")[[1]],pfile,x,sep="/"))
+  sapply(tmpwd, function(x){
+    file.remove(paste(options("prism.path")[[1]], pfile, x, sep="/"))
   })
-  
-  
-  file.remove(paste(options("prism.path")[[1]],pfile,sep="/"),recursive = T)
-  
-  
+  unlink(paste(options("prism.path")[[1]], pfile, sep="/"), recursive = TRUE)
 }
 
 
@@ -136,14 +138,14 @@ process_zip <- function(pfile,name){
 #' @param yr the year of data that's being requested, in numeric form
 #' @importFrom RCurl getURL
 #' @export
-extract_version <- function(type,temporal,yr){
-  base <- paste("ftp://prism.nacse.org/",temporal,"/",type,"/",yr,"/",sep="")
-  dirlist <- getURL(base,ftp.use.epsv=FALSE,dirlistonly = TRUE)
+extract_version <- function(type, temporal, yr){
+  base <- paste0("ftp://prism.nacse.org/", temporal, "/", type, "/", yr, "/")
+  dirlist <- RCurl::getURL(base, ftp.use.epsv = FALSE, dirlistonly = TRUE)
   # Get the first split and take the last element
-  sp1 <- unlist(strsplit(dirlist,"PRISM_"))
-  sp2 <- unlist(strsplit(sp1[length(sp1)],"zip"))[1]
-  #Now we have an exemplar listing
-  sp1 <- unlist(strsplit(sp2,"stable_"))[2]
-  sp2 <- unlist(strsplit(sp1,"_[0-9]{4,8}"))
+  sp1 <- unlist(strsplit(dirlist, "PRISM_"))
+  sp2 <- unlist(strsplit(sp1[length(sp1)], "zip"))[1]
+  # Now we have an exemplar listing
+  sp1 <- unlist(strsplit(sp2, "stable_"))[2]
+  sp2 <- unlist(strsplit(sp1, "_[0-9]{4,8}"))
   return(sp2[1])
 }
