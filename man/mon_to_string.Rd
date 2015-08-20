@@ -16,7 +16,9 @@ a character vector (same length as \code{month}) with 2 char month strings.
 Handle numeric month to string conversions
 }
 \examples{
-mon_to_string(month = c(1, 3, 2))
-mon_to_string(month = 12)
+\dontrun{
+  mon_to_string(month = c(1, 3, 2))
+  mon_to_string(month = 12)
+}
 }
 

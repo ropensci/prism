@@ -54,25 +54,24 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
       stop("You must enter a year from 1895 onwards.")
     }
     
-    ### Get processing version in case the name has changed
+    # Get processing version in case the name has changed
     
     
-    ### Handle data after 1980
+    # Handle data after 1980
     download_pb <- txtProgressBar(min = 0, max = length(years) * length(month), style = 3)
-    counter <- 1
     base <- "ftp://prism.nacse.org/monthly"
-    if (max(years) >= year(Sys.Date() - 190)) {
+    if (max(years) >= lubridate::year(Sys.Date() - 190)) {
       filenames <- get_recent_filenames(type = type, frequency = "monthly")
     }
     for(i in 1:length(years)){
-      #parse date
+      # parse date
       full_path <- paste(base, type, years[i], sep = "/")
       
       if(years[i] > 1980) {
-        proc_ver <- extract_version(type = type,temporal = "monthly",yr = years[i])
+        proc_ver <- extract_version(type = type, temporal = "monthly",yr = years[i])
         
         for(j in 1:length(month)){
-          if (max(years) >= year(Sys.Date() - 190)){
+          if (max(years) >= lubridate::year(Sys.Date() - 190)){
             fileName <- filenames[grep(paste0(years[i], mon_to_string(month[j])),
                              filenames)]
           } else {
@@ -112,16 +111,18 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
               }
             }
           }
-          setTxtProgressBar(download_pb, counter)
-          counter <- counter + 1
+          setTxtProgressBar(download_pb, (i - 1)*length(month) + j)
         }
       } else {
-        # Handle years before 1981.  
-        # The whole years worth of data needs to be downloaded, 
+        # Handle years before 1981.
+        # The whole year's worth of data needs to be downloaded, 
         # then extracted, and copied into the main directory.
-        proc_ver <- extract_version(type = type,temporal = "monthly",yr = years[i])
-        fileName <- paste0("PRISM_", type, "_stable_",proc_ver,"_", years[i], "_all_bil.zip") 
-        if(length(prism_check(fileName)) == 1){
+        proc_ver <- extract_version(type = type, temporal = "monthly", yr = years[i])
+        fileName <- paste0("PRISM_", type, "_stable_", proc_ver, "_", years[i], "_all_bil.zip")
+        
+        files_to_check <- paste0("PRISM_", type, "_stable_", proc_ver, "_", 
+                                 years[i], mon_to_string(month), "_bil")
+        if(length(prism_check(files_to_check)) > 0){
           outFile <- paste(options("prism.path"), fileName, sep="/")
           
           if (Sys.info()["sysname"] == "Windows") {
@@ -135,9 +136,6 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
             tryCatch({
               download.file(url = paste(full_path, fileName, sep="/"),
                             destfile = outFile, quiet=TRUE, mode = "wb")
-              if(!keepZip){
-                file.remove(outFile)
-              }
             }, error = function(e) {
               downloaded <<- FALSE
             })
@@ -153,16 +151,19 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
           } else {
             unzip(outFile, exdir = strsplit(outFile,".zip")[[1]])
           }
+          if(!keepZip & file.exists(outFile)){
+            file.remove(outFile)
+          }
           # Now process the data by month
           # First get the name of the directory with the data
           all_file <- strsplit(fileName, '[.]')[[1]][1]
           to_split <- sapply(month, function(x) gsub("_all", sprintf("%02d", x), all_file))
-          process_zip(all_file, to_split)
+          process_zip(pfile = all_file, name = to_split)
         }
-        setTxtProgressBar(download_pb, i)
+        setTxtProgressBar(download_pb, i*length(month))
       }
-      close(download_pb)
     }
+    close(download_pb)
   }
 }
 

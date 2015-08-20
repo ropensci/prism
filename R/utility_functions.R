@@ -1,22 +1,22 @@
-#' @title Get daily data file names for last 2 years  
+#' @title Get daily data file names for last 2 years
 #' @description Utility function to download all filenames
 #' for the last two years. This is to determine which are
 #' currently showing as provisional, early, or stable.
 #' @inheritParams get_prism_dailys
 #' @param frequency \code{character} for the frequency. One of
-#' "daily" or "monthly". 
+#' "daily" or "monthly".
 #' @importFrom RCurl getURL
 #' @importFrom lubridate year
 #' @export
 get_recent_filenames <- function(type, frequency) {
   frequency <- match.arg(frequency, c("daily", "monthly"))
 
-  full_path_this <- paste("ftp://prism.nacse.org", frequency, 
+  full_path_this <- paste("ftp://prism.nacse.org", frequency,
                           type, year(Sys.Date()), "", sep = "/")
   filenames_this <- getURL(full_path_this, ftp.use.epsv = FALSE, dirlistonly = TRUE)
   filenames_this <- strsplit(filenames_this, split = "\r\n")[[1]]
-  
-  full_path_last <- paste("ftp://prism.nacse.org", frequency, 
+
+  full_path_last <- paste("ftp://prism.nacse.org", frequency,
                           type, year(Sys.Date()) - 1, "", sep = "/")
   filenames_last <- getURL(full_path_last, ftp.use.epsv = FALSE, dirlistonly = TRUE)
   # Stores all the filenames for this and last year
@@ -27,10 +27,10 @@ get_recent_filenames <- function(type, frequency) {
 #' @description Handle numeric month to string conversions
 #' @param month a numeric vector of months (month must be > 0 and <= 12)
 #' @return a character vector (same length as \code{month}) with 2 char month strings.
-#' @examples
-#' mon_to_string(month = c(1, 3, 2))
-#' mon_to_string(month = 12)
-#' @export
+#' @examples \dontrun{
+#'   mon_to_string(month = c(1, 3, 2))
+#'   mon_to_string(month = 12)
+#' }
 mon_to_string <- function(month){
   out <- vector()
   for(i in 1:length(month)){
@@ -52,14 +52,14 @@ path_check <- function(){
     # User may have input path with quotes. Remove these.
     user_path <- gsub(pattern = c("\"|'"), "", user_path)
     # Deal with relative paths
-    user_path <- ifelse(nchar(user_path) == 0, 
+    user_path <- ifelse(nchar(user_path) == 0,
                         paste(Sys.getenv("HOME"), "prismtmp", sep="/"),
                         file.path(normalizePath(user_path, winslash = "/")))
     options(prism.path = user_path)
   } else {
     user_path <- getOption('prism.path')
   }
-  
+
   ## Check if path exists
   if(!file.exists(file.path(user_path))){
     dir.create(user_path)
@@ -95,43 +95,44 @@ prism_check <- function(prismfile){
 #' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil','PRISM_tmean_stable_4kmM2_198001_bil')
 #' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
 #' }
-#' @export
 
-process_zip <- function(pfile,name){
-  stop("Fix errors in process_zip")
-  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
-  ##Remove all.xml file
-  file.remove(paste(options("prism.path")[[1]],pfile,grep("all",tmpwd,value = T),sep="/"))
-  ## Get new list of files after removing all.xml
-  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
-  
-  fstrip <- strsplit(tmpwd,"\\.")
-  fstrip <- unlist(lapply(fstrip,function(x) return(x[1])))
+process_zip <- function(pfile, name){
+  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
+
+  # Remove all.xml file
+  file.remove(paste(options("prism.path")[[1]], pfile, grep("all", tmpwd, value = T), sep="/"))
+
+  # Get new list of files after removing all.xml
+  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
+
+  fstrip <- strsplit(tmpwd, "\\.")
+  fstrip <- unlist(lapply(fstrip, function(x) return(x[1])))
   unames <- unique(fstrip)
-  unames <- unames[unames%in%name]
+  unames <- unames[unames %in% name]
   for(j in 1:length(unames)){
-    newdir <- paste(options("prism.path")[[1]],unames[j],sep="/")
-    dir.create(newdir)
-    f2copy <- grep(unames[j],tmpwd,value=T)
-    sapply(f2copy,function(x){file.copy(from = paste(options("prism.path")[[1]],pfile,x,sep="/"),to = paste(newdir,x,sep="/")) })
-    sapply(f2copy,function(x){file.remove(paste(options("prism.path")[[1]],pfile,x,sep="/")) })
-    
-    
-    ### We lose all our metadata, so we need to rewrite it
-    
+    newdir <- paste(options("prism.path")[[1]], unames[j], sep="/")
+    tryCatch(dir.create(newdir), error = function(e) e,
+             warning = function(w){
+               warning(paste(newdir, "already exists. Overwriting existing data."))
+             })
+    f2copy <- grep(unames[j], tmpwd, value = TRUE)
+    sapply(f2copy, function(x){
+      file.copy(from = paste(options("prism.path")[[1]], pfile, x, sep="/"),
+                to = paste(newdir, x, sep="/"))
+    })
+    sapply(f2copy, function(x){
+      file.remove(paste(options("prism.path")[[1]], pfile, x, sep="/"))
+    })
+    # We lose all our metadata, so we need to rewrite it
   }
-  ### Remove all files so the directory can be created.
-  ## Update file list
-  tmpwd <- list.files(paste(options("prism.path")[[1]],pfile,sep="/"))
+  # Remove all files so the directory can be created.
+  # Update file list
+  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
   ## Now loop delete them all
-  sapply(tmpwd,function(x){
-    file.remove(paste(options("prism.path")[[1]],pfile,x,sep="/"))
+  sapply(tmpwd, function(x){
+    file.remove(paste(options("prism.path")[[1]], pfile, x, sep="/"))
   })
-  
-  
-  file.remove(paste(options("prism.path")[[1]],pfile,sep="/"),recursive = T)
-  
-  
+  unlink(paste(options("prism.path")[[1]], pfile, sep="/"), recursive = TRUE)
 }
 
 
@@ -142,18 +143,15 @@ process_zip <- function(pfile,name){
 #' @param yr the year of data that's being requested, in numeric form
 #' @importFrom RCurl getURL
 #' @export
-extract_version <- function(type,temporal,yr){
-  base <- paste("ftp://prism.nacse.org/",temporal,"/",type,"/",yr,"/",sep="")
-  dirlist <- tryCatch({
-    getURL(base,ftp.use.epsv=FALSE,dirlistonly = TRUE)},
-    error = function(e){
-      print("Error resolving FTP host, please try again in a few moments")
-    })
+
+extract_version <- function(type, temporal, yr){
+  base <- paste0("ftp://prism.nacse.org/", temporal, "/", type, "/", yr, "/")
+  dirlist <- RCurl::getURL(base, ftp.use.epsv = FALSE, dirlistonly = TRUE)
   # Get the first split and take the last element
-  sp1 <- unlist(strsplit(dirlist,"PRISM_"))
-  sp2 <- unlist(strsplit(sp1[length(sp1)],"zip"))[1]
-  #Now we have an exemplar listing
-  sp1 <- unlist(strsplit(sp2,"[A-Za-z]_"))[3]
-  sp2 <- unlist(strsplit(sp1,"_[0-9]{4,8}"))
+  sp1 <- unlist(strsplit(dirlist, "PRISM_"))
+  sp2 <- unlist(strsplit(sp1[length(sp1)], "zip"))[1]
+  # Now we have an exemplar listing
+  sp1 <- unlist(strsplit(sp2, "stable_"))[2]
+  sp2 <- unlist(strsplit(sp1, "_[0-9]{4,8}"))
   return(sp2[1])
 }
