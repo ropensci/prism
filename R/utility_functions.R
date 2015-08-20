@@ -1,26 +1,25 @@
-#' @title Get daily data file names for last 2 years
+
+#' @title List all the files in an FTP directory
 #' @description Utility function to download all filenames
-#' for the last two years. This is to determine which are
-#' currently showing as provisional, early, or stable.
-#' @inheritParams get_prism_dailys
-#' @param frequency \code{character} for the frequency. One of
-#' "daily" or "monthly".
+#' for a given directory. 
+#' @param type the 
+#' @param freq \code{character} for the frequency. One of
+#' "daily" or "monthly". 
 #' @importFrom RCurl getURL
-#' @importFrom lubridate year
 #' @export
-get_recent_filenames <- function(type, frequency) {
-  frequency <- match.arg(frequency, c("daily", "monthly"))
+get_filenames <- function(type, freq,yr) {
+  freq <- match.arg(freq, c("daily", "monthly"))
 
-  full_path_this <- paste("ftp://prism.nacse.org", frequency,
-                          type, year(Sys.Date()), "", sep = "/")
-  filenames_this <- getURL(full_path_this, ftp.use.epsv = FALSE, dirlistonly = TRUE)
-  filenames_this <- strsplit(filenames_this, split = "\r\n")[[1]]
-
-  full_path_last <- paste("ftp://prism.nacse.org", frequency,
-                          type, year(Sys.Date()) - 1, "", sep = "/")
-  filenames_last <- getURL(full_path_last, ftp.use.epsv = FALSE, dirlistonly = TRUE)
-  # Stores all the filenames for this and last year
-  c(filenames_this, strsplit(filenames_last, split = "\r\n")[[1]])
+  full_path <- paste("ftp://prism.nacse.org", freq,type, yr, "", sep = "/")
+  
+  filenames <-tryCatch({
+     getURL(full_path, ftp.use.epsv = FALSE, dirlistonly = TRUE)},
+    error = function(e){
+      stop("Error resolving FTP host, please try again in a few moments")   
+    })
+  filenames<- unlist(strsplit(filenames, split = "\n"))
+    # Stores all the filenames for this and last year
+  return(filenames)
 }
 
 #' helper function for handling months
@@ -72,18 +71,18 @@ path_check <- function(){
 
 #' Helper function to check if files already exist
 #' @description check if files exist
-#' @param prismfile a list of full paths for prism files
+#' @param prismfiles a list of full paths for prism files
 #' @return a character vector of file names that already exist
 #' @export
-prism_check <- function(prismfile){
-  file_bases <- unlist(sapply(prismfile, strsplit, split=".zip"))
+prism_check <- function(prismfiles){
+  file_bases <- unlist(sapply(prismfiles, strsplit, split=".zip"))
   which_downloaded <- sapply(file_bases, function(base) {
     # Look inside the folder to see if the .bil is there
     # Won't be able to check for all other files. Unlikely to matter.
     ls_folder <- list.files(file.path(getOption("prism.path"), base))
     any(grepl("\\.bil", ls_folder))
   })
-  prismfile[!which_downloaded]
+  prismfiles[!which_downloaded]
 }
 
 #' Process pre 1980 files
@@ -95,7 +94,6 @@ prism_check <- function(prismfile){
 #' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil','PRISM_tmean_stable_4kmM2_198001_bil')
 #' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
 #' }
-
 process_zip <- function(pfile, name){
   tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
 
@@ -155,3 +153,4 @@ extract_version <- function(type, temporal, yr){
   sp2 <- unlist(strsplit(sp1, "_[0-9]{4,8}"))
   return(sp2[1])
 }
+

@@ -1,25 +1,26 @@
-# library(rgdal)
-# library(testthat)
-# library(lubridate)
-# library(RCurl)
-# context("Downloads work")
-# temp_dir_prism <- tempdir()
-# options(prism.path = temp_dir_prism)
-# tryCatch({
-#   test_that("Daily download works and gives reasonable output", {
-#     # Day = 13 to make sure months and days don't get confused.
-#     # Download three days to make sure that the middle day is downloaded.
-#     # Stable
-#     # Use min and max date as the code 
-#     get_prism_dailys(type = "all", minDate = "2014-01-13", maxDate = "2014-01-15",
-#                      dates = NULL, keepZip = FALSE)
-#     get_prism_dailys(type = "tmean", minDate = "2014-01-13", maxDate = "2014-01-15",
-#                      dates = NULL, keepZip = FALSE)
+library(raster)
+ library(testthat)
+ library(lubridate)
+ library(RCurl)
+ context("Downloads work")
+ temp_dir_prism <- tempdir()
+ options(prism.path = temp_dir_prism)
+ tryCatch({
+   test_that("Daily download works and gives reasonable output", {
+     # Day = 13 to make sure months and days don't get confused.
+     # Download three days to make sure that the middle day is downloaded.
+     # Stable
+     # Use min and max date as the code 
+     get_prism_dailys(type = "all", minDate = "2014-01-13", maxDate = "2014-01-15",
+                      dates = NULL, keepZip = FALSE)
+#
+#    get_prism_dailys(type = "tmean", minDate = "2014-01-13", maxDate = "2014-01-15",
+#                     dates = NULL, keepZip = FALSE)
 #     
 #     # provisional
 #     today <- Sys.Date()
 #     get_prism_dailys(type = "tmax", minDate = as.character(today - 30), maxDate = as.character(today - 30),
-#                      dates = NULL, keepZip = FALSE)
+#                     dates = NULL, keepZip = FALSE)
 #     
 #     match_grid <- function(type, date_str) {
 #       expect_match({
