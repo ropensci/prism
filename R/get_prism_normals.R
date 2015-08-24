@@ -27,7 +27,7 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
     match_list <- "annual"
   }
   
-  files <- get_filenames(type,resolution)
+  files <- get_filenames(type = type,resolution = resolution)
 
   # set length of progress bar
   pblen <- max(length(month),length(annual))
