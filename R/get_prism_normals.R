@@ -15,20 +15,20 @@
 get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,  keepZip = TRUE){
   ### parameter and error handling
   path_check()
-  type <- match.arg(type, c("ppt","tmean","tmin","tmax"))
+  type <- match.arg(type, c("ppt","tmean","tmin","tmax","tdmean","vpdmax","vpdmin"))
   res<- match.arg(resolution, c("4km","800m"))
+  
+  
   
   if(!is.null(month)){
     month <- mon_to_string(month)
-    files <- vector()
-    for(i in 1:length(month)){
-      files <- c(files,paste("PRISM_",type,"_30yr_normal_", res,"M2_",month[i],"_bil.zip",sep=""))
-    }
+    match_list <- month
   } else if(annual){
-    files <- paste("PRISM_",type,"_30yr_normal_", res,"M2_annual_bil.zip",sep="")  
-    
-  } 
+    match_list <- "annual"
+  }
   
+  files <- get_filenames(type,res)
+
   # set length of progress bar
   pblen <- max(length(month),length(annual))
   
@@ -36,18 +36,46 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   full_path <- paste(base,paste("normals_",res,sep=""),type,"",sep="/")
   ## Trim files
   files <- prism_check(files)
-  mpb <- txtProgressBar(min = 0, max = pblen, style = 3)
   
+  ### Grep through files 
+  files <- grep(paste(match_list,collapse="|"),files,value=T)
+  
+  mpb <- txtProgressBar(min = 0, max = pblen, style = 3)
+  counter <- 1
   for(i in 1:length(files)){
-    outFile <- paste(options("prism.path"),files[i],sep="/")
-    if(length(files>0)){
-      download.file(url = paste(full_path,files[i],sep=""), destfile = outFile,quiet=T)
-      unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] ) 
-      setTxtProgressBar(mpb, i)
+    outFile <- paste(options("prism.path"), files[i], sep="/")
+    tryNumber <- 1
+    downloaded <- FALSE
+    
+    if (Sys.info()["sysname"] == "Windows") {
+      current_net2_status <- setInternet2(NA)
+      setInternet2(FALSE)
+    }
+    while(tryNumber < 11 & !downloaded){
+      downloaded <- TRUE
+      tryCatch(
+        download.file(url = paste(full_path, files[i], sep = "/"), 
+                      destfile = outFile, mode = "wb", quiet = TRUE), 
+        error = function(e){
+          downloaded <<- FALSE
+        })
+      tryNumber <- tryNumber + 1
+    }
+    if (Sys.info()["sysname"] == "Windows") {
+      setInternet2(current_net2_status)
+    }
+    if (!downloaded) {
+      warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
+                     ", and year = ", years[i]))
+    } else {
+      unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]])
       if(!keepZip){
         file.remove(outFile)
-        }
+      }
     }
+    
+    setTxtProgressBar(mpb, counter)
+    counter <- counter + 1
   }
   close(mpb)
   
