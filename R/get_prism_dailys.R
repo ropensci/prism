@@ -35,12 +35,6 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     
   
     
-    ### Check year
-    if(!is.numeric(years)){
-      stop("You must enter a numeric year from 1895 onwards.")
-    }
-    
-    
     ### Handle data after 1980
     download_pb <- txtProgressBar(min = 0, max = length(dates), style = 3)
     counter <- 1
