@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>PRISM Climate Group at Oregon State University</origin>
+        <pubdate>20120710</pubdate>
+        <title>United States Average April Maximum Temperature, 1981-2010 (800m; BIL)</title>
+        <geoform>maps and data</geoform>
+        <pubinfo>
+          <pubplace>Corvallis, OR, USA</pubplace>
+          <publish>PRISM Climate Group at Oregon State University</publish>
+        </pubinfo>
+        <onlink>prism.oregonstate.edu</onlink>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>Monthly 30-year "normal" dataset covering the conterminous U.S., averaged over the climatological period 1981-2010.  Contains spatially gridded average April maximum temperature at 800m grid cell resolution. Distribution of the point measurements to the spatial grid was accomplished using the PRISM model, developed and applied by Dr. Christopher Daly of the PRISM Climate Group at Oregon State University.  This dataset was heavily peer reviewed, and is available free-of-charge on the PRISM website.</abstract>
+      <purpose>Display and/or analysis requiring spatially distributed April maximum temperature for the climatological period 1981-2010.</purpose>
+      <supplinf>There are many methods of interpolating climate from monitoring stations to grid points. Some provide estimates of acceptable accuracy in flat terrain, but few have been able to adequately explain the extreme, complex variations in climate that occur in mountainous regions. Significant progress in this area has been achieved through the development of PRISM (Parameter-elevation Regressions on Independent Slopes Model). PRISM is an analytical model that uses point data and an underlying grid such as a digital elevation model (DEM) or a 30 yr climatological average (e.g. 1981-2010 average) to generate gridded estimates of monthly or annual precipitation and temperature (as well as other climatic parameters). PRISM is well suited to regions with mountainous terrain, because it incorporates a conceptual framework that addresses the spatial scale and pattern of orographic processes. Grids were modeled on a monthly basis. Annual grids were produced by averaging (temperatures) or summing (precipitation) the monthly grids.</supplinf>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <rngdates>
+          <begdate>19810101</begdate>
+          <enddate>20101231</enddate>
+        </rngdates>
+      </timeinfo>
+      <current>observed</current>
+    </timeperd>
+    <status>
+      <progress>complete</progress>
+      <update>as needed</update>
+    </status>
+    <spdom>
+      <descgeog>Conterminous U.S.</descgeog>
+      <bounding>
+        <westbc>-125.0208333</westbc>
+        <eastbc>-66.4791667</eastbc>
+        <northbc>49.9375000</northbc>
+        <southbc>24.0625000</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <stratum>
+        <stratkey>maximum temperature</stratkey>
+      </stratum>
+    </keywords>
+    <accconst>Access pursuant to license agreement</accconst>
+    <useconst>Acknowledgement of the following agencies in products derived from these data: PRISM Climate Group at Oregon State University.</useconst>
+  </idinfo>
+  <dataqual>
+    <attracc>
+      <attraccr>All data were based on the same averaging period (1981-2010). Similar quality assurance procedures were used with all input data sets.</attraccr>
+    </attracc>
+    <logic>Point estimates originated from some or all of the following sources: 1) National Weather Service (NWS) Cooperative (COOP) stations, 2) Natural Resources Conservation Service (NRCS) SNOTEL, 3) United States Forest Service (USFS) and Bureau of Land Management (BLM) RAWS Stations, 4) Bureau of Reclemation (AGRIMET) stations, 5) California Data Exchange Center (CDEC) stations, 6) Storage guages, 7) NRCS Snowcourse stations, 8) Other State and local station networks, 9) Estimated station data, 10) Canadian stations, 11) Upper air stations, 12) NWS/Federal Aviation Administration (FAA) Automated surface observation stations (ASOS), 13) Community Collaborative Rain, Hail, and Snow Network stations (CoCoRaHS), 14) Soil Climate Analysis Network (SCAN), 15) Oklahoma Mesonet, 16) Weather Bureau Army Navy (WBAN), and 17) Colorado Agricultural Meteorological Network (CoAgMet). All COOP station data were subjected to quality control checks by the National Climatic Data Center (NCDC). All COOP, SNOTEL and other data were subjected to further quality control checks by PRISM Climate Group at Oregon State University.</logic>
+    <posacc>
+      <horizpa>
+        <horizpar>Accuracy of this data set is based on the original specification of the Defense Mapping Agency (DMA) 1 degree digital elevation models (DEM). The stated accuracy of the original DEMs are 130 m circular error with 90% probability.</horizpar>
+      </horizpa>
+    </posacc>
+  </dataqual>
+  <spdoinfo>
+    <direct>raster</direct>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <geograph>
+        <latres>0.00833333</latres>
+        <longres>0.00833333</longres>
+        <geogunit>Decimal degrees</geogunit>
+      </geograph>
+      <planar>
+        <planci>
+          <plance>Row and Column</plance>
+          <coordrep>
+            <absres>0.00833333</absres>
+            <ordres>0.00833333</ordres>
+          </coordrep>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>North American Datum of 1983</horizdn>
+        <ellips>Geodetic Reference System 80</ellips>
+        <semiaxis>6378137</semiaxis>
+        <denflat>298.257</denflat>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>Raster data representing climate variables</enttypl>
+        <enttypd>Spatially gridded values</enttypd>
+        <enttypds>Daly, C., Halbleib, M., Smith, J.I., Gibson, W.P., Doggett, M.K., Taylor, G.H., Curtis, J., and Pasteris, P.A. 2008. Physiographically-sensitive mapping of temperature and precipitation across the conterminous United States. International Journal of Climatology, 28: 2031-2064.</enttypds>
+      </enttyp>
+      <attr>
+        <attrlabl>Average April maximum temperature (BIL format)</attrlabl>
+        <attrdef>spatially gridded average maximum temperature values</attrdef>
+        <attrdomv>
+          <rdom>
+            <rdommin>-100</rdommin>
+            <rdommax>100</rdommax>
+            <attrunit>Degrees C</attrunit>
+          </rdom>
+        </attrdomv>
+      </attr>
+    </detailed>
+  </eainfo>
+  <distinfo>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntper>PRISM Climate Group at Oregon State University</cntper>
+        </cntperp>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>NACSE, 2001 Kelley Engr Center</address>
+          <city>Oregon State University</city>
+          <state>USA</state>
+          <postal>Oregon</postal>
+          <country>97330</country>
+        </cntaddr>
+        <cntvoice>(541) 737-2531</cntvoice>
+        <cntemail>prism_orders@nacse.org</cntemail>
+      </cntinfo>
+    </distrib>
+    <distliab>none</distliab>
+    <stdorder>
+      <fees>none</fees>
+    </stdorder>
+  </distinfo>
+  <metainfo>
+    <metd>20130808</metd>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntper>Matthew Doggett</cntper>
+          <cntorg>PRISM Climate Group</cntorg>
+        </cntperp>
+        <cntaddr>
+          <addrtype>mailing and physical</addrtype>
+          <address>NACSE, 2001 Kelley Engr Center</address>
+          <city>Oregon State University</city>
+          <state>Oregon</state>
+          <postal>97331</postal>
+          <country>USA</country>
+        </cntaddr>
+        <cntvoice>(541) 737-2531</cntvoice>
+        <cntemail>doggett@nacse.org</cntemail>
+      </cntinfo>
+    </metc>
+    <metstdn>FDGC Content Standard for Digital Geospatial Metadata and Biological Data Profile</metstdn>
+    <metstdv>FDGC-STD-001-1998</metstdv>
+  </metainfo>
+  <mercury>
+    <mercury_status>draft</mercury_status>
+  </mercury>
+</metadata>
+
