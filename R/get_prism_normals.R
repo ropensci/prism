@@ -16,7 +16,7 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   ### parameter and error handling
   path_check()
   type <- match.arg(type, c("ppt","tmean","tmin","tmax","tdmean","vpdmax","vpdmin"))
-  res<- match.arg(resolution, c("4km","800m"))
+  resolution<- match.arg(resolution, c("4km","800m"))
   
   
   
@@ -27,13 +27,13 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
     match_list <- "annual"
   }
   
-  files <- get_filenames(type,res)
+  files <- get_filenames(type,resolution)
 
   # set length of progress bar
   pblen <- max(length(month),length(annual))
   
   base <- "ftp://prism.nacse.org"
-  full_path <- paste(base,paste("normals_",res,sep=""),type,"",sep="/")
+  full_path <- paste(base,paste("normals_",resolution,sep=""),type,"",sep="/")
   ## Trim files
   files <- prism_check(files)
   

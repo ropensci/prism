@@ -16,8 +16,8 @@ get_filenames <- function(type, freq=NULL,yr=NULL,resolution = NULL) {
 
      full_path <- paste("ftp://prism.nacse.org", freq,type, yr, "", sep = "/")
   } else if(!is.null(resolution)){
-    res<- match.arg(resolution, c("4km","800m"))
-    full_path <- paste("ftp://prism.nacse.org/normals_", res,"/",type,"/", sep = "")
+    resolution<- match.arg(resolution, c("4km","800m"))
+    full_path <- paste("ftp://prism.nacse.org/normals_", resolution,"/",type,"/", sep = "")
     
   }
   
