@@ -12,86 +12,130 @@
 #' @export
 get_prism_annual <- function(type, year = NULL ,keepZip = TRUE){
   ### parameter and error handling
+  freq <- "monthly"
+  
   path_check()
-  type <- match.arg(type, c("ppt","tmean","tmin","tmax"))
+  type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax", "all"))
+
   
-  
-  
-  ### Check year
-  ### Check months
-  
-  
-  if(min(as.numeric(year)) > 1980){
-    download_pb <- txtProgressBar(min = 0, max = length(year), style = 3)
-    
-    base <- "ftp://prism.nacse.org/monthly"
-    for(i in 1:length(year)){
-      ystring <- as.character(year[i])
-      
-      full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
-      
-      fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_bil.zip",sep="") 
-      
-      if(length(prism_check(fileName)) == 1){
-        outFile <- paste(options("prism.path"),fileName,sep="/")
-        
-        download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile,quiet=T)
-        unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
-        
-        if(!keepZip){
-          file.remove(outFile)
-        }
-      }
-      setTxtProgressBar(download_pb, i)
+    ### Check year
+    if(!is.numeric(years)){
+      stop("You must enter a numeric year from 1895 onwards.")
     }
     
-    close(download_pb)
-  }
-  
-  
-  
-  ### Handle data before 1981
-  
-  if(min(as.numeric(year)) <= 1980){
-    download_pb <- txtProgressBar(min = 0, max = length(year), style = 3)
+    if(any(years < 1895)){
+      stop("You must enter a year from 1895 onwards.")
+    }
     
+    
+    
+    # Handle data after 1980
     base <- "ftp://prism.nacse.org/monthly"
-    for(i in 1:length(year)){
-      ystring <- as.character(year[i])
+    download_pb <- txtProgressBar(min = 0, max = length(years) , style = 3)
+    counter <- 1
+    
+    
+    for(i in 1:length(years)){
+      # parse date
+      full_path <- paste(base, type, years[i], sep = "/")
       
-      full_path <- paste(base,paste(type,ystring,sep="/"),sep="/")
-      
-      fileName <- paste("PRISM_",type,"_stable_4kmM2_",ystring,"_all_bil.zip",sep="") 
-      
-      if(length(prism_check(fileName)) == 1){
-        outFile <- paste(options("prism.path"),fileName,sep="/")
+      if(years[i] > 1980) {
         
-        tryCatch({
-          
-          download.file(url = paste(full_path,fileName,sep="/"), destfile = outFile, quiet=T)
-          unzip(outFile, exdir = strsplit(outFile,".zip")[[1]] )   
+        fileName <- get_filenames(type,freq,years[i])
+        ### subset the list of files down to the ones we want to download
+        match_list <- paste(years[i],"bil.zip",sep="_")
+        
+        fileName <- grep(paste(match_list,collapse="|"),fileName,value = TRUE)
+        ### Check for existing file names  that are already downloaded
+        fileName <- prism_check(fileName)
+        
+        if(length(fileName) >= 1){
+          for(j in 1:length(fileName)) {
+            outFile <- paste(options("prism.path"), fileName[j], sep="/")
+            tryNumber <- 1
+            downloaded <- FALSE
+            
+            if (Sys.info()["sysname"] == "Windows") {
+              current_net2_status <- setInternet2(NA)
+              setInternet2(FALSE)
+            }
+            while(tryNumber < 11 & !downloaded){
+              downloaded <- TRUE
+              tryCatch(
+                download.file(url = paste(full_path, fileName[j], sep = "/"), 
+                              destfile = outFile, mode = "wb", quiet = TRUE), 
+                error = function(e){
+                  downloaded <<- FALSE
+                })
+              tryNumber <- tryNumber + 1
+            }
+            if (Sys.info()["sysname"] == "Windows") {
+              setInternet2(current_net2_status)
+            }
+            if (!downloaded) {
+              warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
+                             ", and year = ", years[i]))
+            } else {
+              unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]])
+              if(!keepZip){
+                file.remove(outFile)
+              }
+            }
+            
+            setTxtProgressBar(download_pb, counter)
+            counter <- counter + 1
+          }
+        }
+      } else {
+        # Handle years before 1981.
+        # The whole year's worth of data needs to be downloaded, 
+        # then extracted, and copied into the main directory.
+        
+        fileName <- get_filenames(type,freq,years[i])
+        
+        outFile <- paste(options("prism.path"), fileName, sep="/")
+        
+        if (Sys.info()["sysname"] == "Windows") {
+          current_net2_status <- setInternet2(NA)
+          setInternet2(FALSE)
+        }
+        tryNumber <- 1
+        downloaded <- FALSE
+        while(tryNumber < 11 & !downloaded){
+          downloaded <- TRUE
+          tryCatch({
+            download.file(url = paste(full_path, fileName, sep="/"),
+                          destfile = outFile, quiet=TRUE, mode = "wb")
+          }, error = function(e) {
+            downloaded <<- FALSE
+          })
+          tryNumber <- tryNumber + 1
+        }
+        if (Sys.info()["sysname"] == "Windows") {
+          setInternet2(current_net2_status)
+        }
+        
+        if (!downloaded){
+          warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
+                         ", and years = ", years[i]))
+        } else {
+          unzip(outFile, exdir = strsplit(outFile,".zip")[[1]])
           if(!keepZip){
             file.remove(outFile)
           }
-        },
-        error = function(e){
-          stop(" \n Error: Requested file cannot be found on the server")
         }
-        )
-        
-        ### Now process the data by month
-        ## First get the name of the directory with the data
-        all_file <- strsplit(fileName,'[.]')[[1]][1]
-        to_split <- gsub("_all","",all_file)
-        process_zip(all_file,to_split)
-        
-        
+        if(!keepZip & file.exists(outFile)){
+          file.remove(outFile)
         }
+        # Now process the data by month
+        # First get the name of the directory with the data
+        all_file <- strsplit(fileName, '[.]')[[1]][1]
+        to_split <- gsub("_all","" ,all_file)
+        process_zip(all_file, to_split)
+        
+        setTxtProgressBar(download_pb, i)
       }
-      setTxtProgressBar(download_pb, i)
     }
-    
     close(download_pb)
-  }
   
-  
+}
