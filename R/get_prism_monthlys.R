@@ -60,9 +60,11 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
 
     
     # Handle data after 1980
-    download_pb <- txtProgressBar(min = 0, max = length(years) * length(month), style = 3)
     base <- "ftp://prism.nacse.org/monthly"
-
+    download_pb <- txtProgressBar(min = 0, max = length(years) , style = 3)
+    counter <- 1
+    
+    
     for(i in 1:length(years)){
       # parse date
       full_path <- paste(base, type, years[i], sep = "/")
@@ -78,7 +80,6 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
         fileName <- prism_check(fileName)
         
           if(length(fileName) >= 1){
-            
             for(j in 1:length(fileName)) {
             outFile <- paste(options("prism.path"), fileName[j], sep="/")
             tryNumber <- 1
