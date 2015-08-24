@@ -20,6 +20,10 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     dates <- seq(as.Date(minDate),as.Date(maxDate),by="days")
   }
   
+  if(as.Date(minDate) > as.Date(maxDate)){
+    stop("Your minimum date must be less than your maximum date")
+  }
+  
   ## Get years
   years <- unique(format(dates,"%Y"))
   
@@ -96,47 +100,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
         # Handle years before 1981.  
         # The whole years worth of data needs to be downloaded, 
         # then extracted, and copied into the main directory.
-        fileName <- get_filenames(type,freq,years[i])
-        
-        
-        outFile <- paste(options("prism.path"), fileName, sep="/")
-        
-        if (Sys.info()["sysname"] == "Windows") {
-          current_net2_status <- setInternet2(NA)
-          setInternet2(FALSE)
-        }
-        tryNumber <- 1
-        downloaded <- FALSE
-        while(tryNumber < 11 & !downloaded){
-          downloaded <- TRUE
-          tryCatch({
-            download.file(url = paste(full_path, fileName, sep="/"),
-                          destfile = outFile, quiet=TRUE, mode = "wb")
-          }, error = function(e) {
-            downloaded <<- FALSE
-          })
-          tryNumber <- tryNumber + 1
-        }
-        if (Sys.info()["sysname"] == "Windows") {
-          setInternet2(current_net2_status)
-        }
-        
-        if (!downloaded){
-          warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
-                         ", and years = ", years[i]))
-        } else {
-          unzip(outFile, exdir = strsplit(outFile,".zip")[[1]])
-          if(!keepZip){
-            file.remove(outFile)
-          }
-        }
-        # Now process the data by month
-        # First get the name of the directory with the data
-        all_file <- strsplit(fileName, '[.]')[[1]][1]
-        to_split <- sapply(month, function(x) gsub("_all", sprintf("%02d", x), all_file))
-        process_zip(all_file, to_split)
-        
-        setTxtProgressBar(download_pb, i)
+       stop("There is no daily data available pre-1981")
       }
       close(download_pb)
     }
