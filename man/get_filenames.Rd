@@ -4,16 +4,22 @@
 \alias{get_filenames}
 \title{List all the files in an FTP directory}
 \usage{
-get_filenames(type, freq, yr)
+get_filenames(type, freq = NULL, yr = NULL, resolution = NULL)
 }
 \arguments{
 \item{type}{the}
 
-\item{freq}{\code{character} for the frequency. One of
-"daily" or "monthly".}
+\item{freq}{\code{character} for the frequency. One of "daily" or "monthly".}
+
+\item{yr}{the year for the monthly or daily data}
+
+\item{resolution}{the grid cell resolution of the data you want}
 }
 \description{
 Utility function to download all filenames
 for a given directory.
+}
+\details{
+This will work for daily, monthly and normals data.  To work with monlthy and daily data freq and yr are needed.  Otherwise if resolution is given then a normal data listing will be given.
 }
 
