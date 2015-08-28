@@ -78,6 +78,7 @@ get_prism_monthlys <- function(type, years = NULL, month = NULL, keepZip = TRUE)
         fileName <- grep(paste(match_list,collapse="|"),fileName,value = TRUE)
         ### Check for existing file names  that are already downloaded
         fileName <- prism_check(fileName)
+
         
           if(length(fileName) >= 1){
             for(j in 1:length(fileName)) {

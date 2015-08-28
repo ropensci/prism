@@ -29,9 +29,7 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   
   files <- get_filenames(type = type,resolution = resolution)
 
-  # set length of progress bar
-  pblen <- max(length(month),length(annual))
-  
+
   base <- "ftp://prism.nacse.org"
   full_path <- paste(base,paste("normals_",resolution,sep=""),type,"",sep="/")
   ## Trim files
@@ -40,7 +38,12 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   ### Grep through files 
   files <- grep(paste(match_list,collapse="|"),files,value=T)
   
-  mpb <- txtProgressBar(min = 0, max = pblen, style = 3)
+  ### If you have no files to download exit
+  if(length(files) == 0 ){
+    return(NULL)
+  }
+  
+  mpb <- txtProgressBar(min = 0, max =length(files), style = 3)
   counter <- 1
   for(i in 1:length(files)){
     outFile <- paste(options("prism.path"), files[i], sep="/")

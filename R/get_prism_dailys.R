@@ -39,8 +39,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     
   
     
-    ### Handle data after 1980
-    download_pb <- txtProgressBar(min = 0, max = length(dates), style = 3)
+
     counter <- 1
     base <- "ftp://prism.nacse.org/daily"
     
@@ -57,7 +56,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
         fileName <- grep(paste(match_list,collapse="|"),fileName,value = TRUE)
         ### Check for existing file names  that are already downloaded
         fileName <- prism_check(fileName)
-        
+
         if(length(fileName) >= 1){
           
           for(j in 1:length(fileName)) {
@@ -100,7 +99,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
         # Handle years before 1981.  
         # The whole years worth of data needs to be downloaded, 
         # then extracted, and copied into the main directory.
-       stop("There is no daily data available pre-1981")
+       cat("There is no daily data available pre-1981")
       }
       close(download_pb)
     }
