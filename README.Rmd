@@ -54,7 +54,7 @@ ls_prism_data(name = TRUE)
 You can easily make a quick plot of your data to using the output of `ls_prism_data()`
 
 ```{r quick_plot,fig.height=5,fig.width=8}
-prism_image(ls_prism_data()[1])
+prism_image(ls_prism_data()[1,])
 
 ```
 
