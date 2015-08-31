@@ -18,68 +18,31 @@ get_prism_normals <- function(type, resolution, month =  NULL , annual =  FALSE,
   type <- match.arg(type, c("ppt","tmean","tmin","tmax","tdmean","vpdmax","vpdmin"))
   resolution<- match.arg(resolution, c("4km","800m"))
   
-  
+
   
   if(!is.null(month)){
+    if(any(month < 1 | month > 12)) {
+      stop("You must enter a month between 1 and 12")
+    }
     month <- mon_to_string(month)
     match_list <- month
   } else if(annual){
     match_list <- "annual"
+    month <- "14"
   }
   
-  files <- get_filenames(type = type,resolution = resolution)
+  uris <- sapply(month,function(x){paste("http://services.nacse.org/prism/data/public/normals",resolution,type,x,sep="/")})
+  
 
-
-  base <- "ftp://prism.nacse.org"
-  full_path <- paste(base,paste("normals_",resolution,sep=""),type,"",sep="/")
-  ## Trim files
-  files <- prism_check(files)
-  
-  ### Grep through files 
-  files <- grep(paste(match_list,collapse="|"),files,value=T)
-  
-  ### If you have no files to download exit
-  if(length(files) == 0 ){
-    return(NULL)
+  mpb <- txtProgressBar(min = 0, max =length(uris), style = 3)
+ 
+  for(i in 1:length(uris)){
+    prism_webservice(uris[i],keepZip)
+    setTxtProgressBar(mpb, i)
+    
   }
   
-  mpb <- txtProgressBar(min = 0, max =length(files), style = 3)
-  counter <- 1
-  for(i in 1:length(files)){
-    outFile <- paste(options("prism.path"), files[i], sep="/")
-    tryNumber <- 1
-    downloaded <- FALSE
-    
-    if (Sys.info()["sysname"] == "Windows") {
-      current_net2_status <- setInternet2(NA)
-      setInternet2(FALSE)
-    }
-    while(tryNumber < 11 & !downloaded){
-      downloaded <- TRUE
-      tryCatch(
-        download.file(url = paste(full_path, files[i], sep = "/"), 
-                      destfile = outFile, mode = "wb", quiet = TRUE), 
-        error = function(e){
-          downloaded <<- FALSE
-        })
-      tryNumber <- tryNumber + 1
-    }
-    if (Sys.info()["sysname"] == "Windows") {
-      setInternet2(current_net2_status)
-    }
-    if (!downloaded) {
-      warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
-                     ", and year = ", years[i]))
-    } else {
-      unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]])
-      if(!keepZip){
-        file.remove(outFile)
-      }
-    }
-    
-    setTxtProgressBar(mpb, counter)
-    counter <- counter + 1
-  }
+  
   close(mpb)
   
   

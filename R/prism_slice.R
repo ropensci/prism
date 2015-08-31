@@ -16,14 +16,13 @@
 
 prism_slice <- function(location,prismfile){
 
-  prismfilexml <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".xml",sep="")
-  prismfilerast <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".bil",sep="")
-  
-  meta_d <- sapply(prismfilexml,prism_md,simplify=F)
+
+  meta_d <- unlist(prism_md(prismfile[,1]))
   pstack <- prism_stack(prismfile)
   data <- unlist(extract(pstack,matrix(location,nrow=1),buffer=10))
   data <- as.data.frame(data)
-  data$date <- unlist(lapply(meta_d,function(x){return(x[1])}))
+  
+  data$date <- unlist(lapply(strsplit(meta_d,"-"),function(x){return(gsub(pattern = " ",replacement = "",x=x[1]))} ))
   data$date <- as.POSIXct(data$date,format="%Y%m%d")
   ## Re order
   data <- data[order(data$date),]

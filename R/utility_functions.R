@@ -1,39 +1,4 @@
 
-#' @title List all the files in an FTP directory
-#' @description Utility function to download all filenames
-#' for a given directory. 
-#' @param type the 
-#' @param freq \code{character} for the frequency. One of "daily" or "monthly". 
-#' @param yr the year for the monthly or daily data
-#' @param resolution the grid cell resolution of the data you want
-#' @details This will work for daily, monthly and normals data.  To work with monlthy and daily data freq and yr are needed.  Otherwise if resolution is given then a normal data listing will be given.
-#' @importFrom RCurl getURL
-#' @export
-get_filenames <- function(type, freq=NULL,yr=NULL,resolution = NULL) {
- 
-  if(!is.null(freq) && !is.null(yr)){
-    freq <- match.arg(freq, c("daily", "monthly"))
-
-     full_path <- paste("ftp://prism.nacse.org", freq,type, yr, "", sep = "/")
-  } else if(!is.null(resolution)){
-    resolution<- match.arg(resolution, c("4km","800m"))
-    full_path <- paste("ftp://prism.nacse.org/normals_", resolution,"/",type,"/", sep = "")
-    
-  }
-  
-  
-  
-  filenames <-tryCatch({
-     getURL(full_path, ftp.use.epsv = FALSE, dirlistonly = TRUE)},
-    error = function(e){
-      stop("Error resolving FTP host, please try again in a few moments")   
-    })
-  filenames<- unlist(strsplit(filenames, split = "\n"))
-    # Stores all the filenames for this and last year
-  return(filenames)
-}
-
-
 #' helper function for handling months
 #' @description Handle numeric month to string conversions
 #' @param month a numeric vector of months (month must be > 0 and <= 12)
