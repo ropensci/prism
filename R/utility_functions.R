@@ -116,18 +116,16 @@ process_zip <- function(pfile, name){
 #' @param type the type of data you're downloading, should be tmax, tmin etc...
 #' @param temporal The temporal resolution of the data, monthly, daily, etc...
 #' @param yr the year of data that's being requested, in numeric form
-#' @importFrom RCurl getURL
-#' @export
 
-extract_version <- function(type, temporal, yr){
-  base <- paste0("ftp://prism.nacse.org/", temporal, "/", type, "/", yr, "/")
-  dirlist <- RCurl::getURL(base, ftp.use.epsv = FALSE, dirlistonly = TRUE)
-  # Get the first split and take the last element
-  sp1 <- unlist(strsplit(dirlist, "PRISM_"))
-  sp2 <- unlist(strsplit(sp1[length(sp1)], "zip"))[1]
+#extract_version <- function(type, temporal, yr){
+#  base <- paste0("ftp://prism.nacse.org/", temporal, "/", type, "/", yr, "/")
+##  dirlist <- RCurl::getURL(base, ftp.use.epsv = FALSE, dirlistonly = TRUE)
+#  # Get the first split and take the last element
+#  sp1 <- unlist(strsplit(dirlist, "PRISM_"))
+#  sp2 <- unlist(strsplit(sp1[length(sp1)], "zip"))[1]
   # Now we have an exemplar listing
-  sp1 <- unlist(strsplit(sp2, "stable_"))[2]
-  sp2 <- unlist(strsplit(sp1, "_[0-9]{4,8}"))
-  return(sp2[1])
-}
+#  sp1 <- unlist(strsplit(sp2, "stable_"))[2]
+#  sp2 <- unlist(strsplit(sp1, "_[0-9]{4,8}"))
+#  return(sp2[1])
+#}
 
