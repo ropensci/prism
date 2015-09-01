@@ -8,7 +8,7 @@ prism_slice(location, prismfile)
 \arguments{
 \item{location}{a vector of a single location in the form of long,lat}
 
-\item{prismfile}{a vector of output from ls_prism_data() giving a list of prism files to extract data from and plot}
+\item{prismfile}{a vector of output from ls_prism_data()[,1] giving a list of prism files to extract data from and plot}
 }
 \value{
 a ggplot2 plot of the requested slice

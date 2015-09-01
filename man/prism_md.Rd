@@ -3,10 +3,12 @@
 \alias{prism_md}
 \title{Extract select prism metadata}
 \usage{
-prism_md(f)
+prism_md(f, returnDate = FALSE)
 }
 \arguments{
 \item{f}{a simple directory name}
+
+\item{returnDate}{TRUE or FALSE?  If TRUE, an ISO date is returned.  By default years will come back with YYYY-01-01 and months as YYYY-MM-01}
 }
 \value{
 a character vector of metadata.

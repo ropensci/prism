@@ -3,7 +3,7 @@
 \alias{get_prism_normals}
 \title{Download data for 30 year normals of climate variables}
 \usage{
-get_prism_normals(type, resolution, month = NULL, annual = FALSE,
+get_prism_normals(type, resolution, mon = NULL, annual = FALSE,
   keepZip = TRUE)
 }
 \arguments{
@@ -12,7 +12,7 @@ which downloads "ppt", "tmin", and "tmax". Note that tmean == mean(tmin, tmax).}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km" or "800m".}
 
-\item{month}{a numeric value for month, can be a numeric vector of months.}
+\item{mon}{a numeric value for month, can be a numeric vector of months.}
 
 \item{annual}{if TRUE download annual data}
 
@@ -27,7 +27,7 @@ You must make sure that you have set up a valid download directory.  This must b
 \examples{
 \dontrun{
 ### Get 30 year normal values for rainfall
-get_prism_normals(type="ppt",resolution = "4km",month = 1, keepZip=F)
+get_prism_normals(type="ppt",resolution = "4km",mon = 1, keepZip=F)
 
 }
 }

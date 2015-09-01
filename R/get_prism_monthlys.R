@@ -79,7 +79,7 @@ if(length(uris_post81) > 0){
 }
     
   
-     counter <- i+1
+     counter <- length(uris_post81)+1
    
 
 ### Handle pre 1981 files
