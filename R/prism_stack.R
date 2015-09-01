@@ -7,10 +7,12 @@
 #' }
 #' @export
 prism_stack <- function(prismfile){
-  prismfile <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".bil",sep="")
-  masterRaster <- stack(raster(prismfile[1]))
-  for(i in 2:length(prismfile)){
-    masterRaster<-  addLayer(masterRaster,raster(prismfile[i]))  
+  prismfile_fp <- sapply(prismfile,function(x){paste(options("prism.path")[[1]],"/",x,"/",x,".bil",sep="")})
+  masterRaster <- stack(raster(prismfile_fp[1]))
+  if(length(prismfile_fp) > 1){
+    for(i in 2:length(prismfile_fp)){
+      masterRaster<-  addLayer(masterRaster,raster(prismfile_fp[i]))  
+    }
   }
   return(masterRaster)
 }

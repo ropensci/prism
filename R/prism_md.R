@@ -1,20 +1,22 @@
 #' Extract select prism metadata
 #' @description used to extract some prism metadata used in other fxns
 #' @param f a simple directory name
+#' @param returnDate TRUE or FALSE?  If TRUE, an ISO date is returned.  By default years will come back with YYYY-01-01 and months as YYYY-MM-01
 #' @return a character vector of metadata.
 #' @export
-prism_md <- function(f){
+prism_md <- function(f,returnDate = FALSE){
   p <- strsplit(f,"_")
-  return(lapply(p,pr_parse))
+  return(lapply(p,pr_parse,returnDate = returnDate))
 }
 
 #' name parse
 #' @description parse the directory name into relevant metadata
 #' @param p a prism file directory
+#' @param returnDate TRUE or FALSE?  If TRUE, an ISO date is returned.  By default years will come back with YYYY-01-01 and months as YYYY-MM-01
 #' @return a properly parsed string of human readable names
 #' @export
 
-pr_parse <- function(p){
+pr_parse <- function(p,returnDate = FALSE){
   ## Extract the climate variable
   type <- p[2]
   ## Extract the date the data is for
@@ -52,7 +54,12 @@ pr_parse <- function(p){
     }
 
   md_string <- paste(ds,ures,type,sep = " - ")
-  return(md_string)
+  if(!returnDate){
+    return(md_string)
+  } else {
+    return(paste(yr,ifelse(nchar(mon) > 0,mon,"01"),ifelse(nchar(day) > 0,day,"01"),sep="-"))
+  }
+  
 }
 
 #' Extract select prism metadata

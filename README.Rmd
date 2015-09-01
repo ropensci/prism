@@ -31,7 +31,7 @@ Normals are based on the years 1981 - 2010, and can be downloaded in two resolut
 ```{r get normals}
 library(prism)
 options(prism.path = "~/prismtmp")
-get_prism_normals(type="tmean",resolution = "4km",month = 1:6, keepZip=F)
+get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip=F)
 
 ```
 
@@ -54,14 +54,14 @@ ls_prism_data(name = TRUE)
 You can easily make a quick plot of your data to using the output of `ls_prism_data()`
 
 ```{r quick_plot,fig.height=5,fig.width=8}
-prism_image(ls_prism_data()[1,])
+prism_image(ls_prism_data()[1,1])
 
 ```
 
 Monthly and daily data is also easily accessible. Below we'll get January data for the years 1990 to 2000. We an also grab data from June 1 to June 14 2013.
 
 ```{r get daily monthly, message=FALSE}
-get_prism_monthlys(type="tmean", year = 1990:2000, month = 1, keepZip=F)
+get_prism_monthlys(type="tmean", year = 1990:2000, mon = 1, keepZip=F)
 get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 ```
 
@@ -72,12 +72,13 @@ You can also visualize a single point across a set of rasters.  This procedure w
 Let's get make a plot of January temperatures is Boulder between 1982 and 2014.  First we'll grab all the data from the US, and then give our function a point to get data from.  The point must be a vector in the form of longitude, latitude.
 
 ```{r plot_Boulder}
+library(ggplot2)
 boulder <- c(-105.2797,40.0176)
 ## Get data.
-get_prism_monthlys(type="tmean", year = 1982:2014, month = 1, keepZip=F)
+get_prism_monthlys(type="tmean", year = 1982:2014, mon = 1, keepZip=F)
 ## We'll use regular expressions to grep through the list and get data only from the month of January
-to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data(),value=T)
-library(ggplot2)
+to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data()[,1],value=T)
+to_slice = grep("tmean",to_slice, value = T)
 p <- prism_slice(boulder,to_slice)
 p + stat_smooth(method="lm",se=F) + theme_bw() + ggtitle("Average January temperature in Boulder, CO 1982-2014")
 ```
@@ -87,8 +88,8 @@ Lastly it's easy to just load up the prism data with the raster package.  This t
 ```{r raster_math,fig.height=5,fig.width=8}
 library(raster)
 ### I got these just by looking at the list output
-jnorm <- ls_prism_data(absPath=T)[1]
-j2013 <- ls_prism_data(absPath=T)[52]
+jnorm <- ls_prism_data(absPath=T)[1,2]
+j2013 <- ls_prism_data(absPath=T)[52,2]
 ## See that the full path is returned
 jnorm
 ## Now we'll load the rasters.
