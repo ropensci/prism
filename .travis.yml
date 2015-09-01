@@ -1,5 +1,5 @@
 language: r
-sudo: false
+sudo: required
 
 after_failure:
 - "./travis-tool.sh dump_logs"
