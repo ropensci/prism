@@ -25,10 +25,8 @@ Data is available in 3 different forms as mentioned above.  Each one has it's ow
 | *tmax*      | Maximum temperature      |
 | *tmin* | Minimum temperature      |
 | *ppt*  | Total precipitation (Rain and snow)|
-| *vpdmin* | Daily minimum vapor pressure deficit [averaged over all days in the
-month - normal data only] |
-| *vpdmax* |Daily maximum vapor pressure deficit [averaged over all days in
-the month - normal data only] |
+| *vpdmin* | Daily minimum vapor pressure deficit [averaged over all days in the month - normal data only] |
+| *vpdmax* |Daily maximum vapor pressure deficit [averaged over all days in the month - normal data only] |
 
 **Normal data**
 
