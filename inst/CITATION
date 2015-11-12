@@ -1,0 +1,11 @@
+citEntry(entry = "Manual",
+  title   = "prism: Download data from the Oregon prism project",
+  author  = "Edmund M. Hart and Kendon Bell",
+  year    = "2015",
+  note    = "R package version 0.1.0",
+  url     = "http://github.com/ropensci/prism",
+  doi     = "",
+
+  textVersion =
+  paste("Edmund M. Hart and Kendon Bell (2015) prism: Download data from the Oregon prism project. R package version 0.1.0. http://github.com/ropensci/prism DOI: 10.5281/zenodo.16522")
+)

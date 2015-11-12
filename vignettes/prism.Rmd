@@ -1,18 +1,15 @@
-##`prism`
-
-[![Build Status](https://api.travis-ci.org/ropensci/prism.png?branch=master)](https://travis-ci.org/ropensci/prism)
-[![Build status](https://ci.appveyor.com/api/projects/status/ie38i6p5651pc1o5/branch/master)](https://ci.appveyor.com/project/sckott/prism/branch/master)
-
+---
+title: "Download and plot PRISM data"
+author: "Edmund Hart"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
 This package allows users to access and visualize data from the [Oregon State PRISM project](http://www.prism.oregonstate.edu/).  Data is all in the form of gridded rasters for the continental US at 3 different scales: daily, monthly and 30 year normals.  Please see their webpage for a full description of the data products, or [see their overview](http://www.prism.oregonstate.edu/documents/PRISM_datasets_aug2013.pdf).
-
-### Quickstart
-Currently the package is only available on github and installable with `devtools`
-```{r start, eval=FALSE}
-library(devtools)
-install_github(repo = "prism", username = "ropensci")
-library(prism)
-```
 
 ### Downloading data
 
@@ -29,7 +26,7 @@ month - normal data only] |
 | *vpdmax* |Daily maximum vapor pressure deficit [averaged over all days in
 the month - normal data only] |
 
-**Normal data**
+**Normal Data**
 
 Normals are based on the years 1981 - 2010, and can be downloaded in two resolutions, `4km` and `800m`, and a resolution must be specified.  Normals can also be downloaded for a given month, vector of months, or an average for all 30 years.
 
@@ -92,7 +89,6 @@ p + stat_smooth(method="lm",se=F) + theme_bw() +
 ggtitle("Average January temperature in Boulder, CO 1982-2014")
 ```
 
-
 Lastly it's easy to just load up the prism data with the raster package.  This time what we'll look at January temperature anomalies.  To do this we'll examine the difference between January 2013 and the 30 year normals for January.  Conveniently, we've already downloaded both of these files.  We just need to grab them out of our list.
 
 ```{r raster_math,fig.height=5,fig.width=7}
@@ -119,33 +115,4 @@ plot(anom_rast)
 
 The plot shows that January 2013 was warmer than the average over the last 30 years.  It also shows how easy it is to use the raster library to work with prism data.  The package provides a simple framework to work with a large number of rasters that you can easily download and vizualize or use with other data sets.
 
-
-**Javascript maps**
-
-The [leaflet package](https://cran.r-project.org/web/packages/leaflet/) allows you to easily make javascript maps using the [leaflet](http://leafletjs.com/) mapping framework using prism data.  These can easily be hosted on websites like [Rpubs](https://rpubs.com/) or your own site.  Here is a simple example of plotting the [30 year normal for annual temperature](https://rpubs.com/DistribEcology/122453). 
-
-```{r leaflet,eval=F}
-library(leaflet)
-library(raster)
-library(prism)
-
-## Set default path for raster files
-options(prism.path = "~/prismtmp")
-get_prism_normals(type="tmean",resolution = "4km",annual =T, keepZip=F)
-
-
-## Grab the data, ls_prism_data(absPath=T) will show you all the data you've downloaded
-norm <- grep("tmean_30yr_normal_4kmM2_annual",ls_prism_data(absPath=T)[,2],value=T)
-rast <- raster(norm)
-
-
-## Create color pallette and plot
-pal <- colorNumeric(c("#0000FF", "#FFFF00", "#FF0000"), values(rast),
-                    na.color = "transparent")
-
-leaflet() %>% addTiles(urlTemplate = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}') %>% 
-  addRasterImage(rast,colors = pal,opacity=.65) %>% addLegend(pal = pal, values = values(rast),
-                                                              title = "Deg C")
-
-```
 
