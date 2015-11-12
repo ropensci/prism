@@ -9,6 +9,7 @@
 #' ### Get all the data for January from 1990 to 2000
 #' get_prism_annual(type="tmean", year = 1990:2000, keepZip=F)
 #' }
+#' @importFrom utils download.file setTxtProgressBar txtProgressBar unzip
 #' @export
 get_prism_annual <- function(type, years = NULL ,keepZip = TRUE){
   ### parameter and error handling

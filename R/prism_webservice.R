@@ -26,10 +26,6 @@ prism_webservice <- function(uri,keepZip=FALSE, returnName = FALSE){
   tryNumber <- 1
   downloaded <- FALSE
   
-  if (Sys.info()["sysname"] == "Windows") {
-    current_net2_status <- setInternet2(NA)
-    setInternet2(FALSE)
-  }
   while(tryNumber < 11 & !downloaded){
     downloaded <- TRUE
     tryCatch(
@@ -39,12 +35,9 @@ prism_webservice <- function(uri,keepZip=FALSE, returnName = FALSE){
       })
     tryNumber <- tryNumber + 1
   }
-  if (Sys.info()["sysname"] == "Windows") {
-    setInternet2(current_net2_status)
-  }
+
   if (!downloaded) {
-    warning(paste0("Downloading failed for type = ", type, ", month = ", month[j],
-                   ", and year = ", years[i]))
+    warning(paste0("Downloading failed"))
   } else {
     suppressWarnings(unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]]))
     if(!keepZip){

@@ -20,7 +20,8 @@ This should match all other files post 1980
 \examples{
 \dontrun{
 process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil','PRISM_tmean_stable_4kmM2_198001_bil')
-process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
+process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',
+c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
 }
 }
 

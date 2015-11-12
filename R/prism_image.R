@@ -25,10 +25,10 @@ prism_image <- function(prismfile, col = "heat"){
   colnames(out) <- c("x","y","data")
     
   if(col == "heat"){
-    prPlot <- ggplot() + geom_raster(data = out, aes(x=x,y=y,fill=data))+theme_bw()+scale_fill_gradient(low = "yellow", high="red") + xlab("Longitude") + ylab("Latitude")+ggtitle(pname)  
+    prPlot <- ggplot() + geom_raster(data = out, aes_string(x='x',y='y',fill='data'))+theme_bw()+scale_fill_gradient(low = "yellow", high="red") + xlab("Longitude") + ylab("Latitude")+ggtitle(pname)  
     print(prPlot)
   } else {
-    prPlot <- ggplot() + geom_raster(data = out, aes(x=x,y=y,fill=data))+theme_bw()+scale_fill_gradient(low = "red", high="blue") + xlab("Longitude") + ylab("Latitude")+ggtitle(pname)  
+    prPlot <- ggplot() + geom_raster(data = out, aes_string(x='x',y='y',fill='data'))+theme_bw()+scale_fill_gradient(low = "red", high="blue") + xlab("Longitude") + ylab("Latitude")+ggtitle(pname)  
     print(prPlot)
   }
 }
