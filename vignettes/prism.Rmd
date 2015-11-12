@@ -30,12 +30,19 @@ the month - normal data only] |
 
 Normals are based on the years 1981 - 2010, and can be downloaded in two resolutions, `4km` and `800m`, and a resolution must be specified.  Normals can also be downloaded for a given month, vector of months, or an average for all 30 years.
 
-```{r get normals}
+```{r get normals_noeval,echo=FALSE,warning=FALSE}
+library(prism)
+
+```
+
+
+```{r get normals,eval=FALSE}
 library(prism)
 options(prism.path = "~/prismtmp")
 get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip=F)
 
 ```
+
 
 The first thing to note is that you'll need to set a local location to work with this data.  Second is the option `keepZip`.  If this is `TRUE` the zip file will remain on your machine, otherwise it will be automatically deleted.
 
@@ -65,7 +72,7 @@ prism_image(ls_prism_data()[1,1])
 
 Monthly and daily data is also easily accessible. Below we'll get January data for the years 1990 to 2000. We an also grab data from June 1 to June 14 2013.
 
-```{r get daily monthly, message=FALSE}
+```{r get daily monthly, message=FALSE,eval=FALSE}
 get_prism_monthlys(type="tmean", year = 1990:2000, mon = 1, keepZip=F)
 get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 ```
@@ -76,12 +83,17 @@ You can also visualize a single point across a set of rasters.  This procedure w
 
 Let's get make a plot of January temperatures is Boulder between 1982 and 2014.  First we'll grab all the data from the US, and then give our function a point to get data from.  The point must be a vector in the form of longitude, latitude.
 
+```{r,eval=FALSE}
+## Get data.
+get_prism_monthlys(type="tmean", year = 1982:2014, mon = 1, keepZip=F)
+```
+
+
 ```{r plot_Boulder,fig.height=5,fig.width=7}
 library(ggplot2)
 boulder <- c(-105.2797,40.0176)
-## Get data.
-get_prism_monthlys(type="tmean", year = 1982:2014, mon = 1, keepZip=F)
-## We'll use regular expressions to grep through the list and get data only from the month of January
+## We'll use regular expressions to grep through the list and get data only from 
+## the month of January
 to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data()[,1],value=T)
 to_slice = grep("tmean",to_slice, value = T)
 p <- prism_slice(boulder,to_slice)
@@ -101,7 +113,8 @@ jnorm
 ## Now we'll load the rasters.
 jnorm_rast <- raster(jnorm)
 j2013_rast <- raster(j2013)
-## Now we can do simple subtraction to get the anomaly by subtracting 2014 from the 30 year normal map
+## Now we can do simple subtraction to get the anomaly by subtracting 2014 from 
+## the 30 year normal map
 anomCalc <- function(x, y) {
   return(x - y)
   }

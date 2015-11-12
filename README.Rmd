@@ -1,3 +1,6 @@
+---
+output: pdf_document
+---
 ##`prism`
 
 [![Build Status](https://api.travis-ci.org/ropensci/prism.png?branch=master)](https://travis-ci.org/ropensci/prism)
