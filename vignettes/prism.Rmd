@@ -9,4 +9,4 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This package allows users to access and visualize data from the [Oregon State PRISM project](http://www.prism.oregonstate.edu/).  Data is all in the form of gridded rasters for the continental US at 3 different scales: daily, monthly and 30 year normals.  Please see a [live vignette for details] 
+This package allows users to access and visualize data from the [Oregon State PRISM project](http://www.prism.oregonstate.edu/).  Data is all in the form of gridded rasters for the continental US at 3 different scales: daily, monthly and 30 year normals.  Please see a [live vignette for details](http://ropensci.github.io/prism/)
