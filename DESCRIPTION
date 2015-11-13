@@ -18,7 +18,6 @@ Imports:
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
-BuildVignettes: no
 Suggests:
     testthat,
     knitr
