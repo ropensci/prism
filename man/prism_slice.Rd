@@ -23,7 +23,7 @@ the list of prism files should be from a continuous data set. Otherwise the plot
 \examples{
 \dontrun{
 ### Assumes you have a clean prism directory
-get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
+get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
 p <- prism_slice(c(-73.2119,44.4758),ls_prism_data())
 print(p)
 }

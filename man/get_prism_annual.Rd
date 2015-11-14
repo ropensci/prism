@@ -23,7 +23,7 @@ Data is available from 1891 until 2014, however you have to download all data fo
 \examples{
 \dontrun{
 ### Get all the data for January from 1990 to 2000
-get_prism_annual(type="tmean", year = 1990:2000, keepZip=F)
+get_prism_annual(type="tmean", year = 1990:2000, keepZip=FALSE)
 }
 }
 

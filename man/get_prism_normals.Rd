@@ -28,7 +28,7 @@ You must make sure that you have set up a valid download directory.  This must b
 \examples{
 \dontrun{
 ### Get 30 year normal values for rainfall
-get_prism_normals(type="ppt",resolution = "4km",mon = 1, keepZip=F)
+get_prism_normals(type="ppt",resolution = "4km",mon = 1, keepZip=FALSE)
 
 }
 }

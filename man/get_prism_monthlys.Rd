@@ -37,7 +37,7 @@ This must be set as options(prism.path = "YOURPATH")
 \examples{
 \dontrun{
 ### Get all the data for January from 1990 to 2000
-get_prism_monthlys(type="tmean", years = 1990:2000, mon = 1, keepZip=F)
+get_prism_monthlys(type="tmean", years = 1990:2000, mon = 1, keepZip=FALSE)
 }
 }
 
