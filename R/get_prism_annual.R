@@ -7,7 +7,7 @@
 #' @details Data is available from 1891 until 2014, however you have to download all data for years prior to 1981.  Thefore if you enter a vector of years that bounds 1981, you will automatically download all data for all years in the vector.  If the "all" parameter is set to TRUE, it will override any months entered and download all data. Data will be downloaded for all months in all the years in the vectors supplied. You must make sure that you have set up a valid download directory.  This must be set as options(prism.path = "YOURPATH")
 #' @examples \dontrun{
 #' ### Get all the data for January from 1990 to 2000
-#' get_prism_annual(type="tmean", year = 1990:2000, keepZip=F)
+#' get_prism_annual(type="tmean", year = 1990:2000, keepZip=FALSE)
 #' }
 #' @importFrom utils download.file setTxtProgressBar txtProgressBar unzip
 #' @export
