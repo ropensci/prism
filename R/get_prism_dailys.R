@@ -46,7 +46,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
   download_pb <- txtProgressBar(min = 0, max = uris_len, style = 3)
   
   if(check == "internal"){
-    x <- httr::HEAD(uri[1])
+    x <- httr::HEAD(uris[1])
     fn <- x$headers$`content-disposition`
     fn <- regmatches(fn,regexpr('\\"[a-zA-Z0-9_\\.]+',fn))
     fn <- substr(fn,2,nchar((fn)))
