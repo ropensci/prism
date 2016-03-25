@@ -35,7 +35,7 @@ path_check <- function(){
   } else {
     user_path <- getOption('prism.path')
   }
-
+  
   ## Check if path exists
   if(!file.exists(file.path(user_path))){
     dir.create(user_path)
@@ -49,9 +49,13 @@ path_check <- function(){
 #' Helper function to check if files already exist
 #' @description check if files exist
 #' @param prismfiles a list of full paths for prism files
-#' @return a character vector of file names that already exist
+#' @param lgl \code{TRUE} returns a logical vector indicating those
+#' not yet downloaded; \code{FALSE}
+#' returns the file names that are not yet downloaded.
+#' @return a character vector of file names that are not yet downloaded
+#' or a logical vector indication those not yet downloaded..
 #' @export
-prism_check <- function(prismfiles){
+prism_check <- function(prismfiles, lgl = FALSE){
   file_bases <- unlist(sapply(prismfiles, strsplit, split=".zip"))
   which_downloaded <- sapply(file_bases, function(base) {
     # Look inside the folder to see if the .bil is there
@@ -59,7 +63,11 @@ prism_check <- function(prismfiles){
     ls_folder <- list.files(file.path(getOption("prism.path"), base))
     any(grepl("\\.bil", ls_folder))
   })
-  prismfiles[!which_downloaded]
+  if(lgl){
+    return(!which_downloaded)
+  } else {
+    return(prismfiles[!which_downloaded])    
+  }
 }
 
 #' Process pre 1980 files
@@ -74,13 +82,13 @@ prism_check <- function(prismfiles){
 #' }
 process_zip <- function(pfile, name){
   tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
-
+  
   # Remove all.xml file
   file.remove(paste(options("prism.path")[[1]], pfile, grep("all", tmpwd, value = T), sep="/"))
-
+  
   # Get new list of files after removing all.xml
   tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
-
+  
   fstrip <- strsplit(tmpwd, "\\.")
   fstrip <- unlist(lapply(fstrip, function(x) return(x[1])))
   unames <- unique(fstrip)
@@ -124,7 +132,7 @@ process_zip <- function(pfile, name){
 #  # Get the first split and take the last element
 #  sp1 <- unlist(strsplit(dirlist, "PRISM_"))
 #  sp2 <- unlist(strsplit(sp1[length(sp1)], "zip"))[1]
-  # Now we have an exemplar listing
+# Now we have an exemplar listing
 #  sp1 <- unlist(strsplit(sp2, "stable_"))[2]
 #  sp2 <- unlist(strsplit(sp1, "_[0-9]{4,8}"))
 #  return(sp2[1])

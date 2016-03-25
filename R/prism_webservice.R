@@ -12,7 +12,7 @@
 
 prism_webservice <- function(uri,keepZip=FALSE, returnName = FALSE){
   ## Get file name
-  x <- HEAD(uri)
+  x <- httr::HEAD(uri)
   fn <- x$headers$`content-disposition`
   fn <- regmatches(fn,regexpr('\\"[a-zA-Z0-9_\\.]+',fn))
   fn <- substr(fn,2,nchar((fn)))
