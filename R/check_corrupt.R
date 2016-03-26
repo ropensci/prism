@@ -5,6 +5,7 @@
 #' @inheritParams get_prism_dailys
 #' @return \code{logical} indicating whether the process 
 #' succeeded.
+#' @export
 check_corrupt <- function(type, minDate = NULL, maxDate =  NULL){
   minDate <- as.Date(minDate)
   maxDate <- as.Date(maxDate)
