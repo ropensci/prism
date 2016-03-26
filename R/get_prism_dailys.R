@@ -52,7 +52,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     to_download_lgl <- prism_check(file_names, lgl = TRUE)
     uris <- uris[to_download_lgl]
   }
-  download_pb <- txtProgressBar(min = 0, max = length(uris), style = 3)
+  download_pb <- txtProgressBar(min = 0, max = max(length(uris), 1), style = 3)
   
   if(length(uris) > 0){
     for(i in 1:length(uris)){
@@ -60,7 +60,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
       setTxtProgressBar(download_pb, i)
     }
   } else {
-    setTxtProgressBar(download_pb, length(uris))
+    setTxtProgressBar(download_pb, max(length(uris), 1))
   }
 
   close(download_pb)
