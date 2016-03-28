@@ -119,6 +119,60 @@ process_zip <- function(pfile, name){
   unlink(paste(options("prism.path")[[1]], pfile, sep="/"), recursive = TRUE)
 }
 
+#' @title Get PRISM metadata
+#' @description Retrieves PRISM metadata for a given type and
+#' date range. The information is retrieved from the .info.txt file.
+#' @inheritParams get_prism_dailys
+#' @return list of data.frames containing metadata. If only
+#' one date is requested, the function returns the data.frame.
+get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
+  path_check()
+  dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
+  dates_str <- paste(gsub("-", "", dates), collapse = "|")
+  prism_folders <- list.files(path = getOption("prism.path"))
+  type_folders <- grep(type, prism_folders, value = TRUE)
+  final_folders <- grep(dates_str, type_folders, value = TRUE)
+  if(length(final_folders) != length(dates)){
+    stop("Not all files are in prism.path.")
+  }
+  final_txt_full <- file.path(getOption("prism.path"), final_folders, paste0(final_folders, ".info.txt"))
+  out <- lapply(final_txt_full, function(x){
+    readin <- read.delim(x, sep = "\n", header = FALSE)
+    str_spl <- unlist(stringr::str_split(as.character(readin[[1]]), ": "))
+    
+    names_md <- str_spl[seq(from = 1, to = length(str_spl), by = 2)]
+    data_md <- str_spl[seq(from = 2, to = length(str_spl), by = 2)]
+    out <- matrix(data_md, nrow = 1)
+    out <- as.data.frame(out)
+    names(out) <- names_md
+    out
+  })
+  if(length(out) == 1){
+    return(out[[1]])
+  } else {
+    return(out)
+  }
+}
+
+#' @title Processes dates as this appears many times.
+#' @inheritParams get_prism_dailys
+#' @return Vector of dates
+gen_dates <- function(minDate, maxDate, dates){
+  minDate <- as.Date(minDate)
+  maxDate <- as.Date(maxDate)
+  if(!is.null(dates) && !is.null(maxDate)){
+    stop("You can enter a date range or a vector of dates, but not both")
+  }
+  
+  if(is.null(dates)){
+    dates <- seq(as.Date(minDate),as.Date(maxDate),by="days")
+    
+    if(as.Date(minDate) > as.Date(maxDate)){
+      stop("Your minimum date must be less than your maximum date")
+    }
+  }
+  dates
+}
 
 #' Get the resolution text string
 #' @description To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing

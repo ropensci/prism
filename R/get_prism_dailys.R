@@ -18,18 +18,8 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
                              check = "httr"){
   path_check()
   check <- match.arg(check, c("httr", "internal"))
-  if(!is.null(dates) && !is.null(maxDate)){
-    stop("You can enter a date range or a vector of dates, but not both")
-  }
-  
-  if(is.null(dates)){
-    dates <- seq(as.Date(minDate),as.Date(maxDate),by="days")
-    
-    if(as.Date(minDate) > as.Date(maxDate)){
-      stop("Your minimum date must be less than your maximum date")
-    }
-  }
-  
+  dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
+
   if( min(as.numeric(format(dates,"%Y"))) < 1981 ) { 
     stop("You must enter a date that is later than 1980")
   }

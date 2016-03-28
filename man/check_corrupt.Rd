@@ -4,7 +4,7 @@
 \alias{check_corrupt}
 \title{Check the integrity of downloaded PRISM data}
 \usage{
-check_corrupt(type, minDate = NULL, maxDate = NULL)
+check_corrupt(type, minDate = NULL, maxDate = NULL, dates = NULL)
 }
 \arguments{
 \item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
@@ -13,6 +13,8 @@ Note that tmean == mean(tmin, tmax).}
 \item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start to download data.}
 
 \item{maxDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to end downloading data.}
+
+\item{dates}{a vector of iso-8601 formatted dates to download data for, can also be a single date.}
 }
 \value{
 \code{logical} indicating whether the process
