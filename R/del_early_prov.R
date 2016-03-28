@@ -7,7 +7,6 @@
 #' @export
 del_early_prov <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
   path_check()
-  browser()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
   md <- get_metadata(type = type, dates = dates)
   mddf <- dplyr::bind_rows(md)
