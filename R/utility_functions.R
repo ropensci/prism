@@ -136,6 +136,9 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
   final_folders <- type_folders[which(dates_type_folders %in% dates_str)]
 
   final_txt_full <- file.path(getOption("prism.path"), final_folders, paste0(final_folders, ".info.txt"))
+  if(length(final_txt_full) == 0){
+    stop("No files exist to obtain metadata from.")
+  }
   out <- lapply(1:length(final_txt_full), function(i){
     readin <- tryCatch(read.delim(final_txt_full[i], sep = "\n", 
                                   header = FALSE, stringsAsFactors = FALSE),
