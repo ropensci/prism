@@ -4,6 +4,7 @@
 #' @inheritParams get_prism_dailys
 #' @importFrom dplyr bind_rows
 #' @return NULL
+#' @export
 del_early_prov <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
   path_check()
   browser()
