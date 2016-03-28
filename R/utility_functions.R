@@ -125,14 +125,16 @@ process_zip <- function(pfile, name){
 #' @inheritParams get_prism_dailys
 #' @return list of data.frames containing metadata. If only
 #' one date is requested, the function returns the data.frame.
+#' @importFrom stringr str_extract
 get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
   path_check()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-  dates_str <- paste(gsub("-", "", dates), collapse = "|")
+  dates_str <- gsub("-", "", dates)
   prism_folders <- list.files(path = getOption("prism.path"))
   type_folders <- grep(type, prism_folders, value = TRUE)
-  final_folders <- grep(dates_str, type_folders, value = TRUE)
-  
+  dates_type_folders <- stringr::str_extract(type_folders, "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
+  final_folders <- type_folders[which(dates_type_folders %in% dates_str)]
+
   final_txt_full <- file.path(getOption("prism.path"), final_folders, paste0(final_folders, ".info.txt"))
   out <- lapply(1:length(final_txt_full), function(i){
     readin <- tryCatch(read.delim(final_txt_full[i], sep = "\n", 
