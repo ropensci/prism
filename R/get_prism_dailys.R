@@ -42,9 +42,6 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
   uris <- sapply(uri_dates,function(x){paste("http://services.nacse.org/prism/data/public/4km",type,x,sep="/")})
   
-  uris_len <- length(uris)
-  download_pb <- txtProgressBar(min = 0, max = uris_len, style = 3)
-  
   if(check == "internal"){
     x <- httr::HEAD(uris[1])
     fn <- x$headers$`content-disposition`
@@ -55,6 +52,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
     to_download_lgl <- prism_check(file_names, lgl = TRUE)
     uris <- uris[to_download_lgl]
   }
+  download_pb <- txtProgressBar(min = 0, max = max(length(uris), 1), style = 3)
   
   if(length(uris) > 0){
     for(i in 1:length(uris)){
@@ -62,7 +60,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
       setTxtProgressBar(download_pb, i)
     }
   } else {
-    setTxtProgressBar(download_pb, uris_len)
+    setTxtProgressBar(download_pb, max(length(uris), 1))
   }
 
   close(download_pb)
