@@ -14,7 +14,9 @@ License: MIT + file LICENSE
 Imports:
     ggplot2,
     raster,
-    httr
+    httr,
+    dplyr,
+    stringr
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr

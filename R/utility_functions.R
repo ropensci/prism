@@ -125,26 +125,36 @@ process_zip <- function(pfile, name){
 #' @inheritParams get_prism_dailys
 #' @return list of data.frames containing metadata. If only
 #' one date is requested, the function returns the data.frame.
+#' @importFrom stringr str_extract
 get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
   path_check()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-  dates_str <- paste(gsub("-", "", dates), collapse = "|")
+  dates_str <- gsub("-", "", dates)
   prism_folders <- list.files(path = getOption("prism.path"))
   type_folders <- grep(type, prism_folders, value = TRUE)
-  final_folders <- grep(dates_str, type_folders, value = TRUE)
-  if(length(final_folders) != length(dates)){
-    stop("Not all files are in prism.path.")
-  }
+  dates_type_folders <- stringr::str_extract(type_folders, "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
+  final_folders <- type_folders[which(dates_type_folders %in% dates_str)]
+
   final_txt_full <- file.path(getOption("prism.path"), final_folders, paste0(final_folders, ".info.txt"))
-  out <- lapply(final_txt_full, function(x){
-    readin <- read.delim(x, sep = "\n", header = FALSE)
+  if(length(final_txt_full) == 0){
+    stop("No files exist to obtain metadata from.")
+  }
+  out <- lapply(1:length(final_txt_full), function(i){
+    readin <- tryCatch(read.delim(final_txt_full[i], sep = "\n", 
+                                  header = FALSE, stringsAsFactors = FALSE),
+                       error = function(e){
+                         warning(e)
+                         warning(paste0("Problem opening ", x, ". The folder may exist without files inside it."))
+                       })
     str_spl <- unlist(stringr::str_split(as.character(readin[[1]]), ": "))
     
     names_md <- str_spl[seq(from = 1, to = length(str_spl), by = 2)]
     data_md <- str_spl[seq(from = 2, to = length(str_spl), by = 2)]
     out <- matrix(data_md, nrow = 1)
-    out <- as.data.frame(out)
+    out <- as.data.frame(out, stringsAsFactors = FALSE)
     names(out) <- names_md
+    out$file_path <- final_txt_full[i]
+    out$folder_path <- file.path(getOption("prism.path"), final_folders[i])
     out
   })
   if(length(out) == 1){
@@ -158,14 +168,14 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
 #' @inheritParams get_prism_dailys
 #' @return Vector of dates
 gen_dates <- function(minDate, maxDate, dates){
-  minDate <- as.Date(minDate)
-  maxDate <- as.Date(maxDate)
   if(!is.null(dates) && !is.null(maxDate)){
     stop("You can enter a date range or a vector of dates, but not both")
   }
   
   if(is.null(dates)){
-    dates <- seq(as.Date(minDate),as.Date(maxDate),by="days")
+    minDate <- as.Date(minDate)
+    maxDate <- as.Date(maxDate)
+    dates <- seq(as.Date(minDate), as.Date(maxDate), by="days")
     
     if(as.Date(minDate) > as.Date(maxDate)){
       stop("Your minimum date must be less than your maximum date")
