@@ -134,7 +134,7 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
   type_folders <- grep(type, prism_folders, value = TRUE)
   dates_type_folders <- stringr::str_extract(type_folders, "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
   final_folders <- type_folders[which(dates_type_folders %in% dates_str)]
-
+  final_folders <- final_folders[!stringr::str_detect(final_folders, ".zip")]
   final_txt_full <- file.path(getOption("prism.path"), final_folders, paste0(final_folders, ".info.txt"))
   if(length(final_txt_full) == 0){
     stop("No files exist to obtain metadata from.")
