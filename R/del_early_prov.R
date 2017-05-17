@@ -7,20 +7,24 @@
 #' @export
 del_early_prov <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
   path_check()
-  dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-  md <- get_metadata(type = type, dates = dates)
+  dates <- prism:::gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
+  md <- prism:::get_metadata(type = type, dates = dates)
+  md <- lapply(md, function(x){
+    names(x) <- stringr::str_replace(names(x), "_DATASET", "")
+    x
+  })
   mddf <- dplyr::bind_rows(md)
-  mddf$dates_str <- stringr::str_extract(mddf$PRISM_FILENAME, "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
+  mddf$dates_str <- stringr::str_extract(mddf$PRISM_FILENAME, 
+                                         "[0-9]{8}")
   
   duplicates <- mddf$dates_str[duplicated(mddf$dates_str)]
   for(dup in duplicates){
     dups <- mddf[mddf$dates_str == dup,]
     dups$dates_num <- as.numeric(dups$dates_str)
-    to_delete <- which(dups$dates_num < max(dups$dates_num))
-    if(length(to_delete) == 0){
-      # This happens if the dates are all the same.
-      to_delete <- 1:(NROW(dups) - 1)
-    }
+    
+    # This assumes that the files are in order of date modified
+    to_delete <- 1:(NROW(dups) - 1)
+    
     unlink(dups$folder_path[to_delete], recursive = TRUE)
     # Check if the folder was deleted.
     if(file.exists(file.path(dups$file_path[to_delete], ".."))){
