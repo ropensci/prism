@@ -42,11 +42,11 @@ del_early_prov <- function (type, minDate = NULL, maxDate = NULL, dates = NULL)
       dups$to_delete <- dups$new_to_delete
     }
     unlink(dups$folder_path[dups$to_delete], recursive = TRUE)
-    if (file.exists(file.path(dups$file_path[dups$to_delete], 
-                              ".."))) {
-      warning(paste0("Unable to remove folder ", file.path(dups$file_path[dups$to_delete], 
-                                                           ".."), ". Check permissions."))
-    }
+    lapply(dups$folder_path[dups$to_delete], function(x){
+      if(file.exists(x)) {
+        warning(paste0("Unable to remove folder ", x, ". Check permissions."))
+      }
+    })
   }
   NULL
 }
