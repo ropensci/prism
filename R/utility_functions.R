@@ -144,7 +144,7 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
                                   header = FALSE, stringsAsFactors = FALSE),
                        error = function(e){
                          warning(e)
-                         warning(paste0("Problem opening ", x, ". The folder may exist without files inside it."))
+                         warning(paste0("Problem opening ", final_txt_full[i], ". The folder may exist without the .info.text file inside it."))
                        })
     str_spl <- unlist(stringr::str_split(as.character(readin[[1]]), ": "))
     
