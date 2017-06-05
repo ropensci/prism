@@ -1,7 +1,9 @@
 Package: prism
 Type: Package
 Title: Access Data from the Oregon State Prism Climate Project
-Description: Allows users to access the Oregon State Prism climate data. Using the web service API data can easily downloaded in bulk and loaded into R for spatial analysis. Some user friendly visualizations are also provided.
+Description: Allows users to access the Oregon State Prism climate data. Using
+    the web service API data can easily downloaded in bulk and loaded into R for
+    spatial analysis. Some user friendly visualizations are also provided.
 URL: http://github.com/ropensci/prism
 BugReports: http://github.com/ropensci/prism/issues
 Version: 0.0.7
@@ -16,10 +18,12 @@ Imports:
     raster,
     httr,
     dplyr,
-    stringr
+    stringr,
+    magrittr
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr
 Suggests:
     testthat,
     knitr
+RoxygenNote: 5.0.1

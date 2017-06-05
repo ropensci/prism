@@ -6,6 +6,7 @@
 #' @return \code{logical} indicating whether the process 
 #' succeeded.
 #' @export
+#' @importFrom magrittr %>%
 check_corrupt <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
     dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
     dates_str <- gsub("-", "", dates)
