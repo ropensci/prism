@@ -11,23 +11,26 @@ check_corrupt <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
     dates_str <- gsub("-", "", dates)
     prism_folders <- list.files(getOption("prism.path"))
     
-    type_folders <- grep(pattern = paste0("_", type, "_"), 
-                         prism_folders, value = TRUE)
+    type_folders <- prism_folders %>% 
+      stringr::str_subset(paste0("_", type, "_"))
     # Use D2 for ppt
     if(type == "ppt"){
-      type_folders <- grep(pattern = "4kmD2_", 
-                           type_folders, value = TRUE)
+      type_folders <- type_folders %>% 
+        stringr::str_subset("4kmD2_")
     } else {
-      type_folders <- grep(pattern = "4kmD1_", 
-                           type_folders, value = TRUE)
+      type_folders <- type_folders %>% 
+        stringr::str_subset("4kmD1_")
     }
     # Don't want zips
-    type_folders <- grep(pattern = ".zip", 
-                         type_folders, value = TRUE, invert = TRUE)
-    folders_to_check <- grep(paste(dates_str, collapse = "|"), type_folders, value = TRUE)
+    type_folders <- type_folders %>% 
+      .[!stringr::str_detect(., ".zip")]
+    
+    folders_to_check <- type_folders %>% 
+      stringr::str_subset(paste(dates_str, collapse = "|"))
+    
     # Check for missing dates:
     folders_dates <- stringr::str_extract(folders_to_check, 
-                                               "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
+                                               "[0-9]{8}")
     folders_dates <- as.Date(folders_dates, "%Y%m%d")
     dates_missing <- as.Date(setdiff(dates, folders_dates), origin = "1970-01-01")
     if(length(dates_missing) > 0){
