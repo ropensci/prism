@@ -9,26 +9,8 @@
 #' @importFrom magrittr %>%
 check_corrupt <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
     dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-    dates_str <- gsub("-", "", dates)
-    prism_folders <- list.files(getOption("prism.path"))
-    
-    type_folders <- prism_folders %>% 
-      stringr::str_subset(paste0("_", type, "_"))
-    # Use D2 for ppt
-    if(type == "ppt"){
-      type_folders <- type_folders %>% 
-        stringr::str_subset("4kmD2_")
-    } else {
-      type_folders <- type_folders %>% 
-        stringr::str_subset("4kmD1_")
-    }
-    # Don't want zips
-    type_folders <- type_folders %>% 
-      .[!stringr::str_detect(., ".zip")]
-    
-    folders_to_check <- type_folders %>% 
-      stringr::str_subset(paste(dates_str, collapse = "|"))
-    
+    folders_to_check <- subset_prism_folders(type, dates)
+     
     # Check for missing dates:
     folders_dates <- stringr::str_extract(folders_to_check, 
                                                "[0-9]{8}")

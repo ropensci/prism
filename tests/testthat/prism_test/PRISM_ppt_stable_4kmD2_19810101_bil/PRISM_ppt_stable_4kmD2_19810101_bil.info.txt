@@ -1,0 +1,5 @@
+PRISM_CREATE_DATE: 20150517
+PRISM_DATASET: an81/r1503
+PRISM_VERSION: 14.1-20140502-1000
+PRISM_REMARKS: This grid was initially modeled with PRISM at 30-arc-second (~800-m) resolution to produce the source grid listed under PRISM_FILENAME, on the date(s) listed under PRISM_CREATE_DATE. The source grid was modified as needed to ensure that the sum of the daily grids equaled the monthly modeled grid. This source grid was then upscaled to 2.5-arc-minute (~4-km) resolution with a Gaussian filter.
+PRISM_FILENAME: adj_cai_ppt_us_us_30s_19810101.bil

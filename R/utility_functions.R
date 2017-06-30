@@ -202,3 +202,28 @@ gen_dates <- function(minDate, maxDate, dates){
 #  return(sp2[1])
 #}
 
+# Subsets prism folders on the disk by type and date.
+subset_prism_folders <- function(type, dates){
+  path_check()
+  dates_str <- gsub("-", "", dates)
+  prism_folders <- list.files(getOption("prism.path"))
+  
+  type_folders <- prism_folders %>% 
+    stringr::str_subset(paste0("_", type, "_"))
+  # Use D2 for ppt
+  if(type == "ppt"){
+    type_folders <- type_folders %>% 
+      stringr::str_subset("4kmD2_")
+  } else {
+    type_folders <- type_folders %>% 
+      stringr::str_subset("4kmD1_")
+  }
+  # Don't want zips
+  type_folders <- type_folders %>% 
+    .[!stringr::str_detect(., ".zip")]
+  
+  type_folders %>% 
+    stringr::str_subset(paste(dates_str, collapse = "|"))
+}
+
+
