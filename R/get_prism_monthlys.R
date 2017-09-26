@@ -49,7 +49,7 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE){
     }
   
   pre_1981 <- years[years<1981]
-  post_1981 <- years[years>1981]
+  post_1981 <- years[years>=1981]
   uris_pre81 <- vector()
   uris_post81 <- vector()
   
