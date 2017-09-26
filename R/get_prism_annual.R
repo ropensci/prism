@@ -29,7 +29,7 @@ get_prism_annual <- function(type, years = NULL ,keepZip = TRUE){
     
   
   pre_1981 <- years[years<1981]
-  post_1981 <- years[years>1981]
+  post_1981 <- years[years >= 1981]
   uris_pre81 <- vector()
   uris_post81 <- vector()
   
@@ -58,7 +58,7 @@ get_prism_annual <- function(type, years = NULL ,keepZip = TRUE){
   }
   
   
-  counter <- i+1
+  counter <- length(uris_post81)+1
   
   
   ### Handle pre 1981 files
