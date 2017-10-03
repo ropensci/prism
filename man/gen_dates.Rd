@@ -7,7 +7,7 @@
 gen_dates(minDate, maxDate, dates)
 }
 \arguments{
-\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start to download data. 
+\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start downloading data. 
 May be provided as either a character or \code{\link[base]{Date}} class.}
 
 \item{maxDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to end downloading data.
