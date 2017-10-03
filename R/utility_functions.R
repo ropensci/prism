@@ -172,6 +172,10 @@ gen_dates <- function(minDate, maxDate, dates){
     stop("You can enter a date range or a vector of dates, but not both")
   }
   
+  if((!is.null(maxDate) & is.null(minDate)) | (!is.null(minDate) & is.null(maxDate))){
+    stop("Both minDate and maxDate must be specified if specifying a date range")
+  }
+  
   if(!is.null(dates)){
     # make sure it is cast as a date if it was provided as a character
     dates <- as.Date(dates)
