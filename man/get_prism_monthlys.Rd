@@ -40,4 +40,3 @@ This must be set as options(prism.path = "YOURPATH")
 get_prism_monthlys(type="tmean", years = 1990:2000, mon = 1, keepZip=FALSE)
 }
 }
-

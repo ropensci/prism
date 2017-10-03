@@ -28,4 +28,3 @@ p <- prism_slice(c(-73.2119,44.4758),ls_prism_data())
 print(p)
 }
 }
-

@@ -17,4 +17,3 @@ a properly parsed string of human readable names
 \description{
 parse the directory name into relevant metadata
 }
-
