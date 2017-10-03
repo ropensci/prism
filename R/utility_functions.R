@@ -168,7 +168,7 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
 #' @inheritParams get_prism_dailys
 #' @return Vector of dates
 gen_dates <- function(minDate, maxDate, dates){
-  if(!is.null(dates) && !is.null(maxDate)){
+  if((!is.null(dates) && !is.null(maxDate)) | (!is.null(dates) && !is.null(minDate))){
     stop("You can enter a date range or a vector of dates, but not both")
   }
   
