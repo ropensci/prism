@@ -180,9 +180,9 @@ gen_dates <- function(minDate, maxDate, dates){
   if(is.null(dates)){
     minDate <- as.Date(minDate)
     maxDate <- as.Date(maxDate)
-    dates <- seq(as.Date(minDate), as.Date(maxDate), by="days")
+    dates <- seq(minDate, maxDate, by="days")
     
-    if(as.Date(minDate) > as.Date(maxDate)){
+    if(minDate > maxDate){
       stop("Your minimum date must be less than your maximum date")
     }
   }
