@@ -164,6 +164,17 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
   }
 }
 
+#' Checks to see if the dates (days) specified are within the available Prism record
+#' 
+#' Prism daily record begins January 1, 1895, and assumes that it ends yesterday, 
+#' i.e., \code{Sys.Date() - 1}.
+#' 
+#' @param dates a vector of dates (class Date)
+#' @return \code{TRUE} if all values in \code{dates} are within the available Prism
+#' record. Otherwise, returns \code{FALSE}
+#' @keywords internal
+#' @noRd
+
 is_within_daily_range <- function(dates)
 {
   # day the record starts
