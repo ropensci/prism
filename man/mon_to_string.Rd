@@ -21,4 +21,3 @@ Handle numeric month to string conversions
   mon_to_string(month = 12)
 }
 }
-

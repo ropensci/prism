@@ -22,4 +22,3 @@ This is the workhorse function that will access the web service to download file
 get_prism_annual(type="tmean", year = 1990:2000, keepZip=FALSE)
 }
 }
-

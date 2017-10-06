@@ -16,4 +16,3 @@ subset_prism_folders(type, dates)
 \description{
 To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing
 }
-

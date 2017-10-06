@@ -20,4 +20,3 @@ or a logical vector indication those not yet downloaded..
 \description{
 check if files exist
 }
-

@@ -21,4 +21,3 @@ A \code{tbl_df} containing metadata on the stations used for each day/variable.
 \description{
 Extract metadata on the stations used to generate a particular day/variable
 }
-

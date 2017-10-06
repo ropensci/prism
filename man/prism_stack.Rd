@@ -18,4 +18,3 @@ get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", k
 mystack <- prism_stack(ls_prism_data()[1:14])
 }
 }
-

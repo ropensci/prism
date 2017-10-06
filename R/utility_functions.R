@@ -164,22 +164,66 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
   }
 }
 
+#' Checks to see if the dates (days) specified are within the available Prism record
+#' 
+#' Prism daily record begins January 1, 1895, and assumes that it ends yesterday, 
+#' i.e., \code{Sys.Date() - 1}.
+#' 
+#' @param dates a vector of dates (class Date)
+#' @return \code{TRUE} if all values in \code{dates} are within the available Prism
+#' record. Otherwise, returns \code{FALSE}
+#' @keywords internal
+#' @noRd
+
+is_within_daily_range <- function(dates)
+{
+  # day the record starts
+  minDay <- as.Date("1895-01-01") # need to verify
+  # assume data has posted for yesterday
+  #** may want to enhance this computation to see if it works for people using
+  # this in other time zones. Probably not critical since it will eventually 
+  # throw an error on downloading, but this will help catch it earlier
+  maxDay <- Sys.Date() - 1 # also need to verify this is accurate 
+  
+  # all dates need to be within range
+  all(dates <= maxDay & dates >= minDay)
+}
+
 #' @title Processes dates as this appears many times.
 #' @inheritParams get_prism_dailys
 #' @return Vector of dates
 gen_dates <- function(minDate, maxDate, dates){
-  if(!is.null(dates) && !is.null(maxDate)){
+  if(all(is.null(dates), is.null(minDate), is.null(maxDate)))
+    stop("You must specify either a date range (minDate and maxDate) or a vector of dates")
+  
+  if((!is.null(dates) && !is.null(maxDate)) | (!is.null(dates) && !is.null(minDate))){
     stop("You can enter a date range or a vector of dates, but not both")
+  }
+  
+  if((!is.null(maxDate) & is.null(minDate)) | (!is.null(minDate) & is.null(maxDate))){
+    stop("Both minDate and maxDate must be specified if specifying a date range")
+  }
+  
+  if(!is.null(dates)){
+    # make sure it is cast as a date if it was provided as a character
+    dates <- as.Date(dates)
+    
+    if(!is_within_daily_range(dates))
+      stop("Please ensure all dates fall within the valid Prism data record")
   }
   
   if(is.null(dates)){
     minDate <- as.Date(minDate)
     maxDate <- as.Date(maxDate)
-    dates <- seq(as.Date(minDate), as.Date(maxDate), by="days")
     
-    if(as.Date(minDate) > as.Date(maxDate)){
+    if(minDate > maxDate){
       stop("Your minimum date must be less than your maximum date")
     }
+    
+    if(!is_within_daily_range(c(minDate, maxDate)))
+      stop("Please ensure minDate and maxData are within the available Prism data record")
+    
+    dates <- seq(minDate, maxDate, by="days")
   }
   dates
 }
