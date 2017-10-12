@@ -19,7 +19,8 @@ Imports:
     httr,
     dplyr,
     stringr,
-    magrittr
+    magrittr,
+    utils
 LazyLoad: yes
 LazyData: yes
 VignetteBuilder: knitr

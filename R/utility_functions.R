@@ -140,7 +140,7 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
     stop("No files exist to obtain metadata from.")
   }
   out <- lapply(1:length(final_txt_full), function(i){
-    readin <- tryCatch(read.delim(final_txt_full[i], sep = "\n", 
+    readin <- tryCatch(utils::read.delim(final_txt_full[i], sep = "\n", 
                                   header = FALSE, stringsAsFactors = FALSE),
                        error = function(e){
                          warning(e)
