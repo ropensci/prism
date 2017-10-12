@@ -7,8 +7,7 @@
 #'
 #' @return A \code{tbl_df} containing metadata on the stations used for each day/variable.
 #' @export
-#'
-#' @examples
+
 get_prism_station_md <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL){
   path_check()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
