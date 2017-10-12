@@ -2,7 +2,7 @@
 % Please edit documentation in R/utility_functions.R
 \name{gen_dates}
 \alias{gen_dates}
-\title{Processes dates as this appears many times.}
+\title{Processes dates as this appears many times}
 \usage{
 gen_dates(minDate, maxDate, dates)
 }
@@ -19,4 +19,8 @@ also be a single date. May be provided as either a character or
 }
 \value{
 Vector of dates
+}
+\description{
+Given either a vector of \code{dates} or a \code{minDate} and 
+\code{maxDate}, return a vector of class Date.
 }

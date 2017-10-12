@@ -189,7 +189,9 @@ is_within_daily_range <- function(dates)
   all(dates <= maxDay & dates >= minDay)
 }
 
-#' @title Processes dates as this appears many times.
+#' @title Processes dates as this appears many times
+#' @description Given either a vector of \code{dates} or a \code{minDate} and 
+#' \code{maxDate}, return a vector of class Date. 
 #' @inheritParams get_prism_dailys
 #' @return Vector of dates
 gen_dates <- function(minDate, maxDate, dates){
