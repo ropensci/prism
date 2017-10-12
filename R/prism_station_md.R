@@ -1,4 +1,6 @@
 #' Extract metadata on the stations used to generate a particular day/variable
+#' 
+#' This only extracts metadata from daily PRISM data.
 #'
 #' @param type The type of data to get metadata for, must be "ppt", "tmean", "tmin", or "tmax".
 #' @param minDate a valid iso-8601 (e.g. YYYY-MM-DD) date. The first date to extract metadata for.
