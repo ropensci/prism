@@ -15,11 +15,14 @@ Authors@R: c(person("Hart", "Edmund", role = c("aut","cre"),email =
 License: MIT + file LICENSE
 Imports:
     ggplot2,
+    lubridate,
     raster,
     httr,
     dplyr,
     stringr,
     magrittr,
+    purrr,
+    readr,
     utils
 LazyLoad: yes
 LazyData: yes
