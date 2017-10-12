@@ -230,12 +230,12 @@ gen_dates <- function(minDate, maxDate, dates){
   dates
 }
 
-#' Get the resolution text string
-#' @description To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing
-#' @param type the type of data you're downloading, should be tmax, tmin etc...
-#' @param temporal The temporal resolution of the data, monthly, daily, etc...
-#' @param yr the year of data that's being requested, in numeric form
-
+# --------------- extract_version Roxygen tags
+# Get the resolution text string
+# @description To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing
+# @param type the type of data you're downloading, should be tmax, tmin etc...
+# @param temporal The temporal resolution of the data, monthly, daily, etc...
+# @param yr the year of data that's being requested, in numeric form
 #extract_version <- function(type, temporal, yr){
 #  base <- paste0("ftp://prism.nacse.org/", temporal, "/", type, "/", yr, "/")
 ##  dirlist <- RCurl::getURL(base, ftp.use.epsv = FALSE, dirlistonly = TRUE)
@@ -248,7 +248,15 @@ gen_dates <- function(minDate, maxDate, dates){
 #  return(sp2[1])
 #}
 
-# Subsets prism folders on the disk by type and date.
+#' Subsets prism folders on the disk by type and date
+#' 
+#' Looks through all of the PRISM data that is donwloaded in your \code{prism.path}
+#' and returns the subset based on \code{type} and \code{dates}.
+#' 
+#' @param type The type of data you want to subset. Should be tmax, tmin, tmean, 
+#' ppt, vpdmin, or vpdmax
+#' @param dates A vector of the dates you wish to subset as a string
+#' 
 subset_prism_folders <- function(type, dates){
   path_check()
   dates_str <- gsub("-", "", dates)
