@@ -273,8 +273,7 @@ subset_prism_folders <- function(type, dates){
       stringr::str_subset("4kmD1_")
   }
   # Don't want zips
-  type_folders <- type_folders %>% 
-    .[!stringr::str_detect(., ".zip")]
+  type_folders <- type_folders[!stringr::str_detect(type_folders, ".zip")]
   
   type_folders %>% 
     stringr::str_subset(paste(dates_str, collapse = "|"))
