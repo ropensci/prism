@@ -21,7 +21,11 @@
 #' # Valid calls:
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
 #' get_prism_dailys(type="ppt", dates = "2013/06/01", keepZip=FALSE)
-#' get_prism_dailys(type="tmean", dates = as.Date("2013-06-01", "2013-06-14", "2014-06-30"), keepZip=FALSE)
+#' get_prism_dailys(
+#'   type="tmean", 
+#'   dates = as.Date("2013-06-01", "2013-06-14", "2014-06-30"), 
+#'   keepZip=FALSE
+#' )
 #' 
 #' # will fail:
 #' get_prism_dailys(type="ppt", minDate = "2013-06-01", dates = "2013-06-14", keepZip=FALSE)
