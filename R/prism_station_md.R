@@ -10,8 +10,8 @@
 #'
 #' @examples
 get_prism_station_md <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL){
-  prism:::path_check()
-  dates <- prism:::gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
+  path_check()
+  dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
   folders_to_get <- subset_prism_folders(type = type, dates = dates)
   if(length(folders_to_get) == 0){
     stop("None of the requested dates are available.")
