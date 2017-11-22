@@ -32,4 +32,3 @@ get_prism_normals(type="ppt",resolution = "4km",mon = 1, keepZip=FALSE)
 
 }
 }
-

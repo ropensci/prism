@@ -11,11 +11,15 @@ get_prism_dailys(type, minDate = NULL, maxDate = NULL, dates = NULL,
 \item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
 Note that tmean == mean(tmin, tmax).}
 
-\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start to download data.}
+\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start downloading data. 
+May be provided as either a character or \code{\link[base]{Date}} class.}
 
-\item{maxDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to end downloading data.}
+\item{maxDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to end downloading data.
+May be provided as either a character or \code{\link[base]{Date}} class.}
 
-\item{dates}{a vector of iso-8601 formatted dates to download data for, can also be a single date.}
+\item{dates}{a vector of iso-8601 formatted dates to download data for, can 
+also be a single date. May be provided as either a character or 
+\code{\link[base]{Date}} class.}
 
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your 'prism.path', if \code{FALSE}, they will be deleted.}
 
@@ -29,6 +33,20 @@ Download daily data from the prism project at 4km grid cell resolution for preci
 }
 \details{
 Dates must be in the proper format or downloading will not work properly, you can either enter a date range via minDate and maxDate, or a vector of dates, but not both. You must make sure that you have set up a valid download directory.  This must be set as options(prism.path = "YOURPATH")
-get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
 }
+\examples{
+\dontrun{
+# Valid calls:
+get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
+get_prism_dailys(type="ppt", dates = "2013/06/01", keepZip=FALSE)
+get_prism_dailys(
+  type="tmean", 
+  dates = as.Date("2013-06-01", "2013-06-14", "2014-06-30"), 
+  keepZip=FALSE
+)
 
+# will fail:
+get_prism_dailys(type="ppt", minDate = "2013-06-01", dates = "2013-06-14", keepZip=FALSE)
+get_prism_dailys(type="ppt", minDate = "2013-06-01", keepZip=FALSE)
+}
+}

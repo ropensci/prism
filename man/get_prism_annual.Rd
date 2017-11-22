@@ -26,4 +26,3 @@ Data is available from 1891 until 2014, however you have to download all data fo
 get_prism_annual(type="tmean", year = 1990:2000, keepZip=FALSE)
 }
 }
-

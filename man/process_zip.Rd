@@ -24,4 +24,3 @@ process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',
 c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
 }
 }
-

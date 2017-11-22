@@ -140,7 +140,7 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
     stop("No files exist to obtain metadata from.")
   }
   out <- lapply(1:length(final_txt_full), function(i){
-    readin <- tryCatch(read.delim(final_txt_full[i], sep = "\n", 
+    readin <- tryCatch(utils::read.delim(final_txt_full[i], sep = "\n", 
                                   header = FALSE, stringsAsFactors = FALSE),
                        error = function(e){
                          warning(e)
@@ -164,32 +164,78 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
   }
 }
 
-#' @title Processes dates as this appears many times.
+#' Checks to see if the dates (days) specified are within the available Prism record
+#' 
+#' Prism daily record begins January 1, 1895, and assumes that it ends yesterday, 
+#' i.e., \code{Sys.Date() - 1}.
+#' 
+#' @param dates a vector of dates (class Date)
+#' @return \code{TRUE} if all values in \code{dates} are within the available Prism
+#' record. Otherwise, returns \code{FALSE}
+#' @keywords internal
+#' @noRd
+
+is_within_daily_range <- function(dates)
+{
+  # day the record starts
+  minDay <- as.Date("1895-01-01") # need to verify
+  # assume data has posted for yesterday
+  #** may want to enhance this computation to see if it works for people using
+  # this in other time zones. Probably not critical since it will eventually 
+  # throw an error on downloading, but this will help catch it earlier
+  maxDay <- Sys.Date() - 1 # also need to verify this is accurate 
+  
+  # all dates need to be within range
+  all(dates <= maxDay & dates >= minDay)
+}
+
+#' @title Processes dates as this appears many times
+#' @description Given either a vector of \code{dates} or a \code{minDate} and 
+#' \code{maxDate}, return a vector of class Date. 
 #' @inheritParams get_prism_dailys
 #' @return Vector of dates
 gen_dates <- function(minDate, maxDate, dates){
-  if(!is.null(dates) && !is.null(maxDate)){
+  if(all(is.null(dates), is.null(minDate), is.null(maxDate)))
+    stop("You must specify either a date range (minDate and maxDate) or a vector of dates")
+  
+  if((!is.null(dates) && !is.null(maxDate)) | (!is.null(dates) && !is.null(minDate))){
     stop("You can enter a date range or a vector of dates, but not both")
+  }
+  
+  if((!is.null(maxDate) & is.null(minDate)) | (!is.null(minDate) & is.null(maxDate))){
+    stop("Both minDate and maxDate must be specified if specifying a date range")
+  }
+  
+  if(!is.null(dates)){
+    # make sure it is cast as a date if it was provided as a character
+    dates <- as.Date(dates)
+    
+    if(!is_within_daily_range(dates))
+      stop("Please ensure all dates fall within the valid Prism data record")
   }
   
   if(is.null(dates)){
     minDate <- as.Date(minDate)
     maxDate <- as.Date(maxDate)
-    dates <- seq(as.Date(minDate), as.Date(maxDate), by="days")
     
-    if(as.Date(minDate) > as.Date(maxDate)){
+    if(minDate > maxDate){
       stop("Your minimum date must be less than your maximum date")
     }
+    
+    if(!is_within_daily_range(c(minDate, maxDate)))
+      stop("Please ensure minDate and maxData are within the available Prism data record")
+    
+    dates <- seq(minDate, maxDate, by="days")
   }
   dates
 }
 
-#' Get the resolution text string
-#' @description To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing
-#' @param type the type of data you're downloading, should be tmax, tmin etc...
-#' @param temporal The temporal resolution of the data, monthly, daily, etc...
-#' @param yr the year of data that's being requested, in numeric form
-
+# --------------- extract_version Roxygen tags
+# Get the resolution text string
+# @description To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing
+# @param type the type of data you're downloading, should be tmax, tmin etc...
+# @param temporal The temporal resolution of the data, monthly, daily, etc...
+# @param yr the year of data that's being requested, in numeric form
 #extract_version <- function(type, temporal, yr){
 #  base <- paste0("ftp://prism.nacse.org/", temporal, "/", type, "/", yr, "/")
 ##  dirlist <- RCurl::getURL(base, ftp.use.epsv = FALSE, dirlistonly = TRUE)
@@ -202,7 +248,15 @@ gen_dates <- function(minDate, maxDate, dates){
 #  return(sp2[1])
 #}
 
-# Subsets prism folders on the disk by type and date.
+#' Subsets prism folders on the disk by type and date
+#' 
+#' Looks through all of the PRISM data that is donwloaded in your \code{prism.path}
+#' and returns the subset based on \code{type} and \code{dates}.
+#' 
+#' @param type The type of data you want to subset. Should be tmax, tmin, tmean, 
+#' ppt, vpdmin, or vpdmax
+#' @param dates A vector of the dates you wish to subset as a string
+#' 
 subset_prism_folders <- function(type, dates){
   path_check()
   dates_str <- gsub("-", "", dates)
@@ -219,8 +273,7 @@ subset_prism_folders <- function(type, dates){
       stringr::str_subset("4kmD1_")
   }
   # Don't want zips
-  type_folders <- type_folders %>% 
-    .[!stringr::str_detect(., ".zip")]
+  type_folders <- type_folders[!stringr::str_detect(type_folders, ".zip")]
   
   type_folders %>% 
     stringr::str_subset(paste(dates_str, collapse = "|"))

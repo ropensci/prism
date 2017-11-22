@@ -1,4 +1,6 @@
 #' Extract metadata on the stations used to generate a particular day/variable
+#' 
+#' This only extracts metadata from daily PRISM data.
 #'
 #' @param type The type of data to get metadata for, must be "ppt", "tmean", "tmin", or "tmax".
 #' @param minDate a valid iso-8601 (e.g. YYYY-MM-DD) date. The first date to extract metadata for.
@@ -7,11 +9,10 @@
 #'
 #' @return A \code{tbl_df} containing metadata on the stations used for each day/variable.
 #' @export
-#'
-#' @examples
+
 get_prism_station_md <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL){
-  prism:::path_check()
-  dates <- prism:::gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
+  path_check()
+  dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
   folders_to_get <- subset_prism_folders(type = type, dates = dates)
   if(length(folders_to_get) == 0){
     stop("None of the requested dates are available.")

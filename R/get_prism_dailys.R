@@ -2,16 +2,36 @@
 #' @description Download daily data from the prism project at 4km grid cell resolution for precipitation, mean, min and max temperature
 #' @param type The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
 #'        Note that tmean == mean(tmin, tmax).
-#' @param minDate a valid iso-8601 (e.g. YYYY-MM-DD) date to start to download data.
+#' @param minDate a valid iso-8601 (e.g. YYYY-MM-DD) date to start downloading data. 
+#' May be provided as either a character or \code{\link[base]{Date}} class.
 #' @param maxDate  a valid iso-8601 (e.g. YYYY-MM-DD) date to end downloading data.
-#' @param dates a vector of iso-8601 formatted dates to download data for, can also be a single date.
+#' May be provided as either a character or \code{\link[base]{Date}} class.
+#' @param dates a vector of iso-8601 formatted dates to download data for, can 
+#' also be a single date. May be provided as either a character or 
+#' \code{\link[base]{Date}} class.
 #' @param keepZip if \code{TRUE}, leave the downloaded zip files in your 'prism.path', if \code{FALSE}, they will be deleted.
 #' @param check One of "httr" or "internal". "httr", the default, checks the file name using the web
 #' service, and downloads if that file name is not in the file system. "internal" (much faster) 
 #' only attempts to download layers that are not already in the file system as stable. "internal"
 #' should be used with caution as it is not robust to changes in version or file names.
 #' @details Dates must be in the proper format or downloading will not work properly, you can either enter a date range via minDate and maxDate, or a vector of dates, but not both. You must make sure that you have set up a valid download directory.  This must be set as options(prism.path = "YOURPATH")
+
+#' @examples 
+#' \dontrun{
+#' # Valid calls:
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
+#' get_prism_dailys(type="ppt", dates = "2013/06/01", keepZip=FALSE)
+#' get_prism_dailys(
+#'   type="tmean", 
+#'   dates = as.Date("2013-06-01", "2013-06-14", "2014-06-30"), 
+#'   keepZip=FALSE
+#' )
+#' 
+#' # will fail:
+#' get_prism_dailys(type="ppt", minDate = "2013-06-01", dates = "2013-06-14", keepZip=FALSE)
+#' get_prism_dailys(type="ppt", minDate = "2013-06-01", keepZip=FALSE)
+#' }
+
 #' @importFrom httr HEAD
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL, keepZip = TRUE,
