@@ -1,4 +1,5 @@
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 `prism`
 -------
 
@@ -50,19 +51,11 @@ Data is available in 3 different forms as mentioned above. Each one has it's own
 </tr>
 <tr class="odd">
 <td align="center"><em>vpdmin</em></td>
-<td align="center">Daily minimum vapor pressure deficit [averaged over all days in the</td>
+<td align="center">Daily minimum vapor pressure deficit [averaged over all days in the month - normal data only]</td>
 </tr>
 <tr class="even">
-<td align="center">month - normal data only]</td>
-<td align="center"></td>
-</tr>
-<tr class="odd">
 <td align="center"><em>vpdmax</em></td>
-<td align="center">Daily maximum vapor pressure deficit [averaged over all days in</td>
-</tr>
-<tr class="even">
-<td align="center">the month - normal data only]</td>
-<td align="center"></td>
+<td align="center">Daily maximum vapor pressure deficit [averaged over all days in the month - normal data only]</td>
 </tr>
 </tbody>
 </table>
@@ -77,22 +70,6 @@ options(prism.path = "~/prismtmp")
 get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip=F)
 ```
 
-    ## 
-      |                                                                       
-      |                                                                 |   0%
-      |                                                                       
-      |===========                                                      |  17%
-      |                                                                       
-      |======================                                           |  33%
-      |                                                                       
-      |================================                                 |  50%
-      |                                                                       
-      |===========================================                      |  67%
-      |                                                                       
-      |======================================================           |  83%
-      |                                                                       
-      |=================================================================| 100%
-
 The first thing to note is that you'll need to set a local location to work with this data. Second is the option `keepZip`. If this is `TRUE` the zip file will remain on your machine, otherwise it will be automatically deleted.
 
 You can also view all the data you have downloaded with a simple command `ls_prism_data()`. By default this just gives a list of file names. All the internal functions in the package work off of this simple list of files.
@@ -100,74 +77,69 @@ You can also view all the data you have downloaded with a simple command `ls_pri
 ``` r
 ## Truncated to keep file list short
 ls_prism_data()[1:10,]
+#>  [1] "PRISM_tmean_30yr_normal_4kmM2_01_bil" 
+#>  [2] "PRISM_tmean_30yr_normal_4kmM2_02_bil" 
+#>  [3] "PRISM_tmean_30yr_normal_4kmM2_03_bil" 
+#>  [4] "PRISM_tmean_30yr_normal_4kmM2_04_bil" 
+#>  [5] "PRISM_tmean_30yr_normal_4kmM2_05_bil" 
+#>  [6] "PRISM_tmean_30yr_normal_4kmM2_06_bil" 
+#>  [7] "PRISM_tmean_stable_4kmD1_20130601_bil"
+#>  [8] "PRISM_tmean_stable_4kmD1_20130602_bil"
+#>  [9] "PRISM_tmean_stable_4kmD1_20130603_bil"
+#> [10] "PRISM_tmean_stable_4kmD1_20130604_bil"
 ```
-
-    ##  [1] "PRISM_tmean_30yr_normal_4kmM2_01_bil" 
-    ##  [2] "PRISM_tmean_30yr_normal_4kmM2_02_bil" 
-    ##  [3] "PRISM_tmean_30yr_normal_4kmM2_03_bil" 
-    ##  [4] "PRISM_tmean_30yr_normal_4kmM2_04_bil" 
-    ##  [5] "PRISM_tmean_30yr_normal_4kmM2_05_bil" 
-    ##  [6] "PRISM_tmean_30yr_normal_4kmM2_06_bil" 
-    ##  [7] "PRISM_tmean_stable_4kmD1_20130601_bil"
-    ##  [8] "PRISM_tmean_stable_4kmD1_20130602_bil"
-    ##  [9] "PRISM_tmean_stable_4kmD1_20130603_bil"
-    ## [10] "PRISM_tmean_stable_4kmD1_20130604_bil"
 
 While internal plotting functions use this, other files may want an absolute path (e.g. the `raster` package), there's a parameter `absPath` that conventiently returns the absolute path. Alternatively you may want to see what the normal name for the product is (not the file name), and that parameter is `name`.
 
 ``` r
 ls_prism_data(absPath = TRUE)[1:10,]
-```
+#>                                    files
+#> 1   PRISM_tmean_30yr_normal_4kmM2_01_bil
+#> 2   PRISM_tmean_30yr_normal_4kmM2_02_bil
+#> 3   PRISM_tmean_30yr_normal_4kmM2_03_bil
+#> 4   PRISM_tmean_30yr_normal_4kmM2_04_bil
+#> 5   PRISM_tmean_30yr_normal_4kmM2_05_bil
+#> 6   PRISM_tmean_30yr_normal_4kmM2_06_bil
+#> 7  PRISM_tmean_stable_4kmD1_20130601_bil
+#> 8  PRISM_tmean_stable_4kmD1_20130602_bil
+#> 9  PRISM_tmean_stable_4kmD1_20130603_bil
+#> 10 PRISM_tmean_stable_4kmD1_20130604_bil
+#>                                                                                      abs_path
+#> 1    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_01_bil/PRISM_tmean_30yr_normal_4kmM2_01_bil.bil
+#> 2    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_02_bil/PRISM_tmean_30yr_normal_4kmM2_02_bil.bil
+#> 3    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_03_bil/PRISM_tmean_30yr_normal_4kmM2_03_bil.bil
+#> 4    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_04_bil/PRISM_tmean_30yr_normal_4kmM2_04_bil.bil
+#> 5    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_05_bil/PRISM_tmean_30yr_normal_4kmM2_05_bil.bil
+#> 6    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_06_bil/PRISM_tmean_30yr_normal_4kmM2_06_bil.bil
+#> 7  ~/prismtmp/PRISM_tmean_stable_4kmD1_20130601_bil/PRISM_tmean_stable_4kmD1_20130601_bil.bil
+#> 8  ~/prismtmp/PRISM_tmean_stable_4kmD1_20130602_bil/PRISM_tmean_stable_4kmD1_20130602_bil.bil
+#> 9  ~/prismtmp/PRISM_tmean_stable_4kmD1_20130603_bil/PRISM_tmean_stable_4kmD1_20130603_bil.bil
+#> 10 ~/prismtmp/PRISM_tmean_stable_4kmD1_20130604_bil/PRISM_tmean_stable_4kmD1_20130604_bil.bil
 
-    ##                                    files
-    ## 1   PRISM_tmean_30yr_normal_4kmM2_01_bil
-    ## 2   PRISM_tmean_30yr_normal_4kmM2_02_bil
-    ## 3   PRISM_tmean_30yr_normal_4kmM2_03_bil
-    ## 4   PRISM_tmean_30yr_normal_4kmM2_04_bil
-    ## 5   PRISM_tmean_30yr_normal_4kmM2_05_bil
-    ## 6   PRISM_tmean_30yr_normal_4kmM2_06_bil
-    ## 7  PRISM_tmean_stable_4kmD1_20130601_bil
-    ## 8  PRISM_tmean_stable_4kmD1_20130602_bil
-    ## 9  PRISM_tmean_stable_4kmD1_20130603_bil
-    ## 10 PRISM_tmean_stable_4kmD1_20130604_bil
-    ##                                                                                      abs_path
-    ## 1    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_01_bil/PRISM_tmean_30yr_normal_4kmM2_01_bil.bil
-    ## 2    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_02_bil/PRISM_tmean_30yr_normal_4kmM2_02_bil.bil
-    ## 3    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_03_bil/PRISM_tmean_30yr_normal_4kmM2_03_bil.bil
-    ## 4    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_04_bil/PRISM_tmean_30yr_normal_4kmM2_04_bil.bil
-    ## 5    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_05_bil/PRISM_tmean_30yr_normal_4kmM2_05_bil.bil
-    ## 6    ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_06_bil/PRISM_tmean_30yr_normal_4kmM2_06_bil.bil
-    ## 7  ~/prismtmp/PRISM_tmean_stable_4kmD1_20130601_bil/PRISM_tmean_stable_4kmD1_20130601_bil.bil
-    ## 8  ~/prismtmp/PRISM_tmean_stable_4kmD1_20130602_bil/PRISM_tmean_stable_4kmD1_20130602_bil.bil
-    ## 9  ~/prismtmp/PRISM_tmean_stable_4kmD1_20130603_bil/PRISM_tmean_stable_4kmD1_20130603_bil.bil
-    ## 10 ~/prismtmp/PRISM_tmean_stable_4kmD1_20130604_bil/PRISM_tmean_stable_4kmD1_20130604_bil.bil
-
-``` r
 ls_prism_data(name = TRUE)[1:10,]
+#>                                    files
+#> 1   PRISM_tmean_30yr_normal_4kmM2_01_bil
+#> 2   PRISM_tmean_30yr_normal_4kmM2_02_bil
+#> 3   PRISM_tmean_30yr_normal_4kmM2_03_bil
+#> 4   PRISM_tmean_30yr_normal_4kmM2_04_bil
+#> 5   PRISM_tmean_30yr_normal_4kmM2_05_bil
+#> 6   PRISM_tmean_30yr_normal_4kmM2_06_bil
+#> 7  PRISM_tmean_stable_4kmD1_20130601_bil
+#> 8  PRISM_tmean_stable_4kmD1_20130602_bil
+#> 9  PRISM_tmean_stable_4kmD1_20130603_bil
+#> 10 PRISM_tmean_stable_4kmD1_20130604_bil
+#>                                               product_name
+#> 1  Jan 30-year normals - 4km resolution - Mean temperature
+#> 2  Feb 30-year normals - 4km resolution - Mean temperature
+#> 3  Mar 30-year normals - 4km resolution - Mean temperature
+#> 4  Apr 30-year normals - 4km resolution - Mean temperature
+#> 5  May 30-year normals - 4km resolution - Mean temperature
+#> 6  Jun 30-year normals - 4km resolution - Mean temperature
+#> 7          Jun 01 2013 - 4km resolution - Mean temperature
+#> 8          Jun 02 2013 - 4km resolution - Mean temperature
+#> 9          Jun 03 2013 - 4km resolution - Mean temperature
+#> 10         Jun 04 2013 - 4km resolution - Mean temperature
 ```
-
-    ##                                    files
-    ## 1   PRISM_tmean_30yr_normal_4kmM2_01_bil
-    ## 2   PRISM_tmean_30yr_normal_4kmM2_02_bil
-    ## 3   PRISM_tmean_30yr_normal_4kmM2_03_bil
-    ## 4   PRISM_tmean_30yr_normal_4kmM2_04_bil
-    ## 5   PRISM_tmean_30yr_normal_4kmM2_05_bil
-    ## 6   PRISM_tmean_30yr_normal_4kmM2_06_bil
-    ## 7  PRISM_tmean_stable_4kmD1_20130601_bil
-    ## 8  PRISM_tmean_stable_4kmD1_20130602_bil
-    ## 9  PRISM_tmean_stable_4kmD1_20130603_bil
-    ## 10 PRISM_tmean_stable_4kmD1_20130604_bil
-    ##                                               product_name
-    ## 1  Jan 30-year normals - 4km resolution - Mean temperature
-    ## 2  Feb 30-year normals - 4km resolution - Mean temperature
-    ## 3  Mar 30-year normals - 4km resolution - Mean temperature
-    ## 4  Apr 30-year normals - 4km resolution - Mean temperature
-    ## 5  May 30-year normals - 4km resolution - Mean temperature
-    ## 6  Jun 30-year normals - 4km resolution - Mean temperature
-    ## 7          Jun 01 2013 - 4km resolution - Mean temperature
-    ## 8          Jun 02 2013 - 4km resolution - Mean temperature
-    ## 9          Jun 03 2013 - 4km resolution - Mean temperature
-    ## 10         Jun 04 2013 - 4km resolution - Mean temperature
 
 You can easily make a quick plot of your data to using the output of `ls_prism_data()`
 
@@ -175,7 +147,7 @@ You can easily make a quick plot of your data to using the output of `ls_prism_d
 prism_image(ls_prism_data()[1,1])
 ```
 
-![](README_files/figure-markdown_github/quick_plot-1.png)
+![](man/figures/README-quick_plot-1.png)
 
 **Monthly and Daily Data**
 
@@ -183,69 +155,8 @@ Monthly and daily data is also easily accessible. Below we'll get January data f
 
 ``` r
 get_prism_monthlys(type="tmean", year = 1990:2000, mon = 1, keepZip=F)
-```
-
-    ## 
-      |                                                                       
-      |                                                                 |   0%
-      |                                                                       
-      |======                                                           |   9%
-      |                                                                       
-      |============                                                     |  18%
-      |                                                                       
-      |==================                                               |  27%
-      |                                                                       
-      |========================                                         |  36%
-      |                                                                       
-      |==============================                                   |  45%
-      |                                                                       
-      |===================================                              |  55%
-      |                                                                       
-      |=========================================                        |  64%
-      |                                                                       
-      |===============================================                  |  73%
-      |                                                                       
-      |=====================================================            |  82%
-      |                                                                       
-      |===========================================================      |  91%
-      |                                                                       
-      |=================================================================| 100%
-
-``` r
 get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 ```
-
-    ## 
-      |                                                                       
-      |                                                                 |   0%
-      |                                                                       
-      |=====                                                            |   7%
-      |                                                                       
-      |=========                                                        |  14%
-      |                                                                       
-      |==============                                                   |  21%
-      |                                                                       
-      |===================                                              |  29%
-      |                                                                       
-      |=======================                                          |  36%
-      |                                                                       
-      |============================                                     |  43%
-      |                                                                       
-      |================================                                 |  50%
-      |                                                                       
-      |=====================================                            |  57%
-      |                                                                       
-      |==========================================                       |  64%
-      |                                                                       
-      |==============================================                   |  71%
-      |                                                                       
-      |===================================================              |  79%
-      |                                                                       
-      |========================================================         |  86%
-      |                                                                       
-      |============================================================     |  93%
-      |                                                                       
-      |=================================================================| 100%
 
 Note that for daily data you need to give a well formed date string in the form of "YYYY-MM-DD"
 
@@ -258,79 +169,6 @@ library(ggplot2)
 boulder <- c(-105.2797,40.0176)
 ## Get data.
 get_prism_monthlys(type="tmean", year = 1982:2014, mon = 1, keepZip=F)
-```
-
-    ## 
-      |                                                                       
-      |                                                                 |   0%
-      |                                                                       
-      |==                                                               |   3%
-      |                                                                       
-      |====                                                             |   6%
-      |                                                                       
-      |======                                                           |   9%
-      |                                                                       
-      |========                                                         |  12%
-      |                                                                       
-      |==========                                                       |  15%
-      |                                                                       
-      |============                                                     |  18%
-      |                                                                       
-      |==============                                                   |  21%
-      |                                                                       
-      |================                                                 |  24%
-      |                                                                       
-      |==================                                               |  27%
-      |                                                                       
-      |====================                                             |  30%
-      |                                                                       
-      |======================                                           |  33%
-      |                                                                       
-      |========================                                         |  36%
-      |                                                                       
-      |==========================                                       |  39%
-      |                                                                       
-      |============================                                     |  42%
-      |                                                                       
-      |==============================                                   |  45%
-      |                                                                       
-      |================================                                 |  48%
-      |                                                                       
-      |=================================                                |  52%
-      |                                                                       
-      |===================================                              |  55%
-      |                                                                       
-      |=====================================                            |  58%
-      |                                                                       
-      |=======================================                          |  61%
-      |                                                                       
-      |=========================================                        |  64%
-      |                                                                       
-      |===========================================                      |  67%
-      |                                                                       
-      |=============================================                    |  70%
-      |                                                                       
-      |===============================================                  |  73%
-      |                                                                       
-      |=================================================                |  76%
-      |                                                                       
-      |===================================================              |  79%
-      |                                                                       
-      |=====================================================            |  82%
-      |                                                                       
-      |=======================================================          |  85%
-      |                                                                       
-      |=========================================================        |  88%
-      |                                                                       
-      |===========================================================      |  91%
-      |                                                                       
-      |=============================================================    |  94%
-      |                                                                       
-      |===============================================================  |  97%
-      |                                                                       
-      |=================================================================| 100%
-
-``` r
 ## We'll use regular expressions to grep through the list and get data only from the month of January
 to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data()[,1],value=T)
 to_slice = grep("tmean",to_slice, value = T)
@@ -339,27 +177,19 @@ p + stat_smooth(method="lm",se=F) + theme_bw() +
 ggtitle("Average January temperature in Boulder, CO 1982-2014")
 ```
 
-![](README_files/figure-markdown_github/plot_Boulder-1.png)
+![](man/figures/README-plot_Boulder-1.png)
 
 Lastly it's easy to just load up the prism data with the raster package. This time what we'll look at January temperature anomalies. To do this we'll examine the difference between January 2013 and the 30 year normals for January. Conveniently, we've already downloaded both of these files. We just need to grab them out of our list.
 
 ``` r
 library(raster)
-```
-
-    ## Loading required package: sp
-
-``` r
+#> Loading required package: sp
 ### I got these just by looking at the list output
 jnorm <- ls_prism_data(absPath=T)[1,2]
 j2013 <- ls_prism_data(absPath=T)[52,2]
 ## See that the full path is returned
 jnorm
-```
-
-    ## [1] "~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_01_bil/PRISM_tmean_30yr_normal_4kmM2_01_bil.bil"
-
-``` r
+#> [1] "~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_01_bil/PRISM_tmean_30yr_normal_4kmM2_01_bil.bil"
 ## Now we'll load the rasters.
 jnorm_rast <- raster(jnorm)
 j2013_rast <- raster(j2013)
@@ -373,7 +203,7 @@ anom_rast <- overlay(j2013_rast,jnorm_rast,fun = anomCalc)
 plot(anom_rast)
 ```
 
-![](README_files/figure-markdown_github/raster_math-1.png)
+![](man/figures/README-raster_math-1.png)
 
 The plot shows that January 2013 was warmer than the average over the last 30 years. It also shows how easy it is to use the raster library to work with prism data. The package provides a simple framework to work with a large number of rasters that you can easily download and vizualize or use with other data sets.
 

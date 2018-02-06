@@ -1,6 +1,17 @@
 ---
 output: github_document
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-"
+)
+```
+
 ## `prism`
 
 [![Build Status](https://api.travis-ci.org/ropensci/prism.png?branch=master)](https://travis-ci.org/ropensci/prism)
@@ -28,16 +39,14 @@ Data is available in 3 different forms as mentioned above.  Each one has it's ow
 | *tmax*      | Maximum temperature      |
 | *tmin* | Minimum temperature      |
 | *ppt*  | Total precipitation (Rain and snow)|
-| *vpdmin* | Daily minimum vapor pressure deficit [averaged over all days in the
-month - normal data only] |
-| *vpdmax* |Daily maximum vapor pressure deficit [averaged over all days in
-the month - normal data only] |
+| *vpdmin* | Daily minimum vapor pressure deficit [averaged over all days in the month - normal data only] |
+| *vpdmax* |Daily maximum vapor pressure deficit [averaged over all days in the month - normal data only] |
 
 **Normal data**
 
 Normals are based on the years 1981 - 2010, and can be downloaded in two resolutions, `4km` and `800m`, and a resolution must be specified.  Normals can also be downloaded for a given month, vector of months, or an average for all 30 years.
 
-```{r get normals}
+```{r get normals,results=FALSE}
 library(prism)
 options(prism.path = "~/prismtmp")
 get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip=F)
@@ -72,7 +81,7 @@ prism_image(ls_prism_data()[1,1])
 
 Monthly and daily data is also easily accessible. Below we'll get January data for the years 1990 to 2000. We an also grab data from June 1 to June 14 2013.
 
-```{r get daily monthly, message=FALSE}
+```{r get daily monthly, message=FALSE, results=FALSE}
 get_prism_monthlys(type="tmean", year = 1990:2000, mon = 1, keepZip=F)
 get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 ```
@@ -83,7 +92,7 @@ You can also visualize a single point across a set of rasters.  This procedure w
 
 Let's get make a plot of January temperatures is Boulder between 1982 and 2014.  First we'll grab all the data from the US, and then give our function a point to get data from.  The point must be a vector in the form of longitude, latitude.
 
-```{r plot_Boulder,fig.height=5,fig.width=7}
+```{r plot_Boulder,fig.height=5,fig.width=7, results=FALSE}
 library(ggplot2)
 boulder <- c(-105.2797,40.0176)
 ## Get data.
