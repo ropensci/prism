@@ -1,7 +1,7 @@
 ---
-output: pdf_document
+output: github_document
 ---
-##`prism`
+## `prism`
 
 [![Build Status](https://api.travis-ci.org/ropensci/prism.png?branch=master)](https://travis-ci.org/ropensci/prism)
 [![Build status](https://ci.appveyor.com/api/projects/status/ie38i6p5651pc1o5/branch/master)](https://ci.appveyor.com/project/sckott/prism/branch/master)
