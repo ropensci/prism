@@ -1,17 +1,16 @@
 Package: prism
-Type: Package
 Title: Access Data from the Oregon State Prism Climate Project
 Description: Allows users to access the Oregon State Prism climate data. Using
     the web service API data can easily downloaded in bulk and loaded into R for
     spatial analysis. Some user friendly visualizations are also provided.
 URL: http://github.com/ropensci/prism
 BugReports: http://github.com/ropensci/prism/issues
-Version: 0.0.7
-Date: 2015-11-11
-Authors@R: c(person("Hart", "Edmund", role = c("aut","cre"),email =
-    "Edmund.m.hart@gmail.com"),
-    person("Kendon", "Bell", role = c("aut"),
-    email = "kmb56@berkeley.edu") )
+Version: 0.1.0
+Authors@R: c(
+    person("Hart", "Edmund", email ="Edmund.m.hart@gmail.com",role = c("aut", "ccp")),
+    person("Kendon", "Bell", email = "kmb56@berkeley.edu", role = c("aut")),
+    person("Alan", "Butler", ,"rabutler@usbr.gov", c("ctb","cre"))
+    )
 License: MIT + file LICENSE
 Imports:
     ggplot2,

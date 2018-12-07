@@ -1,4 +1,4 @@
-# prism 0.0.7.9000
+# prism 0.1.0
 
 ## Minor changes
 

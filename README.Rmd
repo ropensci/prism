@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 
 ## `prism`
 
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/prism)](https://cran.r-project.org/package=prism)
 [![Build Status](https://api.travis-ci.org/ropensci/prism.png?branch=master)](https://travis-ci.org/ropensci/prism)
 [![Build status](https://ci.appveyor.com/api/projects/status/ie38i6p5651pc1o5/branch/master)](https://ci.appveyor.com/project/sckott/prism/branch/master)
 [![codecov.io](https://codecov.io/github/ropensci/prism/coverage.svg?branch=master)](https://codecov.io/github/ropensci/prism?branch=master)
@@ -22,8 +23,16 @@ knitr::opts_chunk$set(
 This package allows users to access and visualize data from the [Oregon State PRISM project](http://www.prism.oregonstate.edu/).  Data is all in the form of gridded rasters for the continental US at 3 different scales: daily, monthly and 30 year normals.  Please see their webpage for a full description of the data products, or [see their overview](http://www.prism.oregonstate.edu/documents/PRISM_datasets_aug2013.pdf).
 
 ### Quickstart
-Currently the package is only available on github and installable with `devtools`
+
+prism is available on CRAN:
+
+```{r eval=FALSE}
+install.packages("prism")
+```
+
+Or the development version can be installed from GitHub with devtools:
 ```{r start, eval=FALSE}
+# install.packages("devtools")
 library(devtools)
 install_github(repo = "prism", username = "ropensci")
 library(prism)
