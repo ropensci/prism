@@ -1,8 +1,8 @@
 ## Test environment
 
-* local Windows 7 (64 bit), R 3.4.3
-* Ubuntu 14.04 (on travis-ci), R 3.4.2
-* Windows Server 2012 R2 (on AppVeyor), R 3.4.3
+* local 10 Enterprise, R 3.5.1
+* Ubuntu 14.04 (on travis-ci), R 3.5.1
+* Windows (on AppVeyor), R 3.5.1
 
 ## R CMD check results
 
