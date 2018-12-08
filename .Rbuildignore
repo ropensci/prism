@@ -3,4 +3,7 @@
 ^README\.Rmd$
 ^figure$
 ^appveyor\.yml$
-^\.travis\.yml$
+^\.travis\.
+^cran-comments\.md$
+^revdep$
+^codecov\.yml$

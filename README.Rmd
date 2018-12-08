@@ -1,8 +1,20 @@
 ---
-output: pdf_document
+output: github_document
 ---
-##`prism`
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-"
+)
+```
+
+## `prism`
+
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/prism)](https://cran.r-project.org/package=prism)
 [![Build Status](https://api.travis-ci.org/ropensci/prism.png?branch=master)](https://travis-ci.org/ropensci/prism)
 [![Build status](https://ci.appveyor.com/api/projects/status/ie38i6p5651pc1o5/branch/master)](https://ci.appveyor.com/project/sckott/prism/branch/master)
 [![codecov.io](https://codecov.io/github/ropensci/prism/coverage.svg?branch=master)](https://codecov.io/github/ropensci/prism?branch=master)
@@ -11,8 +23,16 @@ output: pdf_document
 This package allows users to access and visualize data from the [Oregon State PRISM project](http://www.prism.oregonstate.edu/).  Data is all in the form of gridded rasters for the continental US at 3 different scales: daily, monthly and 30 year normals.  Please see their webpage for a full description of the data products, or [see their overview](http://www.prism.oregonstate.edu/documents/PRISM_datasets_aug2013.pdf).
 
 ### Quickstart
-Currently the package is only available on github and installable with `devtools`
+
+prism is available on CRAN:
+
+```{r eval=FALSE}
+install.packages("prism")
+```
+
+Or the development version can be installed from GitHub with devtools:
 ```{r start, eval=FALSE}
+# install.packages("devtools")
 library(devtools)
 install_github(repo = "prism", username = "ropensci")
 library(prism)
@@ -28,16 +48,14 @@ Data is available in 3 different forms as mentioned above.  Each one has it's ow
 | *tmax*      | Maximum temperature      |
 | *tmin* | Minimum temperature      |
 | *ppt*  | Total precipitation (Rain and snow)|
-| *vpdmin* | Daily minimum vapor pressure deficit [averaged over all days in the
-month - normal data only] |
-| *vpdmax* |Daily maximum vapor pressure deficit [averaged over all days in
-the month - normal data only] |
+| *vpdmin* | Daily minimum vapor pressure deficit [averaged over all days in the month - normal data only] |
+| *vpdmax* |Daily maximum vapor pressure deficit [averaged over all days in the month - normal data only] |
 
 **Normal data**
 
 Normals are based on the years 1981 - 2010, and can be downloaded in two resolutions, `4km` and `800m`, and a resolution must be specified.  Normals can also be downloaded for a given month, vector of months, or an average for all 30 years.
 
-```{r get normals}
+```{r get normals,results=FALSE}
 library(prism)
 options(prism.path = "~/prismtmp")
 get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip=F)
@@ -72,7 +90,7 @@ prism_image(ls_prism_data()[1,1])
 
 Monthly and daily data is also easily accessible. Below we'll get January data for the years 1990 to 2000. We an also grab data from June 1 to June 14 2013.
 
-```{r get daily monthly, message=FALSE}
+```{r get daily monthly, message=FALSE, results=FALSE}
 get_prism_monthlys(type="tmean", year = 1990:2000, mon = 1, keepZip=F)
 get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
 ```
@@ -83,7 +101,7 @@ You can also visualize a single point across a set of rasters.  This procedure w
 
 Let's get make a plot of January temperatures is Boulder between 1982 and 2014.  First we'll grab all the data from the US, and then give our function a point to get data from.  The point must be a vector in the form of longitude, latitude.
 
-```{r plot_Boulder,fig.height=5,fig.width=7}
+```{r plot_Boulder,fig.height=5,fig.width=7, results=FALSE}
 library(ggplot2)
 boulder <- c(-105.2797,40.0176)
 ## Get data.
