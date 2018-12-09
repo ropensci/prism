@@ -6,7 +6,9 @@
 
 ## R CMD check results
 
-There were no ERRORs, WARNINGs, or NOTEs.
+There were no ERRORs, or WARNINGs. 
+
+There is one NOTE, identifying that the maintainer has changed from Edmund Hart to Alan Butler.
 
 ## Downstream dependencies
 
