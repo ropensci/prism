@@ -11,14 +11,17 @@ prism_webservice(uri, keepZip = FALSE, returnName = FALSE)
 
 \item{keepZip}{TRUE or FALSE, keep zip files once they have been unzipped}
 
-\item{returnName}{TRUE or FALSE, if TRUE the name of the file that was downoaded is returned}
+\item{returnName}{TRUE or FALSE, if TRUE the name of the file that was
+downloaded is returned}
 }
 \description{
-This is the workhorse function that will access the web service to download files
+This is the workhorse function that will access the web service to download
+files.
 }
 \examples{
 \dontrun{
 ### Get all the data for January from 1990 to 2000
 get_prism_annual(type="tmean", year = 1990:2000, keepZip=FALSE)
 }
+
 }

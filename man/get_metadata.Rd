@@ -10,11 +10,11 @@ get_metadata(type, dates = NULL, minDate = NULL, maxDate = NULL)
 \item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
 Note that tmean == mean(tmin, tmax).}
 
-\item{dates}{a vector of iso-8601 formatted dates to download data for, can 
-also be a single date. May be provided as either a character or 
+\item{dates}{a vector of iso-8601 formatted dates to download data for, can
+also be a single date. May be provided as either a character or
 \code{\link[base]{Date}} class.}
 
-\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start downloading data. 
+\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start downloading data.
 May be provided as either a character or \code{\link[base]{Date}} class.}
 
 \item{maxDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to end downloading data.

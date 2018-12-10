@@ -1,19 +1,27 @@
 #' Plot a slice of a raster stack
-#' @description This function will plot a slice of data at a single point location from a list of prism files 
+#' 
+#' This function will plot a slice of data at a single point location from a 
+#' list of prism files 
+#' 
 #' @param location a vector of a single location in the form of long,lat
-#' @param prismfile a vector of output from ls_prism_data()[,1] giving a list of prism files to extract data from and plot
+#' 
+#' @param prismfile a vector of output from [ls_prism_data()]`[,1]` giving a 
+#'   list of prism files to extract data from and plot
+#'   
 #' @return a ggplot2 plot of the requested slice
-#' @details the list of prism files should be from a continuous data set. Otherwise the plot will look erratic and incorrect.
+#' @details the list of prism files should be from a continuous data set. 
+#' Otherwise the plot will look erratic and incorrect.
+#' 
 #' @examples \dontrun{
 #' ### Assumes you have a clean prism directory
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
 #' p <- prism_slice(c(-73.2119,44.4758),ls_prism_data())
 #' print(p)
 #' }
+#' 
 #' @import raster ggplot2 
+#' 
 #' @export
-
-
 prism_slice <- function(location,prismfile){
   
   if(!is.null(dim(prismfile))){

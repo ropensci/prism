@@ -11,20 +11,20 @@ get_prism_dailys(type, minDate = NULL, maxDate = NULL, dates = NULL,
 \item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
 Note that tmean == mean(tmin, tmax).}
 
-\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start downloading data. 
+\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start downloading data.
 May be provided as either a character or \code{\link[base]{Date}} class.}
 
 \item{maxDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to end downloading data.
 May be provided as either a character or \code{\link[base]{Date}} class.}
 
-\item{dates}{a vector of iso-8601 formatted dates to download data for, can 
-also be a single date. May be provided as either a character or 
+\item{dates}{a vector of iso-8601 formatted dates to download data for, can
+also be a single date. May be provided as either a character or
 \code{\link[base]{Date}} class.}
 
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your 'prism.path', if \code{FALSE}, they will be deleted.}
 
 \item{check}{One of "httr" or "internal". "httr", the default, checks the file name using the web
-service, and downloads if that file name is not in the file system. "internal" (much faster) 
+service, and downloads if that file name is not in the file system. "internal" (much faster)
 only attempts to download layers that are not already in the file system as stable. "internal"
 should be used with caution as it is not robust to changes in version or file names.}
 }

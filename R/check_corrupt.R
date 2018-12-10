@@ -1,19 +1,21 @@
-#' @title Check the integrity of downloaded PRISM data
-#' @description Uses the \code{raster::stack} function
-#' to determine if the bil files are readable. Any that
-#' are not readable are redownloaded.
+#' Check the integrity of downloaded PRISM data
+#' 
+#' Uses the `raster::stack` function to determine if the bil files are readable. 
+#' Any that are not readable are redownloaded.
+#' 
 #' @inheritParams get_prism_dailys
-#' @return \code{logical} indicating whether the process 
-#' succeeded.
+#' 
+#' @return \code{logical} indicating whether the process succeeded.
+#' 
 #' @export
+#' 
 #' @importFrom magrittr %>%
 check_corrupt <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
     dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
     folders_to_check <- subset_prism_folders(type, dates)
      
     # Check for missing dates:
-    folders_dates <- stringr::str_extract(folders_to_check, 
-                                               "[0-9]{8}")
+    folders_dates <- stringr::str_extract(folders_to_check, "[0-9]{8}")
     folders_dates <- as.Date(folders_dates, "%Y%m%d")
     dates_missing <- as.Date(setdiff(dates, folders_dates), origin = "1970-01-01")
     if(length(dates_missing) > 0){

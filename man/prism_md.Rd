@@ -9,11 +9,12 @@ prism_md(f, returnDate = FALSE)
 \arguments{
 \item{f}{a simple directory name}
 
-\item{returnDate}{TRUE or FALSE?  If TRUE, an ISO date is returned.  By default years will come back with YYYY-01-01 and months as YYYY-MM-01}
+\item{returnDate}{TRUE or FALSE. If TRUE, an ISO date is returned.  By
+default years will come back with YYYY-01-01 and months as YYYY-MM-01}
 }
 \value{
 a character vector of metadata.
 }
 \description{
-used to extract some prism metadata used in other fxns
+used to extract some prism metadata used in other functions
 }

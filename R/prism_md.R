@@ -1,8 +1,14 @@
 #' Extract select prism metadata
-#' @description used to extract some prism metadata used in other fxns
+#' 
+#' @description used to extract some prism metadata used in other functions
+#' 
 #' @param f a simple directory name
-#' @param returnDate TRUE or FALSE?  If TRUE, an ISO date is returned.  By default years will come back with YYYY-01-01 and months as YYYY-MM-01
+#' 
+#' @param returnDate TRUE or FALSE. If TRUE, an ISO date is returned.  By 
+#'   default years will come back with YYYY-01-01 and months as YYYY-MM-01
+#'   
 #' @return a character vector of metadata.
+#' 
 #' @export
 prism_md <- function(f,returnDate = FALSE){
   p <- strsplit(f,"_")
@@ -11,9 +17,14 @@ prism_md <- function(f,returnDate = FALSE){
 
 #' name parse
 #' @description parse the directory name into relevant metadata
+#' 
 #' @param p a prism file directory
-#' @param returnDate TRUE or FALSE?  If TRUE, an ISO date is returned.  By default years will come back with YYYY-01-01 and months as YYYY-MM-01
+#' 
+#' @param returnDate TRUE or FALSE. If TRUE, an ISO date is returned. By default 
+#'   years will come back with YYYY-01-01 and months as YYYY-MM-01
+#'   
 #' @return a properly parsed string of human readable names
+#' 
 #' @export
 
 pr_parse <- function(p,returnDate = FALSE){
@@ -63,10 +74,15 @@ pr_parse <- function(p,returnDate = FALSE){
 }
 
 #' Extract select prism metadata
-#' @description used to extract some prism metadata used in other fxns
+#' 
+#' used to extract some prism metadata used in other functions
+#' 
 #' @param f a location of xml metadata.
+#' 
 #' @return a character vector of metadata.
-#' @details Archived function, was really useful, but non-standarded metadata across files prevents this from being a useable solution atm
+#' 
+#' @details Archived function, was really useful, but non-standarded metadata 
+#' across files prevents this from being a useable solution atm
 #' 
 
 #prism_md <- function(f){

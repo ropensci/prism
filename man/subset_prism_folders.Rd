@@ -7,12 +7,12 @@
 subset_prism_folders(type, dates)
 }
 \arguments{
-\item{type}{The type of data you want to subset. Should be tmax, tmin, tmean, 
+\item{type}{The type of data you want to subset. Should be tmax, tmin, tmean,
 ppt, vpdmin, or vpdmax}
 
 \item{dates}{A vector of the dates you wish to subset as a string}
 }
 \description{
-Looks through all of the PRISM data that is donwloaded in your \code{prism.path}
-and returns the subset based on \code{type} and \code{dates}.
+Looks through all of the PRISM data that is downloaded in your
+\code{prism.path} and returns the subset based on \code{type} and \code{dates}.
 }

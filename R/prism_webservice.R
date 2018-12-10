@@ -1,13 +1,23 @@
 #' Download PRISM via webservice
-#' @description This is the workhorse function that will access the web service to download files
+#' 
+#' This is the workhorse function that will access the web service to download 
+#' files.
+#' 
 #' @param uri a valid PRISM webservice URI
+#' 
 #' @param keepZip TRUE or FALSE, keep zip files once they have been unzipped
-#' @param returnName TRUE or FALSE, if TRUE the name of the file that was downoaded is returned
-#' @examples \dontrun{
+#' 
+#' @param returnName TRUE or FALSE, if TRUE the name of the file that was 
+#'   downloaded is returned
+#' 
+#' @examples 
+#' \dontrun{
 #' ### Get all the data for January from 1990 to 2000
 #' get_prism_annual(type="tmean", year = 1990:2000, keepZip=FALSE)
 #' }
+#' 
 #' @importFrom httr HEAD
+#' 
 #' @export
 
 prism_webservice <- function(uri,keepZip=FALSE, returnName = FALSE){

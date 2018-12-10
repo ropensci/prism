@@ -9,16 +9,19 @@ prism_slice(location, prismfile)
 \arguments{
 \item{location}{a vector of a single location in the form of long,lat}
 
-\item{prismfile}{a vector of output from ls_prism_data()[,1] giving a list of prism files to extract data from and plot}
+\item{prismfile}{a vector of output from \code{\link[=ls_prism_data]{ls_prism_data()}}\code{[,1]} giving a
+list of prism files to extract data from and plot}
 }
 \value{
 a ggplot2 plot of the requested slice
 }
 \description{
-This function will plot a slice of data at a single point location from a list of prism files
+This function will plot a slice of data at a single point location from a
+list of prism files
 }
 \details{
-the list of prism files should be from a continuous data set. Otherwise the plot will look erratic and incorrect.
+the list of prism files should be from a continuous data set.
+Otherwise the plot will look erratic and incorrect.
 }
 \examples{
 \dontrun{
@@ -27,4 +30,5 @@ get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", k
 p <- prism_slice(c(-73.2119,44.4758),ls_prism_data())
 print(p)
 }
+
 }

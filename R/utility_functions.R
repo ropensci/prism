@@ -164,17 +164,20 @@ get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
   }
 }
 
-#' Checks to see if the dates (days) specified are within the available Prism record
+#' Checks to see if the dates (days) specified are within the available Prism 
+#' record
 #' 
-#' Prism daily record begins January 1, 1895, and assumes that it ends yesterday, 
-#' i.e., \code{Sys.Date() - 1}.
+#' Prism daily record begins January 1, 1895, and assumes that it ends 
+#' yesterday, i.e., \code{Sys.Date() - 1}.
 #' 
 #' @param dates a vector of dates (class Date)
-#' @return \code{TRUE} if all values in \code{dates} are within the available Prism
-#' record. Otherwise, returns \code{FALSE}
+#' 
+#' @return \code{TRUE} if all values in \code{dates} are within the available 
+#' Prism record. Otherwise, returns \code{FALSE}
+#' 
 #' @keywords internal
+#' 
 #' @noRd
-
 is_within_daily_range <- function(dates)
 {
   # day the record starts
@@ -189,11 +192,15 @@ is_within_daily_range <- function(dates)
   all(dates <= maxDay & dates >= minDay)
 }
 
-#' @title Processes dates as this appears many times
-#' @description Given either a vector of \code{dates} or a \code{minDate} and 
+#' Processes dates as this appears many times
+#' 
+#' Given either a vector of \code{dates} or a \code{minDate} and 
 #' \code{maxDate}, return a vector of class Date. 
+#' 
 #' @inheritParams get_prism_dailys
 #' @return Vector of dates
+#' 
+#' @noRd
 gen_dates <- function(minDate, maxDate, dates){
   if(all(is.null(dates), is.null(minDate), is.null(maxDate)))
     stop("You must specify either a date range (minDate and maxDate) or a vector of dates")
@@ -250,8 +257,8 @@ gen_dates <- function(minDate, maxDate, dates){
 
 #' Subsets prism folders on the disk by type and date
 #' 
-#' Looks through all of the PRISM data that is donwloaded in your \code{prism.path}
-#' and returns the subset based on \code{type} and \code{dates}.
+#' Looks through all of the PRISM data that is downloaded in your 
+#' `prism.path` and returns the subset based on `type` and `dates`.
 #' 
 #' @param type The type of data you want to subset. Should be tmax, tmin, tmean, 
 #' ppt, vpdmin, or vpdmax

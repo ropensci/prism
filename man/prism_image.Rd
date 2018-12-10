@@ -7,19 +7,23 @@
 prism_image(prismfile, col = "heat")
 }
 \arguments{
-\item{prismfile}{the name of a file to be plotted, this is most easily gotten through ls_prism_data()}
+\item{prismfile}{the name of a file to be plotted, this is most easily gotten
+through \code{\link[=ls_prism_data]{ls_prism_data()}}}
 
-\item{col}{the color pattern to use.  The default is heat, the other valid option is "redblue"}
+\item{col}{the color pattern to use.  The default is heat, the other valid
+option is "redblue"}
 }
 \description{
 Quickly make an image plot of a data set.
 }
 \details{
-This is meant for rapid vizualization, but more detailed plots will require other methods
+This is meant for rapid visualization, but more detailed plots will
+require other methods
 }
 \examples{
 \dontrun{
 get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
 prism_image(ls_prism_data()[1])
 }
+
 }
