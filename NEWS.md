@@ -2,6 +2,8 @@
 
 *In development*
 
+* Can now download vpdmin, vpdmax, and tdmean for normals, daily, monthly, and annual data (#68)
+
 # prism 0.1.0
 
 ## Minor changes
