@@ -33,7 +33,7 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE){
   ### parameter and error handling
 
   path_check()
-  type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax"))
+  type <- match.arg(type, prism_vars())
  
     
     ### Check mon

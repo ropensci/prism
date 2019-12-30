@@ -34,7 +34,7 @@ get_prism_annual <- function(type, years = NULL ,keepZip = TRUE){
   ### parameter and error handling
   
   path_check()
-  type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax", "all"))
+  type <- match.arg(type, prism_vars())
 
   
     ### Check year

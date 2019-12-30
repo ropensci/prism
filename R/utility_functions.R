@@ -286,4 +286,9 @@ subset_prism_folders <- function(type, dates){
     stringr::str_subset(paste(dates_str, collapse = "|"))
 }
 
-
+#' Returns the available prism variables.
+#' @noRd
+prism_vars <- function(all_var = FALSE)
+{
+  c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean")
+}

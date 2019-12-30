@@ -47,7 +47,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL
   ## Get years
   years <- unique(format(dates,"%Y"))
   
-  type <- match.arg(type, c("ppt", "tmean", "tmin", "tmax"))
+  type <- match.arg(type, prism_vars())
   
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
   uris <- sapply(uri_dates,function(x){paste("http://services.nacse.org/prism/data/public/4km",type,x,sep="/")})
