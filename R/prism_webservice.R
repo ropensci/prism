@@ -35,7 +35,7 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
   fn <- regmatches(fn, regexpr('\\"[a-zA-Z0-9_\\.]+', fn))
   fn <- substr(fn, 2, nchar((fn)))
   
-  if (length(prism_check(fn, pre81_months = pre81_months)) == 0) {
+  if (length(prism_not_downloaded(fn, pre81_months = pre81_months)) == 0) {
     message("\n", fn, " already exists. Skipping downloading.")
     return(NULL)
   } else {

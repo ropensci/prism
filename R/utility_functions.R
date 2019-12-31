@@ -55,21 +55,23 @@ path_check <- function()
 
 #' Check if prism files exist
 #' 
-#' Helper function to check if files already exist
+#' Helper function to check if files already exist in the specified "prism.path"
+#' 
+#' `prism_check()` is deprecated. Use `prism_not_downloaded()` instead.
 #' 
 #' @inheritParams prism_webservice
 #' 
-#' @param prismfiles a list of full paths for prism files
+#' @param prismfiles a list of full prism file names ending in ".zip". 
 #' 
 #' @param lgl `TRUE` returns a logical vector indicating those
 #'   not yet downloaded; `FALSE` returns the file names that are not yet 
 #'   downloaded.
 #' 
 #' @return a character vector of file names that are not yet downloaded
-#'   or a logical vector indication those not yet downloaded..
+#'   or a logical vector indication those not yet downloaded.
 #' 
 #' @export
-prism_check <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
+prism_not_downloaded <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
 {
   file_bases <- unlist(sapply(prismfiles, strsplit, split=".zip"))
   which_downloaded <- sapply(
@@ -83,6 +85,18 @@ prism_check <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
   } else {
     return(prismfiles[!which_downloaded])    
   }
+}
+
+#' @export
+#' 
+#' @rdname prism_not_downloaded
+prism_check <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
+{
+  .Deprecated(
+    "`prism_not_downloaded()`"
+  )
+  
+  prism_not_downloaded(prismfiles, lgl = FALSE, pre81_months = NULL)
 }
 
 # return TRUE if all file(s) are found for the specified base_file
