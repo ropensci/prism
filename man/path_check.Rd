@@ -7,5 +7,6 @@
 path_check()
 }
 \description{
-create new directory for user if they don't have one to store prism files
+create new directory for user if they don't have one to store
+prism files
 }

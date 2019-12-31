@@ -2,15 +2,20 @@
 #' helper function for handling months
 #' @description Handle numeric month to string conversions
 #' @param month a numeric vector of months (month must be > 0 and <= 12)
-#' @return a character vector (same length as \code{month}) with 2 char month strings.
+#' @return a character vector (same length as \code{month}) with 2 char month 
+#'   strings.
 #' @examples \dontrun{
 #'   mon_to_string(month = c(1, 3, 2))
 #'   mon_to_string(month = 12)
 #' }
-mon_to_string <- function(month){
+#' @noRd
+mon_to_string <- function(month)
+{
   out <- vector()
   for(i in 1:length(month)){
-    if(month[i] < 1 || month[i] > 12){stop("Please enter a valid numeric month")}
+    if(month[i] < 1 || month[i] > 12) {
+      stop("Please enter a valid numeric month")
+    }
     if(month[i] < 10){ out[i] <- paste("0",month[i],sep="")}
     else { out[i] <- paste0(month[i]) }
   }
@@ -18,9 +23,11 @@ mon_to_string <- function(month){
 }
 
 #' handle existing directory
-#' @description create new directory for user if they don't have one to store prism files
+#' @description create new directory for user if they don't have one to store 
+#'   prism files
 #' @export
-path_check <- function(){
+path_check <- function()
+{
   user_path <- NULL
   if(is.null(getOption('prism.path'))){
     message("You have not set a path to hold your prism files.")
@@ -71,20 +78,40 @@ prism_check <- function(prismfiles, lgl = FALSE){
 }
 
 #' Process pre 1980 files
-#' @description Files that come prior to 1980 come in one huge zip.  This will cause them to mimic all post 1980 downloads
+#' @description Files that come prior to 1980 come in one huge zip.  This will 
+#'   cause them to mimic all post 1980 downloads
+#'   
 #' @param pfile the name of the file, should include "all", that is unzipped
+#' 
 #' @param name a vector of names of files that you want to save.
+#' 
 #' @details This should match all other files post 1980
+#' 
 #' @examples \dontrun{
-#' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil','PRISM_tmean_stable_4kmM2_198001_bil')
-#' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',
-#' c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
+#' process_zip(
+#'   'PRISM_tmean_stable_4kmM2_1980_all_bil',
+#'   'PRISM_tmean_stable_4kmM2_198001_bil'
+#' )
+#' 
+#' process_zip(
+#'   'PRISM_tmean_stable_4kmM2_1980_all_bil',
+#'   c('PRISM_tmean_stable_4kmM2_198001_bil',
+#'   'PRISM_tmean_stable_4kmM2_198002_bil')
+#' )
 #' }
-process_zip <- function(pfile, name){
+#' 
+#' @noRd
+process_zip <- function(pfile, name) 
+{
   tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
   
   # Remove all.xml file
-  file.remove(paste(options("prism.path")[[1]], pfile, grep("all", tmpwd, value = T), sep="/"))
+  file.remove(paste(
+    options("prism.path")[[1]], 
+    pfile, 
+    grep("all", tmpwd, value = TRUE), 
+    sep="/"
+  ))
   
   # Get new list of files after removing all.xml
   tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
@@ -95,10 +122,14 @@ process_zip <- function(pfile, name){
   unames <- unames[unames %in% name]
   for(j in 1:length(unames)){
     newdir <- paste(options("prism.path")[[1]], unames[j], sep="/")
-    tryCatch(dir.create(newdir), error = function(e) e,
-             warning = function(w){
-               warning(paste(newdir, "already exists. Overwriting existing data."))
-             })
+    tryCatch(
+      dir.create(newdir), 
+      error = function(e) e,
+      warning = function(w) {
+        warning(paste(newdir, "already exists. Overwriting existing data."))
+      }
+    )
+    
     f2copy <- grep(unames[j], tmpwd, value = TRUE)
     sapply(f2copy, function(x){
       file.copy(from = paste(options("prism.path")[[1]], pfile, x, sep="/"),
@@ -120,32 +151,56 @@ process_zip <- function(pfile, name){
 }
 
 #' @title Get PRISM metadata
-#' @description Retrieves PRISM metadata for a given type and
-#' date range. The information is retrieved from the .info.txt file.
+#' 
+#' @description Retrieves PRISM metadata for a given type and date range. The 
+#'   information is retrieved from the .info.txt file.
+#'   
 #' @inheritParams get_prism_dailys
-#' @return list of data.frames containing metadata. If only
-#' one date is requested, the function returns the data.frame.
-#' @importFrom stringr str_extract
-get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
+#' 
+#' @return list of data.frames containing metadata. If only one date is 
+#'   requested, the function returns the data.frame.
+#' 
+#' @noRd
+get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL)
+{
   path_check()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
   dates_str <- gsub("-", "", dates)
   prism_folders <- list.files(path = getOption("prism.path"))
   type_folders <- grep(type, prism_folders, value = TRUE)
-  dates_type_folders <- stringr::str_extract(type_folders, "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
+  dates_type_folders <- stringr::str_extract(
+    type_folders, 
+    "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"
+  )
+  
   final_folders <- type_folders[which(dates_type_folders %in% dates_str)]
   final_folders <- final_folders[!stringr::str_detect(final_folders, ".zip")]
-  final_txt_full <- file.path(getOption("prism.path"), final_folders, paste0(final_folders, ".info.txt"))
+  final_txt_full <- file.path(
+    getOption("prism.path"), 
+    final_folders, 
+    paste0(final_folders, ".info.txt")
+  )
+  
   if(length(final_txt_full) == 0){
     stop("No files exist to obtain metadata from.")
   }
-  out <- lapply(1:length(final_txt_full), function(i){
-    readin <- tryCatch(utils::read.delim(final_txt_full[i], sep = "\n", 
-                                  header = FALSE, stringsAsFactors = FALSE),
-                       error = function(e){
-                         warning(e)
-                         warning(paste0("Problem opening ", final_txt_full[i], ". The folder may exist without the .info.text file inside it."))
-                       })
+  out <- lapply(1:length(final_txt_full), function(i) {
+    readin <- tryCatch(
+      utils::read.delim(
+        final_txt_full[i], 
+        sep = "\n", 
+        header = FALSE, 
+        stringsAsFactors = FALSE
+      ),
+      error = function(e) {
+        warning(e)
+        warning(paste0(
+          "Problem opening ", 
+          final_txt_full[i], 
+          ". The folder may exist without the .info.text file inside it."
+        ))
+      }
+    )
     str_spl <- unlist(stringr::str_split(as.character(readin[[1]]), ": "))
     
     names_md <- str_spl[seq(from = 1, to = length(str_spl), by = 2)]
@@ -201,6 +256,7 @@ is_within_daily_range <- function(dates)
 #' @return Vector of dates
 #' 
 #' @noRd
+
 gen_dates <- function(minDate, maxDate, dates){
   if(all(is.null(dates), is.null(minDate), is.null(maxDate)))
     stop("You must specify either a date range (minDate and maxDate) or a vector of dates")
@@ -239,7 +295,9 @@ gen_dates <- function(minDate, maxDate, dates){
 
 # --------------- extract_version Roxygen tags
 # Get the resolution text string
-# @description To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing
+# @description To account for the ever changing name structure, here we will 
+#   scrape the HTTP directory listing and grab it instead of relying on hard 
+#   coded strings that need changing
 # @param type the type of data you're downloading, should be tmax, tmin etc...
 # @param temporal The temporal resolution of the data, monthly, daily, etc...
 # @param yr the year of data that's being requested, in numeric form
