@@ -4,7 +4,8 @@
 \alias{prism_webservice}
 \title{Download PRISM via webservice}
 \usage{
-prism_webservice(uri, keepZip = FALSE, returnName = FALSE)
+prism_webservice(uri, keepZip = FALSE, returnName = FALSE,
+  pre81_months = NULL)
 }
 \arguments{
 \item{uri}{a valid PRISM webservice URI}
@@ -13,6 +14,11 @@ prism_webservice(uri, keepZip = FALSE, returnName = FALSE)
 
 \item{returnName}{TRUE or FALSE, if TRUE the name of the file that was
 downloaded is returned}
+
+\item{pre81_months}{Numeric vector of months that will be downloaded, if
+downloading data before 1981. This is so that the existance of the data can
+be correctly checked, as the file includes all monthly data for a given
+year.}
 }
 \description{
 This is the workhorse function that will access the web service to download
@@ -20,8 +26,11 @@ files.
 }
 \examples{
 \dontrun{
-### Get all the data for January from 1990 to 2000
-get_prism_annual(type="tmean", year = 1990:2000, keepZip=FALSE)
+# Get the January 2001 mean temperature
+prism_webservice(
+  "http://services.nacse.org/prism/data/public/4km/tmean/200001", 
+  keepZip = FALSE
+)
 }
 
 }
