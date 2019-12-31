@@ -90,7 +90,7 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
  
   counter <- 0
 
-  ### Handle post 1980 data
+  ### Handle post 1981 data
   if(length(uris_post81) > 0){    
   
       for(i in 1:length(uris_post81)){
