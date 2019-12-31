@@ -105,31 +105,41 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
   ### Handle pre 1981 files
   if (length(uris_pre81) > 0) {
   
-    pre_files <-vector() 
+    pre_files <- c()
     for (j in 1:length(uris_pre81)) {
-      pre_files[j] <- prism_webservice(uris_pre81[j], keepZip, returnName = TRUE)
+      tmp <- prism_webservice(
+        uris_pre81[j], 
+        keepZip, 
+        returnName = TRUE,
+        pre81_months = mon
+      )
+      if (!is.null(tmp)) {
+        pre_files <- c(pre_files, tmp)
+      }
       setTxtProgressBar(download_pb, counter) 
       counter <- counter + 1
     }
-   
-    ### Process pre 1981 files
-    pre_files <- unlist(strsplit(pre_files,"\\."))
-    pre_files <- pre_files[seq(1,length(pre_files),by =2)]
     
-    for (k in 1:length(pre_files)) {
-      yr <- regmatches(pre_files[k],regexpr('[0-9]{4}',pre_files[k]))
+    # Process pre 1981 files (unzip and keep monthly data)
+    if (length(pre_files) > 0) {
+      pre_files <- unlist(strsplit(pre_files,"\\."))
+      pre_files <- pre_files[seq(1, length(pre_files), by = 2)]
       
-      if (keep_pre81_months) {
-        monstr <- c(mon_to_string(1:12), "")
-      } else {
-        monstr <- mon_to_string(mon)
+      for (k in 1:length(pre_files)) {
+        yr <- regmatches(pre_files[k], regexpr('[0-9]{4}', pre_files[k]))
+        
+        if (keep_pre81_months) {
+          monstr <- c(mon_to_string(1:12), "")
+        } else {
+          monstr <- mon_to_string(mon)
+        }
+        
+        to_split <-   sapply(monstr, function(x) {
+          gsub(pattern = "_all", replacement = x, x = pre_files[k])
+        })
+        
+        process_zip(pre_files[k], to_split)
       }
-      
-      to_split <-   sapply(monstr, function(x) {
-        gsub(pattern = "_all", replacement = x, x = pre_files[k])
-      })
-      
-      process_zip(pre_files[k], to_split)
     }
   }
 

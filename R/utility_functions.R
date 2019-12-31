@@ -53,28 +53,67 @@ path_check <- function()
   }
 }
 
+#' Check if prism files exist
+#' 
 #' Helper function to check if files already exist
-#' @description check if files exist
+#' 
+#' @inheritParams prism_webservice
+#' 
 #' @param prismfiles a list of full paths for prism files
-#' @param lgl \code{TRUE} returns a logical vector indicating those
-#' not yet downloaded; \code{FALSE}
-#' returns the file names that are not yet downloaded.
+#' 
+#' @param lgl `TRUE` returns a logical vector indicating those
+#'   not yet downloaded; `FALSE` returns the file names that are not yet 
+#'   downloaded.
+#' 
 #' @return a character vector of file names that are not yet downloaded
-#' or a logical vector indication those not yet downloaded..
+#'   or a logical vector indication those not yet downloaded..
+#' 
 #' @export
-prism_check <- function(prismfiles, lgl = FALSE){
+prism_check <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
+{
   file_bases <- unlist(sapply(prismfiles, strsplit, split=".zip"))
-  which_downloaded <- sapply(file_bases, function(base) {
-    # Look inside the folder to see if the .bil is there
-    # Won't be able to check for all other files. Unlikely to matter.
-    ls_folder <- list.files(file.path(getOption("prism.path"), base))
-    any(grepl("\\.bil", ls_folder))
-  })
+  which_downloaded <- sapply(
+    file_bases, 
+    find_prism_file, 
+    pre81_months = pre81_months
+  )
+  
   if(lgl){
     return(!which_downloaded)
   } else {
     return(prismfiles[!which_downloaded])    
   }
+}
+
+# return TRUE if all file(s) are found for the specified base_file
+find_prism_file <- function(base_file, pre81_months)
+{
+  # Look inside the folder to see if the .bil is there
+  # Won't be able to check for all other files. Unlikely to matter.
+  if (is.null(pre81_months)) {
+    ls_folder <- list.files(file.path(getOption("prism.path"), base_file))
+    found_file <- any(grepl("\\.bil", ls_folder))
+  } else {
+    # check for all the monthly data. If any of the monthly data do not exist
+    # will need to download the entire file again.
+    # pre81_months can be vector of months, or "". "" represents the annual data
+    annual <- pre81_months[pre81_months == ""]
+    monthly <- pre81_months[pre81_months != ""]
+    all_months <- c()
+    if (length(annual) > 0)
+      all_months <- c(all_months, "")
+    if (length(monthly) > 0)
+      all_months <- c(all_months, mon_to_string(monthly))
+    
+    found_file <- TRUE
+    for (m in all_months) {
+      ls_folder <- gsub(pattern = "_all", replacement = m, x = base_file)
+      ls_folder <- list.files(file.path(getOption("prism.path"), ls_folder))
+      found_file <- found_file & any(grepl("\\.bil", ls_folder))
+    }
+  }
+  
+  found_file
 }
 
 #' Process pre 1980 files

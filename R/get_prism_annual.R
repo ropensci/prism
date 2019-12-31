@@ -100,40 +100,52 @@ get_prism_annual <- function(type, years = NULL, keepZip = TRUE,
     
   }
   
-  counter <- length(uris_post81)+1
+  counter <- length(uris_post81) + 1
   
   ### Handle pre 1981 files
-  if(length(uris_pre81) > 0){
+  if (length(uris_pre81) > 0) {
     
-    pre_files <-vector() 
+    pre_files <-c() 
     for(j in 1:length(uris_pre81)){
-      pre_files[j] <- prism_webservice(uris_pre81[j],keepZip,returnName = T)
+      tmp <- prism_webservice(
+        uris_pre81[j], 
+        keepZip, 
+        returnName = TRUE, 
+        pre81_months = ""
+      )
+      
+      if (!is.null(tmp)) {
+        pre_files <- c(pre_files, tmp)
+      }
+      
       setTxtProgressBar(download_pb, counter) 
       counter <- counter + 1
     }
     
     ### Process pre 1981 files
-    pre_files <- unlist(strsplit(pre_files,"\\."))
-    pre_files <- pre_files[seq(1,length(pre_files),by =2)]
+    if (length(pre_files) > 0) {
+      pre_files <- unlist(strsplit(pre_files,"\\."))
+      pre_files <- pre_files[seq(1,length(pre_files),by =2)]
     
-    for (k in 1:length(pre_files)) {
-      if (keep_pre81_months) {
-        # keep the annual data
-        to_split <- gsub(pattern = "_all", replacement = "", x = pre_files[k])
-        
-        # and keep all 12 months of data
-        all_months <- mon_to_string(1:12)
-        for (m in all_months) {
-          to_split <- c(
-            to_split, 
-            gsub(pattern = "_all", replacement = m, x = pre_files[k])
-          )
+      for (k in 1:length(pre_files)) {
+        if (keep_pre81_months) {
+          # keep the annual data
+          to_split <- gsub(pattern = "_all", replacement = "", x = pre_files[k])
+          
+          # and keep all 12 months of data
+          all_months <- mon_to_string(1:12)
+          for (m in all_months) {
+            to_split <- c(
+              to_split, 
+              gsub(pattern = "_all", replacement = m, x = pre_files[k])
+            )
+          }
+        } else {
+          to_split <- gsub(pattern = "_all", replacement = "", x = pre_files[k])
         }
-      } else {
-        to_split <- gsub(pattern = "_all", replacement = "", x = pre_files[k])
+          
+        process_zip(pre_files[k], to_split)
       }
-        
-      process_zip(pre_files[k], to_split)
     }
   }
   close(download_pb)
