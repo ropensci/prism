@@ -4,18 +4,25 @@
 \alias{get_prism_annual}
 \title{Download annual daily averages}
 \usage{
-get_prism_annual(type, years = NULL, keepZip = TRUE)
+get_prism_annual(type, years = NULL, keepZip = TRUE,
+  keep_pre81_months = FALSE)
 }
 \arguments{
 \item{type}{The type of data to download, must be "ppt", "tmean", "tmin",
-"tmax", or "all", which downloads "ppt", "tmin", and "tmax". Note that
-tmean == mean(tmin, tmax).}
+"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean == mean(tmin, tmax)}.}
 
 \item{years}{a valid numeric year, or vector of years, to download data for.
 If no month is specified, year averages for that year will be downloaded.}
 
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your
 'prism.path', if \code{FALSE}, they will be deleted.}
+
+\item{keep_pre81_months}{The pre-1981 data includes all monthly data and the
+annual data for the specified year. If you need annual and monthly data it
+is advantageous to keep all the monthly data when downloading the annual
+data so you don't have to download the zip file again. When downloading
+annual data, this defaults to \code{FALSE}. When downloading monthly data, this
+defaults to \code{TRUE}.}
 }
 \description{
 Download annual daily average data from the prism project at 4km grid cell
