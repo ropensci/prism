@@ -29,6 +29,6 @@ VignetteBuilder: knitr
 Suggests:
     covr,
     knitr,
-    testthat
+    testthat (>= 2.1.0)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
