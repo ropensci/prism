@@ -12,7 +12,7 @@
 prism_set_dl_dir <- function(path, create = TRUE)
 {
   # Check if path exists, if it doesn't then create it
-  path <- normalizePath(path)
+  path <- normalizePath(path, mustWork = FALSE)
   if (!dir.exists(file.path(path)) & create) {
     message("creating ", path)
     dir.create(path, recursive = TRUE)
