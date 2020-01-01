@@ -36,7 +36,7 @@
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, dates = NULL, keepZip = TRUE,
                              check = "httr"){
-  path_check()
+  prism_check_dl_dir()
   check <- match.arg(check, c("httr", "internal"))
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
 

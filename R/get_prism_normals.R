@@ -14,11 +14,9 @@
 #' @export
 get_prism_normals <- function(type, resolution, mon =  NULL , annual =  FALSE,  keepZip = TRUE){
   ### parameter and error handling
-  path_check()
-  type <- match.arg(type, c("ppt","tmean","tmin","tmax","tdmean","vpdmax","vpdmin"))
+  prism_check_dl_dir()
+  type <- match.arg(type, prism_vars())
   resolution<- match.arg(resolution, c("4km","800m"))
-  
-
   
   if(!is.null(mon)){
     if(any(mon < 1 | mon > 12)) {

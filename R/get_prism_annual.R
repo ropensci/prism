@@ -42,7 +42,7 @@ get_prism_annual <- function(type, years = NULL, keepZip = TRUE,
 {
   ### parameter and error handling
   
-  path_check()
+  prism_check_dl_dir()
   type <- match.arg(type, prism_vars())
   
   ### Check year

@@ -28,7 +28,7 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
 {
   ### parameter and error handling
 
-  path_check()
+  prism_check_dl_dir()
   type <- match.arg(type, prism_vars())
  
   ### Check mon
