@@ -12,6 +12,7 @@ test_that("prism_set_dl_dir() works", {
   expect_true(dir.exists(f2))
 })
 
-test_that("prism_set_dl_dir() fails correctly", {
+test_that("prism_set_dl_dir() fails correctly on windows", {
+  skip_on_travis()
   expect_warning(expect_error(prism_set_dl_dir(f3)))
 })
