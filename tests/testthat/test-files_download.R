@@ -11,10 +11,18 @@ cat("****************************************\n")
 
 #teardown(unlink(dl_folder, recursive = TRUE))
 
+# skip flags -----------------
+skip_normals <- FALSE
+skip_annual <- FALSE
+skip_monthly <- FALSE
+skip_daily <- FALSE
+skip_daily_3 <- FALSE
+skip_daily_prov <- FALSE
+
 # Normals ---------------
 test_that("normals download", {
   skip_on_cran()
-  #skip("skip normals")
+  skip_if(skip_normals)
   
   get_prism_normals("tmean", resolution = "4km", annual = TRUE)
   get_prism_normals("tmax", resolution = "4km", mon = 1)
@@ -78,7 +86,7 @@ test_that("normals download", {
 
 test_that("annuals download", {
   skip_on_cran()
-  #skip("skip annual")
+  skip_if(skip_annual)
   
   get_prism_annual("tmean", years = 2010)
   get_prism_annual("tmax",  years = 2011)
@@ -142,7 +150,7 @@ test_that("annuals download", {
 
 test_that("monthlys download", {
   skip_on_cran()
-  #skip("skip monthly")
+  skip_if(skip_monthly)
   
   get_prism_monthlys("tmean", years = 2010, mon = 1)
   get_prism_monthlys("tmax", years = 1983, mon = 12)
@@ -216,7 +224,7 @@ test_that("monthlys download", {
 
 test_that("daily download", {
   skip_on_cran()
-  #skip("skip daily")
+  skip_if(skip_daily)
   
   get_prism_dailys("tmean", dates = "1981-01-01")
   get_prism_dailys("tmax", dates = "1985-02-20")
@@ -282,7 +290,7 @@ test_that("daily gets 3 in a row", {
   # Download three days to make sure that the middle day is downloaded.
   # Stable
   skip_on_cran()
-  #skip("skip daily 3 in row")
+  skip_if(skip_daily_3)
   
   get_prism_dailys(type = "tmean", minDate = "2014-01-13", 
                    maxDate = "2014-01-15",
@@ -301,13 +309,13 @@ test_that("daily gets 3 in a row", {
   }
 })
 
-# daily provisional
+# daily provisional ------------------
 today <- Sys.Date()
 prov_date <- today - 7
 
 test_that("daily provisional", {
   skip_on_cran()
-  #skip("skip daily provisional")
+  skip_if(skip_daily_prov)
   
   get_prism_dailys(type = "tmax", minDate = prov_date, maxDate = prov_date)
   
