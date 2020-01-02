@@ -28,12 +28,7 @@
                      dates = NULL, keepZip = FALSE)
 
        })
-  test_that("Monthly stable download", {
-    skip_on_cran()
-#     # Download three months to make sure that the middle month is downloaded.
-     get_prism_monthlys(type = "tmean", mon= 2:4, year = 2014, keepZip = FALSE)
 
-  })
   
   test_that("Normals download properly", {
     skip_on_cran()
