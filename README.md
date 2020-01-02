@@ -42,18 +42,17 @@ different temporal parameters, the type options are always the same.
 Keep in mind these are modeled parameters, not measured. Please see the
 [full
 description](http://www.prism.oregonstate.edu/documents/Daly2008_PhysiographicMapping_IntJnlClim.pdf)
-for how they are
-calculated.
+for how they are calculated.
 
-| Parameter name |                                           Descrption                                            |
-| :------------: | :---------------------------------------------------------------------------------------------: |
-|    *tmean*     |                                        Mean temperature                                         |
-|     *tmax*     |                                       Maximum temperature                                       |
-|     *tmin*     |                                       Minimum temperature                                       |
-|    *tdmean*    |                                    Mean dewpoint temperature                                    |
-|     *ppt*      |                               Total precipitation (Rain and snow)                               |
-|    *vpdmin*    | Daily minimum vapor pressure deficit \[averaged over all days in the month - normal data only\] |
-|    *vpdmax*    | Daily maximum vapor pressure deficit \[averaged over all days in the month - normal data only\] |
+| Parameter name |              Descrption              |
+| :------------: | :----------------------------------: |
+|    *tmean*     |           Mean temperature           |
+|     *tmax*     |         Maximum temperature          |
+|     *tmin*     |         Minimum temperature          |
+|    *tdmean*    |      Mean dewpoint temperature       |
+|     *ppt*      | Total precipitation (Rain and snow)  |
+|    *vpdmin*    | Daily minimum vapor pressure deficit |
+|    *vpdmax*    | Daily maximum vapor pressure deficit |
 
 **Normal data**
 
@@ -64,8 +63,21 @@ an average for all 30 years.
 
 ``` r
 library(prism)
+#> Be sure to set the download folder using `prism_set_dl_dir()`.
 options(prism.path = "~/prismtmp")
 get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip=F)
+#> 
+#> PRISM_tmean_30yr_normal_4kmM2_01_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_30yr_normal_4kmM2_02_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_30yr_normal_4kmM2_03_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_30yr_normal_4kmM2_04_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_30yr_normal_4kmM2_05_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_30yr_normal_4kmM2_06_bil.zip already exists. Skipping downloading.
 ```
 
 The first thing to note is that you’ll need to set a local location to
@@ -81,16 +93,16 @@ files.
 ``` r
 ## Truncated to keep file list short
 ls_prism_data()[1:10,]
-#>  [1] "PRISM_tdmean_stable_4kmM3_201001_bil"  
-#>  [2] "PRISM_tdmean_stable_4kmM3_201002_bil"  
-#>  [3] "PRISM_tmean_30yr_normal_4kmM2_01_bil"  
-#>  [4] "PRISM_tmean_30yr_normal_4kmM2_02_bil"  
-#>  [5] "PRISM_tmean_30yr_normal_4kmM2_03_bil"  
-#>  [6] "PRISM_tmean_30yr_normal_4kmM2_04_bil"  
-#>  [7] "PRISM_tmean_30yr_normal_4kmM2_05_bil"  
-#>  [8] "PRISM_tmean_30yr_normal_4kmM2_06_bil"  
-#>  [9] "PRISM_vpdmax_stable_4kmD2_20100101_bil"
-#> [10] "PRISM_vpdmin_stable_4kmM3_2010_bil"
+#>  [1] "PRISM_ppt_stable_4kmM2_1965_bil"  
+#>  [2] "PRISM_ppt_stable_4kmM2_196501_bil"
+#>  [3] "PRISM_ppt_stable_4kmM2_196502_bil"
+#>  [4] "PRISM_ppt_stable_4kmM2_196503_bil"
+#>  [5] "PRISM_ppt_stable_4kmM2_196504_bil"
+#>  [6] "PRISM_ppt_stable_4kmM2_196505_bil"
+#>  [7] "PRISM_ppt_stable_4kmM2_196506_bil"
+#>  [8] "PRISM_ppt_stable_4kmM2_196507_bil"
+#>  [9] "PRISM_ppt_stable_4kmM2_196508_bil"
+#> [10] "PRISM_ppt_stable_4kmM2_196509_bil"
 ```
 
 While internal plotting functions use this, other files may want an
@@ -101,52 +113,52 @@ that parameter is `name`.
 
 ``` r
 ls_prism_data(absPath = TRUE)[1:10,]
-#>                                     files
-#> 1    PRISM_tdmean_stable_4kmM3_201001_bil
-#> 2    PRISM_tdmean_stable_4kmM3_201002_bil
-#> 3    PRISM_tmean_30yr_normal_4kmM2_01_bil
-#> 4    PRISM_tmean_30yr_normal_4kmM2_02_bil
-#> 5    PRISM_tmean_30yr_normal_4kmM2_03_bil
-#> 6    PRISM_tmean_30yr_normal_4kmM2_04_bil
-#> 7    PRISM_tmean_30yr_normal_4kmM2_05_bil
-#> 8    PRISM_tmean_30yr_normal_4kmM2_06_bil
-#> 9  PRISM_vpdmax_stable_4kmD2_20100101_bil
-#> 10     PRISM_vpdmin_stable_4kmM3_2010_bil
-#>                                                                                        abs_path
-#> 1      ~/prismtmp/PRISM_tdmean_stable_4kmM3_201001_bil/PRISM_tdmean_stable_4kmM3_201001_bil.bil
-#> 2      ~/prismtmp/PRISM_tdmean_stable_4kmM3_201002_bil/PRISM_tdmean_stable_4kmM3_201002_bil.bil
-#> 3      ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_01_bil/PRISM_tmean_30yr_normal_4kmM2_01_bil.bil
-#> 4      ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_02_bil/PRISM_tmean_30yr_normal_4kmM2_02_bil.bil
-#> 5      ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_03_bil/PRISM_tmean_30yr_normal_4kmM2_03_bil.bil
-#> 6      ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_04_bil/PRISM_tmean_30yr_normal_4kmM2_04_bil.bil
-#> 7      ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_05_bil/PRISM_tmean_30yr_normal_4kmM2_05_bil.bil
-#> 8      ~/prismtmp/PRISM_tmean_30yr_normal_4kmM2_06_bil/PRISM_tmean_30yr_normal_4kmM2_06_bil.bil
-#> 9  ~/prismtmp/PRISM_vpdmax_stable_4kmD2_20100101_bil/PRISM_vpdmax_stable_4kmD2_20100101_bil.bil
-#> 10         ~/prismtmp/PRISM_vpdmin_stable_4kmM3_2010_bil/PRISM_vpdmin_stable_4kmM3_2010_bil.bil
+#>                                files
+#> 1    PRISM_ppt_stable_4kmM2_1965_bil
+#> 2  PRISM_ppt_stable_4kmM2_196501_bil
+#> 3  PRISM_ppt_stable_4kmM2_196502_bil
+#> 4  PRISM_ppt_stable_4kmM2_196503_bil
+#> 5  PRISM_ppt_stable_4kmM2_196504_bil
+#> 6  PRISM_ppt_stable_4kmM2_196505_bil
+#> 7  PRISM_ppt_stable_4kmM2_196506_bil
+#> 8  PRISM_ppt_stable_4kmM2_196507_bil
+#> 9  PRISM_ppt_stable_4kmM2_196508_bil
+#> 10 PRISM_ppt_stable_4kmM2_196509_bil
+#>                                                                              abs_path
+#> 1      ~/prismtmp/PRISM_ppt_stable_4kmM2_1965_bil/PRISM_ppt_stable_4kmM2_1965_bil.bil
+#> 2  ~/prismtmp/PRISM_ppt_stable_4kmM2_196501_bil/PRISM_ppt_stable_4kmM2_196501_bil.bil
+#> 3  ~/prismtmp/PRISM_ppt_stable_4kmM2_196502_bil/PRISM_ppt_stable_4kmM2_196502_bil.bil
+#> 4  ~/prismtmp/PRISM_ppt_stable_4kmM2_196503_bil/PRISM_ppt_stable_4kmM2_196503_bil.bil
+#> 5  ~/prismtmp/PRISM_ppt_stable_4kmM2_196504_bil/PRISM_ppt_stable_4kmM2_196504_bil.bil
+#> 6  ~/prismtmp/PRISM_ppt_stable_4kmM2_196505_bil/PRISM_ppt_stable_4kmM2_196505_bil.bil
+#> 7  ~/prismtmp/PRISM_ppt_stable_4kmM2_196506_bil/PRISM_ppt_stable_4kmM2_196506_bil.bil
+#> 8  ~/prismtmp/PRISM_ppt_stable_4kmM2_196507_bil/PRISM_ppt_stable_4kmM2_196507_bil.bil
+#> 9  ~/prismtmp/PRISM_ppt_stable_4kmM2_196508_bil/PRISM_ppt_stable_4kmM2_196508_bil.bil
+#> 10 ~/prismtmp/PRISM_ppt_stable_4kmM2_196509_bil/PRISM_ppt_stable_4kmM2_196509_bil.bil
 
 ls_prism_data(name = TRUE)[1:10,]
-#>                                     files
-#> 1    PRISM_tdmean_stable_4kmM3_201001_bil
-#> 2    PRISM_tdmean_stable_4kmM3_201002_bil
-#> 3    PRISM_tmean_30yr_normal_4kmM2_01_bil
-#> 4    PRISM_tmean_30yr_normal_4kmM2_02_bil
-#> 5    PRISM_tmean_30yr_normal_4kmM2_03_bil
-#> 6    PRISM_tmean_30yr_normal_4kmM2_04_bil
-#> 7    PRISM_tmean_30yr_normal_4kmM2_05_bil
-#> 8    PRISM_tmean_30yr_normal_4kmM2_06_bil
-#> 9  PRISM_vpdmax_stable_4kmD2_20100101_bil
-#> 10     PRISM_vpdmin_stable_4kmM3_2010_bil
-#>                                               product_name
-#> 1                      Jan  2010 - 4km resolution - tdmean
-#> 2                      Feb  2010 - 4km resolution - tdmean
-#> 3  Jan 30-year normals - 4km resolution - Mean temperature
-#> 4  Feb 30-year normals - 4km resolution - Mean temperature
-#> 5  Mar 30-year normals - 4km resolution - Mean temperature
-#> 6  Apr 30-year normals - 4km resolution - Mean temperature
-#> 7  May 30-year normals - 4km resolution - Mean temperature
-#> 8  Jun 30-year normals - 4km resolution - Mean temperature
-#> 9                    Jan 01 2010 - 4km resolution - vpdmax
-#> 10                          2010 - 4km resolution - vpdmin
+#>                                files
+#> 1    PRISM_ppt_stable_4kmM2_1965_bil
+#> 2  PRISM_ppt_stable_4kmM2_196501_bil
+#> 3  PRISM_ppt_stable_4kmM2_196502_bil
+#> 4  PRISM_ppt_stable_4kmM2_196503_bil
+#> 5  PRISM_ppt_stable_4kmM2_196504_bil
+#> 6  PRISM_ppt_stable_4kmM2_196505_bil
+#> 7  PRISM_ppt_stable_4kmM2_196506_bil
+#> 8  PRISM_ppt_stable_4kmM2_196507_bil
+#> 9  PRISM_ppt_stable_4kmM2_196508_bil
+#> 10 PRISM_ppt_stable_4kmM2_196509_bil
+#>                                  product_name
+#> 1       1965 - 4km resolution - Precipitation
+#> 2  Jan  1965 - 4km resolution - Precipitation
+#> 3  Feb  1965 - 4km resolution - Precipitation
+#> 4  Mar  1965 - 4km resolution - Precipitation
+#> 5  Apr  1965 - 4km resolution - Precipitation
+#> 6  May  1965 - 4km resolution - Precipitation
+#> 7  Jun  1965 - 4km resolution - Precipitation
+#> 8  Jul  1965 - 4km resolution - Precipitation
+#> 9  Aug  1965 - 4km resolution - Precipitation
+#> 10 Sep  1965 - 4km resolution - Precipitation
 ```
 
 You can easily make a quick plot of your data to using the output of
@@ -186,6 +198,72 @@ library(ggplot2)
 boulder <- c(-105.2797,40.0176)
 ## Get data.
 get_prism_monthlys(type="tmean", year = 1982:2014, mon = 1, keepZip=F)
+#> 
+#> PRISM_tmean_stable_4kmM3_198201_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_198301_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_198401_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_198501_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_198601_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_198701_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_198801_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_198901_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199001_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199101_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199201_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199301_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199401_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199501_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199601_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199701_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199801_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_199901_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200001_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200101_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200201_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200301_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200401_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200501_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200601_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200701_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200801_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_200901_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_201001_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_201101_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_201201_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_201301_bil.zip already exists. Skipping downloading.
+#> 
+#> PRISM_tmean_stable_4kmM3_201401_bil.zip already exists. Skipping downloading.
 ## We'll use regular expressions to grep through the list and get data only from the month of January
 to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data()[,1],value=T)
 to_slice = grep("tmean",to_slice, value = T)
@@ -210,7 +288,7 @@ jnorm <- ls_prism_data(absPath=T)[1,2]
 j2013 <- ls_prism_data(absPath=T)[52,2]
 ## See that the full path is returned
 jnorm
-#> [1] "~/prismtmp/PRISM_tdmean_stable_4kmM3_201001_bil/PRISM_tdmean_stable_4kmM3_201001_bil.bil"
+#> [1] "~/prismtmp/PRISM_ppt_stable_4kmM2_1965_bil/PRISM_ppt_stable_4kmM2_1965_bil.bil"
 ## Now we'll load the rasters.
 jnorm_rast <- raster(jnorm)
 j2013_rast <- raster(j2013)
