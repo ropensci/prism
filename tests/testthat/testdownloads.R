@@ -41,18 +41,6 @@
     get_prism_normals(type="ppt",resolution = "4km",mon = 1, keepZip=F)    
   })
   
-  
-  
-  test_that("Directory listings work",{
-    skip_on_cran()
-    expect_equal(dim(ls_prism_data())[1],13)
-    expect_equal(dim(ls_prism_data())[2],1)
-    expect_equal(dim(ls_prism_data(absPath = T))[2],2)
-    expect_equal(dim(ls_prism_data(name = T))[2],2)
-    expect_equal(ls_prism_data(name = T)[1,2],"Jan 30-year normals - 4km resolution - Precipitation")
-  }) 
-  
-  
   unlink(temp_dir_prism, recursive = TRUE)
  }, error = function(e){
    # Delete the temp folder on errors.
