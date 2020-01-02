@@ -112,7 +112,7 @@ test_that("annuals download", {
     file.path(dl_folder, "PRISM_tdmean_stable_4kmM3_1944_all_bil.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tdmean_stable_4kmM3_1944_all_bil")
+    file.path(dl_folder, "PRISM_tdmean_stable_4kmM3_1944_bil")
   ))
   
   expect_true(file.exists(
@@ -126,7 +126,7 @@ test_that("annuals download", {
     file.path(dl_folder, "PRISM_vpdmax_stable_4kmM3_1933_all_bil.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmax_stable_4kmM3_1933_all_bil")
+    file.path(dl_folder, "PRISM_vpdmax_stable_4kmM3_1933_bil")
   ))
   
   expect_true(file.exists(
