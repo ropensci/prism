@@ -9,19 +9,31 @@
 #' @param resolution The spatial resolution of the data, must be either "4km" 
 #'   or "800m".
 #' 
-#' @param mon a numeric value for month, can be a numeric vector of months.
+#' @param annual if `TRUE` download annual normals.
 #' 
-#' @param annual if `TRUE` download annual data
+#' @section Normals:
 #' 
-#' @details You must make sure that you have set up a valid download directory.  
-#' This must be set as options(prism.path = "YOURPATH"). If `mon` is specified
-#' and `annual` is `TRUE`, then monthly and annual data will be downloaded.
+#' 30-year normals are currently computed using 1981-2010 and are available at 
+#' 4km and 800m resolution. See 
+#' [http://www.prism.oregonstate.edu/normals/](http://www.prism.oregonstate.edu/normals/).
+#' If `mon` is specified and `annual` is `TRUE`, then monthly and annual normal  
+#' data will be downloaded.
 #' 
 #' @examples \dontrun{
-#' ### Get 30 year normal values for January rainfall
-#' get_prism_normals(type="ppt",resolution = "4km",mon = 1, keepZip=FALSE)
+#' # Get 30 year normal values for January rainfall
+#' get_prism_normals(type = "ppt", resolution = "4km", mon = 1, keepZip = FALSE)
 #' 
+#' # Get monthly (every month) and annual 30-year normals for mean temperature
+#' get_prism_normals(
+#'   type = "tmean", 
+#'   resolution = "800m", 
+#'   mon = 1:12, 
+#'   annual = TRUE,
+#'   keepZip = FALSE
+#' )
 #' }
+#' 
+#' @rdname get_prism_data
 #' 
 #' @export
 get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,  

@@ -1,9 +1,14 @@
-#' Download annual daily averages
+#' Download prism data
 #' 
-#' Download annual daily average data from the prism project at 4km grid cell 
-#' resolution for precipitation, mean, min and max temperature
+#' Download grid cell data from the 
+#' [prism project](http://www.prism.oregonstate.edu/). Temperature (min, max, 
+#' and mean), mean dewpoint temperature, precipitation, and vapor pressure 
+#' deficit (min and max) can be downloaded for annual (`get_prism_annual()`), 
+#' monthly (`get_prism_monthlys()`), daily (`get_prism_dailys()`), and 30-year
+#' averages (`get_prism_normals()`). Data are at 4km resolution, except for the 
+#' normals which can also be downloaded at 800m resoultion.
 #' 
-#' @param type The type of data to download, must be "ppt", "tmean", "tmin", 
+#' @param type The type of data to download. Must be "ppt", "tmean", "tmin", 
 #'   "tmax", "tdmean", "vpdmin", or "vpdmax". Note that `tmean == 
 #'   mean(tmin, tmax)`.
 #'   
@@ -20,21 +25,25 @@
 #'   annual data, this defaults to `FALSE`. When downloading monthly data, this
 #'   defaults to `TRUE`.
 #'   
-#' @details Data is available from 1891 until 2014, however you have to download 
-#' all data for years prior to 1981.  Therefore if you enter a vector of years 
-#' that bounds 1981, you will automatically download all data for all years in 
-#' the vector.  If the "all" parameter is set to TRUE, it will override any 
-#' months entered and download all data. Data will be downloaded for all months 
-#' in all the years in the vectors supplied. You must make sure that you have 
-#' set up a valid download directory.  This must be set as 
-#' `options(prism.path = "YOURPATH")`.
+#' @details 
+#' A valid download directory must exist before downloading any prism data. This
+#' can be set using [prism_set_dl_dir()] and can be verified using 
+#' [prism_check_dl_dir()].
+#' 
+#' @section Annual and Monthly:
+#' 
+#' Annual and monthly prism data are available from 1891 to present. For 
+#' 1891-1980 data, monthly and annual data are grouped together in one download 
+#' file; `keep_pre81_months` determines if the other months/yearly data are kept
+#' after the download.  Data will be downloaded for all specified months (`mon`) 
+#' in all the `years` in the supplied vectors.
 #' 
 #' @examples \dontrun{
-#' ### Get all the data for January from 1990 to 2000
-#' get_prism_annual(type="tmean", year = 1990:2000, keepZip=FALSE)
+#' # Get all annual average temperature data from 1990 to 2000
+#' get_prism_annual(type = "tmean", year = 1990:2000, keepZip = FALSE)
 #' }
 #' 
-#' @importFrom utils download.file setTxtProgressBar txtProgressBar unzip
+#' @rdname get_prism_data
 #' 
 #' @export
 get_prism_annual <- function(type, years = NULL, keepZip = TRUE, 
@@ -95,9 +104,7 @@ get_prism_annual <- function(type, years = NULL, keepZip = TRUE,
     for(i in 1:length(uris_post81)){
       prism_webservice(uris_post81[i],keepZip)
       setTxtProgressBar(download_pb, i)
-      
     }
-    
   }
   
   counter <- length(uris_post81) + 1

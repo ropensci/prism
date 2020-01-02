@@ -1,26 +1,16 @@
-#' Download monthly prism data
-#' 
-#' Download monthly data from the prism project at 4km grid cell resolution for 
-#' precipitation, mean, min, and max temperature
-#' 
 #' @inheritParams get_prism_annual
 #' 
 #' @param mon a valid numeric month, or vector of months.
 #' 
-#' @details Data is available from 1891 until 2014, however you have to download 
-#' all data for years prior to 1981.  
-#' Therefore if you enter a vector of years that bounds 1981, 
-#' you will automatically download all data for all years in the vector.  
-#' If the "all" parameter is set to TRUE, it will override any mon 
-#' entered and download all data. Data will be downloaded for all mon 
-#' in all the years in the vectors supplied. You must make sure 
-#' that you have set up a valid download directory.  
-#' This must be set as options(prism.path = "YOURPATH")
-#' 
 #' @examples \dontrun{
-#' ### Get all the data for January from 1990 to 2000
-#' get_prism_monthlys(type="tmean", years = 1990:2000, mon = 1, keepZip=FALSE)
+#' # Get all the precipitation data for January from 1990 to 2000
+#' get_prism_monthlys(type = "ppt", years = 1990:2000, mon = 1, keepZip = FALSE)
+#' 
+#' # Get January-December 2005 monthly precipitation
+#' get_prism_monthlys(type = "ppt", years = 2005, mon = 1:12, keepZip = FALSE)
 #' }
+#' 
+#' @rdname get_prism_data
 #' 
 #' @export
 get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,

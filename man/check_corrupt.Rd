@@ -7,18 +7,20 @@
 check_corrupt(type, minDate = NULL, maxDate = NULL, dates = NULL)
 }
 \arguments{
-\item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
-Note that tmean == mean(tmin, tmax).}
+\item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
+"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean == mean(tmin, tmax)}.}
 
-\item{minDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to start downloading data.
-May be provided as either a character or \code{\link[base]{Date}} class.}
+\item{minDate}{Date to start downloading daily data. Must be specified in
+a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
+character or \link[base:Date]{base::Date} class.}
 
-\item{maxDate}{a valid iso-8601 (e.g. YYYY-MM-DD) date to end downloading data.
-May be provided as either a character or \code{\link[base]{Date}} class.}
+\item{maxDate}{Date to end downloading daily data.  Must be specified in
+a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
+character or \link[base:Date]{base::Date} class.}
 
-\item{dates}{a vector of iso-8601 formatted dates to download data for, can
-also be a single date. May be provided as either a character or
-\code{\link[base]{Date}} class.}
+\item{dates}{A vector of dates to download daily data. Must be specified in
+a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
+character or \link[base:Date]{base::Date} class.}
 }
 \value{
 \code{logical} indicating whether the process succeeded.
