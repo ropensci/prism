@@ -48,7 +48,12 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     while(tryNumber < 11 & !downloaded){
       downloaded <- TRUE
       tryCatch(
-        download.file(url = uri, destfile = outFile, mode = "wb", quiet = TRUE), 
+        utils::download.file(
+          url = uri, 
+          destfile = outFile, 
+          mode = "wb", 
+          quiet = TRUE
+        ), 
         error = function(e){
           downloaded <<- FALSE
         })
@@ -58,7 +63,9 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     if (!downloaded) {
       warning(paste0("Downloading failed"))
     } else {
-      suppressWarnings(unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]]))
+      suppressWarnings(
+        utils::unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]])
+      )
       if(!keepZip){
         file.remove(outFile)
       }
