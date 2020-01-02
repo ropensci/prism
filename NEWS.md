@@ -12,6 +12,7 @@
 * `get_prism_normals()` will now download monthly and annual data simultaneously if asked to do so. (#77)
 * all `get_prism_*()` functions are documented in same man page. (#79)
 * removed man pages for non-exported functions
+* more tests
 
 # prism 0.1.0
 
