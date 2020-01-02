@@ -344,21 +344,15 @@ gen_dates <- function(minDate, maxDate, dates){
 #' ppt, vpdmin, or vpdmax
 #' @param dates A vector of the dates you wish to subset as a string
 #' 
+#' @noRd
 subset_prism_folders <- function(type, dates){
-  path_check()
+  prism_check_dl_dir()
   dates_str <- gsub("-", "", dates)
   prism_folders <- list.files(getOption("prism.path"))
-  
+
   type_folders <- prism_folders %>% 
     stringr::str_subset(paste0("_", type, "_"))
-  # Use D2 for ppt
-  if(type == "ppt"){
-    type_folders <- type_folders %>% 
-      stringr::str_subset("4kmD2_")
-  } else {
-    type_folders <- type_folders %>% 
-      stringr::str_subset("4kmD1_")
-  }
+
   # Don't want zips
   type_folders <- type_folders[!stringr::str_detect(type_folders, ".zip")]
   
@@ -368,7 +362,7 @@ subset_prism_folders <- function(type, dates){
 
 #' Returns the available prism variables.
 #' @noRd
-prism_vars <- function(all_var = FALSE)
+prism_vars <- function()
 {
   c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean")
 }
