@@ -8,6 +8,8 @@
 * Replacing `prism_check()` with `prism_not_downloaded()`. `prism_check()` is deprecated and will be removed in the next release.
 * Replacing `check_path()` with `prism_check_dl_dir()`. `check_path()` is deprecated and will be removed in the next release.
 * Added `prism_set_dl_dir()` as an easy way to set path and make sure it is valid.
+* `get_prism_normals()` will now error if neither monthly nor annual data are specified to be downloaded. (#77)
+* `get_prism_normals()` will now download monthly and annual data simultaneously if asked to do so. (#77)
 
 # prism 0.1.0
 
