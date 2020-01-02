@@ -275,3 +275,50 @@ test_that("daily download", {
     file.path(dl_folder, "PRISM_ppt_stable_4kmD2_20151105_bil")
   ))
 })
+
+# daily 3 in row ------------------
+test_that("daily gets 3 in a row", {
+  # Day = 13 to make sure months and days don't get confused.
+  # Download three days to make sure that the middle day is downloaded.
+  # Stable
+  skip_on_cran()
+  #skip("skip daily 3 in row")
+  
+  get_prism_dailys(type = "tmean", minDate = "2014-01-13", 
+                   maxDate = "2014-01-15",
+                   keepZip = FALSE)
+  get_prism_dailys(type = "ppt", minDate = "2000-06-13", maxDate = "2000-06-15",
+                   keepZip = FALSE)
+  
+  for (i in 13:15) {
+    expect_true(dir.exists(
+      file.path(dl_folder, paste0("PRISM_ppt_stable_4kmD2_200006",i ,"_bil"))
+    ))
+    
+    expect_true(dir.exists(
+      file.path(dl_folder, paste0("PRISM_tmean_stable_4kmD2_201401", i,"_bil"))
+    ))
+  }
+})
+
+# daily provisional
+today <- Sys.Date()
+prov_date <- today - 7
+
+test_that("daily provisional", {
+  skip_on_cran()
+  #skip("skip daily provisional")
+  
+  get_prism_dailys(type = "tmax", minDate = prov_date, maxDate = prov_date)
+  
+  expect_true(dir.exists(
+    file.path(
+      dl_folder,
+      paste0(
+        "PRISM_tmax_provisional_4kmD2_",
+        stringr::str_remove_all(prov_date, "-"),
+        "_bil"
+      )
+    )
+  ))
+})
