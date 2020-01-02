@@ -8,27 +8,34 @@ get_prism_normals(type, resolution, mon = NULL, annual = FALSE,
   keepZip = TRUE)
 }
 \arguments{
-\item{type}{The type of data to download, must be "ppt", "tmean", "tmin", or "tmax".
-Note that tmean == mean(tmin, tmax).}
+\item{type}{The type of data to download, must be "ppt", "tmean", "tmin",
+"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean == mean(tmin, tmax)}.}
 
-\item{resolution}{The spatial resolution of the data, must be either "4km" or "800m".}
+\item{resolution}{The spatial resolution of the data, must be either "4km"
+or "800m".}
 
 \item{mon}{a numeric value for month, can be a numeric vector of months.}
 
-\item{annual}{if TRUE download annual data}
+\item{annual}{if \code{TRUE} download annual data}
 
-\item{keepZip}{if TRUE, leave the downloaded zip files in your 'prism.path', if FALSE, they will be deleted}
+\item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your
+'prism.path', if \code{FALSE}, they will be deleted.}
 }
 \description{
-Download data from the prism project for 30 year normals at 4km or 800m grid cell resolution for precipitation, mean, min and max temperature
+Download data from the prism project for 30 year normals at 4km
+or 800m grid cell resolution for precipitation, mean, min and max
+temperature
 }
 \details{
-You must make sure that you have set up a valid download directory.  This must be set as options(prism.path = "YOURPATH")
+You must make sure that you have set up a valid download directory.
+This must be set as options(prism.path = "YOURPATH"). If \code{mon} is specified
+and \code{annual} is \code{TRUE}, then monthly and annual data will be downloaded.
 }
 \examples{
 \dontrun{
-### Get 30 year normal values for rainfall
+### Get 30 year normal values for January rainfall
 get_prism_normals(type="ppt",resolution = "4km",mon = 1, keepZip=FALSE)
 
 }
+
 }
