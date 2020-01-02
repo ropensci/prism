@@ -1,3 +1,5 @@
+orig_prism_path <- getOption("prism.path")
+teardown(options(prism.path = orig_prism_path))
 prism_set_dl_dir(tempdir())
 
 # Check errors
