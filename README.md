@@ -54,6 +54,15 @@ for how they are calculated.
 |    *vpdmin*    | Daily minimum vapor pressure deficit |
 |    *vpdmax*    | Daily maximum vapor pressure deficit |
 
+Before downloading any data, set the directory that the prism data will
+be saved to:
+
+``` r
+library(prism)
+#> Be sure to set the download folder using `prism_set_dl_dir()`.
+prism_set_dl_dir("~/prismtmp")
+```
+
 **Normal data**
 
 Normals are based on the years 1981 - 2010, and can be downloaded in two
@@ -62,22 +71,7 @@ Normals can also be downloaded for a given month, vector of months, or
 an average for all 30 years.
 
 ``` r
-library(prism)
-#> Be sure to set the download folder using `prism_set_dl_dir()`.
-options(prism.path = "~/prismtmp")
 get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip=F)
-#> 
-#> PRISM_tmean_30yr_normal_4kmM2_01_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_30yr_normal_4kmM2_02_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_30yr_normal_4kmM2_03_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_30yr_normal_4kmM2_04_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_30yr_normal_4kmM2_05_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_30yr_normal_4kmM2_06_bil.zip already exists. Skipping downloading.
 ```
 
 The first thing to note is that you’ll need to set a local location to
@@ -124,17 +118,17 @@ ls_prism_data(absPath = TRUE)[1:10,]
 #> 8  PRISM_ppt_stable_4kmM2_196507_bil
 #> 9  PRISM_ppt_stable_4kmM2_196508_bil
 #> 10 PRISM_ppt_stable_4kmM2_196509_bil
-#>                                                                              abs_path
-#> 1      ~/prismtmp/PRISM_ppt_stable_4kmM2_1965_bil/PRISM_ppt_stable_4kmM2_1965_bil.bil
-#> 2  ~/prismtmp/PRISM_ppt_stable_4kmM2_196501_bil/PRISM_ppt_stable_4kmM2_196501_bil.bil
-#> 3  ~/prismtmp/PRISM_ppt_stable_4kmM2_196502_bil/PRISM_ppt_stable_4kmM2_196502_bil.bil
-#> 4  ~/prismtmp/PRISM_ppt_stable_4kmM2_196503_bil/PRISM_ppt_stable_4kmM2_196503_bil.bil
-#> 5  ~/prismtmp/PRISM_ppt_stable_4kmM2_196504_bil/PRISM_ppt_stable_4kmM2_196504_bil.bil
-#> 6  ~/prismtmp/PRISM_ppt_stable_4kmM2_196505_bil/PRISM_ppt_stable_4kmM2_196505_bil.bil
-#> 7  ~/prismtmp/PRISM_ppt_stable_4kmM2_196506_bil/PRISM_ppt_stable_4kmM2_196506_bil.bil
-#> 8  ~/prismtmp/PRISM_ppt_stable_4kmM2_196507_bil/PRISM_ppt_stable_4kmM2_196507_bil.bil
-#> 9  ~/prismtmp/PRISM_ppt_stable_4kmM2_196508_bil/PRISM_ppt_stable_4kmM2_196508_bil.bil
-#> 10 ~/prismtmp/PRISM_ppt_stable_4kmM2_196509_bil/PRISM_ppt_stable_4kmM2_196509_bil.bil
+#>                                                                                                            abs_path
+#> 1      C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_1965_bil/PRISM_ppt_stable_4kmM2_1965_bil.bil
+#> 2  C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196501_bil/PRISM_ppt_stable_4kmM2_196501_bil.bil
+#> 3  C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196502_bil/PRISM_ppt_stable_4kmM2_196502_bil.bil
+#> 4  C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196503_bil/PRISM_ppt_stable_4kmM2_196503_bil.bil
+#> 5  C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196504_bil/PRISM_ppt_stable_4kmM2_196504_bil.bil
+#> 6  C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196505_bil/PRISM_ppt_stable_4kmM2_196505_bil.bil
+#> 7  C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196506_bil/PRISM_ppt_stable_4kmM2_196506_bil.bil
+#> 8  C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196507_bil/PRISM_ppt_stable_4kmM2_196507_bil.bil
+#> 9  C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196508_bil/PRISM_ppt_stable_4kmM2_196508_bil.bil
+#> 10 C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_ppt_stable_4kmM2_196509_bil/PRISM_ppt_stable_4kmM2_196509_bil.bil
 
 ls_prism_data(name = TRUE)[1:10,]
 #>                                files
@@ -173,12 +167,18 @@ prism_image(ls_prism_data()[1,1])
 **Monthly and Daily Data**
 
 Monthly and daily data is also easily accessible. Below we’ll get
-January data for the years 1990 to 2000. We an also grab data from June
-1 to June 14 2013.
+January data for the years 1982 to 2014 We can also grab data from June
+1 to June 14,
+2013.
 
 ``` r
-get_prism_monthlys(type="tmean", year = 1990:2000, mon = 1, keepZip=F)
-get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=F)
+get_prism_monthlys(type = "tmean", year = 1982:2014, mon = 1, keepZip = FALSE)
+get_prism_dailys(
+  type = "tmean", 
+  minDate = "2013-06-01", 
+  maxDate = "2013-06-14", 
+  keepZip = FALSE
+)
 ```
 
 Note that for daily data you need to give a well formed date string in
@@ -189,87 +189,22 @@ procedure will take a set of rasters, create a stack, extract data at a
 point, and then create a ggplot2 object.
 
 Let’s get make a plot of January temperatures is Boulder between 1982
-and 2014. First we’ll grab all the data from the US, and then give our
-function a point to get data from. The point must be a vector in the
-form of longitude, latitude.
+and 2014. First we’ll grab all the data from the US (downloaded in the
+previous step), and then give our function a point to get data from. The
+point must be a vector in the form of longitude, latitude.
 
 ``` r
 library(ggplot2)
+# data already exist in the prism dl dir
 boulder <- c(-105.2797,40.0176)
-## Get data.
-get_prism_monthlys(type="tmean", year = 1982:2014, mon = 1, keepZip=F)
-#> 
-#> PRISM_tmean_stable_4kmM3_198201_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_198301_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_198401_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_198501_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_198601_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_198701_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_198801_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_198901_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199001_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199101_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199201_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199301_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199401_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199501_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199601_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199701_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199801_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_199901_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200001_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200101_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200201_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200301_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200401_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200501_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200601_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200701_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200801_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_200901_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_201001_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_201101_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_201201_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_201301_bil.zip already exists. Skipping downloading.
-#> 
-#> PRISM_tmean_stable_4kmM3_201401_bil.zip already exists. Skipping downloading.
 ## We'll use regular expressions to grep through the list and get data only from the month of January
 to_slice <- grep("_[0-9]{4}[0][1]",ls_prism_data()[,1],value=T)
 to_slice = grep("tmean",to_slice, value = T)
 p <- prism_slice(boulder,to_slice)
-p + stat_smooth(method="lm",se=F) + theme_bw() + 
-ggtitle("Average January temperature in Boulder, CO 1982-2014")
+p + 
+  stat_smooth(method="lm",se=F) + 
+  theme_bw() + 
+  ggtitle("Average January temperature in Boulder, CO 1982-2014")
 ```
 
 ![](man/figures/README-plot_Boulder-1.png)<!-- -->
@@ -283,21 +218,26 @@ these files. We just need to grab them out of our list.
 ``` r
 library(raster)
 #> Loading required package: sp
-### I got these just by looking at the list output
-jnorm <- ls_prism_data(absPath=T)[1,2]
-j2013 <- ls_prism_data(absPath=T)[52,2]
+# knowing the name of the files you are after allows you to find them in the 
+# list of all files that exist
+jnorm_name <- "PRISM_tmean_30yr_normal_4kmM2_01_bil"
+j2013_name <- "PRISM_tmean_stable_4kmM3_201301_bil"
+all_prism_files <- ls_prism_data(absPath = TRUE)
+jnorm <- all_prism_files[match(jnorm_name, all_prism_files[, 1]), 2]
+j2013 <- all_prism_files[match(j2013_name, all_prism_files[, 1]), 2]
 ## See that the full path is returned
 jnorm
-#> [1] "~/prismtmp/PRISM_ppt_stable_4kmM2_1965_bil/PRISM_ppt_stable_4kmM2_1965_bil.bil"
+#> [1] "C:\\Users\\RAButler\\Documents\\prismtmp/PRISM_tmean_30yr_normal_4kmM2_01_bil/PRISM_tmean_30yr_normal_4kmM2_01_bil.bil"
 ## Now we'll load the rasters.
 jnorm_rast <- raster(jnorm)
 j2013_rast <- raster(j2013)
-## Now we can do simple subtraction to get the anomaly by subtracting 2014 from the 30 year normal map
+# Now we can do simple subtraction to get the anomaly by subtracting 2014 
+# from the 30 year normal map
 anomCalc <- function(x, y) {
   return(x - y)
-  }
+}
 
-anom_rast <- overlay(j2013_rast,jnorm_rast,fun = anomCalc)
+anom_rast <- raster::overlay(j2013_rast,jnorm_rast,fun = anomCalc)
 
 plot(anom_rast)
 ```
@@ -325,9 +265,13 @@ library(raster)
 library(prism)
 
 ## Set default path for raster files
-options(prism.path = "~/prismtmp")
-get_prism_normals(type="tmean",resolution = "4km",annual =T, keepZip=F)
-
+prism_set_dl_dir("~/prismtmp")
+get_prism_normals(
+  type ="tmean",
+  resolution = "4km",
+  annual = TRUE, 
+  keepZip = FALSE
+)
 
 ## Grab the data, ls_prism_data(absPath=T) will show you all the data you've downloaded
 norm <- grep("tmean_30yr_normal_4kmM2_annual",ls_prism_data(absPath=T)[,2],value=T)
@@ -338,7 +282,10 @@ rast <- raster(norm)
 pal <- colorNumeric(c("#0000FF", "#FFFF00", "#FF0000"), values(rast),
                     na.color = "transparent")
 
-leaflet() %>% addTiles(urlTemplate = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}') %>% 
-  addRasterImage(rast,colors = pal,opacity=.65) %>% addLegend(pal = pal, values = values(rast),
-                                                              title = "Deg C")
+leaflet() %>% 
+  addTiles(
+    urlTemplate = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+  ) %>% 
+  addRasterImage(rast,colors = pal,opacity=.65) %>% 
+  addLegend(pal = pal, values = values(rast), title = "Deg C")
 ```
