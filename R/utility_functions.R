@@ -335,31 +335,6 @@ gen_dates <- function(minDate, maxDate, dates){
 #  return(sp2[1])
 #}
 
-#' Subsets prism folders on the disk by type and date
-#' 
-#' Looks through all of the PRISM data that is downloaded in your 
-#' `prism.path` and returns the subset based on `type` and `dates`.
-#' 
-#' @param type The type of data you want to subset. Should be tmax, tmin, tmean, 
-#' ppt, vpdmin, or vpdmax
-#' @param dates A vector of the dates you wish to subset as a string
-#' 
-#' @noRd
-subset_prism_folders <- function(type, dates){
-  prism_check_dl_dir()
-  dates_str <- gsub("-", "", dates)
-  prism_folders <- list.files(getOption("prism.path"))
-
-  type_folders <- prism_folders %>% 
-    stringr::str_subset(paste0("_", type, "_"))
-
-  # Don't want zips
-  type_folders <- type_folders[!stringr::str_detect(type_folders, ".zip")]
-  
-  type_folders %>% 
-    stringr::str_subset(paste(dates_str, collapse = "|"))
-}
-
 #' Returns the available prism variables.
 #' @noRd
 prism_vars <- function()

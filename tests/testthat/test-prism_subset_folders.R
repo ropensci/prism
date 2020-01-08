@@ -1,0 +1,132 @@
+# sample folders -----------------
+folders <- 
+  c("PRISM_ppt_stable_4kmM2_1965_bil", "PRISM_ppt_stable_4kmM2_196501_bil", 
+  "PRISM_ppt_stable_4kmM2_196502_bil", "PRISM_ppt_stable_4kmM2_196503_bil", 
+  "PRISM_ppt_stable_4kmM2_196504_bil", "PRISM_ppt_stable_4kmM2_196505_bil", 
+  "PRISM_ppt_stable_4kmM2_196506_bil", "PRISM_ppt_stable_4kmM2_196507_bil", 
+  "PRISM_ppt_stable_4kmM2_196508_bil", "PRISM_ppt_stable_4kmM2_196509_bil", 
+  "PRISM_ppt_stable_4kmM2_196510_bil", "PRISM_ppt_stable_4kmM2_196511_bil", 
+  "PRISM_ppt_stable_4kmM2_196512_bil", "PRISM_ppt_stable_4kmM2_1967_bil", 
+  "PRISM_ppt_stable_4kmM2_196701_bil", "PRISM_ppt_stable_4kmM2_196702_bil", 
+  "PRISM_ppt_stable_4kmM2_196703_bil", "PRISM_ppt_stable_4kmM2_196704_bil", 
+  "PRISM_ppt_stable_4kmM2_196705_bil", "PRISM_ppt_stable_4kmM2_196706_bil", 
+  "PRISM_ppt_stable_4kmM2_196707_bil", "PRISM_ppt_stable_4kmM2_196708_bil", 
+  "PRISM_ppt_stable_4kmM2_196709_bil", "PRISM_ppt_stable_4kmM2_196710_bil", 
+  "PRISM_ppt_stable_4kmM2_196711_bil", "PRISM_ppt_stable_4kmM2_196712_bil", 
+  "PRISM_ppt_stable_4kmM2_196901_bil", 
+  "PRISM_ppt_stable_4kmM2_196902_bil", "PRISM_ppt_stable_4kmM2_1970_bil", 
+  "PRISM_ppt_stable_4kmM2_197001_bil", "PRISM_ppt_stable_4kmM2_197002_bil", 
+  "PRISM_ppt_stable_4kmM2_197003_bil", "PRISM_ppt_stable_4kmM2_197004_bil", 
+  "PRISM_ppt_stable_4kmM2_197005_bil", "PRISM_ppt_stable_4kmM2_197006_bil", 
+  "PRISM_ppt_stable_4kmM2_197007_bil", "PRISM_ppt_stable_4kmM2_197008_bil", 
+  "PRISM_ppt_stable_4kmM2_197009_bil", "PRISM_ppt_stable_4kmM2_197010_bil", 
+  "PRISM_ppt_stable_4kmM2_197011_bil", "PRISM_ppt_stable_4kmM2_197012_bil", 
+  "PRISM_ppt_stable_4kmM2_1971_bil", "PRISM_tdmean_stable_4kmM3_201001_bil", 
+  "PRISM_tdmean_stable_4kmM3_201002_bil", "PRISM_tmean_30yr_normal_4kmM2_01_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_02_bil", "PRISM_tmean_30yr_normal_4kmM2_03_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_04_bil", "PRISM_tmean_30yr_normal_4kmM2_05_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_06_bil", "PRISM_tmean_30yr_normal_4kmM2_annual_bil", 
+  "PRISM_tmean_stable_4kmD2_20130601_bil", "PRISM_tmean_stable_4kmD2_20130602_bil", 
+  "PRISM_tmean_stable_4kmD2_20130603_bil", "PRISM_tmean_stable_4kmD2_20130604_bil", 
+  "PRISM_tmean_stable_4kmD2_20130605_bil", "PRISM_tmean_stable_4kmD2_20130606_bil", 
+  "PRISM_tmean_stable_4kmD2_20130607_bil", "PRISM_tmean_stable_4kmD2_20130608_bil", 
+  "PRISM_tmean_stable_4kmD2_20130609_bil", "PRISM_tmean_stable_4kmD2_20130610_bil", 
+  "PRISM_tmean_stable_4kmD2_20130611_bil", "PRISM_tmean_stable_4kmD2_20130612_bil", 
+  "PRISM_tmean_stable_4kmD2_20130613_bil", "PRISM_tmean_stable_4kmD2_20130614_bil", 
+  "PRISM_tmean_stable_4kmM3_1965_bil", "PRISM_tmean_stable_4kmM3_196502_bil", 
+  "PRISM_tmean_stable_4kmM3_196503_bil", "PRISM_tmean_stable_4kmM3_196504_bil", 
+  "PRISM_tmean_stable_4kmM3_196505_bil", "PRISM_tmean_stable_4kmM3_196506_bil", 
+  "PRISM_tmean_stable_4kmM3_196507_bil", "PRISM_tmean_stable_4kmM3_196508_bil", 
+  "PRISM_tmean_stable_4kmM3_196509_bil", "PRISM_tmean_stable_4kmM3_196510_bil", 
+  "PRISM_tmean_stable_4kmM3_196511_bil", "PRISM_tmean_stable_4kmM3_196512_bil", 
+  "PRISM_tmean_stable_4kmM3_198201_bil", "PRISM_tmean_stable_4kmM3_198301_bil", 
+  "PRISM_tmean_stable_4kmM3_198401_bil", "PRISM_tmean_stable_4kmM3_198501_bil", 
+  "PRISM_tmean_stable_4kmM3_198601_bil", "PRISM_tmean_stable_4kmM3_198701_bil", 
+  "PRISM_tmean_stable_4kmM3_198801_bil", "PRISM_tmean_stable_4kmM3_198901_bil", 
+  "PRISM_tmean_stable_4kmM3_199001_bil", "PRISM_tmean_stable_4kmM3_199101_bil", 
+  "PRISM_tmean_stable_4kmM3_199201_bil", "PRISM_tmean_stable_4kmM3_199301_bil", 
+  "PRISM_tmean_stable_4kmM3_199401_bil", "PRISM_tmean_stable_4kmM3_199501_bil", 
+  "PRISM_tmean_stable_4kmM3_199601_bil", "PRISM_tmean_stable_4kmM3_199701_bil", 
+  "PRISM_tmean_stable_4kmM3_199801_bil", "PRISM_tmean_stable_4kmM3_199901_bil", 
+  "PRISM_tmean_stable_4kmM3_200001_bil", "PRISM_tmean_stable_4kmM3_200101_bil", 
+  "PRISM_tmean_stable_4kmM3_200201_bil", "PRISM_tmean_stable_4kmM3_200301_bil", 
+  "PRISM_tmean_stable_4kmM3_200401_bil", "PRISM_tmean_stable_4kmM3_200501_bil", 
+  "PRISM_tmean_stable_4kmM3_200601_bil", "PRISM_tmean_stable_4kmM3_200701_bil", 
+  "PRISM_tmean_stable_4kmM3_200801_bil", "PRISM_tmean_stable_4kmM3_200901_bil", 
+  "PRISM_tmean_stable_4kmM3_201001_bil", "PRISM_tmean_stable_4kmM3_201101_bil", 
+  "PRISM_tmean_stable_4kmM3_201102_bil", "PRISM_tmean_stable_4kmM3_201201_bil", 
+  "PRISM_tmean_stable_4kmM3_201202_bil", "PRISM_tmean_stable_4kmM3_201301_bil", 
+  "PRISM_tmean_stable_4kmM3_201302_bil", "PRISM_tmean_stable_4kmM3_201401_bil", 
+  "PRISM_tmin_30yr_normal_4kmM2_04_bil", "PRISM_vpdmax_stable_4kmD2_20100101_bil", 
+  "PRISM_vpdmin_stable_4kmM3_2010_bil")
+
+
+
+# all_in helper ----------------
+all_in <- function(x, y) {
+  all(x %in% y) & all(y %in% x)
+}
+
+# filter_folders annual -----------------
+#filter_folders(folders, type, temp_period, years, mon, dates, resolution)
+
+test_that("prism:::filter_folders annual", {
+  expect_equal(
+    filter_folders(folders, "vpdmin", "annual"),
+    filter_folders(folders, "vpdmin", "annual", 2010) 
+  )
+  expect_equal(
+    filter_folders(folders, "tmean", "annual"),
+    filter_folders(folders, "tmean", "annual", 1965) 
+  )
+  expect_true(all_in(
+    filter_folders(folders, "ppt", "annual"),
+    c("PRISM_ppt_stable_4kmM2_1965_bil", "PRISM_ppt_stable_4kmM2_1967_bil",
+      "PRISM_ppt_stable_4kmM2_1970_bil", "PRISM_ppt_stable_4kmM2_1971_bil")
+  ))
+  
+  expect_true(all_in(
+    filter_folders(folders, "ppt", "annual", years = c(1965, 1970)),
+    c("PRISM_ppt_stable_4kmM2_1965_bil", "PRISM_ppt_stable_4kmM2_1970_bil")
+  ))
+})
+
+# filter_folders monthly ------------------
+test_that("prism:::filter_folders monthly", {
+  expect_true(all_in(
+    filter_folders(folders, "ppt", "monthly"),
+    stringr::str_subset(folders, "_ppt") %>% 
+      stringr::str_subset("_\\d{6}_bil")
+  ))
+  
+  expect_true(all_in(
+    filter_folders(folders, "ppt", "monthly", years = c(1965, 1967), mon = 1:2),
+    c("PRISM_ppt_stable_4kmM2_196501_bil", "PRISM_ppt_stable_4kmM2_196502_bil",
+      "PRISM_ppt_stable_4kmM2_196701_bil", "PRISM_ppt_stable_4kmM2_196702_bil")
+  ))
+  
+  expect_true(all_in(
+    filter_folders(folders, "ppt", "monthly", mon = 1),
+    c("PRISM_ppt_stable_4kmM2_196501_bil", "PRISM_ppt_stable_4kmM2_196701_bil",
+      "PRISM_ppt_stable_4kmM2_196901_bil", "PRISM_ppt_stable_4kmM2_197001_bil")
+  ))
+  
+  expect_length(filter_folders(folders, "ppt", "monthly", years = 1965), 12)
+  expect_length(filter_folders(folders, "ppt", "monthly", years = 1965:1967), 24)
+})
+
+# filter_folders daily ------------------
+test_that("prism:::filter_folders annual", {
+  expect_equal(
+    filter_folders(folders, "vpdmax", "daily"),
+    filter_folders(folders, "vpdmax", "daily", dates = "20100101") 
+  )
+  expect_equal(
+    filter_folders(folders, "vpdmax", "daily"),
+    filter_folders(folders, "vpdmax", "daily", years = 2010) 
+  )
+  expect_equal(
+    filter_folders(folders, "vpdmax", "daily"),
+    filter_folders(folders, "vpdmax", "daily", mon = 1) 
+  )
+})
