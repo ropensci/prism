@@ -150,7 +150,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
       # specific dates have been specified
       pattern <- paste0("_", dates, "_")
     }
-  } else if (temp_period == "monthly_normals") {
+  } else if (temp_period == "monthly normals") {
     # normals
     type_folders <- stringr::str_subset(
       type_folders, 

@@ -57,10 +57,15 @@ folders <-
   "PRISM_tmean_stable_4kmM3_201102_bil", "PRISM_tmean_stable_4kmM3_201201_bil", 
   "PRISM_tmean_stable_4kmM3_201202_bil", "PRISM_tmean_stable_4kmM3_201301_bil", 
   "PRISM_tmean_stable_4kmM3_201302_bil", "PRISM_tmean_stable_4kmM3_201401_bil", 
-  "PRISM_tmin_30yr_normal_4kmM2_04_bil", "PRISM_vpdmax_stable_4kmD2_20100101_bil", 
-  "PRISM_vpdmin_stable_4kmM3_2010_bil")
-
-
+  "PRISM_tmin_30yr_normal_4kmM2_04_bil", 
+  "PRISM_vpdmax_stable_4kmD2_20100101_bil", 
+  "PRISM_vpdmin_stable_4kmM3_2010_bil", "PRISM_tdmean_30yr_normal_4kmM2_01_bil",
+  "PRISM_tdmean_30yr_normal_4kmM2_02_bil", 
+  "PRISM_tdmean_30yr_normal_4kmM2_03_bil",
+  "PRISM_tdmean_30yr_normal_4kmM2_annual_bil",
+  "PRISM_tdmean_30yr_normal_800mM2_09_bil", 
+  "PRISM_tdmean_30yr_normal_800mM2_10_bil",
+  "PRISM_tdmean_30yr_normal_800mM2_annual_bil")
 
 # all_in helper ----------------
 all_in <- function(x, y) {
@@ -116,6 +121,7 @@ test_that("prism:::filter_folders monthly", {
 })
 
 # filter_folders daily ------------------
+tmp_days <- c("20130601", "20130605", "20130609", "20130614")
 test_that("prism:::filter_folders annual", {
   expect_equal(
     filter_folders(folders, "vpdmax", "daily"),
@@ -129,4 +135,77 @@ test_that("prism:::filter_folders annual", {
     filter_folders(folders, "vpdmax", "daily"),
     filter_folders(folders, "vpdmax", "daily", mon = 1) 
   )
+  
+  expect_equal(
+    filter_folders(folders, "tmean", "daily"),
+    filter_folders(folders, "tmean", "daily", years = 2013)
+  )
+  
+  expect_equal(
+    filter_folders(folders, "tmean", "daily"),
+    filter_folders(folders, "tmean", "daily", mon = 6)
+  )
+  
+  expect_equal(
+    filter_folders(folders, "tmean", "daily"),
+    filter_folders(folders, "tmean", "daily", years = 2013, mon = 6)
+  )
+  
+  expect_true(all_in(
+    filter_folders(folders, "tmean", "daily", dates = tmp_days),
+    paste0("PRISM_tmean_stable_4kmD2_", tmp_days, "_bil")
+  ))
+})
+
+# filter_folders normals ------------------
+# TODO: check using both resolutions
+test_that("prism:::filter_folders normals", {
+  # 4km --------------
+  expect_equal(
+    filter_folders(folders, "tdmean", "monthly normals", resolution = "4km"),
+    filter_folders(
+      folders, 
+      "tdmean", 
+      "monthly normals", 
+      mon = 1:3, 
+      resolution = "4km"
+    )
+  )
+  
+  expect_true(all_in(
+    filter_folders(folders, "tdmean", "monthly normals", resolution = "4km"),
+    paste0("PRISM_tdmean_30yr_normal_4kmM2_", prism:::mon_to_string(1:3), "_bil")
+  ))
+  
+  expect_true(all_in(
+    filter_folders(folders, "tdmean", "annual normals", resolution = "4km"),
+    "PRISM_tdmean_30yr_normal_4kmM2_annual_bil"
+  ))
+  
+  # 800m --------------
+  
+  expect_equal(
+    filter_folders(folders, "tdmean", "monthly normals", resolution = "800m"),
+    filter_folders(
+      folders, 
+      "tdmean", 
+      "monthly normals", 
+      mon = 9:10, 
+      resolution = "800m"
+    )
+  )
+  
+  expect_true(all_in(
+    filter_folders(folders, "tdmean", "monthly normals", resolution = "800m"),
+    paste0(
+      "PRISM_tdmean_30yr_normal_800mM2_", 
+      prism:::mon_to_string(9:10), 
+      "_bil"
+    )
+  ))
+  
+  expect_true(all_in(
+    filter_folders(folders, "tdmean", "annual normals", resolution = "800m"),
+    "PRISM_tdmean_30yr_normal_800mM2_annual_bil"
+  ))
 })
