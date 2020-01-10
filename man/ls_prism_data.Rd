@@ -29,4 +29,8 @@ ls_prism_data(absPath = TRUE)
 ### See prism files you have with title of data product
 ls_prism_data(name=TRUE)
 }
+
+}
+\seealso{
+\code{\link[=prism_subset_folders]{prism_subset_folders()}}
 }

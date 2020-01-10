@@ -8,7 +8,7 @@
 #' `temp_period` must be specifed so the function can distinguish between 
 #' wanting annual data or wanting monthly data for a specified year. For example
 #' `prism_subset_folders("tmean", "annual", years = 2012)` would provide only 
-#' one folder: the annual tmean folder. However, 
+#' one folder: the annual average temperature for 2012. However, 
 #' `prism_subset_folders("tmean", "monthly", years = 2012)` would provide 12
 #' folders: each monthly tmean folder for 2012. 
 #' 
@@ -19,7 +19,11 @@
 #' 
 #' `minDate`/`maxDate` or `dates` should only be specified for a `temp_period` 
 #' of "daily". Additionally, only `dates`, or `minDate` and `maxDate`, should be
-#' specified, but all three should not be specified.
+#' specified, but all three should not be specified. Nor should the daily 
+#' specifies be combined with `years` and/or `mon`. For example, if daily 
+#' folders are desired, then specify `years` and/or `mon` to get all days for 
+#' those years and months **or** specify the specific dates using 
+#' `minDate`/`maxDate` or `dates` 
 #' 
 #' @param type The type of data you want to subset. Must be "ppt", "tmean", 
 #'   "tmin", "tmax", "tdmean", "vpdmin", or "vpdmax".
@@ -45,6 +49,38 @@
 #' 
 #' @param resolution The spatial resolution of the data, must be either "4km" or
 #'   "800m". Should only be specified for `temp_period` of "normals".
+#'   
+#' @return A character vector of the folders that meet the type and temporal
+#'   period specified. `character(0)` is returned if no folders are found that
+#'   meet the specifications.
+#'   
+#' @seealso [ls_prism_data()]
+#' 
+#' @examples 
+#' \dontrun{
+#' # get all annual tmin
+#' prism_subset_folders("tmin", "annual")
+#' # get only 2000-2015 annual tmin
+#' prism_subset_folder("tmin", "annual", years = 2000-2015)
+#' 
+#' # get monthly precipitation for 2000-2010
+#' prism_subset_folders("ppt", "monthly", years = 2000-2010)
+#' # get only June-August monthly precip data for 2000-2010
+#' prism_subset_folders("ppt", "monthly", years = 2000-2010, mon = 6:8)
+#' 
+#' # get all daily tmax for July-August in 2010
+#' prism_subset_folders("tmax", "daily", years = 2010, mon = 7:8)
+#' # same as:
+#' prism_subset_folders(
+#'   "tmax", 
+#'   "daily", 
+#'   minDate = "2010-07-01", 
+#'   maxDate = "2010-08-31"
+#' )
+#' 
+#' # get the 4km 30-year average precip for January and February
+#' prism_subset_folders("ppt", "monthly normals", mon = 1:2, resolution = "4km")
+#' }
 #' 
 #' @export
 prism_subset_folders <- function(type, temp_period, years = NULL, mon = NULL, 

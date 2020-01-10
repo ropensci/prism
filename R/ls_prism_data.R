@@ -14,6 +14,9 @@
 #' ### See prism files you have with title of data product
 #' ls_prism_data(name=TRUE)
 #' }
+#' 
+#' @seealso [prism_subset_folders()]
+#' 
 #' @export
 
 ls_prism_data <- function(absPath = FALSE, name = FALSE){
