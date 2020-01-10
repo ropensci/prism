@@ -8,11 +8,10 @@
 #' @return \code{logical} indicating whether the process succeeded.
 #' 
 #' @export
-#' 
-#' @importFrom magrittr %>%
 check_corrupt <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
-    dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-    folders_to_check <- subset_prism_folders(type, dates)
+  type <- match.arg(type, prism_vars())  
+  dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
+    folders_to_check <- prism_subset_folders(type, "daily", dates)
      
     # Check for missing dates:
     folders_dates <- stringr::str_extract(folders_to_check, "[0-9]{8}")

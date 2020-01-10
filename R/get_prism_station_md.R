@@ -17,7 +17,7 @@ get_prism_station_md <- function(type, minDate = NULL, maxDate = NULL,
   prism_check_dl_dir()
   type <- match.arg(type, prism_vars())
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-  folders_to_get <- subset_prism_folders(type = type, dates = dates)
+  folders_to_get <- prism_subset_folders(type, "daily", dates = dates)
   if(length(folders_to_get) == 0){
     stop(
       "None of the requested dates are available.\n", 

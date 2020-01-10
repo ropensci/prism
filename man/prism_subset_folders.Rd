@@ -30,7 +30,7 @@ character or \link[base:Date]{base::Date} class.}
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Date]{base::Date} class.}
 
-\item{resoultion}{The spatial resolution of the data, must be either "4km" or
+\item{resolution}{The spatial resolution of the data, must be either "4km" or
 "800m". Should only be specified for \code{temp_period} of "normals".}
 }
 \description{

@@ -1,3 +1,4 @@
+
 # sample folders -----------------
 folders <- 
   c("PRISM_ppt_stable_4kmM2_1965_bil", "PRISM_ppt_stable_4kmM2_196501_bil", 
@@ -71,6 +72,129 @@ folders <-
 all_in <- function(x, y) {
   all(x %in% y) & all(y %in% x)
 }
+
+# prism_subset_folders() errors ------------------
+test_that("prism_subset_folders() errors correctly", {
+  # unsupported variables
+  expect_error(prism_subset_folders("tmaxx", "annual"))
+  expect_error(prism_subset_folders("vpdmiin", "annual"))
+  # unsupported temp_period
+  expect_error(prism_subset_folders("tmean", "ann"))
+  expect_error(prism_subset_folders("tmean", "annual_normals"))
+  
+  # annual - unnecessary specifications
+  expect_error(
+    prism_subset_folders("tmean", "annual", mon = 1),
+    "No need to specify `mon` for 'annual' `temp_period`"
+  )
+  expect_error(
+    prism_subset_folders("tmean", "annual", dates = "2018-01-01"),
+    "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
+  )
+  expect_error(
+    prism_subset_folders(
+      "tmean", "annual", minDate = "2018-01-01", maxDate = "2018-01-05"
+    ),
+    "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
+  )
+  expect_error(
+    prism_subset_folders("tmean", "annual", resolution = "4km"),
+    "`resolution` should only be specified when `temp_period` is 'normals'"
+  )
+  
+  # monthly - unnecessary specifications
+  expect_error(
+    prism_subset_folders("tmean", "monthly", dates = "2018-01-01"),
+    "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
+  )
+  expect_error(
+    prism_subset_folders(
+      "tmean", "monthly", minDate = "2018-01-01", maxDate = "2018-01-05"
+    ),
+    "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
+  )
+  expect_error(
+    prism_subset_folders("tmean", "monthly", resolution = "800m"),
+    "`resolution` should only be specified when `temp_period` is 'normals'"
+  )
+  
+  # normals - unecessary/incomplete specifications
+  expect_error(
+    prism_subset_folders("tmean", "annual normals"),
+    "`resolution` must be specified when subsetting normals"
+  )
+  expect_error(
+    prism_subset_folders("tmean", "monthly normals"),
+    "`resolution` must be specified when subsetting normals"
+  )
+  expect_error(
+    prism_subset_folders("tmean", "annual normals", resolution = "4pm")
+  )
+  expect_error(
+    prism_subset_folders("tmean", "monthly normals", resolution = "800mm")
+  )
+  expect_error(
+    prism_subset_folders(
+      "tmean", "annual normals", resolution = "4km", years = 2015
+    ),
+    "No need to specify `years` or `mon` when subsetting 'annual normals'"
+  )
+  expect_error(
+    prism_subset_folders(
+      "tmean", "annual normals", resolution = "800m", mon = 1:12
+    ),
+    "No need to specify `years` or `mon` when subsetting 'annual normals'"
+  )
+  expect_error(
+    prism_subset_folders(
+      "tmean", "monthly normals", resolution = "4km", years = 2015
+    ),
+    "No need to specify `years` for 'monthly normals'"
+  )
+  
+  # daily unnecessary specifications
+  expect_error(
+    prism_subset_folders("ppt", "daily", resolution = "800m"),
+    "`resolution` should only be specified when `temp_period` is 'normals'"
+  )
+  expect_error(
+    prism_subset_folders("tmin", "daily", years = 1999, dates = "1999-01-01"),
+    "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
+  )
+  expect_error(
+    prism_subset_folders("tmin", "daily", mon = 3, minDate = "1999-01-01"),
+    "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
+  )
+})
+
+# prism_subset_folders() with test folders -------------
+test_that("prism_subset_folders() works", {
+  expect_equal(
+    prism_subset_folders("ppt", "daily"),
+    prism_subset_folders("ppt", "daily", years = c(1981, 1991, 2011))
+  )
+  expect_equal(
+    prism_subset_folders("ppt", "daily"),
+    prism_subset_folders("ppt", "daily", mon = 1)
+  )
+  expect_equal(
+    prism_subset_folders("tmin", "daily"),
+    prism_subset_folders("tmin", "daily", mon = c(1,6))
+  )
+  expect_equal(
+    prism_subset_folders("tmin", "daily"),
+    prism_subset_folders("tmin", "daily", years = c(1981, 2011))
+  )
+  expect_equal(
+    prism_subset_folders("tmin", "daily"),
+    prism_subset_folders("tmin", "daily", years = 1981:2011)
+  )
+  expect_true(all_in(
+    prism_subset_folders("tmin", "daily"),
+    c("PRISM_tmin_stable_4kmD2_19810101_bil", 
+      "PRISM_tmin_stable_4kmD2_20110615_bil")
+  ))
+})
 
 # filter_folders annual -----------------
 #filter_folders(folders, type, temp_period, years, mon, dates, resolution)

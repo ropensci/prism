@@ -43,7 +43,7 @@
 #'   a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a 
 #'   character or [base::Date] class.
 #' 
-#' @param resoultion The spatial resolution of the data, must be either "4km" or
+#' @param resolution The spatial resolution of the data, must be either "4km" or
 #'   "800m". Should only be specified for `temp_period` of "normals".
 #' 
 #' @export
@@ -54,6 +54,7 @@ prism_subset_folders <- function(type, temp_period, years = NULL, mon = NULL,
   prism_check_dl_dir()
   
   type <- match.arg(type, prism_vars())
+
   temp_period <- match.arg(
     temp_period, 
     c("annual", "monthly", "daily", "monthly normals", "annual normals")
@@ -196,12 +197,15 @@ check_subset_folders_args <- function(type, temp_period, years, mon, minDate,
                                       maxDate, dates, resolution) 
 {
   both_norm <- c("monthly normals", "annual normals")
-  
+
   # resolution only specified for normals and must be specified
-  if (temp_period %in% both_norm & is.null(resolution))
-    stop("`resolution` must be specified when `temp_period` is 'normals'")
+  if (temp_period %in% both_norm) {
+    if (is.null(resolution))
+      stop("`resolution` must be specified when subsetting normals")
+    resolution <- match.arg(resolution, c("4km", "800m"))
+  }
   
-  if (!(tmp_period %in% both_norm) & !is.null(resolution))
+  if (!(temp_period %in% both_norm) & !is.null(resolution))
     stop("`resolution` should only be specified when `temp_period` is 'normals'")
   
   # day specifications only for daily
@@ -217,4 +221,8 @@ check_subset_folders_args <- function(type, temp_period, years, mon, minDate,
   
   if (temp_period == "annual" & !is.null(mon))
     stop("No need to specify `mon` for 'annual' `temp_period`")
+ 
+  if (temp_period == "daily" & (!is.null(mon) | !is.null(years)) & 
+      (!is.null(dates) | !is.null(minDate) | !is.null(maxDate)))
+    stop("Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`")
 }
