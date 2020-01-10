@@ -20,9 +20,8 @@
 #' @export
 
 ls_prism_data <- function(absPath = FALSE, name = FALSE){
-  if (is.null(getOption('prism.path'))) {
-    path_check()
-  }
+  prism_check_dl_dir()
+  
   files <- list.files(getOption('prism.path'))
   files <- files[grep("zip", files, invert=TRUE)]
   # Attempt to ensure that only PRISM files are counted. 
