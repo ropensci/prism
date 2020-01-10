@@ -13,6 +13,7 @@
 * all `get_prism_*()` functions are documented in same man page. (#79)
 * removed man pages for non-exported functions
 * more tests
+* new function: `prism_subset_folders()`. This makes it much easier to get the data for a specific type/temporal period, once it has been downloaded onto the system. (#69)
 
 # prism 0.1.0
 
