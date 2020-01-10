@@ -1,9 +1,9 @@
 
 dl_folder <- file.path(tempdir(), "prism")
-setup({
-  dir.create(dl_folder)
-  options(prism.path = dl_folder)
-})
+cur_path <- getOption("prism.path")
+setup({prism_set_dl_dir(dl_folder)})
+teardown({prism_set_dl_dir(cur_path)})
+
 
 cat("\n\n***************************************")
 cat("\nmake sure you run this 2x or less in any given day!!!!\n")
@@ -12,12 +12,12 @@ cat("****************************************\n")
 #teardown(unlink(dl_folder, recursive = TRUE))
 
 # skip flags -----------------
-skip_normals <- FALSE
-skip_annual <- FALSE
-skip_monthly <- FALSE
-skip_daily <- FALSE
-skip_daily_3 <- FALSE
-skip_daily_prov <- FALSE
+skip_normals <- TRUE
+skip_annual <- TRUE
+skip_monthly <- TRUE
+skip_daily <- TRUE
+skip_daily_3 <- TRUE
+skip_daily_prov <- TRUE
 
 # Normals ---------------
 test_that("normals download", {

@@ -1,4 +1,4 @@
 library(testthat)
-suppressPackageStartupMessageslibrary(prism)
+suppressPackageStartupMessages(library(prism))
 
 test_check("prism")
