@@ -194,6 +194,11 @@ test_that("prism_subset_folders() works", {
     c("PRISM_tmin_stable_4kmD2_19810101_bil", 
       "PRISM_tmin_stable_4kmD2_20110615_bil")
   ))
+  
+  expect_identical(
+    prism_subset_folders("tmin", "daily", years = 2020), 
+    character(0)
+  )
 })
 
 # filter_folders annual -----------------
