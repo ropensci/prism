@@ -12,12 +12,12 @@ cat("****************************************\n")
 #teardown(unlink(dl_folder, recursive = TRUE))
 
 # skip flags -----------------
-skip_normals <- TRUE
-skip_annual <- TRUE
-skip_monthly <- TRUE
-skip_daily <- TRUE
-skip_daily_3 <- TRUE
-skip_daily_prov <- TRUE
+skip_normals <- FALSE
+skip_annual <- FALSE
+skip_monthly <- FALSE
+skip_daily <- FALSE
+skip_daily_3 <- FALSE
+skip_daily_prov <- FALSE
 
 # Normals ---------------
 test_that("normals download", {
