@@ -1,7 +1,7 @@
 #' Download PRISM via webservice
 #' 
-#' This is the workhorse function that will access the web service to download 
-#' files.
+#' This is the workhorse function that accesses the web service to download 
+#' files. It is called by the get_prism_*() functions. 
 #' 
 #' @param uri a valid PRISM webservice URI
 #' 
@@ -23,8 +23,7 @@
 #'   keepZip = FALSE
 #' )
 #' }
-#' 
-#' @export
+#' @noRd
 
 prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE, 
                              pre81_months = NULL)

@@ -17,7 +17,7 @@ not yet downloaded; \code{FALSE} returns the file names that are not yet
 downloaded.}
 
 \item{pre81_months}{Numeric vector of months that will be downloaded, if
-downloading data before 1981. This is so that the existance of the data can
+downloading data before 1981. This is so that the existence of the data can
 be correctly checked, as the file includes all monthly data for a given
 year.}
 }

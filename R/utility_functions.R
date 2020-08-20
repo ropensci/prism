@@ -28,13 +28,16 @@ mon_to_string <- function(month)
 #' 
 #' `prism_check()` is deprecated. Use `prism_not_downloaded()` instead.
 #' 
-#' @inheritParams prism_webservice
-#' 
 #' @param prismfiles a list of full prism file names ending in ".zip". 
 #' 
 #' @param lgl `TRUE` returns a logical vector indicating those
 #'   not yet downloaded; `FALSE` returns the file names that are not yet 
 #'   downloaded.
+#'   
+#' @param pre81_months Numeric vector of months that will be downloaded, if 
+#'   downloading data before 1981. This is so that the existence of the data can
+#'   be correctly checked, as the file includes all monthly data for a given 
+#'   year.
 #' 
 #' @return a character vector of file names that are not yet downloaded
 #'   or a logical vector indication those not yet downloaded.
