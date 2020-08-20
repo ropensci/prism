@@ -7,8 +7,8 @@
 get_prism_station_md(type, minDate = NULL, maxDate = NULL, dates = NULL)
 }
 \arguments{
-\item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
-"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean ==  mean(tmin, tmax)}.}
+\item{type}{The type of data to download. Must be "ppt", "tmin", "tmax",
+"tdmean", "vpdmin", or "vpdmax".}
 
 \item{minDate}{Date to start downloading daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
@@ -30,7 +30,8 @@ day and variable.
 \code{get_prism_station_md()} extracts prism metadata on the stations used to
 generate a particular day and variable. This only extracts metadata from
 daily PRISM data. \strong{The daily data must already be downloaded and available
-in the prism download folder.}
+in the prism download folder.} Note that station metadata does not exist for
+tmean.
 }
 \examples{
 \dontrun{

@@ -22,6 +22,7 @@ test_that("get_prism_station_md() works", {
 # errors -------------------------
 test_that("get_prism_station_md() errors", {
   expect_error(get_prism_station_md("weird", dates = "2018-01-01"))
+  expect_error(get_prism_station_md("tmean", dates = "2019-01-01"))
   expect_error(
     get_prism_station_md("tmax", dates = "2018-01-01"),
     paste0(

@@ -3,7 +3,11 @@
 #' `get_prism_station_md()` extracts prism metadata on the stations used to 
 #' generate a particular day and variable. This only extracts metadata from 
 #' daily PRISM data. **The daily data must already be downloaded and available  
-#' in the prism download folder.**
+#' in the prism download folder.** Note that station metadata does not exist for
+#' tmean.
+#'
+#' @param type The type of data to download. Must be "ppt", "tmin", "tmax", 
+#'   "tdmean", "vpdmin", or "vpdmax".
 #'
 #' @inheritParams get_prism_dailys
 #'
@@ -25,7 +29,7 @@ get_prism_station_md <- function(type, minDate = NULL, maxDate = NULL,
                                  dates = NULL)
 {
   prism_check_dl_dir()
-  type <- match.arg(type, prism_vars())
+  type <- match.arg(type, prism_vars()[prism_vars() != "tmean"])
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
   folders_to_get <- prism_subset_folders(type, "daily", dates = dates)
   if (length(folders_to_get) == 0) {
