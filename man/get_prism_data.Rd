@@ -8,21 +8,30 @@
 \alias{get_prism_normals}
 \title{Download prism data}
 \usage{
-get_prism_annual(type, years = NULL, keepZip = TRUE,
-  keep_pre81_months = FALSE)
+get_prism_annual(type, years = NULL, keepZip = TRUE, keep_pre81_months = FALSE)
 
-get_prism_dailys(type, minDate = NULL, maxDate = NULL, dates = NULL,
-  keepZip = TRUE, check = "httr")
+get_prism_dailys(
+  type,
+  minDate = NULL,
+  maxDate = NULL,
+  dates = NULL,
+  keepZip = TRUE,
+  check = "httr"
+)
 
-get_prism_monthlys(type, years = NULL, mon = NULL, keepZip = TRUE,
-  keep_pre81_months = TRUE)
+get_prism_monthlys(
+  type,
+  years = NULL,
+  mon = NULL,
+  keepZip = TRUE,
+  keep_pre81_months = TRUE
+)
 
-get_prism_normals(type, resolution, mon = NULL, annual = FALSE,
-  keepZip = TRUE)
+get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
 }
 \arguments{
 \item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
-"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean == mean(tmin, tmax)}.}
+"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean ==  mean(tmin, tmax)}.}
 
 \item{years}{a valid numeric year, or vector of years, to download data for.
 If no month is specified, year averages for that year will be downloaded.}

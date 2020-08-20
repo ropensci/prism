@@ -4,8 +4,16 @@
 \alias{prism_subset_folders}
 \title{Subsets PRISM folders on the disk}
 \usage{
-prism_subset_folders(type, temp_period, years = NULL, mon = NULL,
-  minDate = NULL, maxDate = NULL, dates = NULL, resolution = NULL)
+prism_subset_folders(
+  type,
+  temp_period,
+  years = NULL,
+  mon = NULL,
+  minDate = NULL,
+  maxDate = NULL,
+  dates = NULL,
+  resolution = NULL
+)
 }
 \arguments{
 \item{type}{The type of data you want to subset. Must be "ppt", "tmean",

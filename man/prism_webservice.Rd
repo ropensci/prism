@@ -4,8 +4,7 @@
 \alias{prism_webservice}
 \title{Download PRISM via webservice}
 \usage{
-prism_webservice(uri, keepZip = FALSE, returnName = FALSE,
-  pre81_months = NULL)
+prism_webservice(uri, keepZip = FALSE, returnName = FALSE, pre81_months = NULL)
 }
 \arguments{
 \item{uri}{a valid PRISM webservice URI}

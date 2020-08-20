@@ -9,7 +9,7 @@ prism_slice(location, prismfile)
 \arguments{
 \item{location}{a vector of a single location in the form of long,lat}
 
-\item{prismfile}{a vector of output from \code{\link[=ls_prism_data]{ls_prism_data()}}\code{[,1]} giving a
+\item{prismfile}{a vector of output from \code{\link[=ls_prism_data]{ls_prism_data()}}\verb{[,1]} giving a
 list of prism files to extract data from and plot}
 }
 \value{

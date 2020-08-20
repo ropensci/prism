@@ -8,7 +8,7 @@ del_early_prov(type, minDate = NULL, maxDate = NULL, dates = NULL)
 }
 \arguments{
 \item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
-"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean == mean(tmin, tmax)}.}
+"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean ==  mean(tmin, tmax)}.}
 
 \item{minDate}{Date to start downloading daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
