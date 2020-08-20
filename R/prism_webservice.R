@@ -63,10 +63,26 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     if (!downloaded) {
       warning(paste0("Downloading failed"))
     } else {
+      
+      # check and make sure the download file is actually a zip file. If it 
+      # is not a zip file, then likely an error b/c of too many attempts to 
+      # download the same file
+      is_zip <- check_zip_file(outFile)
+      if (!is.logical(is_zip)) {
+        # is_zip is an error message
+        warning(is_zip)
+        return(NULL)
+      }
+      
+      ofolder <- strsplit(outFile, ".zip")[[1]]
       suppressWarnings(
-        utils::unzip(outFile, exdir = strsplit(outFile, ".zip")[[1]])
+        utils::unzip(outFile, exdir = ofolder)
       )
-      if(!keepZip){
+      
+      # make sure unzipped folder is not empty
+      check_unzipped_folder(ofolder, uri)
+      
+      if (!keepZip) {
         file.remove(outFile)
       }
     }
@@ -75,4 +91,32 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
   if (returnName) {
     return(fn)
   }
+}
+
+# x is the file to check. 
+# returns TRUE if it is a zip file, and otherwiser returns text that was read
+check_zip_file <- function(x) {
+  zfile <- readLines(x, warn = FALSE)
+  
+  # zip files have "PK\....." in their first line
+  is_zip <- grepl("^PK\003\004", zfile[1])
+  
+  if (is_zip) {
+    return(is_zip)
+  } else{
+    return(zfile)
+  }
+}
+
+# check to see that there are files in the unzipped folder
+check_unzipped_folder <- function(x, uri) {
+  if (length(list.files(x)) == 0) {
+    warning(
+      "Something went wrong and the unzipped folder is empty.\n",
+      "You might try downloading manually by browsing to the following url:\n",
+      uri
+    )
+  }
+  
+  invisible(x)
 }
