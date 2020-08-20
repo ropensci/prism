@@ -7,7 +7,7 @@
 * Check that pre-1981 data does not exist before downloading it. To do this, `prism_webservice()` and `prism_check()` gain a `pre81_months` parameter, which allows the functions to know which months were requested for downloading. (#81)
 * Replacing `prism_check()` with `prism_not_downloaded()`. `prism_check()` is deprecated and will be removed in the next release.
 * Replacing `check_path()` with `prism_check_dl_dir()`. `check_path()` is deprecated and will be removed in the next release.
-* Added `prism_set_dl_dir()` as an easy way to set path and make sure it is valid.
+* Added `prism_set_dl_dir()` as an easy way to set path and make sure it is valid. Added `prism_get_dl_dir()` as an easy way to get the download directory path without remembering the option ("prism.path"). 
 * `get_prism_normals()` will now error if neither monthly nor annual data are specified to be downloaded. (#77)
 * `get_prism_normals()` will now download monthly and annual data simultaneously if asked to do so. (#77)
 * all `get_prism_*()` functions are documented in same man page. (#79)
