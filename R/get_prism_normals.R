@@ -4,8 +4,6 @@
 #'   or 800m grid cell resolution for precipitation, mean, min and max 
 #'   temperature
 #' 
-#' @inheritParams get_prism_annual
-#' 
 #' @param resolution The spatial resolution of the data, must be either "4km" 
 #'   or "800m".
 #' 

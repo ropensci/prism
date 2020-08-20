@@ -1,5 +1,4 @@
-#' @inheritParams get_prism_annual
-#' 
+
 #' @param minDate Date to start downloading daily data. Must be specified in 
 #'   a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a 
 #'   character or [base::Date] class.

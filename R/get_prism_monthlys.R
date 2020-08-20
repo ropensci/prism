@@ -1,5 +1,4 @@
-#' @inheritParams get_prism_annual
-#' 
+
 #' @param mon a valid numeric month, or vector of months.
 #' 
 #' @examples \dontrun{
