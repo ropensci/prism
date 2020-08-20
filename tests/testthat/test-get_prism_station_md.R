@@ -24,7 +24,32 @@ test_that("get_prism_station_md() errors", {
   expect_error(get_prism_station_md("weird", dates = "2018-01-01"))
   expect_error(
     get_prism_station_md("tmax", dates = "2018-01-01"),
-    paste0("None of the requested dates are available.\n", 
-    "You must first download the daily data.")
+    paste0(
+      "None of the requested dates are available.\n", 
+      "  You must first download the daily data using `get_prism_dailys()`."
+    ),
+    fixed = TRUE
+  )
+  
+  expect_warning(
+    expect_s3_class(
+      get_prism_station_md(
+        avail_files[1, 1], 
+        minDate = avail_files[1, 2], 
+        maxDate = as.Date(avail_files[1, 2]) + 19
+      ), 
+      "tbl_df"
+    )
+  )
+  
+  expect_warning(
+    expect_s3_class(
+      get_prism_station_md(
+        avail_files[2, 1], 
+        minDate = avail_files[2, 2], 
+        maxDate = as.Date(avail_files[2, 2]) + 1
+      ), 
+      "tbl_df"
+    )
   )
 })

@@ -15,6 +15,7 @@
 * more tests
 * new function: `prism_subset_folders()`. This makes it much easier to get the data for a specific type/temporal period, once it has been downloaded onto the system. (#69)
 * Now report when user has exceeded the allowable number of attempts to download the same file (in one day). If user tries to download the same file more than two times in one day, the message is posted as a warning. It is not posted as an error so that if a query of multiple files runs into this issue, it does not abort the full query. Another warning posts if the unzipped folder is empty. (#80)
+* `get_prism_station_md()` now reports a warning if not all requested dates exist in the metadata data frame. (#87 related)
 
 # prism 0.1.0
 

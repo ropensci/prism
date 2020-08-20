@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_prism_station_md.R
 \name{get_prism_station_md}
 \alias{get_prism_station_md}
-\title{Extract prsim metadata}
+\title{Extract prism metadata}
 \usage{
 get_prism_station_md(type, minDate = NULL, maxDate = NULL, dates = NULL)
 }
@@ -27,7 +27,19 @@ A \code{tbl_df} containing metadata on the stations used for the specified
 day and variable.
 }
 \description{
-Extracts prism metadata on the stations used to generate a particular day
-and variable. This only extracts metadata from daily PRISM data. The daily
-data must already be downloaded and available in the "prism.path".
+\code{get_prism_station_md()} extracts prism metadata on the stations used to
+generate a particular day and variable. This only extracts metadata from
+daily PRISM data. \strong{The daily data must already be downloaded and available
+in the prism download folder.}
+}
+\examples{
+\dontrun{
+# download and then get meta data for January 1, 2010 precipitation
+get_prism_dailys("ppt", dates = "2010-01-01")
+get_prism_station_md("ppt", dates = "2010-01-01")
+}
+  
+}
+\seealso{
+\code{\link[=get_prism_dailys]{get_prism_dailys()}}
 }
