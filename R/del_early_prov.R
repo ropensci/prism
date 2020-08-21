@@ -1,4 +1,5 @@
-#' @title Delete early / provisional PRISM data if replaced by provisional / stable data.
+#' Delete early / provisional PRISM data if replaced by provisional / stable data.
+#' 
 #' @description Searches the download folder for duplicated PRISM data
 #' and keeps only the newest version.
 #' @inheritParams get_prism_dailys
@@ -10,13 +11,10 @@ del_early_prov <- function (type, minDate = NULL, maxDate = NULL, dates = NULL)
   path_check()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, 
                              dates = dates)
-  md <- get_metadata(type = type, dates = dates)
-  md <- lapply(md, function(x) {
-    names(x) <- stringr::str_replace(names(x), "_DATASET", 
-                                     "")
-    x
-  })
-  mddf <- dplyr::bind_rows(md)
+  mddf <- prism_data_get_md(type = type, dates = dates)
+
+  # TODO: figure out what's going on below this, as there is no dates_str 
+  # returned by get_metadata()
   mddf$dates_str <- stringr::str_extract(mddf$PRISM_FILENAME, 
                                          "[0-9]{8}")
   duplicates <- mddf$dates_str[duplicated(mddf$dates_str)]
