@@ -188,7 +188,7 @@ process_zip <- function(pfile, name)
 #' @noRd
 get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL)
 {
-  path_check()
+  prism_check_dl_dir()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
   dates_str <- gsub("-", "", dates)
   prism_folders <- list.files(path = getOption("prism.path"))
@@ -343,4 +343,15 @@ gen_dates <- function(minDate, maxDate, dates){
 prism_vars <- function()
 {
   c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean")
+}
+
+# maps prism variables and names
+prism_var_names <- function() {
+  x <- c("Precipitation", "Mean temperature", "Minimum temperature", 
+         "Maximum temperature", "Minimum vapor pressure deficit",
+         "Maximum vapor pressure deficit", "Mean dew point temperature")
+  
+  names(x) <- prism_vars()
+
+  x
 }

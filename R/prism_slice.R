@@ -28,8 +28,8 @@ prism_slice <- function(location,prismfile){
     stop("You must enter a vector of file names, not a data frame, try  ls_prism_data()[,1]")
   }
   
-  meta_d <- unlist(prism_md(prismfile,returnDate=T))
-  meta_names <- unlist(prism_md(prismfile))[1]
+  meta_d <- prism_data_get_date(prismfile)
+  meta_names <- prism_data_get_name(prismfile)[1]
   param_name <- strsplit(meta_names,"-")[[1]][3]
 
   pstack <- prism_stack(prismfile)
@@ -46,9 +46,11 @@ prism_slice <- function(location,prismfile){
     u <- "hPA"
   }
     
-  
-  
-  out <- ggplot(data,aes(x=date,y=data))+geom_path()+geom_point()+xlab("Date") + ylab(paste(param_name,u,sep=" "))
+  out <- ggplot(data,aes(x=date,y=data)) +
+    geom_path() +
+    geom_point() +
+    xlab("Date") + 
+    ylab(paste(param_name,u,sep=" "))
   
   return(out)
 }

@@ -23,22 +23,23 @@ ls_prism_data <- function(absPath = FALSE, name = FALSE){
   prism_check_dl_dir()
   
   files <- list.files(getOption('prism.path'))
-  files <- files[grep("zip", files, invert=TRUE)]
+  # remove zip files
+  files <- files[grep("zip", files, invert = TRUE)]
   # Attempt to ensure that only PRISM files are counted. 
   files <- files[grep("PRISM", files)]
-  fullPath <- paste(getOption('prism.path'), files, 
-                    paste0(files, ".bil"), sep="/")
-  meta_d <- unlist(prism_md(files))
-  out <- data.frame(files,stringsAsFactors = F)
+  fullPath <- file.path(getOption('prism.path'), files, 
+                    paste0(files, ".bil"))
+  
+  out <- data.frame(files, stringsAsFactors = FALSE)
   
   if(absPath){
   out$abs_path <- fullPath
   } 
   
   if(name){
+    meta_d <- prism_data_get_name(files)
     out$product_name <- meta_d
-   
   }
-    return(out)
-  
+    
+  out
 }
