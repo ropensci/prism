@@ -41,7 +41,7 @@ test_that("get_prism_station_md() errors", {
     get_prism_station_md("tmax", "daily", dates = "2018-01-01"),
     paste0(
       "None of the requested dates are available.\n", 
-      "  You must first download the daily data using `get_prism_dailys()`."
+      "  You must first download the data using `get_prism_*()`."
     ),
     fixed = TRUE
   )

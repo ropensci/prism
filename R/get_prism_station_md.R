@@ -62,7 +62,7 @@ get_prism_station_md <- function(type, temp_period, years = NULL, mon = NULL,
   if (length(folders_to_get) == 0) {
     stop(
       "None of the requested dates are available.\n", 
-      "  You must first download the daily data using `get_prism_dailys()`."
+      "  You must first download the data using `get_prism_*()`."
     )
   }
   
