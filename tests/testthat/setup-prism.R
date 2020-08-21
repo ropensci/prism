@@ -18,7 +18,9 @@ avail_tmin <- paste0(
   "_bil"
 )
 
-all_avail <- c(avail_tmin, avail_ppt)
+avail_tdmean <- paste0("PRISM_tdmean_stable_4kmM3_2005", 11:12, "_bil")
+
+all_avail <- c(avail_tmin, avail_ppt, avail_tdmean)
 
 for (ff in all_avail) {
   utils::unzip(

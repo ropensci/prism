@@ -2,13 +2,30 @@
 % Please edit documentation in R/get_prism_station_md.R
 \name{get_prism_station_md}
 \alias{get_prism_station_md}
-\title{Extract prism metadata}
+\title{Extract prism station metadata}
 \usage{
-get_prism_station_md(type, minDate = NULL, maxDate = NULL, dates = NULL)
+get_prism_station_md(
+  type,
+  temp_period,
+  years = NULL,
+  mon = NULL,
+  minDate = NULL,
+  maxDate = NULL,
+  dates = NULL,
+  resolution = NULL
+)
 }
 \arguments{
 \item{type}{The type of data to download. Must be "ppt", "tmin", "tmax",
 "tdmean", "vpdmin", or "vpdmax".}
+
+\item{temp_period}{The temporal period to subset. Must be "monthly", "daily",
+"monthly normals", or "annual normals".}
+
+\item{years}{a valid numeric year, or vector of years, to download data for.
+If no month is specified, year averages for that year will be downloaded.}
+
+\item{mon}{a valid numeric month, or vector of months.}
 
 \item{minDate}{Date to start downloading daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
@@ -21,26 +38,49 @@ character or \link[base:Date]{base::Date} class.}
 \item{dates}{A vector of dates to download daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Date]{base::Date} class.}
+
+\item{resolution}{The spatial resolution of the data, must be either "4km"
+or "800m".}
 }
 \value{
 A \code{tbl_df} containing metadata on the stations used for the specified
-day and variable.
+day and variable. The data frame contains the following columns:
+"date", "temp_period", "type", "station", "name", "longitude",
+"latitude", "elevation", "network", "stnid"
+
+The "date" column is a character with the longest specified date possible
+based on the input. For example, it will be yyyy-mm if getting monthly
+data, and will be yyyy-mm-dd for daily data. It is only mm for monthly
+normals, and it is an empty string for annual normals.
 }
 \description{
 \code{get_prism_station_md()} extracts prism metadata on the stations used to
-generate a particular day and variable. This only extracts metadata from
-daily PRISM data. \strong{The daily data must already be downloaded and available
-in the prism download folder.} Note that station metadata does not exist for
-tmean.
+generate a particular day and variable. \strong{The data must already be downloaded
+and available in the prism download folder.}
+}
+\details{
+Note that station metadata does not exist for "tmean" type or for any
+"annual" temporal periods.
+
+See \code{\link[=prism_subset_folders]{prism_subset_folders()}} for further details
+on specifying ranges of dates for different temporal periods.
 }
 \examples{
 \dontrun{
 # download and then get meta data for January 1, 2010 precipitation
 get_prism_dailys("ppt", dates = "2010-01-01")
-get_prism_station_md("ppt", dates = "2010-01-01")
+get_prism_station_md("ppt", "daily", dates = "2010-01-01")
+
+# will warn that 2010-01-02 is not found:
+get_prism_station_md(
+  "ppt", 
+  "daily", 
+  minDate = "2010-01-01", 
+  maxDate = "2010-01-02"
+)
 }
   
 }
 \seealso{
-\code{\link[=get_prism_dailys]{get_prism_dailys()}}
+\code{\link[=prism_subset_folders]{prism_subset_folders()}}
 }
