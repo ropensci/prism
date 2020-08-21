@@ -7,8 +7,6 @@ avail_files <- rbind(c("ppt", "1981-01-01"), c("ppt", "1991-01-01"),
                      c("ppt", "2011-01-01"), c("tmin", "1981-01-01"),
                      c("tmin", "2011-06-15"))
 
-prism_set_dl_dir("C:/alan/RPackages/ropensci-prism/tests/testthat/prism_test/")
-
 test_that("get_prism_station_md() works", {
   for (i in seq_len(nrow(avail_files))) {
     expect_s3_class(
