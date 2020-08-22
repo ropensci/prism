@@ -11,7 +11,7 @@
 check_corrupt <- function(type, minDate = NULL, maxDate = NULL, dates = NULL){
   type <- match.arg(type, prism_vars())  
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-    folders_to_check <- prism_subset_folders(type, "daily", dates)
+    folders_to_check <- prism_data_subset(type, "daily", dates)
      
     # Check for missing dates:
     folders_dates <- stringr::str_extract(folders_to_check, "[0-9]{8}")

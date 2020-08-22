@@ -30,7 +30,7 @@
 #' Additionally, the normals does not include PRISM_DATASET_VERSION, so that 
 #' variable is added with `NA` values.
 #'   
-#' @inheritParams prism_subset_folders
+#' @inheritParams prism_data_subset
 #' 
 #' @return data.frame containing metadata for all specified dates.
 #' 
@@ -41,7 +41,7 @@ prism_data_get_md <- function(type, temp_period, years = NULL, mon = NULL,
 {
   prism_check_dl_dir()
   
-  final_folders <- prism_subset_folders(type, temp_period, years = years, 
+  final_folders <- prism_data_subset(type, temp_period, years = years, 
                                          mon = mon, minDate = minDate, 
                                          maxDate = maxDate, dates = dates,
                                          resolution = resolution)

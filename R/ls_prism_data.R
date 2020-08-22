@@ -15,7 +15,7 @@
 #' ls_prism_data(name=TRUE)
 #' }
 #' 
-#' @seealso [prism_subset_folders()]
+#' @seealso [prism_data_subset()]
 #' 
 #' @export
 

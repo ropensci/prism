@@ -32,5 +32,5 @@ ls_prism_data(name=TRUE)
 
 }
 \seealso{
-\code{\link[=prism_subset_folders]{prism_subset_folders()}}
+\code{\link[=prism_data_subset]{prism_data_subset()}}
 }

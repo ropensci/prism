@@ -7,7 +7,7 @@
 #' Note that station metadata does not exist for "tmean" type or for any 
 #' "annual" temporal periods. 
 #' 
-#' See [prism_subset_folders()] for further details
+#' See [prism_data_subset()] for further details
 #' on specifying ranges of dates for different temporal periods.
 #'
 #' @param type The type of data to download. Must be "ppt", "tmin", "tmax", 
@@ -28,7 +28,7 @@
 #'   data, and will be yyyy-mm-dd for daily data. It is only mm for monthly 
 #'   normals, and it is an empty string for annual normals.
 #'   
-#' @seealso [prism_subset_folders()]
+#' @seealso [prism_data_subset()]
 #' 
 #' @examples 
 #' \dontrun{
@@ -56,7 +56,7 @@ prism_data_get_station_md <- function(type, temp_period, years = NULL,
   type <- match.arg(type, prism_vars()[prism_vars() != "tmean"])
   #dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
   
-  folders_to_get <- prism_subset_folders(type, temp_period, years = years, 
+  folders_to_get <- prism_data_subset(type, temp_period, years = years, 
                                          mon = mon, minDate = minDate, 
                                          maxDate = maxDate, dates = dates,
                                          resolution = resolution)

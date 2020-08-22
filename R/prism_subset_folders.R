@@ -1,15 +1,15 @@
 #' Subsets PRISM folders on the disk
 #' 
-#' `prism_subset_folders()` subsets the PRISM folders stored on disk by type, 
+#' `prism_data_subset()` subsets the PRISM folders stored on disk by type, 
 #' temporal period, and date. It looks through all of the PRISM data that have
 #' been downloaded in the "prism.path" and returns the subset based on 
 #' `type`, `temp_period`, and specified dates.
 #' 
 #' `temp_period` must be specifed so the function can distinguish between 
 #' wanting annual data or wanting monthly data for a specified year. For example
-#' `prism_subset_folders("tmean", "annual", years = 2012)` would provide only 
+#' `prism_data_subset("tmean", "annual", years = 2012)` would provide only 
 #' one folder: the annual average temperature for 2012. However, 
-#' `prism_subset_folders("tmean", "monthly", years = 2012)` would provide 12
+#' `prism_data_subset("tmean", "monthly", years = 2012)` would provide 12
 #' folders: each monthly tmean folder for 2012. 
 #' 
 #' `temp_period`, `years`, and `mon` can be combined in various different ways 
@@ -59,19 +59,19 @@
 #' @examples 
 #' \dontrun{
 #' # get all annual tmin
-#' prism_subset_folders("tmin", "annual")
+#' prism_data_subset("tmin", "annual")
 #' # get only 2000-2015 annual tmin
 #' prism_subset_folder("tmin", "annual", years = 2000-2015)
 #' 
 #' # get monthly precipitation for 2000-2010
-#' prism_subset_folders("ppt", "monthly", years = 2000-2010)
+#' prism_data_subset("ppt", "monthly", years = 2000-2010)
 #' # get only June-August monthly precip data for 2000-2010
-#' prism_subset_folders("ppt", "monthly", years = 2000-2010, mon = 6:8)
+#' prism_data_subset("ppt", "monthly", years = 2000-2010, mon = 6:8)
 #' 
 #' # get all daily tmax for July-August in 2010
-#' prism_subset_folders("tmax", "daily", years = 2010, mon = 7:8)
+#' prism_data_subset("tmax", "daily", years = 2010, mon = 7:8)
 #' # same as:
-#' prism_subset_folders(
+#' prism_data_subset(
 #'   "tmax", 
 #'   "daily", 
 #'   minDate = "2010-07-01", 
@@ -79,11 +79,11 @@
 #' )
 #' 
 #' # get the 4km 30-year average precip for January and February
-#' prism_subset_folders("ppt", "monthly normals", mon = 1:2, resolution = "4km")
+#' prism_data_subset("ppt", "monthly normals", mon = 1:2, resolution = "4km")
 #' }
 #' 
 #' @export
-prism_subset_folders <- function(type, temp_period, years = NULL, mon = NULL, 
+prism_data_subset <- function(type, temp_period, years = NULL, mon = NULL, 
                                  minDate = NULL, maxDate = NULL, dates = NULL, 
                                  resolution = NULL) 
 {
