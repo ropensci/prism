@@ -2,22 +2,27 @@
 #' 
 #' @description Searches the download folder for duplicated PRISM data
 #' and keeps only the newest version.
+#' 
+#' Daily can be early (current month), provisional (previous 6 months), or 
+#' stable. Monthly can be provisional or stable.
+#' 
 #' @inheritParams get_prism_dailys
 #' @importFrom dplyr bind_rows
-#' @return NULL
+#' @return invisibly returns deleted folders.
 #' @export
 del_early_prov <- function (type, minDate = NULL, maxDate = NULL, dates = NULL) 
 {
-  path_check()
+  prism_check_dl_dir()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, 
                              dates = dates)
-  mddf <- prism_data_get_md(type = type, dates = dates)
+  mddf <- prism_data_get_md(type = type, temp_period = "daily", dates = dates)
 
-  # TODO: figure out what's going on below this, as there is no dates_str 
-  # returned by get_metadata()
-  mddf$dates_str <- stringr::str_extract(mddf$PRISM_FILENAME, 
+  mddf$dates_str <- stringr::str_extract(mddf$PRISM_DATASET_FILENAME, 
                                          "[0-9]{8}")
   duplicates <- mddf$dates_str[duplicated(mddf$dates_str)]
+  
+  out <- NULL
+  
   for (dup in duplicates) {
     dups <- mddf[mddf$dates_str == dup, ]
     dups$dates_num <- as.numeric(dups$dates_str)
@@ -36,15 +41,21 @@ del_early_prov <- function (type, minDate = NULL, maxDate = NULL, dates = NULL)
       # Just assume the later one is newer
       dups$new_to_delete <- dups$to_delete
       dups$new_to_delete[!dups$to_delete] <- TRUE
-      dups$new_to_delete[!dups$to_delete][length(dups$to_delete[!dups$to_delete])] <- FALSE
+      ll <- length(dups$to_delete[!dups$to_delete])
+      dups$new_to_delete[!dups$to_delete][ll] <- FALSE
       dups$to_delete <- dups$new_to_delete
     }
     unlink(dups$folder_path[dups$to_delete], recursive = TRUE)
-    lapply(dups$folder_path[dups$to_delete], function(x){
+    tmp <- lapply(dups$folder_path[dups$to_delete], function(x){
       if(file.exists(x)) {
         warning(paste0("Unable to remove folder ", x, ". Check permissions."))
+      } else {
+        x
       }
     })
+    
+    out <- c(out, unlist(tmp))
   }
-  NULL
+  
+  invisible(out)
 }

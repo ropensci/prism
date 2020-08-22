@@ -22,7 +22,13 @@ character or \link[base:Date]{base::Date} class.}
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Date]{base::Date} class.}
 }
+\value{
+invisibly returns deleted folders.
+}
 \description{
 Searches the download folder for duplicated PRISM data
 and keeps only the newest version.
+
+Daily can be early (current month), provisional (previous 6 months), or
+stable. Monthly can be provisional or stable.
 }

@@ -22,6 +22,7 @@
   * No longer exporting `pr_parse()`. `prism_md()` is the user facing wrapper around it. 
   * Deprecated `prism_md()` in favor of `prism_data_get_name()` (= `prism_md(f, FALSE)`) and `prism_data_get_date()` (= `prism_md(f, TRUE)`). 
 * added `prism_data_get_md()` to parse .info.txt metadata, by converting an existing internal function. (#88)
+* `del_early_prov()` now invisibly returns the folders that it removes.
 
 # prism 0.1.0
 
