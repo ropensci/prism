@@ -30,7 +30,7 @@
 #' Additionally, the normals does not include PRISM_DATASET_VERSION, so that 
 #' variable is added with `NA` values.
 #'   
-#' @inheritParams get_prism_dailys
+#' @inheritParams prism_subset_folders
 #' 
 #' @return data.frame containing metadata for all specified dates.
 #' 

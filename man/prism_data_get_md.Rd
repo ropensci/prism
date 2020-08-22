@@ -16,28 +16,30 @@ prism_data_get_md(
 )
 }
 \arguments{
-\item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
-"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean ==  mean(tmin, tmax)}.}
+\item{type}{The type of data you want to subset. Must be "ppt", "tmean",
+"tmin", "tmax", "tdmean", "vpdmin", or "vpdmax".}
 
-\item{years}{a valid numeric year, or vector of years, to download data for.
-If no month is specified, year averages for that year will be downloaded.}
+\item{temp_period}{The temporal period to subset. Must be "annual",
+"monthly", "daily", "monthly normals", or "annual normals".}
 
-\item{mon}{a valid numeric month, or vector of months.}
+\item{years}{Valid numeric year, or vector of years.}
 
-\item{minDate}{Date to start downloading daily data. Must be specified in
+\item{mon}{Valid numeric month, or vector of months.}
+
+\item{minDate}{Date to start subsetting daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Date]{base::Date} class.}
 
-\item{maxDate}{Date to end downloading daily data.  Must be specified in
+\item{maxDate}{Date to end subsetting daily data.  Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Date]{base::Date} class.}
 
-\item{dates}{A vector of dates to download daily data. Must be specified in
+\item{dates}{A vector of daily dates to subset. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Date]{base::Date} class.}
 
-\item{resolution}{The spatial resolution of the data, must be either "4km"
-or "800m".}
+\item{resolution}{The spatial resolution of the data, must be either "4km" or
+"800m". Should only be specified for \code{temp_period} of "normals".}
 }
 \value{
 data.frame containing metadata for all specified dates.
