@@ -1,6 +1,6 @@
 #' Extract prism station metadata 
 #' 
-#' `get_prism_station_md()` extracts prism metadata on the stations used to 
+#' `prism_data_get_station_md()` extracts prism metadata on the stations used to 
 #' generate a particular day and variable. **The data must already be downloaded 
 #' and available in the prism download folder.** 
 #' 
@@ -34,10 +34,10 @@
 #' \dontrun{
 #' # download and then get meta data for January 1, 2010 precipitation
 #' get_prism_dailys("ppt", dates = "2010-01-01")
-#' get_prism_station_md("ppt", "daily", dates = "2010-01-01")
+#' prism_data_get_station_md("ppt", "daily", dates = "2010-01-01")
 #' 
 #' # will warn that 2010-01-02 is not found:
-#' get_prism_station_md(
+#' prism_data_get_station_md(
 #'   "ppt", 
 #'   "daily", 
 #'   minDate = "2010-01-01", 
@@ -47,9 +47,10 @@
 #'   
 #' @export
 
-get_prism_station_md <- function(type, temp_period, years = NULL, mon = NULL, 
-                                 minDate = NULL, maxDate = NULL, dates = NULL,
-                                 resolution = NULL)
+prism_data_get_station_md <- function(type, temp_period, years = NULL, 
+                                      mon = NULL, minDate = NULL, 
+                                      maxDate = NULL, dates = NULL,
+                                      resolution = NULL)
 {
   prism_check_dl_dir()
   type <- match.arg(type, prism_vars()[prism_vars() != "tmean"])
@@ -186,6 +187,23 @@ get_prism_station_md <- function(type, temp_period, years = NULL, mon = NULL,
   }
  
   zz
+}
+
+#' @description 
+#' `get_prism_station_md()` is a deprecated version of 
+#' `prism_data_get_station_md()`
+#' 
+#' @export
+#' @rdname prism_data_get_station_md
+get_prism_station_md <- function(type, temp_period, years = NULL, mon = NULL, 
+                                 minDate = NULL, maxDate = NULL, dates = NULL,
+                                 resolution = NULL)
+{
+  .Deprecated("`prism_data_get_station_md()`")
+  
+  prism_data_get_station_md(type, temp_period, years = years, mon = mon, 
+                            minDate = minDate, maxDate = maxDate, dates = dates,
+                            resolution = resolution)
 }
 
 folder_to_date <- function(folder, temp_period) {

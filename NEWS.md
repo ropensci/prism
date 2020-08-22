@@ -16,6 +16,7 @@
 * new function: `prism_subset_folders()`. This makes it much easier to get the data for a specific type/temporal period, once it has been downloaded onto the system. (#69)
 * Now report when user has exceeded the allowable number of attempts to download the same file (in one day). If user tries to download the same file more than two times in one day, the message is posted as a warning. It is not posted as an error so that if a query of multiple files runs into this issue, it does not abort the full query. Another warning posts if the unzipped folder is empty. (#80)
 * `get_prism_station_md()` now reports a warning if not all requested dates exist in the metadata data frame. (#87 related) and works for monthly and normals; not only daily. 
+  * Changed to `prism_data_get_station_md()` (#88)
 * Breaking change. No longer exporting `prism_webservice()` as it is wrapped by `get_prism_*()` functions, and requires the correctly specified url. Can still be called with `prism:::prism_webservice()` if users really need it. (#83)
 * breaking change: re-organized `pr_parse()` and `prism_md()` (#88). 
   * No longer exporting `pr_parse()`. `prism_md()` is the user facing wrapper around it. 
