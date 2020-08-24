@@ -1,19 +1,33 @@
-#' Quick image plot
+#' Quick spatial image of prism data
 #' 
-#' Quickly make an image plot of a data set. 
+#' `prism_image()` makes a spatial image plot of the specified prism 
+#' data (single variable and time step.). It is meant for rapid visualization, 
+#' but more detailed plots will require other methods.
 #'  
-#' @param prismfile the name of a file to be plotted, this is most easily gotten 
-#'   through [ls_prism_data()]
+#' @param prismfile the name of a single file to be plotted, this is most easily 
+#'   gotten through [ls_prism_data()] or [prism_data_subset()]. It should be the
+#'   folder name, not the .bil file.
 #'   
 #' @param col the color pattern to use.  The default is heat, the other valid 
-#'   option is "redblue"
+#'   option is "redblue".
 #'   
-#' @details This is meant for rapid visualization, but more detailed plots will 
-#' require other methods
+#' @return Invisibly returns `gg` object of the image. 
+#' 
+#' @seealso [ls_prism_data()], [prism_data_subset()], [ggplot2::geom_raster()]
 #' 
 #' @examples \dontrun{
-#' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
-#' prism_image(ls_prism_data()[1])
+#' get_prism_dailys(
+#'   type = "tmean", 
+#'   minDate = "2013-06-01", 
+#'   maxDate = "2013-06-14", 
+#'   keepZip = FALSE
+#' )
+#' 
+#' # get June 5th 
+#' pd <- prism_data_subset("tmean", "daily", dates = "2013-06-05")
+#' 
+#' # and plot it
+#' prism_image(pd)
 #' }
 #' 
 #' @import ggplot2
@@ -22,23 +36,42 @@
 
 prism_image <- function(prismfile, col = "heat"){
   
+  if(length(prismfile) != 1){
+    stop("You can only quick image one file at a time.")
+  }
+  col = match.arg(col, c("heat", "redblue"))
+  
   ### This works for recent data but a new file needs to be created for 
   pname <- prism_data_get_name(prismfile)
   
-  if(length(prismfile) != 1){
-    stop("You can only quick image one at a time")
-  }
-  prismfile <- paste(options("prism.path")[[1]],"/",prismfile,"/",prismfile,".bil",sep="")  
-  col = match.arg(col,c("heat","redblue"))
+  prismfile <- normalizePath(
+    file.path(
+      prism_get_dl_dir(), 
+      prismfile, 
+      paste0(prismfile,".bil")
+    ), 
+    mustWork = TRUE
+  )
+  
   out <- raster(prismfile)
-  out <- data.frame(rasterToPoints(out))
+  out <- data.frame(raster::rasterToPoints(out))
   colnames(out) <- c("x","y","data")
+  
+  prPlot <- ggplot() + 
+    geom_raster(data = out, aes_string(x='x',y='y',fill='data')) +
+    theme_bw() +
     
+    xlab("Longitude") + 
+    ylab("Latitude") + 
+    ggtitle(pname)  
+  
+  
   if(col == "heat"){
-    prPlot <- ggplot() + geom_raster(data = out, aes_string(x='x',y='y',fill='data'))+theme_bw()+scale_fill_gradient(low = "yellow", high="red") + xlab("Longitude") + ylab("Latitude")+ggtitle(pname)  
-    print(prPlot)
+    prPlot <- prPlot + scale_fill_gradient(low = "yellow", high="red")
   } else {
-    prPlot <- ggplot() + geom_raster(data = out, aes_string(x='x',y='y',fill='data'))+theme_bw()+scale_fill_gradient(low = "red", high="blue") + xlab("Longitude") + ylab("Latitude")+ggtitle(pname)  
-    print(prPlot)
+    prPlot <- prPlot + scale_fill_gradient(low = "red", high="blue")   
   }
+  
+  print(prPlot)
+  invisible(prPlot)
 }
