@@ -18,7 +18,7 @@ option is "redblue".}
 Invisibly returns \code{gg} object of the image.
 }
 \description{
-\code{prism_image()} quickly makes a spatial image plot of the specified prism
+\code{prism_image()} makes a spatial image plot of the specified prism
 data (single variable and time step.). It is meant for rapid visualization,
 but more detailed plots will require other methods.
 }
