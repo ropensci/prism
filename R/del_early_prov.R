@@ -155,6 +155,7 @@ folders_to_remove <- function(x) {
 #' @rdname prism_data_clean
 del_early_prov <- function (type, minDate = NULL, maxDate = NULL, dates = NULL) 
 {
+  .Deprecated("`prism_data_clean()`")
   prism_check_dl_dir()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, 
                              dates = dates)
