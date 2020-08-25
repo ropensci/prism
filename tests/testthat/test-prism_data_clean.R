@@ -11,7 +11,7 @@ setup({
   }
   
   unzip(
-    file.path("prism_test", "test_prism_data_clean.zip"), 
+    file.path("prism_test", "test_prism_archive_clean.zip"), 
     # must remove trailing slash for this to work
     exdir =  ofolder
   )
@@ -38,7 +38,7 @@ teardown(
   unlink(file.path(prism_get_dl_dir(), c(mon_keep, day_keep)), recursive = TRUE)
 )
 
-test_that("prism_data_clean() works", {
+test_that("prism_archive_clean() works", {
   expect_setequal(
     prism_data_subset("ppt", "daily", years = 2020),
     c(day_keep, day_delete)
@@ -48,9 +48,9 @@ test_that("prism_data_clean() works", {
     c(mon_keep, mon_delete)
   )
   
-  expect_setequal(prism_data_clean("ppt", "daily", years = 2020), day_delete)
+  expect_setequal(prism_archive_clean("ppt", "daily", years = 2020), day_delete)
   expect_setequal(prism_data_subset("ppt", "daily", years = 2020), day_keep)
   
-  expect_setequal(prism_data_clean("ppt", "monthly", years = 2020), mon_delete)
+  expect_setequal(prism_archive_clean("ppt", "monthly", years = 2020), mon_delete)
   expect_setequal(prism_data_subset("ppt", "monthly", years = 2020), mon_keep)
 })

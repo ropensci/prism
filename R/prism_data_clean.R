@@ -1,12 +1,12 @@
 #' Clean the prism data by removing early and provisional data
 #' 
-#' `prism_data_clean()` 'cleans' the prism download data by removing early 
+#' `prism_archive_clean()` 'cleans' the prism download data by removing early 
 #' and/or provisional data if newer (provisional or stable) data also exist 
 #' for the same variable and temporal period. Stable data are newer than 
 #' provisional data that are newer than early data; only the newest data are
 #' kept when the "clean" is performed.
 #' 
-#' `prism_data_clean()` prompts the user to verify the folders that should be
+#' `prism_archive_clean()` prompts the user to verify the folders that should be
 #' removed when R is running in interactive mode. Otherwise, all data that are 
 #' identified to be older than the newest available data are removed. 
 #' 
@@ -21,7 +21,7 @@
 #' 
 #' @export
 
-prism_data_clean <- function(type, temp_period, years = NULL, mon = NULL, 
+prism_archive_clean <- function(type, temp_period, years = NULL, mon = NULL, 
                              minDate = NULL, maxDate = NULL, dates = NULL) {
   prism_check_dl_dir()
   
@@ -146,16 +146,16 @@ folders_to_remove <- function(x) {
 }
 
 #' @description 
-#' `del_early_prov()` is a deprecated version of `prism_data_clean()` that only
+#' `del_early_prov()` is a deprecated version of `prism_archive_clean()` that only
 #' works for daily data, and does not prompt the user to confirm which folders
 #' should be removed.
 #' 
 #' @inheritParams get_prism_dailys
 #' @export
-#' @rdname prism_data_clean
+#' @rdname prism_archive_clean
 del_early_prov <- function (type, minDate = NULL, maxDate = NULL, dates = NULL) 
 {
-  .Deprecated("`prism_data_clean()`")
+  .Deprecated("`prism_archive_clean()`")
   prism_check_dl_dir()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, 
                              dates = dates)

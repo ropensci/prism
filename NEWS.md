@@ -23,7 +23,7 @@
   * Deprecated `prism_md()` in favor of `prism_data_get_name()` (= `prism_md(f, FALSE)`) and `prism_data_get_date()` (= `prism_md(f, TRUE)`). 
 * added `prism_data_get_md()` to parse .info.txt metadata, by converting an existing internal function. (#88)
 * `del_early_prov()` now invisibly returns the folders that it removes.
-* `prism_data_clean()` replaces `del_early_prov()` and works with all time steps. It also prompts user to select which folders will be removed before removing them (when R is in interactive mode). (#89)
+* `prism_archive_clean()` replaces `del_early_prov()` and works with all time steps. It also prompts user to select which folders will be removed before removing them (when R is in interactive mode). (#89)
 * `prism_image()` invisibly returns the `gg` object it creates.
 * `prism_archive_ls()` replaces `ls_prism_data()`
 * added `pd_to_file()`
