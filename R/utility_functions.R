@@ -22,11 +22,27 @@ mon_to_string <- function(month)
   return(out)
 }
 
+prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
+{
+  file_bases <- unlist(sapply(zipfiles, strsplit, split=".zip"))
+  which_downloaded <- sapply(
+    file_bases, 
+    find_prism_file, 
+    pre81_months = pre81_months
+  )
+  
+  if(lgl){
+    return(!which_downloaded)
+  } else {
+    return(zipfiles[!which_downloaded])    
+  }
+}
+
 #' Check if prism files exist
 #' 
-#' Helper function to check if files already exist in the specified "prism.path"
-#' 
-#' `prism_check()` is deprecated. Use `prism_not_downloaded()` instead.
+#' Helper function to check if files already exist in the prism download 
+#' directory. Determines if files have **not** been downloaded yet, i.e., 
+#' returns `TRUE` if they do not exist. 
 #' 
 #' @param prismfiles a list of full prism file names ending in ".zip". 
 #' 
@@ -41,34 +57,18 @@ mon_to_string <- function(month)
 #' 
 #' @return a character vector of file names that are not yet downloaded
 #'   or a logical vector indication those not yet downloaded.
-#' 
-#' @export
-prism_not_downloaded <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
-{
-  file_bases <- unlist(sapply(prismfiles, strsplit, split=".zip"))
-  which_downloaded <- sapply(
-    file_bases, 
-    find_prism_file, 
-    pre81_months = pre81_months
-  )
-  
-  if(lgl){
-    return(!which_downloaded)
-  } else {
-    return(prismfiles[!which_downloaded])    
-  }
-}
-
 #' @export
 #' 
-#' @rdname prism_not_downloaded
 prism_check <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
 {
   .Deprecated(
-    "`prism_not_downloaded()`"
+    msg = paste0(
+      "`prism_check()` will be removed in the next release.\n", 
+      "If you need this function, please file a bug at https://github.com/ropensci/prism/issues."
+    )
   )
   
-  prism_not_downloaded(prismfiles, lgl = FALSE, pre81_months = NULL)
+  prism_not_downloaded(prismfiles, lgl = lgl, pre81_months = pre81_months)
 }
 
 # return TRUE if all file(s) are found for the specified base_file

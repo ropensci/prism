@@ -5,7 +5,7 @@
 * Can now download vpdmin, vpdmax, and tdmean for normals, daily, monthly, and annual data (#68)
 * `get_prism_annual()` and `get_prism_monthlys()` gain a `keep_pre81_months` parameter. This lets the user determine if all of the monthly and annual data are kept, since the download includes all 12 months + the annual data for years before 1981. If this is `TRUE` then all monthly data are kept, instead of only those that were specified in the current call to `get_prism_*()`. (#82)
 * Check that pre-1981 data does not exist before downloading it. To do this, `prism_webservice()` and `prism_check()` gain a `pre81_months` parameter, which allows the functions to know which months were requested for downloading. (#81)
-* Replacing `prism_check()` with `prism_not_downloaded()`. `prism_check()` is deprecated and will be removed in the next release.
+* `prism_check()` is deprecated and will be removed in the next release.
 * Replacing `check_path()` with `prism_check_dl_dir()`. `check_path()` is deprecated and will be removed in the next release.
 * Added `prism_set_dl_dir()` as an easy way to set path and make sure it is valid. Added `prism_get_dl_dir()` as an easy way to get the download directory path without remembering the option ("prism.path"). 
 * `get_prism_normals()` will now error if neither monthly nor annual data are specified to be downloaded. (#77)
