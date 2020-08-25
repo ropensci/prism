@@ -30,13 +30,12 @@ character or \link[base:Date]{base::Date} class.}
 \value{
 A \code{tbl_df} containing metadata on the stations used for the specified
 day and variable. The data frame contains the following columns:
-"date", "temp_period", "type", "station", "name", "longitude",
+"date", "prism_data", "type", "station", "name", "longitude",
 "latitude", "elevation", "network", "stnid"
 
-The "date" column is a character with the longest specified date possible
-based on the input. For example, it will be yyyy-mm if getting monthly
-data, and will be yyyy-mm-dd for daily data. It is only mm for monthly
-normals, and it is an empty string for annual normals.
+The "date" column is a character representation of the data. Monthly and
+annual data are given first day of month, and first month of year for
+reporting here. Monthly and annual normals are empty strings.
 }
 \description{
 \code{pd_get_station_md()} extracts prism metadata on the stations used to

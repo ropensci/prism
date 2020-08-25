@@ -28,6 +28,7 @@
 * `prism_archive_ls()` replaces `ls_prism_data()`
 * added `pd_to_file()`
 * added `pd_get_type()`
+* `pd_image()` replaces `prism_image()`
 
 # prism 0.1.0
 
