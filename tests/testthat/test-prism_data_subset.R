@@ -73,80 +73,80 @@ all_in <- function(x, y) {
   all(x %in% y) & all(y %in% x)
 }
 
-# prism_data_subset() errors ------------------
-test_that("prism_data_subset() errors correctly", {
+# prism_archive_subset() errors ------------------
+test_that("prism_archive_subset() errors correctly", {
   # unsupported variables
-  expect_error(prism_data_subset("tmaxx", "annual"))
-  expect_error(prism_data_subset("vpdmiin", "annual"))
+  expect_error(prism_archive_subset("tmaxx", "annual"))
+  expect_error(prism_archive_subset("vpdmiin", "annual"))
   # unsupported temp_period
-  expect_error(prism_data_subset("tmean", "ann"))
-  expect_error(prism_data_subset("tmean", "annual_normals"))
+  expect_error(prism_archive_subset("tmean", "ann"))
+  expect_error(prism_archive_subset("tmean", "annual_normals"))
   
   # annual - unnecessary specifications
   expect_error(
-    prism_data_subset("tmean", "annual", mon = 1),
+    prism_archive_subset("tmean", "annual", mon = 1),
     "No need to specify `mon` for 'annual' `temp_period`"
   )
   expect_error(
-    prism_data_subset("tmean", "annual", dates = "2018-01-01"),
+    prism_archive_subset("tmean", "annual", dates = "2018-01-01"),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
   )
   expect_error(
-    prism_data_subset(
+    prism_archive_subset(
       "tmean", "annual", minDate = "2018-01-01", maxDate = "2018-01-05"
     ),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
   )
   expect_error(
-    prism_data_subset("tmean", "annual", resolution = "4km"),
+    prism_archive_subset("tmean", "annual", resolution = "4km"),
     "`resolution` should only be specified when `temp_period` is 'normals'"
   )
   
   # monthly - unnecessary specifications
   expect_error(
-    prism_data_subset("tmean", "monthly", dates = "2018-01-01"),
+    prism_archive_subset("tmean", "monthly", dates = "2018-01-01"),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
   )
   expect_error(
-    prism_data_subset(
+    prism_archive_subset(
       "tmean", "monthly", minDate = "2018-01-01", maxDate = "2018-01-05"
     ),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
   )
   expect_error(
-    prism_data_subset("tmean", "monthly", resolution = "800m"),
+    prism_archive_subset("tmean", "monthly", resolution = "800m"),
     "`resolution` should only be specified when `temp_period` is 'normals'"
   )
   
   # normals - unecessary/incomplete specifications
   expect_error(
-    prism_data_subset("tmean", "annual normals"),
+    prism_archive_subset("tmean", "annual normals"),
     "`resolution` must be specified when subsetting normals"
   )
   expect_error(
-    prism_data_subset("tmean", "monthly normals"),
+    prism_archive_subset("tmean", "monthly normals"),
     "`resolution` must be specified when subsetting normals"
   )
   expect_error(
-    prism_data_subset("tmean", "annual normals", resolution = "4pm")
+    prism_archive_subset("tmean", "annual normals", resolution = "4pm")
   )
   expect_error(
-    prism_data_subset("tmean", "monthly normals", resolution = "800mm")
+    prism_archive_subset("tmean", "monthly normals", resolution = "800mm")
   )
   expect_error(
-    prism_data_subset(
+    prism_archive_subset(
       "tmean", "annual normals", resolution = "4km", years = 2015
     ),
     "No need to specify `years` or `mon` when subsetting 'annual normals'"
   )
   expect_error(
-    prism_data_subset(
+    prism_archive_subset(
       "tmean", "annual normals", resolution = "800m", mon = 1:12
     ),
     "No need to specify `years` or `mon` when subsetting 'annual normals'"
   )
   expect_error(
-    prism_data_subset(
+    prism_archive_subset(
       "tmean", "monthly normals", resolution = "4km", years = 2015
     ),
     "No need to specify `years` for 'monthly normals'"
@@ -154,49 +154,49 @@ test_that("prism_data_subset() errors correctly", {
   
   # daily unnecessary specifications
   expect_error(
-    prism_data_subset("ppt", "daily", resolution = "800m"),
+    prism_archive_subset("ppt", "daily", resolution = "800m"),
     "`resolution` should only be specified when `temp_period` is 'normals'"
   )
   expect_error(
-    prism_data_subset("tmin", "daily", years = 1999, dates = "1999-01-01"),
+    prism_archive_subset("tmin", "daily", years = 1999, dates = "1999-01-01"),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
   )
   expect_error(
-    prism_data_subset("tmin", "daily", mon = 3, minDate = "1999-01-01"),
+    prism_archive_subset("tmin", "daily", mon = 3, minDate = "1999-01-01"),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
   )
 })
 
-# prism_data_subset() with test folders -------------
-test_that("prism_data_subset() works", {
+# prism_archive_subset() with test folders -------------
+test_that("prism_archive_subset() works", {
   expect_equal(
-    prism_data_subset("ppt", "daily"),
-    prism_data_subset("ppt", "daily", years = c(1981, 1991, 2011))
+    prism_archive_subset("ppt", "daily"),
+    prism_archive_subset("ppt", "daily", years = c(1981, 1991, 2011))
   )
   expect_equal(
-    prism_data_subset("ppt", "daily"),
-    prism_data_subset("ppt", "daily", mon = 1)
+    prism_archive_subset("ppt", "daily"),
+    prism_archive_subset("ppt", "daily", mon = 1)
   )
   expect_equal(
-    prism_data_subset("tmin", "daily"),
-    prism_data_subset("tmin", "daily", mon = c(1,6))
+    prism_archive_subset("tmin", "daily"),
+    prism_archive_subset("tmin", "daily", mon = c(1,6))
   )
   expect_equal(
-    prism_data_subset("tmin", "daily"),
-    prism_data_subset("tmin", "daily", years = c(1981, 2011))
+    prism_archive_subset("tmin", "daily"),
+    prism_archive_subset("tmin", "daily", years = c(1981, 2011))
   )
   expect_equal(
-    prism_data_subset("tmin", "daily"),
-    prism_data_subset("tmin", "daily", years = 1981:2011)
+    prism_archive_subset("tmin", "daily"),
+    prism_archive_subset("tmin", "daily", years = 1981:2011)
   )
   expect_true(all_in(
-    prism_data_subset("tmin", "daily"),
+    prism_archive_subset("tmin", "daily"),
     c("PRISM_tmin_stable_4kmD2_19810101_bil", 
       "PRISM_tmin_stable_4kmD2_20110615_bil")
   ))
   
   expect_identical(
-    prism_data_subset("tmin", "daily", years = 2020), 
+    prism_archive_subset("tmin", "daily", years = 2020), 
     character(0)
   )
 })

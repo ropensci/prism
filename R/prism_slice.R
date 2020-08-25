@@ -5,8 +5,9 @@
 #' 
 #' @param location a vector of a single location in the form of long,lat
 #' 
-#' @param prismfile a vector of output from [ls_prism_data()]`[,1]` giving a 
-#'   list of prism files to extract data from and plot
+#' @param prismfile a vector of output from [prism_archive_ls()] or 
+#'   [prism_archive_subset()] giving a list of prism files to extract data from 
+#'   and plot.
 #'   
 #' @return a ggplot2 plot of the requested slice
 #' @details the list of prism files should be from a continuous data set. 
@@ -15,7 +16,7 @@
 #' @examples \dontrun{
 #' ### Assumes you have a clean prism directory
 #' get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
-#' p <- prism_slice(c(-73.2119,44.4758),ls_prism_data())
+#' p <- prism_slice(c(-73.2119,44.4758), prism_archive_ls())
 #' print(p)
 #' }
 #' 
@@ -25,7 +26,8 @@
 prism_slice <- function(location,prismfile){
   
   if(!is.null(dim(prismfile))){
-    stop("You must enter a vector of file names, not a data frame, try  ls_prism_data()[,1]")
+    stop("You must enter a vector of prism data, not a data frame.\n", 
+         "Try  prism_archive_subset().")
   }
   
   meta_d <- prism_data_get_date(prismfile)

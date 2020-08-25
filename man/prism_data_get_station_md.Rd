@@ -77,7 +77,7 @@ and available in the prism download folder.}
 Note that station metadata does not exist for "tmean" type or for any
 "annual" temporal periods.
 
-See \code{\link[=prism_data_subset]{prism_data_subset()}} for further details
+See \code{\link[=prism_archive_subset]{prism_archive_subset()}} for further details
 on specifying ranges of dates for different temporal periods.
 }
 \examples{
@@ -97,5 +97,5 @@ prism_data_get_station_md(
   
 }
 \seealso{
-\code{\link[=prism_data_subset]{prism_data_subset()}}
+\code{\link[=prism_archive_subset]{prism_archive_subset()}}
 }

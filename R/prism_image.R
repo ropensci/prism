@@ -5,7 +5,7 @@
 #' but more detailed plots will require other methods.
 #'  
 #' @param prismfile the name of a single file to be plotted, this is most easily 
-#'   gotten through [ls_prism_data()] or [prism_data_subset()]. It should be the
+#'   gotten through [prism_archive_ls()] or [prism_archive_subset()]. It should be the
 #'   folder name, not the .bil file.
 #'   
 #' @param col the color pattern to use.  The default is heat, the other valid 
@@ -13,7 +13,7 @@
 #'   
 #' @return Invisibly returns `gg` object of the image. 
 #' 
-#' @seealso [ls_prism_data()], [prism_data_subset()], [ggplot2::geom_raster()]
+#' @seealso [prism_archive_ls()], [prism_archive_subset()], [ggplot2::geom_raster()]
 #' 
 #' @examples \dontrun{
 #' get_prism_dailys(
@@ -24,7 +24,7 @@
 #' )
 #' 
 #' # get June 5th 
-#' pd <- prism_data_subset("tmean", "daily", dates = "2013-06-05")
+#' pd <- prism_archive_subset("tmean", "daily", dates = "2013-06-05")
 #' 
 #' # and plot it
 #' prism_image(pd)

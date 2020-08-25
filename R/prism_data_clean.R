@@ -15,7 +15,7 @@
 #' Thus early data only exist for daily data, while there can be monthly (and 
 #' presumably yearly) provisional data. 
 #' 
-#' @inheritParams prism_data_subset
+#' @inheritParams prism_archive_subset
 #' 
 #' @return Invisibly returns vector of all deleted folders.
 #' 
@@ -25,7 +25,7 @@ prism_archive_clean <- function(type, temp_period, years = NULL, mon = NULL,
                              minDate = NULL, maxDate = NULL, dates = NULL) {
   prism_check_dl_dir()
   
-  pd <- prism_data_subset(type, temp_period, years = years, mon = mon, 
+  pd <- prism_archive_subset(type, temp_period, years = years, mon = mon, 
                           minDate = minDate, maxDate = maxDate, dates = dates)
   
   # identify folders for removal ----------------

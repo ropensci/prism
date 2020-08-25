@@ -8,7 +8,7 @@ prism_image(prismfile, col = "heat")
 }
 \arguments{
 \item{prismfile}{the name of a single file to be plotted, this is most easily
-gotten through \code{\link[=ls_prism_data]{ls_prism_data()}} or \code{\link[=prism_data_subset]{prism_data_subset()}}. It should be the
+gotten through \code{\link[=prism_archive_ls]{prism_archive_ls()}} or \code{\link[=prism_archive_subset]{prism_archive_subset()}}. It should be the
 folder name, not the .bil file.}
 
 \item{col}{the color pattern to use.  The default is heat, the other valid
@@ -32,7 +32,7 @@ get_prism_dailys(
 )
 
 # get June 5th 
-pd <- prism_data_subset("tmean", "daily", dates = "2013-06-05")
+pd <- prism_archive_subset("tmean", "daily", dates = "2013-06-05")
 
 # and plot it
 prism_image(pd)
@@ -40,5 +40,5 @@ prism_image(pd)
 
 }
 \seealso{
-\code{\link[=ls_prism_data]{ls_prism_data()}}, \code{\link[=prism_data_subset]{prism_data_subset()}}, \code{\link[ggplot2:geom_raster]{ggplot2::geom_raster()}}
+\code{\link[=prism_archive_ls]{prism_archive_ls()}}, \code{\link[=prism_archive_subset]{prism_archive_subset()}}, \code{\link[ggplot2:geom_raster]{ggplot2::geom_raster()}}
 }

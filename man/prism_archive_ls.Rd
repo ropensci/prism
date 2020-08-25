@@ -25,7 +25,7 @@ added if \code{absPath} and \code{name} are \code{TRUE}, respectively.
 \code{prism_archive_ls()} lists all available prism data (all variables and all
 temporal periods) that are available in the local archive, i.e., they
 have already been downloaded and are available in \code{\link[=prism_get_dl_dir]{prism_get_dl_dir()}}.
-\code{\link[=prism_data_subset]{prism_data_subset()}} can be used to subset the archive based on specified
+\code{\link[=prism_archive_subset]{prism_archive_subset()}} can be used to subset the archive based on specified
 variables and temporal periods.
 
 \code{ls_prism_data()} is a deprecated version of \code{prism_data_ls()}.
@@ -50,5 +50,5 @@ prism_archive_ls()
 
 }
 \seealso{
-\code{\link[=prism_data_subset]{prism_data_subset()}}
+\code{\link[=prism_archive_subset]{prism_archive_subset()}}
 }

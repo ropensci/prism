@@ -7,14 +7,24 @@
 prism_stack(prismfile)
 }
 \arguments{
-\item{prismfile}{a vector of file names returned by ls_prism_data()}
+\item{prismfile}{a vector of prism data returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}}
+or \code{\link[=prism_archive_subset]{prism_archive_subset()}}.}
 }
 \description{
 Create a stack of prism files
 }
 \examples{
 \dontrun{
-get_prism_dailys(type="tmean", minDate = "2013-06-01", maxDate = "2013-06-14", keepZip=FALSE)
-mystack <- prism_stack(ls_prism_data()[1:14])
+get_prism_dailys(
+  type="tmean", 
+  minDate = "2013-06-01", 
+  maxDate = "2013-06-14", 
+  keepZip = FALSE
+)
+mystack <- prism_stack(prism_archive_subset(
+  "tmean", 
+  minDate = "2013-06-01", 
+  maxDate = "2013-06-14"
+))
 }
 }
