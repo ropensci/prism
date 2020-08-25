@@ -110,6 +110,23 @@ pr_parse <- function(p,returnDate = FALSE){
   out
 }
 
+#' @description 
+#' `pd_to_file()` converts prism data (as returned by [prism_archive_subset()]),
+#' and converts it to a fully specified .bil file. A warning is posted if the 
+#' file does not exist in the local prism archive. 
+#' 
+#' @param pd prism data character vector. 
+#' 
+#' @export
+#' @rdname prism_data_get
+pd_to_file <- function(pd) {
+  pfile <- normalizePath(file.path(
+    prism_get_dl_dir(), pd, paste0(pd, ".bil")
+  ))
+  
+  pfile
+}
+
 #' Extract select prism metadata
 #' 
 #' used to extract some prism metadata used in other functions
