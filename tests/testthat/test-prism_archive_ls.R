@@ -19,7 +19,7 @@ test_that("Directory listings work",{
   df <- data.frame(
     files = x,
     abs_path = pd_to_file(x),
-    product_name = prism_data_get_name(x),
+    product_name = pd_get_name(x),
     stringsAsFactors = FALSE
   )
   

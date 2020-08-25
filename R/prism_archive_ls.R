@@ -73,7 +73,7 @@ ls_prism_data <- function(absPath = FALSE, name = FALSE){
   } 
   
   if(name){
-    meta_d <- prism_data_get_name(files)
+    meta_d <- pd_get_name(files)
     out$product_name <- meta_d
   }
     

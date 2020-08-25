@@ -42,7 +42,7 @@ prism_image <- function(prismfile, col = "heat"){
   col = match.arg(col, c("heat", "redblue"))
   
   ### This works for recent data but a new file needs to be created for 
-  pname <- prism_data_get_name(prismfile)
+  pname <- pd_get_name(prismfile)
   
   prismfile <- normalizePath(
     file.path(

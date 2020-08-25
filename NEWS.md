@@ -20,7 +20,7 @@
 * Breaking change. No longer exporting `prism_webservice()` as it is wrapped by `get_prism_*()` functions, and requires the correctly specified url. Can still be called with `prism:::prism_webservice()` if users really need it. (#83)
 * breaking change: re-organized `pr_parse()` and `prism_md()` (#88). 
   * No longer exporting `pr_parse()`. `prism_md()` is the user facing wrapper around it. 
-  * Deprecated `prism_md()` in favor of `prism_data_get_name()` (= `prism_md(f, FALSE)`) and `prism_data_get_date()` (= `prism_md(f, TRUE)`). 
+  * Deprecated `prism_md()` in favor of `pd_get_name()` (= `prism_md(f, FALSE)`) and `pd_get_date()` (= `prism_md(f, TRUE)`). 
 * added `prism_data_get_md()` to parse .info.txt metadata, by converting an existing internal function. (#88)
 * `del_early_prov()` now invisibly returns the folders that it removes.
 * `prism_archive_clean()` replaces `del_early_prov()` and works with all time steps. It also prompts user to select which folders will be removed before removing them (when R is in interactive mode). (#89)

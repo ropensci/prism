@@ -30,8 +30,8 @@ prism_slice <- function(location,prismfile){
          "Try  prism_archive_subset().")
   }
   
-  meta_d <- prism_data_get_date(prismfile)
-  meta_names <- prism_data_get_name(prismfile)[1]
+  meta_d <- pd_get_date(prismfile)
+  meta_names <- pd_get_name(prismfile)[1]
   param_name <- strsplit(meta_names,"-")[[1]][3]
 
   pstack <- prism_stack(prismfile)

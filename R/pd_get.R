@@ -1,45 +1,52 @@
-#' Get name or date from downloaded prism data
+#' Perform action on "prism data"
 #' 
-#' `prism_data_get_name()` extracts a long, human readable name from the prism
-#' folders or .bil files.
+#' "prism data", i.e., `pd` are the folder names returned by 
+#' [prism_archive_ls()] or [prism_archive_subset()]. These functions get the 
+#' name or date from these data, or convert these data to a file name.
 #' 
-#' @param f 1 or more prism directories name or .bil files. 
+#' `pd_get_name()` extracts a long, human readable name from the prism
+#' data.
 #' 
-#' @return Character vector of names/dates.
+#' @param pd "prism data" as a character vector.  
+#' 
+#' @return `pd_get_name()` and `pd_get_date()` return a character vector of 
+#' names/dates.
 #' 
 #' @export
-#' @rdname prism_data_get
-prism_data_get_name <- function(f) {
-  p <- strsplit(f, "_")
+#' @rdname pd_get
+pd_get_name <- function(pd) {
+  p <- strsplit(pd, "_")
   unlist(lapply(p, pr_parse, returnDate = FALSE))
 }
 
 #' @description 
-#' `prism_data_get_date()` extracts the date from the prism folders or .bil 
-#' files. Date is returned in yyyy-mm-dd format. For monthly data, dd is 01 and
+#' `pd_get_date()` extracts the date from the prism data.
+#' Date is returned in yyyy-mm-dd format. For monthly data, dd is 01 and
 #' for annual data mm is also 01. For normals, an empty character is returned.
 #' 
 #' @export
-#' @rdname prism_data_get
-prism_data_get_date <- function(f) {
-  p <- strsplit(f, "_")
+#' @rdname pd_get
+pd_get_date <- function(pd) {
+  p <- strsplit(pd, "_")
   unlist(lapply(p, pr_parse, returnDate = TRUE))
 }
 
 #' @description 
 #' `prism_md()` is a deprecated function that has been replaced with 
-#' `prism_data_get_name()` and `prism_data_get_date()`
+#' `pd_get_name()` and `pd_get_date()`
+#' 
+#' @param f 1 or more prism directories name or .bil files. 
 #' 
 #' @param returnDate TRUE or FALSE. If TRUE, an ISO date is returned.  By 
 #'   default years will come back with YYYY-01-01 and months as YYYY-MM-01
 #'   
 #' @export
-#' @rdname prism_data_get
+#' @rdname pd_get
 prism_md <- function(f, returnDate = FALSE) {
   if (returnDate) {
-    msg <- "`prism_data_get_name()`"
+    msg <- "`pd_get_name()`"
   } else {
-    msg <- "`prism_data_get_date()`"
+    msg <- "`pd_get_date()`"
   }
   
   .Deprecated(msg)
@@ -111,15 +118,16 @@ pr_parse <- function(p,returnDate = FALSE){
 }
 
 #' @description 
-#' `pd_to_file()` converts prism data (as returned by [prism_archive_subset()]),
-#' and converts it to a fully specified .bil file. A warning is posted if the 
+#' `pd_to_file()` converts prism data  to a fully specified .bil file, i.e., the
+#' full path to the file in the prism archive. A warning is posted if the 
 #' file does not exist in the local prism archive. 
 #' 
 #' @param pd prism data character vector. 
 #' 
 #' @export
-#' @rdname prism_data_get
+#' @rdname pd_get
 pd_to_file <- function(pd) {
+  
   pfile <- normalizePath(file.path(
     prism_get_dl_dir(), pd, paste0(pd, ".bil")
   ))
@@ -135,9 +143,9 @@ pd_to_file <- function(pd) {
 #' 
 #' @return a character vector of metadata.
 #' 
-#' @details Archived function, was really useful, but non-standarded metadata 
+#' @details Archived function, was really useful, but non-standarded metadata
 #' across files prevents this from being a useable solution atm
-#' 
+#' @noRd
 
 #prism_md <- function(f){
 #  m <- xmlParse(f)
