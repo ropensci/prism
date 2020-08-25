@@ -16,17 +16,18 @@
 * new function: `prism_archive_subset()`. This makes it much easier to get the data for a specific type/temporal period, once it has been downloaded onto the system. (#69)
 * Now report when user has exceeded the allowable number of attempts to download the same file (in one day). If user tries to download the same file more than two times in one day, the message is posted as a warning. It is not posted as an error so that if a query of multiple files runs into this issue, it does not abort the full query. Another warning posts if the unzipped folder is empty. (#80)
 * `get_prism_station_md()` now reports a warning if not all requested dates exist in the metadata data frame. (#87 related) and works for monthly and normals; not only daily. 
-  * Changed to `prism_data_get_station_md()` (#88)
+  * Added to `pd_get_station_md()` to replace this function (#88)
 * Breaking change. No longer exporting `prism_webservice()` as it is wrapped by `get_prism_*()` functions, and requires the correctly specified url. Can still be called with `prism:::prism_webservice()` if users really need it. (#83)
 * breaking change: re-organized `pr_parse()` and `prism_md()` (#88). 
   * No longer exporting `pr_parse()`. `prism_md()` is the user facing wrapper around it. 
   * Deprecated `prism_md()` in favor of `pd_get_name()` (= `prism_md(f, FALSE)`) and `pd_get_date()` (= `prism_md(f, TRUE)`). 
-* added `prism_data_get_md()` to parse .info.txt metadata, by converting an existing internal function. (#88)
+* added `pd_get_md()` to parse .info.txt metadata, by converting an existing internal function. (#88)
 * `del_early_prov()` now invisibly returns the folders that it removes.
 * `prism_archive_clean()` replaces `del_early_prov()` and works with all time steps. It also prompts user to select which folders will be removed before removing them (when R is in interactive mode). (#89)
 * `prism_image()` invisibly returns the `gg` object it creates.
 * `prism_archive_ls()` replaces `ls_prism_data()`
 * added `pd_to_file()`
+* added `pd_get_type()`
 
 # prism 0.1.0
 

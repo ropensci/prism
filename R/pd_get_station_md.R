@@ -1,8 +1,11 @@
 #' Extract prism station metadata 
 #' 
-#' `prism_data_get_station_md()` extracts prism metadata on the stations used to 
-#' generate a particular day and variable. **The data must already be downloaded 
-#' and available in the prism download folder.** 
+#' `pd_get_station_md()` extracts prism metadata on the stations used to 
+#' generate the prism data. **The data must already be downloaded 
+#' and available in the prism download folder.** "prism data", i.e., `pd` are 
+#' the folder names returned by [prism_archive_ls()] or 
+#' [prism_archive_subset()]. These functions get the name or date from these 
+#' data, or convert these data to a file name.
 #' 
 #' Note that station metadata does not exist for "tmean" type or for any 
 #' "annual" temporal periods. 
@@ -10,23 +13,16 @@
 #' See [prism_archive_subset()] for further details
 #' on specifying ranges of dates for different temporal periods.
 #'
-#' @param type The type of data to download. Must be "ppt", "tmin", "tmax", 
-#'   "tdmean", "vpdmin", or "vpdmax".
-#'   
-#' @param temp_period The temporal period to subset. Must be "monthly", "daily", 
-#'   "monthly normals", or "annual normals".
-#'
-#' @inheritParams get_prism_dailys
+#' @inheritParams pd_get_name
 #'
 #' @return A `tbl_df` containing metadata on the stations used for the specified
 #'   day and variable. The data frame contains the following columns: 
-#'   "date", "temp_period", "type", "station", "name", "longitude",
+#'   "date", "prism_data", "type", "station", "name", "longitude",
 #'   "latitude", "elevation", "network", "stnid"
 #'   
-#'   The "date" column is a character with the longest specified date possible
-#'   based on the input. For example, it will be yyyy-mm if getting monthly 
-#'   data, and will be yyyy-mm-dd for daily data. It is only mm for monthly 
-#'   normals, and it is an empty string for annual normals.
+#'   The "date" column is a character representation of the data. Monthly and
+#'   annual data are given first day of month, and first month of year for
+#'   reporting here. Monthly and annual normals are empty strings.
 #'   
 #' @seealso [prism_archive_subset()]
 #' 
@@ -34,32 +30,21 @@
 #' \dontrun{
 #' # download and then get meta data for January 1, 2010 precipitation
 #' get_prism_dailys("ppt", dates = "2010-01-01")
-#' prism_data_get_station_md("ppt", "daily", dates = "2010-01-01")
+#' pd <- prism_archive_subset("ppt", "daily", dates = "2010-01-01")
 #' 
 #' # will warn that 2010-01-02 is not found:
-#' prism_data_get_station_md(
-#'   "ppt", 
-#'   "daily", 
-#'   minDate = "2010-01-01", 
-#'   maxDate = "2010-01-02"
-#' )
+#' pd_get_station_md(pd)
 #' }
 #'   
 #' @export
 
-prism_data_get_station_md <- function(type, temp_period, years = NULL, 
-                                      mon = NULL, minDate = NULL, 
-                                      maxDate = NULL, dates = NULL,
-                                      resolution = NULL)
+pd_get_station_md <- function(pd)
 {
   prism_check_dl_dir()
-  type <- match.arg(type, prism_vars()[prism_vars() != "tmean"])
-  #dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
+
+  folders_to_get <- file.path(prism_get_dl_dir(), pd)
+  folders_to_get <- pd[dir.exists(folders_to_get)]
   
-  folders_to_get <- prism_archive_subset(type, temp_period, years = years, 
-                                         mon = mon, minDate = minDate, 
-                                         maxDate = maxDate, dates = dates,
-                                         resolution = resolution)
   if (length(folders_to_get) == 0) {
     stop(
       "None of the requested dates are available.\n", 
@@ -153,35 +138,32 @@ prism_data_get_station_md <- function(type, temp_period, years = NULL,
       }
       out_df %>% 
         dplyr::mutate(
-          date = folder_to_date(x, temp_period), 
-          type = type,
-          temp_period = temp_period
+          date = pd_get_date(x), 
+          type = pd_get_type(x),
+          prism_data = x
         ) %>% 
-        dplyr::select(date, temp_period, type, station, name, longitude, 
+        dplyr::select(date, prism_data, type, station, name, longitude, 
                       latitude, elevation, network, stnid)
     }) %>% 
     dplyr::bind_rows()
   
-  # check to make sure all dates show up in the meta data
-  all_dates <- get_all_possible_dates(temp_period, years = years, mon = mon, 
-                               minDate = minDate, maxDate = maxDate, 
-                               dates = dates)
+  # check to make sure all pd show up in the meta data
 
-  if (length(all_dates) != 1 && any(all_dates != "")) {
-    all_dates <- all_dates[all_dates != ""]
-    dd <- all_dates %in% zz$date
+  if (any(!(pd %in% zz$prism_data))) {
+    
+    dd <- pd %in% zz$prism_data
     if (!all(dd)) {
-      missing <- all_dates[!dd]
+      missing <- pd[!dd]
       n <- length(missing)
-      msg <- paste0("Not all requested dates exist in the returned metadata.\n",
-                    "  ", n, " date(s) are missing:")
+      msg <- paste0("Not all prism data exist in the returned metadata.\n",
+                    "  ", n, " data are missing:")
       if (n > 10) {
         msg <- paste0(msg, " (only the first 10 are printed)")
         missing <- missing[1:10]
       }
       
       msg <- paste0(msg, "\n  ", paste(missing, collapse = "\n  "), "\n\n  ",
-                    "Are you sure those days have been downloaded?")
+                    "Are you sure those data have been downloaded?")
       warning(msg)
     }
   }
@@ -189,113 +171,26 @@ prism_data_get_station_md <- function(type, temp_period, years = NULL,
   zz
 }
 
+#' @inheritParams prism_archive_subset
+#' 
 #' @description 
 #' `get_prism_station_md()` is a deprecated version of 
-#' `prism_data_get_station_md()`
+#' `pd_get_station_md()` that only works with daily prism data.
 #' 
 #' @export
-#' @rdname prism_data_get_station_md
-get_prism_station_md <- function(type, temp_period, years = NULL, mon = NULL, 
-                                 minDate = NULL, maxDate = NULL, dates = NULL,
-                                 resolution = NULL)
+#' @rdname pd_get_station_md
+get_prism_station_md <- function(type, minDate = NULL, maxDate = NULL, 
+                                 dates = NULL)
 {
-  .Deprecated("`prism_data_get_station_md()`")
+  .Deprecated("`pd_get_station_md()`")
   
-  prism_data_get_station_md(type, temp_period, years = years, mon = mon, 
-                            minDate = minDate, maxDate = maxDate, dates = dates,
-                            resolution = resolution)
+  pd <- prism_archive_subset(
+    type, 
+    temp_period = "daily", 
+    minDate = minDate, 
+    maxDate = maxDate, 
+    dates = dates
+  )
+  
+  pd_get_station_md(pd)
 }
-
-folder_to_date <- function(folder, temp_period) {
-  if (temp_period %in% c("annual", "monthly", "daily")) {
-    pattern <- "_\\d{4,}_"
-    
-    dd <- stringr::str_extract(folder, pattern) %>%
-      stringr::str_replace_all("_", "")
-    
-    # add in hyphens after 4th and 6th characters
-    # split between year and month
-    i <- nchar(dd)
-    i <- i > 4
-    stringr::str_sub(dd[i], 5, 4) <- "-"
-    
-    # now add in between month and day
-    i <- nchar(dd)
-    i <- i > 7
-    stringr::str_sub(dd[i], 8, 7) <- "-"
-   
-  } else if (temp_period == "monthly normals") {
-    pattern <- "_\\d{2}_"
-    
-    dd <- stringr::str_extract(folder, pattern) %>%
-      stringr::str_replace_all("_", "")
-    
-  } else if (temp_period == "annual normals") {
-    dd <- ""
-  }
-  
-  dd
-}
-
-# returns "" if it is not possible to determine contrained set of dates. 
-# in that case, the calling function will not check to see that all dates 
-# exist. 
-get_all_possible_dates <- function(temp_period, years = NULL, mon = NULL, 
-                                   minDate = NULL, maxDate = NULL, dates = NULL)
-{
-  if (temp_period == "annual normals") {
-    return("")
-  }
-  
-  if (temp_period == "daily") {
-    if (!is.null(dates) || !is.null(minDate)) {
-      dd <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-    } else if (!is.null(years)) {
-      if (is.null(mon)) {
-        mon <- 1:12
-      }
-      
-      min_date <- paste0(min(years), "-", min(mon), "-01")
-      max_date <- paste0(max(years), "-", max(mon))
-      last_day <- lubridate::days_in_month(paste0(max_date, "-01"), "%Y-%m-%d")
-      max_date <- paste(max_date, last_day, sep = "-")
-      
-      dd <- gen_dates(minDate = min_date, maxDate = max_date, dates = NULL)
-      
-    } else {
-      # impossible to find constrained version of all possible dates, so return
-      # ""
-      dd <- ""
-    }
-    
-  } else if (temp_period == "monthly") {
-    if (is.null(years)) {
-      dd <- ""
-    } else {
-      if (is.null(mon)) {
-        mon <- 1:12
-      }
-      
-      mon <- sprintf("%02d", mon)
-      dd <- expand.grid(years, mon)
-      dd <- paste(dd[,1], dd[,2], sep = "-")
-    }
-    
-  } else if (temp_period == "annual") {
-    if (is.null(years)) {
-      dd <- ""
-    } else {
-      dd <- years
-    }
-  } else {
-    # monthly normals
-    if (is.null(mon)) {
-      mon <- 1:12
-    }
-    
-    dd <- sprintf("%02d", mon)
-  }
-  
-  as.character(dd)
-}
-

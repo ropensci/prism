@@ -31,6 +31,17 @@ pd_get_date <- function(pd) {
   unlist(lapply(p, pr_parse, returnDate = TRUE))
 }
 
+#' @description `pd_get_type()` parses the variable from the prism data.
+#' 
+#' @export
+#' @rdname pd_get
+pd_get_type <- function(pd) {
+  p <- stringr::str_remove(pd, "PRISM_")
+  p <- stringr::str_split(p, "_", simplify = TRUE)
+  
+  p[,1]
+}
+
 #' @description 
 #' `prism_md()` is a deprecated function that has been replaced with 
 #' `pd_get_name()` and `pd_get_date()`

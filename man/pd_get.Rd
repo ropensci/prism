@@ -3,6 +3,7 @@
 \name{pd_get_name}
 \alias{pd_get_name}
 \alias{pd_get_date}
+\alias{pd_get_type}
 \alias{prism_md}
 \alias{pd_to_file}
 \title{Perform action on "prism data"}
@@ -10,6 +11,8 @@
 pd_get_name(pd)
 
 pd_get_date(pd)
+
+pd_get_type(pd)
 
 prism_md(f, returnDate = FALSE)
 
@@ -35,6 +38,8 @@ name or date from these data, or convert these data to a file name.
 \code{pd_get_date()} extracts the date from the prism data.
 Date is returned in yyyy-mm-dd format. For monthly data, dd is 01 and
 for annual data mm is also 01. For normals, an empty character is returned.
+
+\code{pd_get_type()} parses the variable from the prism data.
 
 \code{prism_md()} is a deprecated function that has been replaced with
 \code{pd_get_name()} and \code{pd_get_date()}

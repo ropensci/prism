@@ -159,7 +159,8 @@ del_early_prov <- function (type, minDate = NULL, maxDate = NULL, dates = NULL)
   prism_check_dl_dir()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, 
                              dates = dates)
-  mddf <- prism_data_get_md(type = type, temp_period = "daily", dates = dates)
+  pd <- prism_archive_subset(type = type, temp_period = "daily", dates = dates)
+  mddf <- pd_get_md(pd)
 
   mddf$dates_str <- stringr::str_extract(mddf$PRISM_DATASET_FILENAME, 
                                          "[0-9]{8}")
