@@ -56,7 +56,7 @@ pd_plot_slice <- function(pd, location) {
   meta_names <- pd_get_name(pd)[1]
   param_name <- strsplit(meta_names,"-")[[1]][3]
 
-  pstack <- prism_stack(pd)
+  pstack <- pd_stack(pd)
   data <- unlist(
     raster::extract(pstack, matrix(location, nrow = 1), buffer = 10)
   )
