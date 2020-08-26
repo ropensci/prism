@@ -30,6 +30,7 @@
 * added `pd_get_type()`
 * `pd_image()` replaces `prism_image()`
 * `pd_plot_slice()` replaces `prism_slice()`
+* `pd_stack()` replaces `prism_stack()`
 
 # prism 0.1.0
 
