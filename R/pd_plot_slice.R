@@ -32,8 +32,6 @@
 #' print(p)
 #' }
 #' 
-#' @import raster 
-#' 
 #' @export
 pd_plot_slice <- function(pd, location) {
   
