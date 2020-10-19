@@ -5,7 +5,7 @@
 #' function does no checking and will stack data with different variables or
 #' temporal periods.
 #' 
-#' @param pd,prismfile a vector of prism data returned by [prism_archive_ls()] 
+#' @param pd prismfile a vector of prism data returned by [prism_archive_ls()] 
 #'   or [prism_archive_subset()].
 #'   
 #' @examples \dontrun{
