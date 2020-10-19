@@ -16,5 +16,6 @@ test_that("prism_set_dl_dir() works", {
 
 test_that("prism_set_dl_dir() fails correctly on windows", {
   skip_on_travis()
+  skip_on_os(c("mac", "linux", "solaris"))
   expect_warning(expect_error(prism_set_dl_dir(f3)))
 })
