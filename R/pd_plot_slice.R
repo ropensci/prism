@@ -95,5 +95,5 @@ prism_slice <- function(location, prismfile) {
     "Note the order of paramters changed."
   ))
   
-  pd_slice(prismfile, location)
+  pd_plot_slice(prismfile, location)
 }
