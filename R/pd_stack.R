@@ -5,7 +5,7 @@
 #' function does no checking and will stack data with different variables or
 #' temporal periods.
 #' 
-#' @param pd prismfile a vector of prism data returned by [prism_archive_ls()] 
+#' @param pd,prismfile A vector of prism data returned by [prism_archive_ls()] 
 #'   or [prism_archive_subset()].
 #'   
 #' @examples \dontrun{
@@ -40,6 +40,9 @@ pd_stack <- function(pd) {
   return(masterRaster)
 }
 
+#' @description `prism_stack()` is the deprecated version of `pd_stack()`.
+#' @export
+#' @rdname pd_stack
 prism_stack <- function(prismfile) {
   .Deprecated("`pd_stack()`") 
   
