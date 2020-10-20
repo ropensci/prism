@@ -31,6 +31,8 @@
 * `pd_image()` replaces `prism_image()`
 * `pd_plot_slice()` replaces `prism_slice()`
 * `pd_stack()` replaces `prism_stack()`
+* `prism_archive_verify()` replaces `check_corrupt()`. 
+  * It also now works with time steps other than daily and it gains a `download_corrupt` argument that controls whether corrupt files are automatically re-downloaded.
 
 # prism 0.1.0
 
@@ -39,7 +41,7 @@
 * New functions
     - `del_early_prov()` searches the download folder for duplicated PRISM data and keeps only the newest version.
     - `get_prism_station_md()` extracts metadata from daily PRISM data.
-* `get_prism_dailys ()` gains a `check` parameter that allows the user to specify how prism files are checked.
+* `get_prism_dailys()` gains a `check` parameter that allows the user to specify how prism files are checked.
 
 
 ## Bug fixes
