@@ -1,5 +1,5 @@
 
-n_files <- 8
+n_files <- 9
 
 test_that("Directory listings work",{
   skip_on_cran()

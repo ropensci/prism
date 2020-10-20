@@ -14,7 +14,7 @@ test_that("pd_get_md() works", {
     x <- pd_get_md(prism_archive_subset("ppt", "daily", year = 1981:2020)),
     "data.frame"
   )
-  expect_identical(dim(x), c(3L, 8L))
+  expect_identical(dim(x), c(4L, 8L))
   expect_setequal(colnames(x), exp_cols)
   
   expect_s3_class(

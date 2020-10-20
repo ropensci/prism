@@ -171,7 +171,7 @@ test_that("prism_archive_subset() errors correctly", {
 test_that("prism_archive_subset() works", {
   expect_equal(
     prism_archive_subset("ppt", "daily"),
-    prism_archive_subset("ppt", "daily", years = c(1981, 1991, 2011))
+    prism_archive_subset("ppt", "daily", years = c(1981, 1991, 2011, 2012))
   )
   expect_equal(
     prism_archive_subset("ppt", "daily"),

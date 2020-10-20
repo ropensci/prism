@@ -3,7 +3,7 @@ dl_dir <- file.path("prism_test")
 # need to unzip all the zip files, then delete the unzipped folder when exiting
 avail_ppt <- paste0(
   "PRISM_ppt_stable_4kmD2_",
-  c("19810101", "19910101", "20110101"),
+  c("19810101", "19910101", "20110101", "20120101"),
   "_bil"
 )
 avail_tmin <- paste0(
