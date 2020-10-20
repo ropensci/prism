@@ -50,9 +50,9 @@ for the same variable and temporal period. Stable data are newer than
 provisional data that are newer than early data; only the newest data are
 kept when the "clean" is performed.
 
-\code{del_early_prov()} is a deprecated version of \code{prism_archive_clean()} that only
-works for daily data, and does not prompt the user to confirm which folders
-should be removed.
+\code{del_early_prov()} is a deprecated version of \code{prism_archive_clean()} that
+only works for daily data, and does not prompt the user to confirm which
+folders should be removed.
 }
 \details{
 \code{prism_archive_clean()} prompts the user to verify the folders that should be

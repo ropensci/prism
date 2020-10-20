@@ -146,9 +146,9 @@ folders_to_remove <- function(x) {
 }
 
 #' @description 
-#' `del_early_prov()` is a deprecated version of `prism_archive_clean()` that only
-#' works for daily data, and does not prompt the user to confirm which folders
-#' should be removed.
+#' `del_early_prov()` is a deprecated version of `prism_archive_clean()` that 
+#' only works for daily data, and does not prompt the user to confirm which 
+#' folders should be removed.
 #' 
 #' @inheritParams get_prism_dailys
 #' @export
