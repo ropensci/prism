@@ -50,9 +50,9 @@ prism_archive_verify <- function(type, temp_period, years = NULL, mon = NULL,
     }
     
     close(mpb)
-  } else {
+  } else if (length(dl_files) == 0) {
     dl_files <- TRUE
-  }
+  } 
   
   dl_files
 }
@@ -165,24 +165,31 @@ pd_is_readable <- function(pd) {
 folder_to_url <- function(pd) {
   pd <- stringr::str_split(pd, "_", simplify = TRUE)
   
-  if (ncol(pd) == 6) {
+  pd_norm <- pd[pd[,3] == "30yr",,drop = FALSE]
+  pd_other <- pd[pd[,3] != "30yr",,drop = FALSE]
+
+  urls <- c()
+  
+  if (length(pd_other) > 0) {
     # daily, monthly, annual
-    urls <- paste0(
+    urls <- c(urls, paste0(
       "http://services.nacse.org/prism/data/public/4km/",
-      pd[,2], "/", pd[,5]
-    )
-  } else {
+      pd_other[,2], "/", pd_other[,5]
+    ))
+  } 
+  
+  if (length(pd_norm) > 0) {
     # normals
     # if any are annual, change to "14"
-    urls[urls[,6] == "annual",6] <- "14"
+    pd_norm[pd_norm[,6] == "annual",6] <- "14"
     
     # strip off "M2" from resolution
-    pd[,5] <- stringr::str_remove(pd[,5], "M2")
+    pd_norm[,5] <- stringr::str_remove(pd_norm[,5], "M2")
     
-    urls <- paste0(
+    urls <- c(urls, paste0(
       "http://services.nacse.org/prism/data/public/normals/",
-      pd[,5], "/", pd[,2], pd[,6]
-    )
+      pd_norm[,5], "/", pd_norm[,2], "/", pd_norm[,6]
+    ))
   }
   
   urls
