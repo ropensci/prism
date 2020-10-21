@@ -1,9 +1,9 @@
-#' Download PRISM via webservice
+#' Download PRISM via web service
 #' 
 #' This is the workhorse function that accesses the web service to download 
 #' files. It is called by the get_prism_*() functions. 
 #' 
-#' @param uri a valid PRISM webservice URI
+#' @param uri a valid PRISM web service URI
 #' 
 #' @param keepZip TRUE or FALSE, keep zip files once they have been unzipped
 #' 
@@ -11,7 +11,7 @@
 #'   downloaded is returned
 #'   
 #' @param pre81_months Numeric vector of months that will be downloaded, if 
-#'   downloading data before 1981. This is so that the existance of the data can
+#'   downloading data before 1981. This is so that the existence of the data can
 #'   be correctly checked, as the file includes all monthly data for a given 
 #'   year.
 #' 

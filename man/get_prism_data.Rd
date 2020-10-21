@@ -74,7 +74,7 @@ and mean), mean dewpoint temperature, precipitation, and vapor pressure
 deficit (min and max) can be downloaded for annual (\code{get_prism_annual()}),
 monthly (\code{get_prism_monthlys()}), daily (\code{get_prism_dailys()}), and 30-year
 averages (\code{get_prism_normals()}). Data are at 4km resolution, except for the
-normals which can also be downloaded at 800m resoultion.
+normals which can also be downloaded at 800m resolution.
 
 Download data from the prism project for 30 year normals at 4km
 or 800m grid cell resolution for precipitation, mean, min and max
@@ -104,9 +104,9 @@ in all the \code{years} in the supplied vectors.
 \section{Daily}{
 
 
-Daily prism data are avaialbe beginning on January 1, 1981. To download the
+Daily prism data are available beginning on January 1, 1981. To download the
 daily data, dates must be in the proper format or downloading will not work
-properly. Dates can be sepcified using either a date range via \code{minDate} and
+properly. Dates can be specified using either a date range via \code{minDate} and
 \code{maxDate}, or a vector of \code{dates}, but not both.
 }
 

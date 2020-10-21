@@ -22,9 +22,9 @@
 #' 
 #' @section Daily:
 #' 
-#' Daily prism data are avaialbe beginning on January 1, 1981. To download the 
+#' Daily prism data are available beginning on January 1, 1981. To download the 
 #' daily data, dates must be in the proper format or downloading will not work 
-#' properly. Dates can be sepcified using either a date range via `minDate` and 
+#' properly. Dates can be specified using either a date range via `minDate` and 
 #' `maxDate`, or a vector of `dates`, but not both. 
 #'
 #' @examples 

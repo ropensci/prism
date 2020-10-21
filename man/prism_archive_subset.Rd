@@ -53,7 +53,7 @@ been downloaded in the "prism.path" and returns the subset based on
 \code{type}, \code{temp_period}, and specified dates.
 }
 \details{
-\code{temp_period} must be specifed so the function can distinguish between
+\code{temp_period} must be specified so the function can distinguish between
 wanting annual data or wanting monthly data for a specified year. For example
 \code{prism_archive_subset("tmean", "annual", years = 2012)} would provide only
 one folder: the annual average temperature for 2012. However,

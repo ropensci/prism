@@ -6,7 +6,7 @@
 #' deficit (min and max) can be downloaded for annual (`get_prism_annual()`), 
 #' monthly (`get_prism_monthlys()`), daily (`get_prism_dailys()`), and 30-year
 #' averages (`get_prism_normals()`). Data are at 4km resolution, except for the 
-#' normals which can also be downloaded at 800m resoultion.
+#' normals which can also be downloaded at 800m resolution.
 #' 
 #' @param type The type of data to download. Must be "ppt", "tmean", "tmin", 
 #'   "tmax", "tdmean", "vpdmin", or "vpdmax". Note that `tmean == 
