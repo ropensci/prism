@@ -70,6 +70,9 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
       if (!is.logical(is_zip)) {
         # is_zip is an error message
         warning(is_zip)
+        # convert the file to .txt (store error message)
+        new_file <- stringr::str_replace(outFile, ".zip", ".txt")
+        file.rename(outFile, new_file)
         return(NULL)
       }
       
