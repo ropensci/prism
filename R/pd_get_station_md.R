@@ -4,8 +4,7 @@
 #' generate the prism data. **The data must already be downloaded 
 #' and available in the prism download folder.** "prism data", i.e., `pd` are 
 #' the folder names returned by [prism_archive_ls()] or 
-#' [prism_archive_subset()]. These functions get the name or date from these 
-#' data, or convert these data to a file name.
+#' [prism_archive_subset()].
 #' 
 #' Note that station metadata does not exist for "tmean" type or for any 
 #' "annual" temporal periods. 
@@ -41,6 +40,14 @@
 pd_get_station_md <- function(pd)
 {
   prism_check_dl_dir()
+  
+  # remove tmean from folders
+  tmean <- stringr::str_detect(pd, "_tmean_")
+  if (any(tmean)) {
+    message("Removing tmean from specified `pd`.\n", 
+            "Station metadata does not exist for tmean.")
+    pd <- pd[!tmean]
+  }
 
   folders_to_get <- file.path(prism_get_dl_dir(), pd)
   folders_to_get <- pd[dir.exists(folders_to_get)]

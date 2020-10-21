@@ -42,8 +42,7 @@ reporting here. Monthly and annual normals are empty strings.
 generate the prism data. \strong{The data must already be downloaded
 and available in the prism download folder.} "prism data", i.e., \code{pd} are
 the folder names returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}} or
-\code{\link[=prism_archive_subset]{prism_archive_subset()}}. These functions get the name or date from these
-data, or convert these data to a file name.
+\code{\link[=prism_archive_subset]{prism_archive_subset()}}.
 
 \code{get_prism_station_md()} is a deprecated version of
 \code{pd_get_station_md()} that only works with daily prism data.
