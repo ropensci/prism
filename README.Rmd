@@ -67,7 +67,7 @@ The remainder of this README provides examples following this work flow.
 Data are available in 4 different temporal scales as mentioned above. At each temporal scale, there are 7 different parameters/variables available. Keep in mind these are modeled parameters, not measured.  Please see the [full description](http://www.prism.oregonstate.edu/documents/Daly2008_PhysiographicMapping_IntJnlClim.pdf) for how they are calculated.
 
 | Parameter name| Description           |
-|:---------------:|:-------------|
+|:---------------|:-------------|
 | *tmean*      | Mean temperature |
 | *tmax*      | Maximum temperature      |
 | *tmin* | Minimum temperature      |
@@ -93,7 +93,10 @@ Normals are based on the latest 30-year period; currently 1981 - 2010. Normals c
 
 ```{r get normals,results=FALSE, eval=FALSE}
 # Download the January - June 30-year averages at 4km resolution
-get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip = FALSE)
+get_prism_normals(type="tmean", resolution = "4km", mon = 1:6, keepZip = FALSE)
+
+# Download the 30-year annual average precip
+get_prism_normals("ppt", "4km", annual = TRUE, keepZip = FALSE)
 ```
 
 If the archive has not already been set, calling any of the `get_prism_*()` functions will prompt the user to specify the directory. prism data are downloaded as zip files and then unzipped. If the `keepZip` argument is `TRUE` the zip file will remain on your machine, otherwise it will be automatically deleted.

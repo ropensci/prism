@@ -58,14 +58,14 @@ description](http://www.prism.oregonstate.edu/documents/Daly2008_PhysiographicMa
 for how they are calculated.
 
 | Parameter name | Description                          |
-| :------------: | :----------------------------------- |
-|    *tmean*     | Mean temperature                     |
-|     *tmax*     | Maximum temperature                  |
-|     *tmin*     | Minimum temperature                  |
-|    *tdmean*    | Mean dew point temperature           |
-|     *ppt*      | Total precipitation (rain and snow)  |
-|    *vpdmin*    | Daily minimum vapor pressure deficit |
-|    *vpdmax*    | Daily maximum vapor pressure deficit |
+| :------------- | :----------------------------------- |
+| *tmean*        | Mean temperature                     |
+| *tmax*         | Maximum temperature                  |
+| *tmin*         | Minimum temperature                  |
+| *tdmean*       | Mean dew point temperature           |
+| *ppt*          | Total precipitation (rain and snow)  |
+| *vpdmin*       | Daily minimum vapor pressure deficit |
+| *vpdmax*       | Daily maximum vapor pressure deficit |
 
 ## Downloading data
 
