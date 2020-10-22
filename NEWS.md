@@ -49,7 +49,7 @@ There are two overall major updates with this release. (1) All functions should 
 * `pd_get_station_md()` (formerly `get_prism_station_md()`) now reports a warning if not all requested dates exist in the metadata data frame. (#87 related). It also now works for monthly and normals; not solely daily prism data. 
 * `pd_get_md()` was added to parse .info.txt metadata, by converting an existing internal function. (#88)
 * `prism_archive_clean()` (formerly `del_early_prov()`) now invisibly returns the folders that it removes.
-* `pd_image()` (formerly `prism_image()`) invisibly returns the `gg` object it creates.
+* `pd_image()` (formerly `prism_image()`) invisibly returns the `gg` object it creates. It also shows the units for the prism variable in the fill legend. (#99)
 
 
 # prism 0.1.0

@@ -43,6 +43,7 @@ pd_image <- function(pd, col = "heat") {
   col <- match.arg(col, c("heat", "redblue"))
 
   pname <- pd_get_name(pd)
+  ptype <- pd_get_type(pd)
 
   stop_file <- function(x) {
     stop(paste0(pd, " was not found in prism archive."))
@@ -57,13 +58,17 @@ pd_image <- function(pd, col = "heat") {
   out <- raster(prismfile)
   out <- data.frame(raster::rasterToPoints(out))
   colnames(out) <- c("x", "y", "data")
-
+  
+  u <- get_units(ptype)
+  
   prPlot <- ggplot() +
     geom_raster(data = out, aes_string(x = "x", y = "y", fill = "data")) +
     theme_bw() +
-    xlab("Longitude") +
-    ylab("Latitude") +
-    ggtitle(pname)
+    labs(
+      title = pname,
+      x = "Longitude", y = "Latitude",
+      fill = u
+    )
 
 
   if (col == "heat") {

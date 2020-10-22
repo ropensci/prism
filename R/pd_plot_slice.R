@@ -66,21 +66,14 @@ pd_plot_slice <- function(pd, location) {
   ## Re order
   data <- data[order(data$date),]
   
-  # get units for plot
-  if(ptype %in% c("tmin", "tmax", "tmean")) {
-    u <- "(C)"
-  } else if(ptype %in% c("tdmean", "vpdmax", "vpdmin")) {
-    u <- "hPA"
-  } else {
-    # must be ppt
-    u <- "(mm)"
-  }
+  # units
+  u <- get_units(ptype, param_name)
     
   out <- ggplot(data,aes(x=date,y=data)) +
     geom_path() +
     geom_point() +
     xlab("Date") + 
-    ylab(paste(param_name,u,sep=" "))
+    ylab(u)
   
   return(out)
 }
@@ -96,4 +89,30 @@ prism_slice <- function(location, prismfile) {
   ))
   
   pd_plot_slice(prismfile, location)
+}
+
+get_units <- function(type, pre_txt = NULL) {
+  # get units for plot
+  if(type %in% c("tmin", "tmax", "tmean")) {
+    if (!is.null(pre_txt)) {
+      u <- bquote(.(pre_txt) ~ (degree*C))
+    } else {
+      u <- expression(degree*C)
+    }
+  } else if(type %in% c("tdmean", "vpdmax", "vpdmin")) {
+    if (!is.null(pre_txt)) {
+      u <- paste(pre_txt, "(hPA)")
+    } else {
+      u <- "hPA"
+    }
+  } else {
+    # must be ppt
+    if (!is.null(pre_txt)) {
+      u <- paste(pre_txt, "(mm)")
+    } else {
+      u <- "mm"
+    }
+  }
+  
+  u
 }
