@@ -163,10 +163,6 @@ can get that with the `pd_get_name()` function.
 ``` r
 ## Truncated to keep file list short
 pd_to_file(prism_archive_ls())
-#> Warning in normalizePath(path.expand(path), winslash, mustWork): path[84]="C:
-#> \Users\RAButler\Documents\prismtmp/PRISM_vpdmin_stable_4kmM3_2017_bil.txt/
-#> PRISM_vpdmin_stable_4kmM3_2017_bil.txt.bil": The system cannot find the path
-#> specified
 #>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM2_annual_bil\\PRISM_ppt_30yr_normal_4kmM2_annual_bil.bil"    
 #>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_800mM2_02_bil\\PRISM_ppt_30yr_normal_800mM2_02_bil.bil"          
 #>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_20120101_bil\\PRISM_ppt_stable_4kmD2_20120101_bil.bil"          
