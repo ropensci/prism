@@ -100,8 +100,9 @@ vector of months, or annual averages for all 30 years.
 # Download the January - June 30-year averages at 4km resolution
 get_prism_normals(type="tmean", resolution = "4km", mon = 1:6, keepZip = FALSE)
 
-# Download the 30-year annual average precip
+# Download the 30-year annual average precip and annual average teperature
 get_prism_normals("ppt", "4km", annual = TRUE, keepZip = FALSE)
+get_prism_normals("tmean", "4km", annual = TRUE, keepZip = FALSE)
 ```
 
 If the archive has not already been set, calling any of the
@@ -134,26 +135,26 @@ the form of “YYYY-MM-DD”.
 
 You can view all the prism data you have downloaded with a simple
 command: `prism_archive_ls()`. This function gives a list of folder
-names, i.e., prism data (`pd`). All the internal functions in the
-package work off of one or more of these folder names (`pd`).
+names, i.e., prism data (`pd`). All the functions in the prism package
+work off of one or more of these folder names (`pd`).
 
 ``` r
 ## Truncated to keep file list short
 prism_archive_ls()
-#>  [1] "PRISM_ppt_30yr_normal_4kmM2_annual_bil" 
-#>  [2] "PRISM_ppt_30yr_normal_800mM2_02_bil"    
-#>  [3] "PRISM_ppt_stable_4kmD2_20120101_bil"    
-#>  [4] "PRISM_ppt_stable_4kmM3_2000_bil"        
-#>  [5] "PRISM_ppt_stable_4kmM3_2001_bil"        
-#>  [6] "PRISM_ppt_stable_4kmM3_2002_bil"        
-#>  [7] "PRISM_ppt_stable_4kmM3_2003_bil"        
-#>  [8] "PRISM_ppt_stable_4kmM3_2004_bil"        
-#>  [9] "PRISM_ppt_stable_4kmM3_2005_bil"        
-#> [10] "PRISM_ppt_stable_4kmM3_2006_bil"        
+#>  [1] "PRISM_ppt_30yr_normal_4kmM2_annual_bil"  
+#>  [2] "PRISM_ppt_30yr_normal_800mM2_02_bil"     
+#>  [3] "PRISM_ppt_stable_4kmD2_20120101_bil"     
+#>  [4] "PRISM_ppt_stable_4kmM3_2000_bil"         
+#>  [5] "PRISM_ppt_stable_4kmM3_2001_bil"         
+#>  [6] "PRISM_ppt_stable_4kmM3_2002_bil"         
+#>  [7] "PRISM_ppt_stable_4kmM3_2003_bil"         
+#>  [8] "PRISM_ppt_stable_4kmM3_2004_bil"         
+#>  [9] "PRISM_ppt_stable_4kmM3_2005_bil"         
+#> [10] "PRISM_ppt_stable_4kmM3_2006_bil"         
 ....
 ```
 
-While internal plotting functions use this, other files may need an
+While prism functions use this folder format, other files may need an
 absolute path (e.g. the `raster` package). The `pd_to_file()` function
 conveniently returns the absolute path. Alternatively, you may want to
 see what the normal name for the product is (not the file name), and we
@@ -162,15 +163,15 @@ can get that with the `pd_get_name()` function.
 ``` r
 ## Truncated to keep file list short
 pd_to_file(prism_archive_ls())
-#> Warning in normalizePath(path.expand(path), winslash, mustWork): path[82]="C:
+#> Warning in normalizePath(path.expand(path), winslash, mustWork): path[84]="C:
 #> \Users\RAButler\Documents\prismtmp/PRISM_vpdmin_stable_4kmM3_2017_bil.txt/
 #> PRISM_vpdmin_stable_4kmM3_2017_bil.txt.bil": The system cannot find the path
 #> specified
-#>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM2_annual_bil\\PRISM_ppt_30yr_normal_4kmM2_annual_bil.bil"  
-#>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_800mM2_02_bil\\PRISM_ppt_30yr_normal_800mM2_02_bil.bil"        
-#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_20120101_bil\\PRISM_ppt_stable_4kmD2_20120101_bil.bil"        
-#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2000_bil\\PRISM_ppt_stable_4kmM3_2000_bil.bil"                
-#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2001_bil\\PRISM_ppt_stable_4kmM3_2001_bil.bil"                
+#>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM2_annual_bil\\PRISM_ppt_30yr_normal_4kmM2_annual_bil.bil"    
+#>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_800mM2_02_bil\\PRISM_ppt_30yr_normal_800mM2_02_bil.bil"          
+#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_20120101_bil\\PRISM_ppt_stable_4kmD2_20120101_bil.bil"          
+#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2000_bil\\PRISM_ppt_stable_4kmM3_2000_bil.bil"                  
+#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2001_bil\\PRISM_ppt_stable_4kmM3_2001_bil.bil"                  
 ....
 
 pd_get_name(prism_archive_ls())
@@ -203,6 +204,15 @@ prism_archive_subset("tmean", "daily", mon = 6)
 #> [12] "PRISM_tmean_stable_4kmD2_20130612_bil"
 #> [13] "PRISM_tmean_stable_4kmD2_20130613_bil"
 #> [14] "PRISM_tmean_stable_4kmD2_20130614_bil"
+
+# or we can loook for days between June 7 and June 10
+prism_archive_subset(
+  "tmean", "daily", minDate = "2013-06-07", maxDate = "2013-06-10"
+)
+#> [1] "PRISM_tmean_stable_4kmD2_20130607_bil"
+#> [2] "PRISM_tmean_stable_4kmD2_20130608_bil"
+#> [3] "PRISM_tmean_stable_4kmD2_20130609_bil"
+#> [4] "PRISM_tmean_stable_4kmD2_20130610_bil"
 ```
 
 ### Raster plots
@@ -309,7 +319,7 @@ package](https://cran.r-project.org/web/packages/leaflet/) allows you to
 easily make javascript maps using the [leaflet](http://leafletjs.com/)
 mapping framework using prism data. These can easily be hosted on
 websites like [Rpubs](https://rpubs.com/) or your own site. Here is a
-simple example of plotting the [30 year normal for annual
+simple example of plotting the [30-year normal for annual
 temperature](https://rpubs.com/DistribEcology/122453). If you run this
 code you will have an interactive map, instead of just the screen shot
 shown here.
@@ -319,10 +329,9 @@ library(leaflet)
 library(raster)
 library(prism)
 
-# 30-year normals for average temperature have already been downloaded for 
-# January - June. We will use June in this example.
+# 30-year normal average temperature have already been downloaded for 
 norm <- prism_archive_subset(
-  "tmean", "monthly normals", mon = 6, resolution = "4km"
+  "tmean", "annual normals", resolution = "4km"
 )
 rast <- raster(pd_to_file(norm))
 
