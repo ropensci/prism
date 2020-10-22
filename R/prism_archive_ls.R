@@ -32,9 +32,9 @@
 prism_archive_ls <- function() {
   prism_check_dl_dir()
   
-  data <- list.files(prism_get_dl_dir())
-  # remove zip files
-  data <- data[grep("zip", data, invert = TRUE)]
+  # list.dirs will inherently not include .zip and .txt files
+  data <- list.dirs(prism_get_dl_dir(), full.names = FALSE, recursive = FALSE)
+
   # Attempt to ensure that only PRISM folders are counted. 
   data <- data[grep("PRISM", data)]
   
