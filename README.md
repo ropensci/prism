@@ -35,16 +35,20 @@ install_github(repo = "prism", username = "ropensci")
 
 ## Quickstart
 
-The overall work flow in the prism package is:
+The overall work flow in the prism package is (links go to details on
+this page):
 
-1.  Set the download directory, i.g., the folder on your computer that
-    prism data will be saved to: `prism_set_dl_dir()`. This is now
-    referred to as the “prism archive”.
-2.  Download prism data to the archive: `get_prism_*()`. Each folder, or
-    variable, timestep, day/month/year is stored in a single folder in
-    the archive and referred to as prism data (`pd`).
-3.  Interact with the prism archive: `prism_archive_*()`. Or interact
-    with the prism data: `pd_*()`.
+1.  [Set the download directory](#downloading-data), i.e., the folder on
+    your computer that prism data will be saved to:
+    `prism_set_dl_dir()`. This is now referred to as the “prism
+    archive”.
+2.  [Download prism data to the archive:](#download-30-year-normal-data)
+    `get_prism_*()`. Each folder, or variable, timestep, day/month/year
+    is stored in a single folder in the archive and referred to as prism
+    data (`pd`).
+3.  [Interact with the prism
+    archive:](#interact-with-the-archive-and-prism-data)
+    `prism_archive_*()`. Or interact with the prism data: `pd_*()`.
 
 The remainder of this README provides examples following this work flow.
 
@@ -94,7 +98,10 @@ vector of months, or annual averages for all 30 years.
 
 ``` r
 # Download the January - June 30-year averages at 4km resolution
-get_prism_normals(type="tmean",resolution = "4km",mon = 1:6, keepZip = FALSE)
+get_prism_normals(type="tmean", resolution = "4km", mon = 1:6, keepZip = FALSE)
+
+# Download the 30-year annual average precip
+get_prism_normals("ppt", "4km", annual = TRUE, keepZip = FALSE)
 ```
 
 If the archive has not already been set, calling any of the
@@ -133,16 +140,16 @@ package work off of one or more of these folder names (`pd`).
 ``` r
 ## Truncated to keep file list short
 prism_archive_ls()
-#>  [1] "PRISM_ppt_30yr_normal_800mM2_02_bil"    
-#>  [2] "PRISM_ppt_stable_4kmD2_20120101_bil"    
-#>  [3] "PRISM_ppt_stable_4kmM3_2000_bil"        
-#>  [4] "PRISM_ppt_stable_4kmM3_2001_bil"        
-#>  [5] "PRISM_ppt_stable_4kmM3_2002_bil"        
-#>  [6] "PRISM_ppt_stable_4kmM3_2003_bil"        
-#>  [7] "PRISM_ppt_stable_4kmM3_2004_bil"        
-#>  [8] "PRISM_ppt_stable_4kmM3_2005_bil"        
-#>  [9] "PRISM_ppt_stable_4kmM3_2006_bil"        
-#> [10] "PRISM_ppt_stable_4kmM3_2007_bil"        
+#>  [1] "PRISM_ppt_30yr_normal_4kmM2_annual_bil" 
+#>  [2] "PRISM_ppt_30yr_normal_800mM2_02_bil"    
+#>  [3] "PRISM_ppt_stable_4kmD2_20120101_bil"    
+#>  [4] "PRISM_ppt_stable_4kmM3_2000_bil"        
+#>  [5] "PRISM_ppt_stable_4kmM3_2001_bil"        
+#>  [6] "PRISM_ppt_stable_4kmM3_2002_bil"        
+#>  [7] "PRISM_ppt_stable_4kmM3_2003_bil"        
+#>  [8] "PRISM_ppt_stable_4kmM3_2004_bil"        
+#>  [9] "PRISM_ppt_stable_4kmM3_2005_bil"        
+#> [10] "PRISM_ppt_stable_4kmM3_2006_bil"        
 ....
 ```
 
@@ -155,23 +162,23 @@ can get that with the `pd_get_name()` function.
 ``` r
 ## Truncated to keep file list short
 pd_to_file(prism_archive_ls())
-#> Warning in normalizePath(path.expand(path), winslash, mustWork): path[81]="C:
+#> Warning in normalizePath(path.expand(path), winslash, mustWork): path[82]="C:
 #> \Users\RAButler\Documents\prismtmp/PRISM_vpdmin_stable_4kmM3_2017_bil.txt/
 #> PRISM_vpdmin_stable_4kmM3_2017_bil.txt.bil": The system cannot find the path
 #> specified
-#>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_800mM2_02_bil\\PRISM_ppt_30yr_normal_800mM2_02_bil.bil"        
-#>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_20120101_bil\\PRISM_ppt_stable_4kmD2_20120101_bil.bil"        
-#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2000_bil\\PRISM_ppt_stable_4kmM3_2000_bil.bil"                
-#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2001_bil\\PRISM_ppt_stable_4kmM3_2001_bil.bil"                
-#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2002_bil\\PRISM_ppt_stable_4kmM3_2002_bil.bil"                
+#>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM2_annual_bil\\PRISM_ppt_30yr_normal_4kmM2_annual_bil.bil"  
+#>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_800mM2_02_bil\\PRISM_ppt_30yr_normal_800mM2_02_bil.bil"        
+#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_20120101_bil\\PRISM_ppt_stable_4kmD2_20120101_bil.bil"        
+#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2000_bil\\PRISM_ppt_stable_4kmM3_2000_bil.bil"                
+#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2001_bil\\PRISM_ppt_stable_4kmM3_2001_bil.bil"                
 ....
 
 pd_get_name(prism_archive_ls())
-#>  [1] "Feb 30-year normals - 800m resolution - Precipitation"        
-#>  [2] "Jan 01 2012 - 4km resolution - Precipitation"                 
-#>  [3] "2000 - 4km resolution - Precipitation"                        
-#>  [4] "2001 - 4km resolution - Precipitation"                        
-#>  [5] "2002 - 4km resolution - Precipitation"                        
+#>  [1] "Annual 30-year normals - 4km resolution - Precipitation"      
+#>  [2] "Feb 30-year normals - 800m resolution - Precipitation"        
+#>  [3] "Jan 01 2012 - 4km resolution - Precipitation"                 
+#>  [4] "2000 - 4km resolution - Precipitation"                        
+#>  [5] "2001 - 4km resolution - Precipitation"                        
 ....
 ```
 

@@ -54,11 +54,11 @@ install_github(repo = "prism", username = "ropensci")
 
 ## Quickstart
 
-The overall work flow in the prism package is:
+The overall work flow in the prism package is (links go to details on this page):
 
-1. Set the download directory, i.g., the folder on your computer that prism data will be saved to: `prism_set_dl_dir()`. This is now referred to as the "prism archive". 
-2. Download prism data to the archive: `get_prism_*()`. Each folder, or variable, timestep, day/month/year is stored in a single folder in the archive and referred to as prism data (`pd`). 
-3. Interact with the prism archive: `prism_archive_*()`. Or interact with the prism data: `pd_*()`. 
+1. [Set the download directory](#downloading-data), i.e., the folder on your computer that prism data will be saved to: `prism_set_dl_dir()`. This is now referred to as the "prism archive". 
+2. [Download prism data to the archive:](#download-30-year-normal-data) `get_prism_*()`. Each folder, or variable, timestep, day/month/year is stored in a single folder in the archive and referred to as prism data (`pd`). 
+3. [Interact with the prism archive:](#interact-with-the-archive-and-prism-data) `prism_archive_*()`. Or interact with the prism data: `pd_*()`. 
 
 The remainder of this README provides examples following this work flow.
 
