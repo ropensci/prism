@@ -1,6 +1,15 @@
 language: r
 sudo: required
 
+r: 
+  - oldrel
+  - release
+  - devel
+  
+os:
+  - linux
+  - osx
+
 after_failure:
 - "./travis-tool.sh dump_logs"
 
