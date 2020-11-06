@@ -49,8 +49,8 @@ meet the specifications.
 \description{
 \code{prism_archive_subset()} subsets the PRISM folders stored on disk by type,
 temporal period, and date. It looks through all of the PRISM data that have
-been downloaded in the "prism.path" and returns the subset based on
-\code{type}, \code{temp_period}, and specified dates.
+been downloaded in the prism archive (\code{\link[=prism_get_dl_dir]{prism_get_dl_dir()}}) and returns the
+subset based on the specified \code{type}, \code{temp_period}, and dates.
 }
 \details{
 \code{temp_period} must be specified so the function can distinguish between
@@ -68,7 +68,7 @@ of those would result in getting all annual, monthly, or daily data.
 \code{minDate}/\code{maxDate} or \code{dates} should only be specified for a \code{temp_period}
 of "daily". Additionally, only \code{dates}, or \code{minDate} and \code{maxDate}, should be
 specified, but all three should not be specified. Nor should the daily
-specifies be combined with \code{years} and/or \code{mon}. For example, if daily
+arguments be combined with \code{years} and/or \code{mon}. For example, if daily
 folders are desired, then specify \code{years} and/or \code{mon} to get all days for
 those years and months \strong{or} specify the specific dates using
 \code{minDate}/\code{maxDate} or \code{dates}

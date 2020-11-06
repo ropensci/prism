@@ -2,8 +2,8 @@
 #' 
 #' `prism_archive_subset()` subsets the PRISM folders stored on disk by type, 
 #' temporal period, and date. It looks through all of the PRISM data that have
-#' been downloaded in the "prism.path" and returns the subset based on 
-#' `type`, `temp_period`, and specified dates.
+#' been downloaded in the prism archive ([prism_get_dl_dir()]) and returns the 
+#' subset based on the specified `type`, `temp_period`, and dates.
 #' 
 #' `temp_period` must be specified so the function can distinguish between 
 #' wanting annual data or wanting monthly data for a specified year. For example
@@ -20,7 +20,7 @@
 #' `minDate`/`maxDate` or `dates` should only be specified for a `temp_period` 
 #' of "daily". Additionally, only `dates`, or `minDate` and `maxDate`, should be
 #' specified, but all three should not be specified. Nor should the daily 
-#' specifies be combined with `years` and/or `mon`. For example, if daily 
+#' arguments be combined with `years` and/or `mon`. For example, if daily 
 #' folders are desired, then specify `years` and/or `mon` to get all days for 
 #' those years and months **or** specify the specific dates using 
 #' `minDate`/`maxDate` or `dates` 
