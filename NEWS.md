@@ -2,7 +2,7 @@
 
 *In development*
 
-Thanks to @jsta for updating the README and other helping with several other under the hood fixes. 
+Thanks to @jsta for updating the README and helping with several other under the hood fixes. 
 
 ## Breaking Changes
 
