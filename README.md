@@ -100,7 +100,7 @@ vector of months, or annual averages for all 30 years.
 # Download the January - June 30-year averages at 4km resolution
 get_prism_normals(type="tmean", resolution = "4km", mon = 1:6, keepZip = FALSE)
 
-# Download the 30-year annual average precip and annual average teperature
+# Download the 30-year annual average precip and annual average temperature
 get_prism_normals("ppt", "4km", annual = TRUE, keepZip = FALSE)
 get_prism_normals("tmean", "4km", annual = TRUE, keepZip = FALSE)
 ```
@@ -201,7 +201,7 @@ prism_archive_subset("tmean", "daily", mon = 6)
 #> [13] "PRISM_tmean_stable_4kmD2_20130613_bil"
 #> [14] "PRISM_tmean_stable_4kmD2_20130614_bil"
 
-# or we can loook for days between June 7 and June 10
+# or we can look for days between June 7 and June 10
 prism_archive_subset(
   "tmean", "daily", minDate = "2013-06-07", maxDate = "2013-06-10"
 )
@@ -312,7 +312,7 @@ p +
 Finally, the prism data are in a form that can be used with leaflet maps
 (with the help of the raster package). The [leaflet
 package](https://cran.r-project.org/web/packages/leaflet/) allows you to
-easily make javascript maps using the [leaflet](http://leafletjs.com/)
+easily make JavaScript maps using the [leaflet](http://leafletjs.com/)
 mapping framework using prism data. These can easily be hosted on
 websites like [Rpubs](https://rpubs.com/) or your own site. Here is a
 simple example of plotting the [30-year normal for annual
@@ -346,4 +346,4 @@ leaflet() %>%
   addLegend(pal = pal, values = values(rast), title = "Deg C")
 ```
 
-\[![leaflet example figure](man/figures/leaflet_example.png)
+\[![leaflet example figure](vignettes/leaflet_example.png)

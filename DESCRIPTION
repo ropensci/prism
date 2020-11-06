@@ -30,6 +30,7 @@ VignetteBuilder: knitr
 Suggests:
     covr,
     knitr,
+    rmarkdown,
     testthat (>= 2.1.0)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
