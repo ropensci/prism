@@ -8,3 +8,4 @@
 ^revdep$
 ^codecov\.yml$
 ^vignettes/README\.md$
+^\.github$
