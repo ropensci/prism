@@ -1,8 +1,6 @@
 f1 <- file.path(tempdir(), "prism", "new")
 f2 <- file.path(tempdir(), "prism2")
 f3 <- file.path(tempdir(), "*$.txt")
-cat("\nf1: ", f1)
-cat("\nf1 normal: ", normalizePath(f1, mustWork = FALSE), "\n")
 
 orig_prism_path <- getOption("prism.path")
 teardown(options(prism.path = orig_prism_path))

@@ -7,8 +7,8 @@ teardown(options(prism.path = orig_prism_path))
 prism_set_dl_dir(tempdir())
 
 test_that("prism_check_dl_dir() works if path is set", {
-  expect_equal(prism_check_dl_dir(), normalizePath(tempdir()))
-  expect_warning(expect_equal(path_check(), normalizePath(tempdir())))
+  expect_equal(prism_check_dl_dir(), tempdir())
+  expect_warning(expect_equal(path_check(), tempdir()))
 })
 
 options(prism.path = NULL)
