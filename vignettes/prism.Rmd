@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = Sys.getenv("PRISM_AUTHOR")
+  eval = Sys.getenv("PRISM_AUTHOR") == "true"
 )
 
 # knitr hook to truncate long output. See:
