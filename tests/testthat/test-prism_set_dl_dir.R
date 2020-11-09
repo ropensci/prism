@@ -1,12 +1,12 @@
-f1 <- file.path(tempdir(), "prism", "new")
-f2 <- file.path(tempdir(), "prism2")
-f3 <- file.path(tempdir(), "*$.txt")
+f1 <- normalizePath(file.path(tempdir(), "prism", "new"), mustWork = FALSE)
+f2 <- normalizePath(file.path(tempdir(), "prism2"), mustWork = FALSE)
+f3 <- normalizePath(file.path(tempdir(), "*$.txt"), mustWork = FALSE)
 
 orig_prism_path <- getOption("prism.path")
 teardown(options(prism.path = orig_prism_path))
 
 test_that("prism_set_dl_dir() works", {
-  expect_equal(prism_set_dl_dir(f1), normalizePath(f1, mustWork = FALSE))
+  expect_equal(prism_set_dl_dir(f1), normalizePath(f1))
   expect_true(dir.exists(f1))
   expect_equal(prism_get_dl_dir(), normalizePath(f1))
   expect_equal(prism_set_dl_dir(f2), normalizePath(f2))
