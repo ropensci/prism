@@ -6,7 +6,7 @@ orig_prism_path <- getOption("prism.path")
 teardown(options(prism.path = orig_prism_path))
 
 test_that("prism_set_dl_dir() works", {
-  expect_equal(prism_set_dl_dir(f1), normalizePath(f1))
+  expect_equal(prism_set_dl_dir(f1), normalizePath(f1, mustWork = FALSE))
   expect_true(dir.exists(f1))
   expect_equal(prism_get_dl_dir(), normalizePath(f1))
   expect_equal(prism_set_dl_dir(f2), normalizePath(f2))
