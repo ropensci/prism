@@ -134,9 +134,10 @@ You can easily make a quick plot of your data using the output of `prism_archive
 
 ```{r quick_plot,fig.height=5,fig.width=7}
 # Plot the January 30-year average temperatures
+# grab only the first value, just in case multiple values are returned
 jmean <- prism_archive_subset(
   "tmean", "monthly normals", mon = 1, resolution = "4km"
-)
+)[1]
 pd_image(jmean)
 ```
 
