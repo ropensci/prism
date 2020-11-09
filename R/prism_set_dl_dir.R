@@ -13,6 +13,8 @@
 prism_set_dl_dir <- function(path, create = TRUE)
 {
   # Check if path exists, if it doesn't then create it
+  message("incoming path: ", path)
+  
   path <- normalizePath(path, mustWork = FALSE)
   if (!dir.exists(file.path(path)) & create) {
     message("creating ", path)
@@ -24,7 +26,7 @@ prism_set_dl_dir <- function(path, create = TRUE)
   }
   
   options(prism.path = path)
-  
+  message("outgoing path: ", path)
   invisible(path)
 }
 

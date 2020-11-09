@@ -1,6 +1,8 @@
-f1 <- normalizePath(file.path(tempdir(), "prism", "new"), mustWork = FALSE)
-f2 <- normalizePath(file.path(tempdir(), "prism2"), mustWork = FALSE)
-f3 <- normalizePath(file.path(tempdir(), "*$.txt"), mustWork = FALSE)
+f1 <- file.path(tempdir(), "prism", "new")
+f2 <- file.path(tempdir(), "prism2")
+f3 <- file.path(tempdir(), "*$.txt")
+message("f1: ", f1)
+message("f1 normal: ", normalizePath(f1, mustWork = FALSE))
 
 orig_prism_path <- getOption("prism.path")
 teardown(options(prism.path = orig_prism_path))
