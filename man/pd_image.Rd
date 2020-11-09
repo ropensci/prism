@@ -45,5 +45,5 @@ pd_image(pd)
 }
 \seealso{
 \code{\link[=prism_archive_ls]{prism_archive_ls()}}, \code{\link[=prism_archive_subset]{prism_archive_subset()}},
-\code{\link[ggplot2:geom_raster]{ggplot2::geom_raster()}}
+\code{\link[ggplot2:geom_tile]{ggplot2::geom_raster()}}
 }

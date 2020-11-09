@@ -30,15 +30,15 @@ del_early_prov(type, minDate = NULL, maxDate = NULL, dates = NULL)
 
 \item{minDate}{Date to start subsetting daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
+character or \link[base:Dates]{base::Date} class.}
 
 \item{maxDate}{Date to end subsetting daily data.  Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
+character or \link[base:Dates]{base::Date} class.}
 
 \item{dates}{A vector of daily dates to subset. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
+character or \link[base:Dates]{base::Date} class.}
 }
 \value{
 Invisibly returns vector of all deleted folders.

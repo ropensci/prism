@@ -28,15 +28,15 @@ prism_archive_subset(
 
 \item{minDate}{Date to start subsetting daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
+character or \link[base:Dates]{base::Date} class.}
 
 \item{maxDate}{Date to end subsetting daily data.  Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
+character or \link[base:Dates]{base::Date} class.}
 
 \item{dates}{A vector of daily dates to subset. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
+character or \link[base:Dates]{base::Date} class.}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km" or
 "800m". Should only be specified for \code{temp_period} of "normals".}

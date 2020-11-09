@@ -33,5 +33,5 @@ Suggests:
     rmarkdown,
     testthat (>= 2.1.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Encoding: UTF-8
