@@ -9,6 +9,29 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = Sys.getenv("PRISM_AUTHOR")
+)
+
+# knitr hook to truncate long output. See:
+# https://stackoverflow.com/q/23114654/3362993
+hook_output <- knitr::knit_hooks$get("output")
+knitr::knit_hooks$set(output = function(x, options) {
+  if (!is.null(n <- options$out.lines)) {
+    x <- unlist(strsplit(x, "\n"))
+    if (length(x) > n) {
+      # truncate the output
+      x <- c(head(x, n), "....\n")
+    }
+    x <- paste(x, collapse = "\n")
+  }
+  hook_output(x, options)
+})
+```
+
 **Previous Versions:**
 
 - Edmund Hart - November 13, 2015
@@ -137,7 +160,7 @@ You can easily make a quick plot of your data using the output of `prism_archive
 # grab only the first value, just in case multiple values are returned
 jmean <- prism_archive_subset(
   "tmean", "monthly normals", mon = 1, resolution = "4km"
-)[1]
+)
 pd_image(jmean)
 ```
 
