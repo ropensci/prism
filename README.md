@@ -4,8 +4,8 @@
 # `prism`
 
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/prism)](https://cran.r-project.org/package=prism)
-[![Build
-Status](https://api.travis-ci.org/ropensci/prism.png?branch=master)](https://travis-ci.org/ropensci/prism)
+[![R build
+status](https://github.com/ropensci/prism/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/prism/actions)
 [![Build
 status](https://ci.appveyor.com/api/projects/status/ie38i6p5651pc1o5/branch/master)](https://ci.appveyor.com/project/sckott/prism/branch/master)
 [![codecov.io](https://codecov.io/github/ropensci/prism/coverage.svg?branch=master)](https://codecov.io/github/ropensci/prism?branch=master)
@@ -143,14 +143,14 @@ work off of one or more of these folder names (`pd`).
 prism_archive_ls()
 #>  [1] "PRISM_ppt_30yr_normal_4kmM2_annual_bil"  
 #>  [2] "PRISM_ppt_30yr_normal_800mM2_02_bil"     
-#>  [3] "PRISM_ppt_stable_4kmD2_20120101_bil"     
-#>  [4] "PRISM_ppt_stable_4kmM3_2000_bil"         
-#>  [5] "PRISM_ppt_stable_4kmM3_2001_bil"         
-#>  [6] "PRISM_ppt_stable_4kmM3_2002_bil"         
-#>  [7] "PRISM_ppt_stable_4kmM3_2003_bil"         
-#>  [8] "PRISM_ppt_stable_4kmM3_2004_bil"         
-#>  [9] "PRISM_ppt_stable_4kmM3_2005_bil"         
-#> [10] "PRISM_ppt_stable_4kmM3_2006_bil"         
+#>  [3] "PRISM_ppt_stable_4kmD2_19810101_bil"     
+#>  [4] "PRISM_ppt_stable_4kmD2_19820101_bil"     
+#>  [5] "PRISM_ppt_stable_4kmD2_19830101_bil"     
+#>  [6] "PRISM_ppt_stable_4kmD2_20120101_bil"     
+#>  [7] "PRISM_ppt_stable_4kmM3_2000_bil"         
+#>  [8] "PRISM_ppt_stable_4kmM3_2001_bil"         
+#>  [9] "PRISM_ppt_stable_4kmM3_2002_bil"         
+#> [10] "PRISM_ppt_stable_4kmM3_2003_bil"         
 ....
 ```
 
@@ -165,17 +165,17 @@ can get that with the `pd_get_name()` function.
 pd_to_file(prism_archive_ls())
 #>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM2_annual_bil\\PRISM_ppt_30yr_normal_4kmM2_annual_bil.bil"    
 #>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_800mM2_02_bil\\PRISM_ppt_30yr_normal_800mM2_02_bil.bil"          
-#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_20120101_bil\\PRISM_ppt_stable_4kmD2_20120101_bil.bil"          
-#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2000_bil\\PRISM_ppt_stable_4kmM3_2000_bil.bil"                  
-#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM3_2001_bil\\PRISM_ppt_stable_4kmM3_2001_bil.bil"                  
+#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_19810101_bil\\PRISM_ppt_stable_4kmD2_19810101_bil.bil"          
+#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_19820101_bil\\PRISM_ppt_stable_4kmD2_19820101_bil.bil"          
+#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmD2_19830101_bil\\PRISM_ppt_stable_4kmD2_19830101_bil.bil"          
 ....
 
 pd_get_name(prism_archive_ls())
 #>  [1] "Annual 30-year normals - 4km resolution - Precipitation"      
 #>  [2] "Feb 30-year normals - 800m resolution - Precipitation"        
-#>  [3] "Jan 01 2012 - 4km resolution - Precipitation"                 
-#>  [4] "2000 - 4km resolution - Precipitation"                        
-#>  [5] "2001 - 4km resolution - Precipitation"                        
+#>  [3] "Jan 01 1981 - 4km resolution - Precipitation"                 
+#>  [4] "Jan 01 1982 - 4km resolution - Precipitation"                 
+#>  [5] "Jan 01 1983 - 4km resolution - Precipitation"                 
 ....
 ```
 
