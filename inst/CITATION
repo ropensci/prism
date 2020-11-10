@@ -3,9 +3,9 @@ citEntry(entry = "Manual",
   author  = "Edmund M. Hart and Kendon Bell",
   year    = "2015",
   note    = "R package version 0.0.6",
-  url     = "http://github.com/ropensci/prism",
+  url     = "https://github.com/ropensci/prism",
   doi     = "10.5281/zenodo.33663",
 
   textVersion =
-  paste("Edmund M. Hart and Kendon Bell (2015) prism: Download data from the Oregon prism project. R package version 0.0.6 http://github.com/ropensci/prism DOI: 10.5281/zenodo.33663 ")
+  paste("Edmund M. Hart and Kendon Bell (2015) prism: Download data from the Oregon prism project. R package version 0.0.6 https://github.com/ropensci/prism DOI: 10.5281/zenodo.33663 ")
 )

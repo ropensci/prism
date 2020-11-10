@@ -11,11 +11,11 @@ status](https://ci.appveyor.com/api/projects/status/ie38i6p5651pc1o5/branch/mast
 [![codecov.io](https://codecov.io/github/ropensci/prism/coverage.svg?branch=master)](https://codecov.io/github/ropensci/prism?branch=master)
 
 This package allows users to access and visualize data from the [Oregon
-State PRISM project](http://www.prism.oregonstate.edu/). Data are all in
-the form of gridded rasters for the continental US at 4 different
+State PRISM project](https://www.prism.oregonstate.edu/). Data are all
+in the form of gridded rasters for the continental US at 4 different
 temporal scales: daily, monthly, annual, and 30 year normals. Please see
 their webpage for a full description of the data products, or [see their
-overview](http://www.prism.oregonstate.edu/documents/PRISM_datasets_aug2013.pdf).
+overview](https://www.prism.oregonstate.edu/documents/PRISM_datasets_aug2013.pdf).
 
 ## Installation
 
@@ -58,7 +58,7 @@ Data are available in 4 different temporal scales as mentioned above. At
 each temporal scale, there are 7 different parameters/variables
 available. Keep in mind these are modeled parameters, not measured.
 Please see the [full
-description](http://www.prism.oregonstate.edu/documents/Daly2008_PhysiographicMapping_IntJnlClim.pdf)
+description](https://www.prism.oregonstate.edu/documents/Daly2008_PhysiographicMapping_IntJnlClim.pdf)
 for how they are calculated.
 
 | Parameter name | Description                          |
@@ -312,7 +312,7 @@ p +
 Finally, the prism data are in a form that can be used with leaflet maps
 (with the help of the raster package). The [leaflet
 package](https://CRAN.R-project.org/package=leaflet) allows you to
-easily make JavaScript maps using the [leaflet](http://leafletjs.com/)
+easily make JavaScript maps using the [leaflet](https://leafletjs.com/)
 mapping framework using prism data. These can easily be hosted on
 websites like [Rpubs](https://rpubs.com/) or your own site. Here is a
 simple example of plotting the [30-year normal for annual
