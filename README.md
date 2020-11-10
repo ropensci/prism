@@ -311,7 +311,7 @@ p +
 
 Finally, the prism data are in a form that can be used with leaflet maps
 (with the help of the raster package). The [leaflet
-package](https://cran.r-project.org/web/packages/leaflet/) allows you to
+package](https://CRAN.R-project.org/package=leaflet) allows you to
 easily make JavaScript maps using the [leaflet](http://leafletjs.com/)
 mapping framework using prism data. These can easily be hosted on
 websites like [Rpubs](https://rpubs.com/) or your own site. Here is a
