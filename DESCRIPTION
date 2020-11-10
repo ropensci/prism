@@ -1,11 +1,11 @@
 Package: prism
 Title: Access Data from the Oregon State Prism Climate Project
 Description: Allows users to access the Oregon State Prism climate data
-    (<http://www.prism.oregonstate.edu/>). Using the web service API data
+    (<https://www.prism.oregonstate.edu/>). Using the web service API data
     can easily downloaded in bulk and loaded into R for spatial analysis.
     Some user friendly visualizations are also provided.
-URL: https://docs.ropensci.org/prism, http://github.com/ropensci/prism
-BugReports: http://github.com/ropensci/prism/issues
+URL: https://docs.ropensci.org/prism/, https://github.com/ropensci/prism
+BugReports: https://github.com/ropensci/prism/issues
 Version: 0.2.0
 Authors@R: c(
     person("Hart", "Edmund", email ="Edmund.m.hart@gmail.com",role = c("aut", "ccp")),

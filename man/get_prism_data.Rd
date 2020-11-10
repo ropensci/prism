@@ -69,7 +69,7 @@ or "800m".}
 }
 \description{
 Download grid cell data from the
-\href{http://www.prism.oregonstate.edu/}{prism project}. Temperature (min, max,
+\href{https://www.prism.oregonstate.edu/}{prism project}. Temperature (min, max,
 and mean), mean dewpoint temperature, precipitation, and vapor pressure
 deficit (min and max) can be downloaded for annual (\code{get_prism_annual()}),
 monthly (\code{get_prism_monthlys()}), daily (\code{get_prism_dailys()}), and 30-year
@@ -115,7 +115,7 @@ properly. Dates can be specified using either a date range via \code{minDate} an
 
 30-year normals are currently computed using 1981-2010 and are available at
 4km and 800m resolution. See
-\url{http://www.prism.oregonstate.edu/normals/}.
+\url{https://www.prism.oregonstate.edu/normals/}.
 If \code{mon} is specified and \code{annual} is \code{TRUE}, then monthly and annual normal
 data will be downloaded.
 }

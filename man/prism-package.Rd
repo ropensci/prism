@@ -7,16 +7,16 @@
 \title{prism: Access Data from the Oregon State Prism Climate Project}
 \description{
 Allows users to access the Oregon State Prism climate data
-    (<http://www.prism.oregonstate.edu/>). Using the web service API data
+    (<https://www.prism.oregonstate.edu/>). Using the web service API data
     can easily downloaded in bulk and loaded into R for spatial analysis.
     Some user friendly visualizations are also provided.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://docs.ropensci.org/prism}
-  \item \url{http://github.com/ropensci/prism}
-  \item Report bugs at \url{http://github.com/ropensci/prism/issues}
+  \item \url{https://docs.ropensci.org/prism/}
+  \item \url{https://github.com/ropensci/prism}
+  \item Report bugs at \url{https://github.com/ropensci/prism/issues}
 }
 
 }
