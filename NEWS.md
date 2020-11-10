@@ -1,6 +1,6 @@
-# prism 0.1.0.9000
+# prism 0.2.0
 
-*In development*
+*Submitting to CRAN*
 
 Thanks to @jsta for updating the README and helping with several other under the hood fixes. 
 
@@ -12,7 +12,7 @@ Thanks to @jsta for updating the README and helping with several other under the
 
 ## Major Updates
 
-There are two overall major updates with this release. (1) All functions should work with all temporal periods and all variables; previously some functions only worked with daily data and not all variables were able to be downloaded from the prism website. (2) A new API was implemented that results in many functions being deprecated in favor of the update naming convention. This change was intended to provide consistent name for functions that apply to different steps in the work flow implemented in this package. The details of these changes are:
+There are two overall major updates with this release. (1) All functions should work with all temporal periods and all variables; previously some functions only worked with daily data and not all variables were able to be downloaded from the prism website. (2) A new API was implemented that results in many functions being deprecated in favor of the updated naming convention. This change was intended to provide consistent names for functions that apply to different steps in the work flow implemented in this package. The details of these changes are:
 
 * Users can now download vpdmin, vpdmax, and tdmean variables for 30-year normals, daily, monthly, and annual data. (#68)
 * There are now several functions (`prism_*_dl_dir()`) that set and check the prism download directory. These are hopefully easier to remember than using the base R `options()` and `getOption()` functions and the prism option variable name "prism.path". 

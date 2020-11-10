@@ -6,7 +6,7 @@ Description: Allows users to access the Oregon State Prism climate data
     Some user friendly visualizations are also provided.
 URL: https://docs.ropensci.org/prism, http://github.com/ropensci/prism
 BugReports: http://github.com/ropensci/prism/issues
-Version: 0.1.0.9000
+Version: 0.2.0
 Authors@R: c(
     person("Hart", "Edmund", email ="Edmund.m.hart@gmail.com",role = c("aut", "ccp")),
     person("Kendon", "Bell", email = "kmb56@berkeley.edu", role = c("aut")),
