@@ -51,7 +51,7 @@ Or the development version can be installed from GitHub with devtools:
 ```{r start, eval=FALSE}
 # install.packages("devtools")
 library(devtools)
-install_github(repo = "prism", username = "ropensci")
+install_github("ropensci/prism")
 ```
 
 ## Quickstart
