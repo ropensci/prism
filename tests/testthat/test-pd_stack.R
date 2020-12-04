@@ -1,6 +1,6 @@
 test_that("pd_stack() works", {
   # three days
-  dd <- prism_archive_subset("ppt", "daily", mon = 1)
+  dd <- prism_archive_subset("ppt", "daily", mon = 1, years = 1981:2011)
   expect_s4_class(x <- pd_stack(dd), "RasterStack")
   expect_equal(dim(x)[3], length(dd))
   expect_setequal(names(x), dd)

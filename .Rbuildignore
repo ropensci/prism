@@ -10,3 +10,4 @@
 ^vignettes/README\.md$
 ^\.github$
 ^CRAN-RELEASE$
+^data-raw$
