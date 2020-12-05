@@ -1,3 +1,5 @@
+Re-submission of submission from 2020-11-10. The tarball is now < 5 MB.
+
 ## Test environment
 
 * Local: Windows 10 Enterprise: R 3.6.3
@@ -8,9 +10,7 @@
 
 ## R CMD check results
 
-There were no ERRORs or WARNINGs.
-
-There is 1 NOTE from R-hub regarding the size of the tarball. The size is due to data necessary for package tests. Care has been taken to include minimal downloaded prism data for the tests, and each dataset are individually zipped with sizes < 1.6 MB. 
+There were no ERRORs or WARNINGs or NOTEs.
 
 ## Downstream dependencies
 
