@@ -1,7 +1,7 @@
 #' Download prism data
 #' 
 #' Download grid cell data from the 
-#' [prism project](https://www.prism.oregonstate.edu/). Temperature (min, max, 
+#' [prism project](https://prism.nacse.org/). Temperature (min, max, 
 #' and mean), mean dewpoint temperature, precipitation, and vapor pressure 
 #' deficit (min and max) can be downloaded for annual (`get_prism_annual()`), 
 #' monthly (`get_prism_monthlys()`), daily (`get_prism_dailys()`), and 30-year

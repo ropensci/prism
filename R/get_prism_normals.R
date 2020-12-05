@@ -13,7 +13,7 @@
 #' 
 #' 30-year normals are currently computed using 1981-2010 and are available at 
 #' 4km and 800m resolution. See 
-#' [https://www.prism.oregonstate.edu/normals/](https://www.prism.oregonstate.edu/normals/).
+#' [https://prism.nacse.org/normals/](https://prism.nacse.org/normals/).
 #' If `mon` is specified and `annual` is `TRUE`, then monthly and annual normal  
 #' data will be downloaded.
 #' 

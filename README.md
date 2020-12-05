@@ -9,10 +9,10 @@ status](https://github.com/ropensci/prism/workflows/R-CMD-check/badge.svg)](http
 [![codecov.io](https://codecov.io/github/ropensci/prism/coverage.svg?branch=master)](https://codecov.io/github/ropensci/prism?branch=master)
 
 This package allows users to access and visualize data from the [Oregon
-State PRISM project](https://www.prism.oregonstate.edu/). Data are all
-in the form of gridded rasters for the continental US at 4 different
-temporal scales: daily, monthly, annual, and 30 year normals. Please see
-their webpage for a full description of the data products, or [see their
+State PRISM project](https://prism.nacse.org). Data are all in the form
+of gridded rasters for the continental US at 4 different temporal
+scales: daily, monthly, annual, and 30 year normals. Please see their
+webpage for a full description of the data products, or [see their
 overview](https://www.prism.oregonstate.edu/documents/PRISM_datasets_aug2013.pdf).
 
 ## Installation
