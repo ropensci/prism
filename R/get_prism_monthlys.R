@@ -13,7 +13,7 @@
 #' 
 #' @export
 get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
-                               keep_pre81_months = TRUE)
+                               keep_pre81_months = TRUE, service = NULL)
 {
   ### parameter and error handling
 
@@ -43,12 +43,16 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
   uris_pre81 <- vector()
   uris_post81 <- vector()
   
+  if (is.null(service)) {
+	service <- "http://services.nacse.org/prism/data/public/4km"
+  }
+  
   if (length(pre_1981)) {
     uris_pre81 <- sapply(
       pre_1981,
       function(x) {
         paste(
-          "http://services.nacse.org/prism/data/public/4km", type, x, sep = "/"
+          service, type, x, sep = "/"
         )
       }
     )
