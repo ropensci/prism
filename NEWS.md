@@ -1,6 +1,6 @@
 # prism 0.2.0
 
-*Submitted to CRAN 11/10/2020*
+**Published December 5, 2020**
 
 Thanks to @jsta for updating the README and helping with several other under the hood fixes. 
 
