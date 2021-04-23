@@ -1,0 +1,113 @@
+---
+title: "Example prism Analysis"
+author: "Alan Butler"
+date: "4/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This document provides an example of how to use the prism package, combined with the raster package, to compute an example analyis. In this example, we will download monthly prism data, clip it to the Upper Colorado River Basin area, spatially average it, and then create water year totals. 
+
+```{r, message = FALSE, warning=FALSE}
+library(prism)
+library(raster)
+library(rgdal)
+library(sp)
+library(dplyr)
+library(stringr)
+
+prism_set_dl_dir("./prism_example")
+```
+
+## Download the Data
+
+We will download all average temperature data for 2017-2020 so that we can have full water year (October - September) data for water years 2018-2020. 
+
+```{r, eval=FALSE}
+get_prism_monthlys("tmean", years = 2017:2020, mon = 1:12)
+```
+Then, create a raster stack of the data, using only October 2017 - September 2020. Need two partial years of data, so have to call `prism_archive_subset()` multiple times. 
+
+```{r}
+ond2017 <- prism_archive_subset("tmean", "monthly", years = 2017, mon = 10:12)
+full_yrs <- prism_archive_subset("tmean", "monthly", years = 2018:2019, mon = 1:12)
+js2019 <- prism_archive_subset("tmean", "monthly", years = 2020, mon = 1:9)
+
+ps <- pd_stack(c(ond2017, full_yrs, js2019))
+```
+
+## Crop to CRB
+
+Currently, each month of data is for CONUS. We want all of these months to only be for the Colorado River Basin. First, read in a shapefile of the CRB:
+
+```{r}
+crb <- readOGR("data/LC_UC_Basin 2011.shp")[2,] %>% # UB only but in UTM
+  # transform to the same projection that the raster data is using
+  spTransform("+proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0")
+```
+Then, we need a function to mask and crop a single layer (single month of prism data). Then, we can apply that function to every layer.
+
+```{r}
+mask_and_crop <- function(i, rasterStack, basin, progress_bar) {
+  zz <- mask(crop(rasterStack[[i]], extent(basin)), basin)
+  setTxtProgressBar(progress_bar, i)
+  zz
+}
+
+# initialize the progress bar
+pb <- txtProgressBar(min = 0, max = nlayers(ps) , style = 3)
+
+
+ps_crop <- lapply(
+    seq_len(nlayers(ps)), 
+    mask_and_crop, 
+    rasterStack = ps, 
+    basin = crb,
+    progress_bar = pb
+  )
+
+# this returns a list, and we want it to be a raster stack again
+# convert the list to a stack
+ps_crop <- raster::stack(ps_crop)
+```
+
+Here's a plot of the first month of data before and after masking and cropping:
+```{r, echo = FALSE}
+par(mfrow = c(2, 1))
+plot(ps[[1]])
+title("October 2017 tmean - CONUS")
+
+plot(ps_crop[[1]])
+title("October 2017 - tmean CRB")
+```
+
+## Spatial Stats
+
+Finally, we want to compute a spatial average to get a CRB basin-wide average monthly temperature:
+
+```{r}
+crb_avg <- cellStats(ps_crop, "mean")
+# this results in a named vector. We know that the PRISM naming convention uses
+# PRISM_var_stable_4kmM3_yyyymm_bil, where var is tmean in this example, 
+# so we can parse this to create a data frame with year, month, and value
+
+df <- data.frame(ts = names(crb_avg), value = unname(crb_avg)) %>%
+    # we want just the yyyymm_bil part, and then remove _bil
+    mutate(
+      ts = str_extract(ts, "\\d{6}_bil"),
+      ts = str_remove(ts, "_bil"),
+      # then get yyyy as year and mm as month,
+      yrs = substr(ts, 1, 4),
+      mm = substr(ts, 5, 6)
+    )
+```
+
+And now you have a data frame of monthly average temperatures in the CRB:
+
+```{r}
+head(df)
+```
+
