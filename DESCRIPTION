@@ -1,11 +1,12 @@
 Package: prism
 Title: Access Data from the Oregon State Prism Climate Project
-Description: Allows users to access the Oregon State Prism climate data. Using
-    the web service API data can easily downloaded in bulk and loaded into R for
-    spatial analysis. Some user friendly visualizations are also provided.
-URL: http://github.com/ropensci/prism
-BugReports: http://github.com/ropensci/prism/issues
-Version: 0.1.0.9000
+Description: Allows users to access the Oregon State Prism climate data
+    (<https://prism.nacse.org/>). Using the web service API data
+    can easily downloaded in bulk and loaded into R for spatial analysis.
+    Some user friendly visualizations are also provided.
+URL: https://docs.ropensci.org/prism/, https://github.com/ropensci/prism
+BugReports: https://github.com/ropensci/prism/issues
+Version: 0.2.0
 Authors@R: c(
     person("Hart", "Edmund", email ="Edmund.m.hart@gmail.com",role = c("aut", "ccp")),
     person("Kendon", "Bell", email = "kmb56@berkeley.edu", role = c("aut")),
@@ -29,6 +30,8 @@ VignetteBuilder: knitr
 Suggests:
     covr,
     knitr,
-    testthat
+    rmarkdown,
+    testthat (>= 2.1.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1
+Encoding: UTF-8

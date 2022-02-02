@@ -2,89 +2,141 @@
 #' helper function for handling months
 #' @description Handle numeric month to string conversions
 #' @param month a numeric vector of months (month must be > 0 and <= 12)
-#' @return a character vector (same length as \code{month}) with 2 char month strings.
+#' @return a character vector (same length as \code{month}) with 2 char month 
+#'   strings.
 #' @examples \dontrun{
 #'   mon_to_string(month = c(1, 3, 2))
 #'   mon_to_string(month = 12)
 #' }
-mon_to_string <- function(month){
+#' @noRd
+mon_to_string <- function(month)
+{
   out <- vector()
   for(i in 1:length(month)){
-    if(month[i] < 1 || month[i] > 12){stop("Please enter a valid numeric month")}
+    if(month[i] < 1 || month[i] > 12) {
+      stop("Please enter a valid numeric month")
+    }
     if(month[i] < 10){ out[i] <- paste("0",month[i],sep="")}
     else { out[i] <- paste0(month[i]) }
   }
   return(out)
 }
 
-#' handle existing directory
-#' @description create new directory for user if they don't have one to store prism files
-#' @export
-path_check <- function(){
-  user_path <- NULL
-  if(is.null(getOption('prism.path'))){
-    message("You have not set a path to hold your prism files.")
-    user_path <- readline("Please enter the full or relative path to download files to (hit enter to use default '~/prismtmp'): ")
-    # User may have input path with quotes. Remove these.
-    user_path <- gsub(pattern = c("\"|'"), "", user_path)
-    # Deal with relative paths
-    user_path <- ifelse(nchar(user_path) == 0,
-                        paste(Sys.getenv("HOME"), "prismtmp", sep="/"),
-                        file.path(normalizePath(user_path, winslash = "/")))
-    options(prism.path = user_path)
-  } else {
-    user_path <- getOption('prism.path')
-  }
+prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
+{
+  file_bases <- unlist(sapply(zipfiles, strsplit, split=".zip"))
+  which_downloaded <- sapply(
+    file_bases, 
+    find_prism_file, 
+    pre81_months = pre81_months
+  )
   
-  ## Check if path exists
-  if(!file.exists(file.path(user_path))){
-    dir.create(user_path)
-    if (!file.exists(file.path(user_path))){
-      message("Path invalid or permissions error.")
-      options(prism.path = NULL)
-    }
-  }
-}
-
-#' Helper function to check if files already exist
-#' @description check if files exist
-#' @param prismfiles a list of full paths for prism files
-#' @param lgl \code{TRUE} returns a logical vector indicating those
-#' not yet downloaded; \code{FALSE}
-#' returns the file names that are not yet downloaded.
-#' @return a character vector of file names that are not yet downloaded
-#' or a logical vector indication those not yet downloaded..
-#' @export
-prism_check <- function(prismfiles, lgl = FALSE){
-  file_bases <- unlist(sapply(prismfiles, strsplit, split=".zip"))
-  which_downloaded <- sapply(file_bases, function(base) {
-    # Look inside the folder to see if the .bil is there
-    # Won't be able to check for all other files. Unlikely to matter.
-    ls_folder <- list.files(file.path(getOption("prism.path"), base))
-    any(grepl("\\.bil", ls_folder))
-  })
   if(lgl){
     return(!which_downloaded)
   } else {
-    return(prismfiles[!which_downloaded])    
+    return(zipfiles[!which_downloaded])    
   }
 }
 
+#' Check if prism files exist
+#' 
+#' Helper function to check if files already exist in the prism download 
+#' directory. Determines if files have **not** been downloaded yet, i.e., 
+#' returns `TRUE` if they do not exist. 
+#' 
+#' @param prismfiles a list of full prism file names ending in ".zip". 
+#' 
+#' @param lgl `TRUE` returns a logical vector indicating those
+#'   not yet downloaded; `FALSE` returns the file names that are not yet 
+#'   downloaded.
+#'   
+#' @param pre81_months Numeric vector of months that will be downloaded, if 
+#'   downloading data before 1981. This is so that the existence of the data can
+#'   be correctly checked, as the file includes all monthly data for a given 
+#'   year.
+#' 
+#' @return a character vector of file names that are not yet downloaded
+#'   or a logical vector indication those not yet downloaded.
+#' @export
+#' 
+prism_check <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
+{
+  .Deprecated(
+    msg = paste0(
+      "`prism_check()` will be removed in the next release.\n", 
+      "If you need this function, please file a bug at https://github.com/ropensci/prism/issues."
+    )
+  )
+  
+  prism_not_downloaded(prismfiles, lgl = lgl, pre81_months = pre81_months)
+}
+
+# return TRUE if all file(s) are found for the specified base_file
+find_prism_file <- function(base_file, pre81_months)
+{
+  # Look inside the folder to see if the .bil is there
+  # Won't be able to check for all other files. Unlikely to matter.
+  if (is.null(pre81_months)) {
+    ls_folder <- list.files(file.path(getOption("prism.path"), base_file))
+    found_file <- any(grepl("\\.bil", ls_folder))
+  } else {
+    # check for all the monthly data. If any of the monthly data do not exist
+    # will need to download the entire file again.
+    # pre81_months can be vector of months, or "". "" represents the annual data
+    annual <- pre81_months[pre81_months == ""]
+    monthly <- pre81_months[pre81_months != ""]
+    all_months <- c()
+    if (length(annual) > 0)
+      all_months <- c(all_months, "")
+    if (length(monthly) > 0)
+      all_months <- c(all_months, mon_to_string(monthly))
+    
+    found_file <- TRUE
+    for (m in all_months) {
+      ls_folder <- gsub(pattern = "_all", replacement = m, x = base_file)
+      ls_folder <- list.files(file.path(getOption("prism.path"), ls_folder))
+      found_file <- found_file & any(grepl("\\.bil", ls_folder))
+    }
+  }
+  
+  found_file
+}
+
 #' Process pre 1980 files
-#' @description Files that come prior to 1980 come in one huge zip.  This will cause them to mimic all post 1980 downloads
+#' @description Files that come prior to 1980 come in one huge zip.  This will 
+#'   cause them to mimic all post 1980 downloads
+#'   
 #' @param pfile the name of the file, should include "all", that is unzipped
+#' 
 #' @param name a vector of names of files that you want to save.
+#' 
 #' @details This should match all other files post 1980
+#' 
 #' @examples \dontrun{
-#' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil','PRISM_tmean_stable_4kmM2_198001_bil')
-#' process_zip('PRISM_tmean_stable_4kmM2_1980_all_bil',
-#' c('PRISM_tmean_stable_4kmM2_198001_bil','PRISM_tmean_stable_4kmM2_198002_bil'))
+#' process_zip(
+#'   'PRISM_tmean_stable_4kmM2_1980_all_bil',
+#'   'PRISM_tmean_stable_4kmM2_198001_bil'
+#' )
+#' 
+#' process_zip(
+#'   'PRISM_tmean_stable_4kmM2_1980_all_bil',
+#'   c('PRISM_tmean_stable_4kmM2_198001_bil',
+#'   'PRISM_tmean_stable_4kmM2_198002_bil')
+#' )
 #' }
-process_zip <- function(pfile, name){
+#' 
+#' @noRd
+process_zip <- function(pfile, name) 
+{
   tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
   
   # Remove all.xml file
-  file.remove(paste(options("prism.path")[[1]], pfile, grep("all", tmpwd, value = T), sep="/"))
+  file.remove(paste(
+    options("prism.path")[[1]], 
+    pfile, 
+    grep("all", tmpwd, value = TRUE), 
+    sep="/"
+  ))
   
   # Get new list of files after removing all.xml
   tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
@@ -95,10 +147,14 @@ process_zip <- function(pfile, name){
   unames <- unames[unames %in% name]
   for(j in 1:length(unames)){
     newdir <- paste(options("prism.path")[[1]], unames[j], sep="/")
-    tryCatch(dir.create(newdir), error = function(e) e,
-             warning = function(w){
-               warning(paste(newdir, "already exists. Overwriting existing data."))
-             })
+    tryCatch(
+      dir.create(newdir), 
+      error = function(e) e,
+      warning = function(w) {
+        warning(paste(newdir, "already exists. Overwriting existing data."))
+      }
+    )
+    
     f2copy <- grep(unames[j], tmpwd, value = TRUE)
     sapply(f2copy, function(x){
       file.copy(from = paste(options("prism.path")[[1]], pfile, x, sep="/"),
@@ -117,51 +173,6 @@ process_zip <- function(pfile, name){
     file.remove(paste(options("prism.path")[[1]], pfile, x, sep="/"))
   })
   unlink(paste(options("prism.path")[[1]], pfile, sep="/"), recursive = TRUE)
-}
-
-#' @title Get PRISM metadata
-#' @description Retrieves PRISM metadata for a given type and
-#' date range. The information is retrieved from the .info.txt file.
-#' @inheritParams get_prism_dailys
-#' @return list of data.frames containing metadata. If only
-#' one date is requested, the function returns the data.frame.
-#' @importFrom stringr str_extract
-get_metadata <- function(type, dates = NULL, minDate = NULL, maxDate = NULL){
-  path_check()
-  dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-  dates_str <- gsub("-", "", dates)
-  prism_folders <- list.files(path = getOption("prism.path"))
-  type_folders <- grep(type, prism_folders, value = TRUE)
-  dates_type_folders <- stringr::str_extract(type_folders, "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
-  final_folders <- type_folders[which(dates_type_folders %in% dates_str)]
-  final_folders <- final_folders[!stringr::str_detect(final_folders, ".zip")]
-  final_txt_full <- file.path(getOption("prism.path"), final_folders, paste0(final_folders, ".info.txt"))
-  if(length(final_txt_full) == 0){
-    stop("No files exist to obtain metadata from.")
-  }
-  out <- lapply(1:length(final_txt_full), function(i){
-    readin <- tryCatch(utils::read.delim(final_txt_full[i], sep = "\n", 
-                                  header = FALSE, stringsAsFactors = FALSE),
-                       error = function(e){
-                         warning(e)
-                         warning(paste0("Problem opening ", final_txt_full[i], ". The folder may exist without the .info.text file inside it."))
-                       })
-    str_spl <- unlist(stringr::str_split(as.character(readin[[1]]), ": "))
-    
-    names_md <- str_spl[seq(from = 1, to = length(str_spl), by = 2)]
-    data_md <- str_spl[seq(from = 2, to = length(str_spl), by = 2)]
-    out <- matrix(data_md, nrow = 1)
-    out <- as.data.frame(out, stringsAsFactors = FALSE)
-    names(out) <- names_md
-    out$file_path <- final_txt_full[i]
-    out$folder_path <- file.path(getOption("prism.path"), final_folders[i])
-    out
-  })
-  if(length(out) == 1){
-    return(out[[1]])
-  } else {
-    return(out)
-  }
 }
 
 #' Checks to see if the dates (days) specified are within the available Prism 
@@ -201,6 +212,7 @@ is_within_daily_range <- function(dates)
 #' @return Vector of dates
 #' 
 #' @noRd
+
 gen_dates <- function(minDate, maxDate, dates){
   if(all(is.null(dates), is.null(minDate), is.null(maxDate)))
     stop("You must specify either a date range (minDate and maxDate) or a vector of dates")
@@ -239,7 +251,9 @@ gen_dates <- function(minDate, maxDate, dates){
 
 # --------------- extract_version Roxygen tags
 # Get the resolution text string
-# @description To account for the ever changing name structure, here we will scrape the HTTP directory listing and grab it instead of relying on hard coded strings that need changing
+# @description To account for the ever changing name structure, here we will 
+#   scrape the HTTP directory listing and grab it instead of relying on hard 
+#   coded strings that need changing
 # @param type the type of data you're downloading, should be tmax, tmin etc...
 # @param temporal The temporal resolution of the data, monthly, daily, etc...
 # @param yr the year of data that's being requested, in numeric form
@@ -255,35 +269,20 @@ gen_dates <- function(minDate, maxDate, dates){
 #  return(sp2[1])
 #}
 
-#' Subsets prism folders on the disk by type and date
-#' 
-#' Looks through all of the PRISM data that is downloaded in your 
-#' `prism.path` and returns the subset based on `type` and `dates`.
-#' 
-#' @param type The type of data you want to subset. Should be tmax, tmin, tmean, 
-#' ppt, vpdmin, or vpdmax
-#' @param dates A vector of the dates you wish to subset as a string
-#' 
-subset_prism_folders <- function(type, dates){
-  path_check()
-  dates_str <- gsub("-", "", dates)
-  prism_folders <- list.files(getOption("prism.path"))
-  
-  type_folders <- prism_folders %>% 
-    stringr::str_subset(paste0("_", type, "_"))
-  # Use D2 for ppt
-  if(type == "ppt"){
-    type_folders <- type_folders %>% 
-      stringr::str_subset("4kmD2_")
-  } else {
-    type_folders <- type_folders %>% 
-      stringr::str_subset("4kmD1_")
-  }
-  # Don't want zips
-  type_folders <- type_folders[!stringr::str_detect(type_folders, ".zip")]
-  
-  type_folders %>% 
-    stringr::str_subset(paste(dates_str, collapse = "|"))
+#' Returns the available prism variables.
+#' @noRd
+prism_vars <- function()
+{
+  c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean")
 }
 
+# maps prism variables and names
+prism_var_names <- function() {
+  x <- c("Precipitation", "Mean temperature", "Minimum temperature", 
+         "Maximum temperature", "Minimum vapor pressure deficit",
+         "Maximum vapor pressure deficit", "Mean dew point temperature")
+  
+  names(x) <- prism_vars()
 
+  x
+}

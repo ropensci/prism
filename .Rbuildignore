@@ -7,3 +7,7 @@
 ^cran-comments\.md$
 ^revdep$
 ^codecov\.yml$
+^vignettes/README\.md$
+^\.github$
+^CRAN-RELEASE$
+^data-raw$
