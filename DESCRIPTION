@@ -15,7 +15,6 @@ Authors@R: c(
 License: MIT + file LICENSE
 Imports:
     ggplot2,
-    lubridate,
     raster,
     httr,
     dplyr,
