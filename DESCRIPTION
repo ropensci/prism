@@ -24,6 +24,7 @@ Imports:
     readr,
     utils
 LazyLoad: yes
+LazyData: yes
 VignetteBuilder: knitr
 Suggests:
     covr,
