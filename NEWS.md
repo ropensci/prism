@@ -1,3 +1,9 @@
+# prism 0.2.0.9000
+
+* Removed lubridate from imports to fix CRAN note.
+* Removed vignette that depended on too many other libraries; did not want to add them all to Suggests and also relied on external shape file. Will move to somewhere else online. 
+* Removed LazyData and LazyLoad from Description to fix CRAN note.
+
 # prism 0.2.0
 
 **Published December 5, 2020**

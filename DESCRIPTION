@@ -6,7 +6,7 @@ Description: Allows users to access the Oregon State Prism climate data
     Some user friendly visualizations are also provided.
 URL: https://docs.ropensci.org/prism/, https://github.com/ropensci/prism
 BugReports: https://github.com/ropensci/prism/issues
-Version: 0.2.0
+Version: 0.2.0.9000
 Authors@R: c(
     person("Hart", "Edmund", email ="Edmund.m.hart@gmail.com",role = c("aut", "ccp")),
     person("Kendon", "Bell", email = "kmb56@berkeley.edu", role = c("aut")),
@@ -15,7 +15,6 @@ Authors@R: c(
 License: MIT + file LICENSE
 Imports:
     ggplot2,
-    lubridate,
     raster,
     httr,
     dplyr,
@@ -24,8 +23,6 @@ Imports:
     purrr,
     readr,
     utils
-LazyLoad: yes
-LazyData: yes
 VignetteBuilder: knitr
 Suggests:
     covr,
@@ -33,5 +30,5 @@ Suggests:
     rmarkdown,
     testthat (>= 2.1.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Encoding: UTF-8
