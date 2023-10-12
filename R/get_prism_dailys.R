@@ -13,6 +13,12 @@
 #'
 #' @param check One of "httr" or "internal". See details.
 #'  
+#' @param service Either \code{NULL} (default) or a URL provided by PRISM staff
+#'   for subscription-based service. Example:
+#'   "http://services.nacse.org/prism/data/subscription/800m". To use the
+#'	subscription option, you must using a IP addresses registered with PRISM
+#'  staff.
+#'
 #' @details 
 #' For the `check` parameter, "httr", the default, checks the file name using 
 #' the web service, and downloads if that file name is not in the file system. 
@@ -66,7 +72,8 @@
 #'
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, 
-                             dates = NULL, keepZip = TRUE, check = "httr")
+                             dates = NULL, keepZip = TRUE, check = "httr",
+							 service = NULL)
 {
   prism_check_dl_dir()
   check <- match.arg(check, c("httr", "internal"))
@@ -81,10 +88,14 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   
   type <- match.arg(type, prism_vars())
   
+   if (is.null(service)) {
+	service <- "http://services.nacse.org/prism/data/public/4km"
+  }
+
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
   uris <- sapply(uri_dates, function(x) {
     paste(
-      "http://services.nacse.org/prism/data/public/4km", type, x, 
+      service, type, x, 
       sep = "/"
     )
   })
