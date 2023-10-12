@@ -55,7 +55,7 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         with:
-          upload-snapshots:true
+          upload-snapshots: true
           
       - name: Test coverage
         if: matrix.config.os == 'windows-latest' && matrix.config.r == 'release'
