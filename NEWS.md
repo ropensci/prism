@@ -5,6 +5,8 @@
 * Removed LazyData and LazyLoad from Description to fix CRAN note.
 * Updated error message in `pd_image()` when input has length of 0.
 * Fixed documentation for `get_prism_normals()` to reference the new period (1991-2020). (#111)
+* Updated error message in `get_prism_dailys()` if a date before Jan. 1, 1981 is provided.
+* Added `service` parameter to `get_prism_dailys()`, `get_prism_monthlys()`, and `get_prism_annual()`, so user can provide subscription based URLs, instead of default public available 4km data. (@adamlilith)
 
 # prism 0.2.0
 

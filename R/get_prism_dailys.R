@@ -12,12 +12,6 @@
 #'   character or [base::Date] class.
 #'
 #' @param check One of "httr" or "internal". See details.
-#'  
-#' @param service Either \code{NULL} (default) or a URL provided by PRISM staff
-#'   for subscription-based service. Example:
-#'   "http://services.nacse.org/prism/data/subscription/800m". To use the
-#'	subscription option, you must using a IP addresses registered with PRISM
-#'  staff.
 #'
 #' @details 
 #' For the `check` parameter, "httr", the default, checks the file name using 
@@ -80,7 +74,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
 
   if( min(as.numeric(format(dates,"%Y"))) < 1981 ) { 
-    stop("You must enter a date that is later than 1980")
+    stop("You must enter a date that is on or after Januyar 1, 1981.")
   }
   
   ## Get years
@@ -88,8 +82,8 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   
   type <- match.arg(type, prism_vars())
   
-   if (is.null(service)) {
-	service <- "http://services.nacse.org/prism/data/public/4km"
+  if (is.null(service)) {
+	  service <- "http://services.nacse.org/prism/data/public/4km"
   }
 
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
@@ -125,7 +119,6 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   }
 
   close(download_pb)
-  
 }
 
 

@@ -25,11 +25,12 @@
 #'   annual data, this defaults to `FALSE`. When downloading monthly data, this
 #'   defaults to `TRUE`.
 #'   
-#' @param service Either \code{NULL} (default) or a URL provided by PRISM staff
+#' @param service Either `NULL` (default) or a URL provided by PRISM staff
 #'   for subscription-based service. Example:
 #'   "http://services.nacse.org/prism/data/subscription/800m". To use the
-#'	subscription option, you must using a IP addresses registered with PRISM
-#'  staff.
+#'	 subscription option, you must use an IP address registered with PRISM
+#'   staff. When `NULL`, URL defaults to: 
+#'   "http://services.nacse.org/prism/data/public/4km".
 #'
 #' @details 
 #' A valid download directory must exist before downloading any prism data. This
@@ -69,13 +70,13 @@ get_prism_annual <- function(type, years = NULL, keepZip = TRUE,
     stop("You must enter a year from 1895 onwards.")
   }
     
-  pre_1981 <- years[years<1981]
+  pre_1981 <- years[years < 1981]
   post_1981 <- years[years >= 1981]
   uris_pre81 <- vector()
   uris_post81 <- vector()
   
   if (is.null(service)) {
-	service <- "http://services.nacse.org/prism/data/public/4km"
+	  service <- "http://services.nacse.org/prism/data/public/4km"
   }  
   
   if (length(pre_1981)) {
@@ -100,11 +101,11 @@ get_prism_annual <- function(type, years = NULL, keepZip = TRUE,
     )
   }
   
-  # download_pb <- txtProgressBar(
-    # min = 0, 
-    # max = length(uris_post81) + length(uris_pre81), 
-    # style = 3
-  # )
+  download_pb <- txtProgressBar(
+    min = 0,
+    max = length(uris_post81) + length(uris_pre81),
+    style = 3
+  )
   
   counter <- 0
   
@@ -135,7 +136,7 @@ get_prism_annual <- function(type, years = NULL, keepZip = TRUE,
         pre_files <- c(pre_files, tmp)
       }
       
-      # setTxtProgressBar(download_pb, counter) 
+      setTxtProgressBar(download_pb, counter) 
       counter <- counter + 1
     }
     
@@ -165,5 +166,5 @@ get_prism_annual <- function(type, years = NULL, keepZip = TRUE,
       }
     }
   }
-  # close(download_pb)
+  close(download_pb)
 }

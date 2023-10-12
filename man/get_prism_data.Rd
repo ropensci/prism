@@ -8,7 +8,13 @@
 \alias{get_prism_normals}
 \title{Download prism data}
 \usage{
-get_prism_annual(type, years = NULL, keepZip = TRUE, keep_pre81_months = FALSE)
+get_prism_annual(
+  type,
+  years = NULL,
+  keepZip = TRUE,
+  keep_pre81_months = FALSE,
+  service = NULL
+)
 
 get_prism_dailys(
   type,
@@ -16,7 +22,8 @@ get_prism_dailys(
   maxDate = NULL,
   dates = NULL,
   keepZip = TRUE,
-  check = "httr"
+  check = "httr",
+  service = NULL
 )
 
 get_prism_monthlys(
@@ -24,7 +31,8 @@ get_prism_monthlys(
   years = NULL,
   mon = NULL,
   keepZip = TRUE,
-  keep_pre81_months = TRUE
+  keep_pre81_months = TRUE,
+  service = NULL
 )
 
 get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
@@ -45,6 +53,13 @@ is advantageous to keep all the monthly data when downloading the annual
 data so you don't have to download the zip file again. When downloading
 annual data, this defaults to \code{FALSE}. When downloading monthly data, this
 defaults to \code{TRUE}.}
+
+\item{service}{Either \code{NULL} (default) or a URL provided by PRISM staff
+for subscription-based service. Example:
+"http://services.nacse.org/prism/data/subscription/800m". To use the
+subscription option, you must use an IP address registered with PRISM
+staff. When \code{NULL}, URL defaults to:
+"http://services.nacse.org/prism/data/public/4km".}
 
 \item{minDate}{Date to start downloading daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
