@@ -7,6 +7,7 @@
 * Fixed documentation for `get_prism_normals()` to reference the new period (1991-2020). (#111)
 * Updated error message in `get_prism_dailys()` if a date before Jan. 1, 1981 is provided.
 * Added `service` parameter to `get_prism_dailys()`, `get_prism_monthlys()`, and `get_prism_annual()`, so user can provide subscription based URLs, instead of default public available 4km data. (@adamlilith)
+* Deprecated `check` parameter in `get_prism_dailys()` as it does not exist in monthly or annual functions. (#116)
 
 # prism 0.2.0
 

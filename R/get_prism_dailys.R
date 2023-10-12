@@ -70,6 +70,13 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
 							 service = NULL)
 {
   prism_check_dl_dir()
+  
+  if (!missing(check)) {
+    warning(paste('You provided the `check` argument.',
+    '  This argument will be removed in the next release of prism.', 
+    sep = '\n'))
+  }
+  
   check <- match.arg(check, c("httr", "internal"))
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
 
