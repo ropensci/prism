@@ -113,7 +113,7 @@ properly. Dates can be specified using either a date range via \code{minDate} an
 \section{Normals}{
 
 
-30-year normals are currently computed using 1981-2010 and are available at
+30-year normals are currently computed using 1991-2020 and are available at
 4km and 800m resolution. See
 \url{https://prism.nacse.org/normals/}.
 If \code{mon} is specified and \code{annual} is \code{TRUE}, then monthly and annual normal

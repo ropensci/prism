@@ -4,6 +4,7 @@
 * Removed vignette that depended on too many other libraries; did not want to add them all to Suggests and also relied on external shape file. Will move to somewhere else online. 
 * Removed LazyData and LazyLoad from Description to fix CRAN note.
 * Updated error message in `pd_image()` when input has length of 0.
+* Fixed documentation for `get_prism_normals()` to reference the new period (1991-2020). (#111)
 
 # prism 0.2.0
 
