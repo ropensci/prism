@@ -13,7 +13,6 @@
 #'   mean(tmin, tmax)`.
 #'   
 #' @param years a valid numeric year, or vector of years, to download data for.  
-#'   If no month is specified, year averages for that year will be downloaded.
 #'   
 #' @param keepZip if `TRUE`, leave the downloaded zip files in your 
 #'   'prism.path', if `FALSE`, they will be deleted.
@@ -53,7 +52,7 @@
 #' @rdname get_prism_data
 #' 
 #' @export
-get_prism_annual <- function(type, years = NULL, keepZip = TRUE, 
+get_prism_annual <- function(type, years, keepZip = TRUE, 
                              keep_pre81_months = FALSE, service = NULL)
 {
   ### parameter and error handling

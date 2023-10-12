@@ -10,7 +10,7 @@
 \usage{
 get_prism_annual(
   type,
-  years = NULL,
+  years,
   keepZip = TRUE,
   keep_pre81_months = FALSE,
   service = NULL
@@ -28,8 +28,8 @@ get_prism_dailys(
 
 get_prism_monthlys(
   type,
-  years = NULL,
-  mon = NULL,
+  years,
+  mon = 1:12,
   keepZip = TRUE,
   keep_pre81_months = TRUE,
   service = NULL
@@ -41,8 +41,7 @@ get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
 \item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
 "tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean ==  mean(tmin, tmax)}.}
 
-\item{years}{a valid numeric year, or vector of years, to download data for.
-If no month is specified, year averages for that year will be downloaded.}
+\item{years}{a valid numeric year, or vector of years, to download data for.}
 
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your
 'prism.path', if \code{FALSE}, they will be deleted.}
@@ -75,7 +74,8 @@ character or \link[base:Dates]{base::Date} class.}
 
 \item{check}{One of "httr" or "internal". See details.}
 
-\item{mon}{a valid numeric month, or vector of months.}
+\item{mon}{a valid numeric month, or vector of months. Required for
+\code{get_prism_monthlys()}. Can be \code{NULL} for \code{get_prism_normals()}.}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km"
 or "800m".}

@@ -1,5 +1,6 @@
 
-#' @param mon a valid numeric month, or vector of months.
+#' @param mon a valid numeric month, or vector of months. Required for 
+#'   `get_prism_monthlys()`. Can be `NULL` for `get_prism_normals()`.
 #' 
 #' @examples \dontrun{
 #' # Get all the precipitation data for January from 1990 to 2000
@@ -12,7 +13,7 @@
 #' @rdname get_prism_data
 #' 
 #' @export
-get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
+get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
                                keep_pre81_months = TRUE, service = NULL)
 {
   ### parameter and error handling
