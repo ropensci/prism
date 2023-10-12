@@ -11,7 +11,7 @@ Authors@R: c(
     person("Hart", "Edmund", email ="Edmund.m.hart@gmail.com",role = c("aut", "ccp")),
     person("Kendon", "Bell", email = "kmb56@berkeley.edu", role = c("aut")),
     person(given = "Alan", family = "Butler", email = "rabutler@usbr.gov", 
-    role = c("ctb","cre"))
+    role = c("ctb","cre"),comment = c(ORCID = "0000-0002-8625-6386"))
     )
 License: MIT + file LICENSE
 Imports:
