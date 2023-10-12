@@ -67,7 +67,10 @@ pd_image <- function(pd, col = "heat") {
   u <- get_units(ptype)
   
   prPlot <- ggplot() +
-    geom_raster(data = out, aes_string(x = "x", y = "y", fill = "data")) +
+    geom_raster(
+      data = out, 
+      aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["data"]])
+    ) +
     theme_bw() +
     labs(
       title = pname,
