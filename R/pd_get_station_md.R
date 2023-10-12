@@ -60,98 +60,7 @@ pd_get_station_md <- function(pd)
   }
   
   zz <- folders_to_get %>% 
-    purrr::map(function(x){
-      fn <- file.path(getOption("prism.path"), x, paste0(x, ".stn.csv"))
-      var_names <- readr::read_lines(fn, n_max = 1, skip = 1)
-      if (var_names == "Station,Name,Longitude,Latitude,Elevation(m),Network,stnid"){
-        out_df <- suppressWarnings(readr::read_csv(
-          file.path(getOption("prism.path"), x, paste0(x, ".stn.csv")), 
-          skip = 1, 
-          progress = FALSE, 
-          col_types = readr::cols(
-            Station = readr::col_character(),
-            Name = readr::col_character(),
-            Longitude = readr::col_double(),
-            Latitude = readr::col_double(),
-            `Elevation(m)` = readr::col_double(),
-            Network = readr::col_character(),
-            stnid = readr::col_character()
-          )
-        )) %>% 
-          dplyr::rename(station = Station, name = Name, longitude = Longitude, 
-                        latitude = Latitude, elevation = `Elevation(m)`, 
-                        network = Network)
-      } else if(var_names == "ID,NAME,LON,LAT,ELEV(m),Network,stnid"){
-        out_df <- readr::read_csv(
-          file.path(getOption("prism.path"), x, paste0(x, ".stn.csv")), 
-          skip = 1, 
-          progress = FALSE, 
-          col_types = readr::cols(
-            ID = readr::col_character(),
-            NAME = readr::col_character(),
-            LON = readr::col_double(),
-            LAT = readr::col_double(),
-            `ELEV(m)` = readr::col_double(),
-            Network = readr::col_character(),
-            stnid = readr::col_character()
-          )
-        ) %>% 
-          dplyr::rename(station = ID, name = NAME, longitude = LON, 
-                        latitude = LAT, elevation = `ELEV(m)`, 
-                        network = Network)
-      }  else if(var_names == "Station,Name,Longitude,Latitude,Elevation(m),Network"){
-        out_df <- readr::read_csv(
-          file.path(getOption("prism.path"), x, paste0(x, ".stn.csv")), 
-          skip = 1, 
-          progress = FALSE, 
-          col_types = readr::cols(
-            Station = readr::col_character(),
-            Name = readr::col_character(),
-            Longitude = readr::col_double(),
-            Latitude = readr::col_double(),
-            `Elevation(m)` = readr::col_double(),
-            Network = readr::col_character()
-          )
-        ) %>%
-          dplyr::rename(station = Station, name = Name, longitude = Longitude, 
-                        latitude = Latitude, elevation = `Elevation(m)`, 
-                        network = Network) %>% 
-          dplyr::mutate(stnid = NA_character_)
-      } else if (var_names == "Station,Name,Longitude,Latitude,Elevation(m),Network,station_id") {
-        out_df <- readr::read_csv(
-          file.path(getOption("prism.path"), x, paste0(x, ".stn.csv")), 
-          skip = 1, 
-          progress = FALSE, 
-          col_types = readr::cols(
-            Station = readr::col_character(),
-            Name = readr::col_character(),
-            Longitude = readr::col_double(),
-            Latitude = readr::col_double(),
-            `Elevation(m)` = readr::col_double(),
-            Network = readr::col_character(),
-            station_id = readr::col_character()
-          )
-        ) %>% 
-          dplyr::rename(station = Station, name = Name, longitude = Longitude, 
-                        latitude = Latitude, elevation = `Elevation(m)`, 
-                        network = Network, stnid = station_id)
-      }
-      else{
-        stop(
-          "Metadata file does not appear to be formatted as expected.\n",
-          "Please check that the .stn.csv file exists and is from prism.\n",
-          "If it is, please file an issue at github.com/ropensci/prism and include the .stn.csv file."
-        )
-      }
-      out_df %>% 
-        dplyr::mutate(
-          date = pd_get_date(x), 
-          type = pd_get_type(x),
-          prism_data = x
-        ) %>% 
-        dplyr::select(date, prism_data, type, station, name, longitude, 
-                      latitude, elevation, network, stnid)
-    }) %>% 
+    lapply(read_md_csv) %>% 
     dplyr::bind_rows()
   
   # check to make sure all pd show up in the meta data
@@ -176,6 +85,82 @@ pd_get_station_md <- function(pd)
   }
  
   zz
+}
+
+# there are 4 different ways the metadata csv files are formatted. This function
+# reads each of those different formats, and wrangles them into the same format
+# with a consisent set of header names
+# x should be a .bil file name
+read_md_csv <- function(x) {
+  fn <- file.path(getOption("prism.path"), x, paste0(x, ".stn.csv"))
+  var_names <- readr::read_lines(fn, n_max = 1, skip = 1)
+  
+  # these are the 4 known ways that the metadata csv might be formatted
+  v1 <- "Station,Name,Longitude,Latitude,Elevation(m),Network,stnid"
+  v2 <- "ID,NAME,LON,LAT,ELEV(m),Network,stnid"
+  v3 <-  "Station,Name,Longitude,Latitude,Elevation(m),Network"
+  v4 <- "Station,Name,Longitude,Latitude,Elevation(m),Network,station_id"
+  
+  if (!any(var_names == v1, var_names == v2, var_names == v3, var_names == v4)) {
+    stop(
+      "Metadata file does not appear to be formatted as expected.\n",
+      "  Please check that the .stn.csv file exists and is from prism.\n",
+      "  If it is, please file an issue at github.com/ropensci/prism and include the .stn.csv file."
+    )
+  }
+  
+  # reads and assigns type to any of the expected column names (not all will
+  # exist in every csv file)
+  out_df <- suppressWarnings(readr::read_csv(
+    file.path(getOption("prism.path"), x, paste0(x, ".stn.csv")), 
+    skip = 1, 
+    progress = FALSE, 
+    col_types = readr::cols(
+      Station = readr::col_character(),
+      Name = readr::col_character(),
+      Longitude = readr::col_double(),
+      Latitude = readr::col_double(),
+      `Elevation(m)` = readr::col_double(),
+      Network = readr::col_character(),
+      stnid = readr::col_character(),
+      ID = readr::col_character(),
+      NAME = readr::col_character(),
+      LON = readr::col_double(),
+      LAT = readr::col_double(),
+      `ELEV(m)` = readr::col_double(),
+      station_id = readr::col_character()
+    )
+  ))
+  
+  if (var_names == v2) {
+    out_df <- dplyr::rename(out_df, station = ID, name = NAME, longitude = LON, 
+                            latitude = LAT, elevation = `ELEV(m)`, 
+                            network = Network)
+  } else {
+    if (exists('station_id', out_df)) {
+      out_df <- dplyr::rename(out_df, stnid = station_id)
+    }
+    
+    if (!exists('stnid', out_df)) {
+      # if stnid does not exist, add it with NA
+      out_df <- dplyr::mutate(out_df, stnid = NA_character_)
+    }
+    
+    out_df <- dplyr::rename(out_df, station = Station, name = Name, 
+                            longitude = Longitude, latitude = Latitude, 
+                            elevation = `Elevation(m)`, network = Network)
+  }
+  
+  # add in the date and variable and file name to the data frame and then 
+  # select specific columns
+  out_df %>% 
+    dplyr::mutate(
+      date = pd_get_date(x), 
+      type = pd_get_type(x),
+      prism_data = x
+    ) %>% 
+    dplyr::select(date, prism_data, type, station, name, longitude, 
+                  latitude, elevation, network, stnid)
 }
 
 #' @inheritParams prism_archive_subset

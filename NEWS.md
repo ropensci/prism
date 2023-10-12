@@ -15,6 +15,7 @@
   * `get_prism_annual()`
     * `years` no longer has a default of `NULL`, so user will understand it has to be provided
   * Minor updates to documentation of `mon` and `years` parameters
+* Removed purrr from imports.
 
 # prism 0.2.0
 
