@@ -3,6 +3,19 @@
 * Removed lubridate from imports to fix CRAN note.
 * Removed vignette that depended on too many other libraries; did not want to add them all to Suggests and also relied on external shape file. Will move to somewhere else online. 
 * Removed LazyData and LazyLoad from Description to fix CRAN note.
+* Updated error message in `pd_image()` when input has length of 0.
+* Fixed documentation for `get_prism_normals()` to reference the new period (1991-2020). (#111)
+* Updated error message in `get_prism_dailys()` if a date before Jan. 1, 1981 is provided.
+* Added `service` parameter to `get_prism_dailys()`, `get_prism_monthlys()`, and `get_prism_annual()`, so user can provide subscription based URLs, instead of default public available 4km data. (@adamlilith)
+* Deprecated `check` parameter in `get_prism_dailys()` as it does not exist in monthly or annual functions. (#116)
+* Changed defaults in get data functions (#104)
+  * `get_prism_monthlys()` 
+    * `mon` now defaults to `1:12`, so default now downloads all months for the specified years
+    * `years` no longer has a default of `NULL`, so user will understand it has to be provided
+  * `get_prism_annual()`
+    * `years` no longer has a default of `NULL`, so user will understand it has to be provided
+  * Minor updates to documentation of `mon` and `years` parameters
+* Removed purrr from imports.
 
 # prism 0.2.0
 

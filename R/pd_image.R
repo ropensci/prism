@@ -37,9 +37,14 @@
 
 pd_image <- function(pd, col = "heat") {
   
-  if (length(pd) != 1) {
+  if (length(pd) > 1) {
     stop("You can only quick image one file at a time.")
   }
+  
+  if (length(pd) == 0) {
+    stop("Provided `pd` has a length of 0 (should be 1).")
+  }
+  
   col <- match.arg(col, c("heat", "redblue"))
 
   pname <- pd_get_name(pd)
@@ -62,7 +67,10 @@ pd_image <- function(pd, col = "heat") {
   u <- get_units(ptype)
   
   prPlot <- ggplot() +
-    geom_raster(data = out, aes_string(x = "x", y = "y", fill = "data")) +
+    geom_raster(
+      data = out, 
+      aes(x = .data[["x"]], y = .data[["y"]], fill = .data[["data"]])
+    ) +
     theme_bw() +
     labs(
       title = pname,

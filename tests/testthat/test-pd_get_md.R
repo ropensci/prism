@@ -11,7 +11,7 @@ exp_cols <- c(
 
 test_that("pd_get_md() works", {
   expect_s3_class(
-    x <- pd_get_md(prism_archive_subset("ppt", "daily", year = 1981:2020)),
+    x <- pd_get_md(prism_archive_subset("ppt", "daily", year = 1981:2019)),
     "data.frame"
   )
   expect_identical(dim(x), c(4L, 8L))

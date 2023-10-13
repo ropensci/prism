@@ -1,5 +1,6 @@
 
-#' @param mon a valid numeric month, or vector of months.
+#' @param mon a valid numeric month, or vector of months. Required for 
+#'   `get_prism_monthlys()`. Can be `NULL` for `get_prism_normals()`.
 #' 
 #' @examples \dontrun{
 #' # Get all the precipitation data for January from 1990 to 2000
@@ -12,7 +13,7 @@
 #' @rdname get_prism_data
 #' 
 #' @export
-get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
+get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
                                keep_pre81_months = TRUE, service = NULL)
 {
   ### parameter and error handling
@@ -69,27 +70,25 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
       uri_dates_post81,
       function(x) {
         paste(
-          service,type,x,sep="/"
+          service, type, x, sep="/"
         )
       }
     )
   }
     
-  # download_pb <- txtProgressBar(
-    # min = 0, 
-    # max = length(uris_post81) + length(uris_pre81), 
-    # style = 3
-  # )
+  download_pb <- txtProgressBar(
+    min = 0,
+    max = length(uris_post81) + length(uris_pre81),
+    style = 3
+  )
  
   counter <- 0
 
   ### Handle post 1981 data
   if(length(uris_post81) > 0){    
-  
       for(i in 1:length(uris_post81)){
-      prism_webservice(uris_post81[i],keepZip)
-      # setTxtProgressBar(download_pb, i)
-      
+        prism_webservice(uris_post81[i],keepZip)
+        setTxtProgressBar(download_pb, i)
     }
   }
     
@@ -109,7 +108,7 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
       if (!is.null(tmp)) {
         pre_files <- c(pre_files, tmp)
       }
-      # setTxtProgressBar(download_pb, counter) 
+      setTxtProgressBar(download_pb, counter) 
       counter <- counter + 1
     }
     
@@ -136,5 +135,5 @@ get_prism_monthlys <- function(type, years = NULL, mon = NULL, keepZip = TRUE,
     }
   }
 
-  # close(download_pb)
+  close(download_pb)
 }

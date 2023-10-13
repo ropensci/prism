@@ -8,7 +8,13 @@
 \alias{get_prism_normals}
 \title{Download prism data}
 \usage{
-get_prism_annual(type, years = NULL, keepZip = TRUE, keep_pre81_months = FALSE)
+get_prism_annual(
+  type,
+  years,
+  keepZip = TRUE,
+  keep_pre81_months = FALSE,
+  service = NULL
+)
 
 get_prism_dailys(
   type,
@@ -16,15 +22,17 @@ get_prism_dailys(
   maxDate = NULL,
   dates = NULL,
   keepZip = TRUE,
-  check = "httr"
+  check = "httr",
+  service = NULL
 )
 
 get_prism_monthlys(
   type,
-  years = NULL,
-  mon = NULL,
+  years,
+  mon = 1:12,
   keepZip = TRUE,
-  keep_pre81_months = TRUE
+  keep_pre81_months = TRUE,
+  service = NULL
 )
 
 get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
@@ -33,8 +41,7 @@ get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
 \item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
 "tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean ==  mean(tmin, tmax)}.}
 
-\item{years}{a valid numeric year, or vector of years, to download data for.
-If no month is specified, year averages for that year will be downloaded.}
+\item{years}{a valid numeric year, or vector of years, to download data for.}
 
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your
 'prism.path', if \code{FALSE}, they will be deleted.}
@@ -45,6 +52,13 @@ is advantageous to keep all the monthly data when downloading the annual
 data so you don't have to download the zip file again. When downloading
 annual data, this defaults to \code{FALSE}. When downloading monthly data, this
 defaults to \code{TRUE}.}
+
+\item{service}{Either \code{NULL} (default) or a URL provided by PRISM staff
+for subscription-based service. Example:
+"http://services.nacse.org/prism/data/subscription/800m". To use the
+subscription option, you must use an IP address registered with PRISM
+staff. When \code{NULL}, URL defaults to:
+"http://services.nacse.org/prism/data/public/4km".}
 
 \item{minDate}{Date to start downloading daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
@@ -60,7 +74,8 @@ character or \link[base:Dates]{base::Date} class.}
 
 \item{check}{One of "httr" or "internal". See details.}
 
-\item{mon}{a valid numeric month, or vector of months.}
+\item{mon}{a valid numeric month, or vector of months. Required for
+\code{get_prism_monthlys()}. Can be \code{NULL} for \code{get_prism_normals()}.}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km"
 or "800m".}
@@ -113,7 +128,7 @@ properly. Dates can be specified using either a date range via \code{minDate} an
 \section{Normals}{
 
 
-30-year normals are currently computed using 1981-2010 and are available at
+30-year normals are currently computed using 1991-2020 and are available at
 4km and 800m resolution. See
 \url{https://prism.nacse.org/normals/}.
 If \code{mon} is specified and \code{annual} is \code{TRUE}, then monthly and annual normal
