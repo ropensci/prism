@@ -7,4 +7,5 @@ prism.Rproj
 prismDataScratch.R
 .httr-oauth
 /revdep/.cache.rds
+/revdep/library/*
 data-raw/prism_example/*

@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Alan Butler \email{rabutler@usbr.gov} [contributor]
+\strong{Maintainer}: Alan Butler \email{rabutler@usbr.gov} (\href{https://orcid.org/0000-0002-8625-6386}{ORCID}) [contributor]
 
 Authors:
 \itemize{

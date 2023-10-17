@@ -1,4 +1,4 @@
-citEntry(entry = "Manual",
+bibentry(bibtype = "Manual",
   title   = "prism: Download data from the Oregon prism project",
   author  = "Edmund M. Hart and Kendon Bell",
   year    = "2015",
