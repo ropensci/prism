@@ -1,3 +1,5 @@
+Re-submission to fix package size. It is now < 5 MB. 
+
 ## Test environment
 
 * Local: Windows 10 Enterprise: R 4.3.1
