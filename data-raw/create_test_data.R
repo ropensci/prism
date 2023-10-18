@@ -4,6 +4,7 @@
 
 library(raster)
 library(prism)
+library(maps)
 
 # unzip data -------------------------------------
 # the dl directory is the test file directory
@@ -24,7 +25,7 @@ avail_tmin <- paste0(
 
 avail_tdmean <- paste0("PRISM_tdmean_stable_4kmM3_2005", 11:12, "_bil")
 
-avail_vpdmin <- "PRISM_vpdmin_30yr_normal_4kmM2_annual_bil"
+avail_vpdmin <- "PRISM_vpdmin_30yr_normal_4kmM4_annual_bil"
 
 all_avail <- c(avail_tmin, avail_ppt, avail_tdmean, avail_vpdmin)
 
