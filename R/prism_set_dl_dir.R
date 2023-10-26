@@ -8,7 +8,12 @@
 #' @param create Boolean that determines if the `path` will be created if it 
 #'   does not already exist.
 #'   
-#' @return Invisibly returns `path`
+#' @returns Invisibly returns `path`
+#'
+#' @examples
+#' prism_set_dl_dir('.')
+#' prism_set_dl_dir('~/prismtmp') # default
+#' 
 #'   
 #' @export
 
@@ -33,6 +38,10 @@ prism_set_dl_dir <- function(path, create = TRUE)
 #' a wrapper around `getOption("prism.path")` so the user does not have to 
 #' remember the option name. 
 #' 
+#' @examples
+#' prism_get_dl_dir()
+#' 
+#' 
 #' @export
 #' 
 #' @rdname prism_set_dl_dir
@@ -46,6 +55,10 @@ prism_get_dl_dir <- function() {
 #' has not been set, and in interactive mode, then prompt user to specify the 
 #' download location. If not in interactive mode, and it has not been set, then 
 #' set to "~/prismtmp".
+#' 
+#' @examples
+#' prism_check_dl_dir()
+#' 
 #' 
 #' @export
 #' 

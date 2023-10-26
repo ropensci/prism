@@ -52,3 +52,12 @@ other temporal data. The keys/variables are renamed as follows:
 Additionally, the normals does not include PRISM_DATASET_VERSION, so that
 variable is added with \code{NA} values.
 }
+\examples{
+\dontrun{
+#' # Assumes 2000-2002 annual precipitation data is already downloaded
+pd <- prism_archive_subset('ppt', 'annual', years = 2000:2002)
+df <- pd_get_md(pd)
+head(df)
+}
+
+}

@@ -36,6 +36,13 @@
 #' @inheritParams pd_get_name
 #'
 #' @return data.frame containing metadata for all specified prism data.
+#' 
+#' @examples\dontrun{
+#' #' # Assumes 2000-2002 annual precipitation data is already downloaded
+#' pd <- prism_archive_subset('ppt', 'annual', years = 2000:2002)
+#' df <- pd_get_md(pd)
+#' head(df)
+#' }
 #'
 #' @export
 pd_get_md <- function(pd) {

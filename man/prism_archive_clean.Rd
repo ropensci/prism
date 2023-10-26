@@ -64,3 +64,11 @@ months are provisional data. After six months data are considered stable.
 Thus early data only exist for daily data, while there can be monthly (and
 presumably yearly) provisional data.
 }
+\examples{
+\dontrun{
+# delete any provisional annual precipitation data from 2000-2023
+# del_files will containg any deleted files
+del_files <- prism_archive_clean('ppt', 'annual', 2000:2023)
+}
+
+}

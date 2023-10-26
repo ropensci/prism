@@ -22,6 +22,13 @@
 #'   Any prism data that are not readable are returned (folder names), whether
 #'   they are re-downloaded or not.
 #'   
+#' @examples \dontrun{
+#' # check all annual precipitation data from 2000-2023 are readable
+#' # x will contain any corrupt files, or be TRUE if they are all readable
+#' x <- prism_archive_verify('ppt', 'annual', 2000:2023)
+#' }
+#' 
+#'   
 #' @export
 prism_archive_verify <- function(type, temp_period, years = NULL, mon = NULL, 
                                  minDate = NULL, maxDate = NULL, dates = NULL,

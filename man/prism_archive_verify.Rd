@@ -71,3 +71,12 @@ Under the hood, it uses \code{raster::stack()} and then \code{raster::rasterToPo
 to determine if the bil files are readable. If both those files are able
 to successfully read the files, they are assumed to be valid/readable.
 }
+\examples{
+\dontrun{
+# check all annual precipitation data from 2000-2023 are readable
+# x will contain any corrupt files, or be TRUE if they are all readable
+x <- prism_archive_verify('ppt', 'annual', 2000:2023)
+}
+
+  
+}

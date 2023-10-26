@@ -1,7 +1,8 @@
 # prism 0.2.1.9000 (development version)
 
-- Removed global assignment inside `prism_webservice()`
-- Documented return value for `pd_stack()`, `prism_set_dl_dir()` & `get_prism_*()` functions.
+* Removed global assignment inside `prism_webservice()`
+* Documented return value for `pd_stack()`, `prism_set_dl_dir()` ,`pd_to_file()`, `pd_get_type()` & `get_prism_*()` functions.
+* Added examples to documentation for `pd_to_file()`, `prism_archive_clean()`, `prism_archive_verify()`, `prism_set_dl_dir()`, & `pd_get_*()` functions.
 
 # prism 0.2.1
 

@@ -29,11 +29,16 @@ default years will come back with YYYY-01-01 and months as YYYY-MM-01}
 \value{
 \code{pd_get_name()} and \code{pd_get_date()} return a character vector of
 names/dates.
+
+\code{pd_get_type()} returns a character vector of prism variable types,
+e.g., 'ppt'.
+
+\code{pd_to_file()} returns a character vector with the full path to the
+bil file.
 }
 \description{
-"prism data", i.e., \code{pd} are the folder names returned by
-\code{\link[=prism_archive_ls]{prism_archive_ls()}} or \code{\link[=prism_archive_subset]{prism_archive_subset()}}. These functions get the
-name or date from these data, or convert these data to a file name.
+\code{pd_get_name()} extracts a long, human readable name from the prism
+data.
 
 \code{pd_get_date()} extracts the date from the prism data.
 Date is returned in yyyy-mm-dd format. For monthly data, dd is 01 and
@@ -49,6 +54,26 @@ full path to the file in the prism archive. A warning is posted if the
 file does not exist in the local prism archive.
 }
 \details{
-\code{pd_get_name()} extracts a long, human readable name from the prism
-data.
+"prism data", i.e., \code{pd} are the folder names returned by
+\code{\link[=prism_archive_ls]{prism_archive_ls()}} or \code{\link[=prism_archive_subset]{prism_archive_subset()}}. These functions get the
+name or date from these data, or convert these data to a file name.
+}
+\examples{
+\dontrun{
+# Assumes 2000-2002 annual precipitation data is already downloaded
+pd <- prism_archive_subset('ppt', 'annual', years = 2000:2002)
+pd_get_name(pd)
+## [1] "2000 - 4km resolution - Precipitation" "2001 - 4km resolution - Precipitation"
+## [3] "2002 - 4km resolution - Precipitation"
+
+pd_get_date(pd)
+## [1] "2000-01-01" "2001-01-01" "2002-01-01"
+
+pd_get_type(pd)
+## [1] "ppt" "ppt" "ppt"
+
+pd_to_file(pd[1])
+## [1] "C:/prismdir/PRISM_ppt_stable_4kmM3_2000_bil/PRISM_ppt_stable_4kmM3_2000_bil.bil""
+}
+
 }
