@@ -46,16 +46,19 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     
     while(tryNumber < 11 & !downloaded){
       downloaded <- TRUE
-      tryCatch(
+      tmp <- tryCatch(
         utils::download.file(
           url = uri, 
           destfile = outFile, 
           mode = "wb", 
           quiet = TRUE
         ), 
-        error = function(e){
-          downloaded <<- FALSE
-        })
+        error = function(e) FALSE)
+      
+      if (isFALSE(tmp)) {
+        downloaded <- FALSE
+      }
+      
       tryNumber <- tryNumber + 1
     }
   

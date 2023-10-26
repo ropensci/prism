@@ -1,5 +1,7 @@
 # prism 0.2.1.9000 (development version)
 
+- Removed global assignment inside `prism_webservice()`
+
 # prism 0.2.1
 
 **Released October 17, 2023**
