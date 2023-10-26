@@ -21,6 +21,9 @@ path_check()
 \item{create}{Boolean that determines if the \code{path} will be created if it
 does not already exist.}
 }
+\value{
+Invisibly returns \code{path}
+}
 \description{
 \code{prism_set_dl_dir()} sets the directory that downloaded prism data will be
 saved to. The prism download directory is saved in the "prism.path" option.

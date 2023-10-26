@@ -13,6 +13,10 @@ prism_stack(prismfile)
 \item{pd, prismfile}{A vector of prism data returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}}
 or \code{\link[=prism_archive_subset]{prism_archive_subset()}}.}
 }
+\value{
+A \code{RasterStack} object. Raster layers are stacked in the order they
+are provided in \code{pd}.
+}
 \description{
 \code{pd_stack()} creates a raster stack from prism data. It is up to the user to
 ensure that \code{pd} is of the expected variable and temporal period, i.e., the
@@ -36,4 +40,5 @@ mystack <- prism_stack(prism_archive_subset(
   maxDate = "2013-06-14"
 ))
 }
+
 }

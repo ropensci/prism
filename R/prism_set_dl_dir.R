@@ -8,6 +8,8 @@
 #' @param create Boolean that determines if the `path` will be created if it 
 #'   does not already exist.
 #'   
+#' @return Invisibly returns `path`
+#'   
 #' @export
 
 prism_set_dl_dir <- function(path, create = TRUE)

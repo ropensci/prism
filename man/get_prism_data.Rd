@@ -82,6 +82,10 @@ or "800m".}
 
 \item{annual}{if \code{TRUE} download annual normals.}
 }
+\value{
+Nothing is returned - an error will occcur if download is not
+successful.
+}
 \description{
 Download grid cell data from the
 \href{https://prism.nacse.org/}{prism project}. Temperature (min, max,

@@ -44,6 +44,9 @@
 #' after the download.  Data will be downloaded for all specified months (`mon`) 
 #' in all the `years` in the supplied vectors.
 #' 
+#' @return Nothing is returned - an error will occcur if download is not 
+#'   successful.
+#' 
 #' @examples \dontrun{
 #' # Get all annual average temperature data from 1990 to 2000
 #' get_prism_annual(type = "tmean", year = 1990:2000, keepZip = FALSE)

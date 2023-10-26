@@ -8,6 +8,9 @@
 #' @param pd,prismfile A vector of prism data returned by [prism_archive_ls()] 
 #'   or [prism_archive_subset()].
 #'   
+#' @return A `RasterStack` object. Raster layers are stacked in the order they
+#'   are provided in `pd`.
+#'   
 #' @examples \dontrun{
 #' get_prism_dailys(
 #'   type="tmean", 
@@ -22,6 +25,7 @@
 #'   maxDate = "2013-06-14"
 #' ))
 #' }
+#' 
 #' @export
 pd_stack <- function(pd) {
   
