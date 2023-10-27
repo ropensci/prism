@@ -12,7 +12,7 @@
 #'   "tmax", "tdmean", "vpdmin", or "vpdmax". Note that `tmean == 
 #'   mean(tmin, tmax)`.
 #'   
-#' @param years a valid numeric year, or vector of years, to download data for.  
+#' @param years a valid numeric year, or vector of years, to download data for. 
 #'   
 #' @param keepZip if `TRUE`, leave the downloaded zip files in your 
 #'   'prism.path', if `FALSE`, they will be deleted.
@@ -41,7 +41,7 @@
 #' Annual and monthly prism data are available from 1891 to present. For 
 #' 1891-1980 data, monthly and annual data are grouped together in one download 
 #' file; `keep_pre81_months` determines if the other months/yearly data are kept
-#' after the download.  Data will be downloaded for all specified months (`mon`) 
+#' after the download.  Data will be downloaded for all specified months (`mon`)
 #' in all the `years` in the supplied vectors.
 #' 
 #' @return Nothing is returned - an error will occcur if download is not 

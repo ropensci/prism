@@ -101,7 +101,7 @@ read_md_csv <- function(x) {
   v3 <-  "Station,Name,Longitude,Latitude,Elevation(m),Network"
   v4 <- "Station,Name,Longitude,Latitude,Elevation(m),Network,station_id"
   
-  if (!any(var_names == v1, var_names == v2, var_names == v3, var_names == v4)) {
+  if (!any(var_names == v1, var_names == v2, var_names == v3, var_names == v4)){
     stop(
       "Metadata file does not appear to be formatted as expected.\n",
       "  Please check that the .stn.csv file exists and is from prism.\n",

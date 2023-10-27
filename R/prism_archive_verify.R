@@ -6,7 +6,7 @@
 #' [prism_archive_subset()]. Any files that are not readable can automatically 
 #' be re-downloaded.
 #' 
-#' Under the hood, it uses `raster::stack()` and then `raster::rasterToPoints()` 
+#' Under the hood, it uses `raster::stack()` and then `raster::rasterToPoints()`
 #' to determine if the bil files are readable. If both those files are able 
 #' to successfully read the files, they are assumed to be valid/readable.
 #' 

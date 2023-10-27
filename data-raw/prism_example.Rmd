@@ -37,7 +37,9 @@ Then, create a raster stack of the data, using only October 2017 - September 202
 
 ```{r}
 ond2017 <- prism_archive_subset("tmean", "monthly", years = 2017, mon = 10:12)
-full_yrs <- prism_archive_subset("tmean", "monthly", years = 2018:2019, mon = 1:12)
+full_yrs <- prism_archive_subset(
+  "tmean", "monthly", years = 2018:2019, mon = 1:12
+)
 js2019 <- prism_archive_subset("tmean", "monthly", years = 2020, mon = 1:9)
 
 ps <- pd_stack(c(ond2017, full_yrs, js2019))

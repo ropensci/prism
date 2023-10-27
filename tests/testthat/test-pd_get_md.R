@@ -18,7 +18,9 @@ test_that("pd_get_md() works", {
   expect_setequal(colnames(x), exp_cols)
   
   expect_s3_class(
-    x <- pd_get_md(prism_archive_subset("tdmean", "monthly", year = 2005, mon = 11:12)), 
+    x <- pd_get_md(
+      prism_archive_subset("tdmean", "monthly", year = 2005, mon = 11:12)
+    ), 
     "data.frame"
   )
   expect_identical(dim(x), c(2L, 8L))
@@ -34,7 +36,7 @@ test_that("pd_get_md() works", {
   expect_setequal(colnames(x), exp_cols)
   
   expect_s3_class(
-    y <- pd_get_md(prism_archive_subset("tmin", "daily", dates = "1981-01-01")), 
+    y <- pd_get_md(prism_archive_subset("tmin", "daily", dates = "1981-01-01")),
     "data.frame"
   )
   

@@ -51,6 +51,12 @@ test_that("prism_archive_clean() works", {
   expect_setequal(prism_archive_clean("ppt", "daily", years = 2020), day_delete)
   expect_setequal(prism_archive_subset("ppt", "daily", years = 2020), day_keep)
   
-  expect_setequal(prism_archive_clean("ppt", "monthly", years = 2020), mon_delete)
-  expect_setequal(prism_archive_subset("ppt", "monthly", years = 2020), mon_keep)
+  expect_setequal(
+    prism_archive_clean("ppt", "monthly", years = 2020), 
+    mon_delete
+  )
+  expect_setequal(
+    prism_archive_subset("ppt", "monthly", years = 2020), 
+    mon_keep
+  )
 })

@@ -3,7 +3,7 @@
 #' `prism_archive_ls()` lists all available prism data (all variables and all 
 #' temporal periods) that are available in the local archive, i.e., they 
 #' have already been downloaded and are available in [prism_get_dl_dir()].
-#' [prism_archive_subset()] can be used to subset the archive based on specified 
+#' [prism_archive_subset()] can be used to subset the archive based on specified
 #' variables and temporal periods.
 #' 
 #' @details 

@@ -92,7 +92,7 @@ prism_md <- function(f, returnDate = FALSE) {
 #' 
 #' @param p a prism file directory or bil file
 #' 
-#' @param returnDate TRUE or FALSE. If TRUE, an ISO date is returned. By default 
+#' @param returnDate TRUE or FALSE. If TRUE, an ISO date is returned. By default
 #'   years will come back with YYYY-01-01 and months as YYYY-MM-01
 #'   
 #' @return a properly parsed string of human readable names
@@ -105,27 +105,28 @@ pr_parse <- function(p,returnDate = FALSE){
   normals <- FALSE
   
   if(grepl("normal",paste(p,collapse=""))){
-    if(grepl("annual",paste(p,collapse=""))){mon <- "Annual"
-      } else {
-        mon <- month.abb[as.numeric(p[length(p)-1])]
-      }
+    if(grepl("annual",paste(p,collapse=""))) {
+      mon <- "Annual"
+    } else {
+      mon <- month.abb[as.numeric(p[length(p)-1])]
+    }
     ds <- paste(mon,"30-year normals",sep=" ")
     normals <- TRUE
-    } else {
+  } else {
    
-  
     d <- p[length(p)-1]
     yr <- substr(d,1,4)
     mon <- substr(d,5,6)
     day <- substr(d,7,8)
+    
     ## Get resolution
     ### Create date string
-    ifelse(
+    ds <- ifelse(
       !is.na(month.abb[as.numeric(mon)]),
-      ds <- paste(month.abb[as.numeric(mon)],day,yr,sep=" "),
-      ds <- paste(yr,sep=" ")
+      paste(month.abb[as.numeric(mon)],day,yr,sep=" "),
+      paste(yr,sep=" ")
     )
-    }
+  }
   
   ures <- ifelse(
     grepl("4km",paste(p,collapse="")),
@@ -142,7 +143,12 @@ pr_parse <- function(p,returnDate = FALSE){
     if (normals) {
       out <- ""
     } else {
-      out <- paste(yr,ifelse(nchar(mon) > 0,mon,"01"),ifelse(nchar(day) > 0,day,"01"),sep="-")
+      out <- paste(
+        yr, 
+        ifelse(nchar(mon) > 0, mon, "01"), 
+        ifelse(nchar(day) > 0, day, "01"), 
+        sep = "-"
+      )
     }
   }
   

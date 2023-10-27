@@ -242,10 +242,15 @@ check_subset_folders_args <- function(type, temp_period, years, mon, minDate,
   }
   
   if (!(temp_period %in% both_norm) & !is.null(resolution))
-    stop("`resolution` should only be specified when `temp_period` is 'normals'")
+    stop(
+      "`resolution` should only be specified when `temp_period` is 'normals'"
+    )
   
   # day specifications only for daily
-  if (temp_period != "daily" & any(!is.null(minDate), !is.null(maxDate), !is.null(dates)))
+  if (
+    temp_period != "daily" & 
+    any(!is.null(minDate), !is.null(maxDate), !is.null(dates))
+  )
     stop("`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'")
   
   # if annual normals, then no years or months should be specified

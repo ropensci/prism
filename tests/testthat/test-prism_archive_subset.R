@@ -23,18 +23,30 @@ folders <-
   "PRISM_ppt_stable_4kmM2_197009_bil", "PRISM_ppt_stable_4kmM2_197010_bil", 
   "PRISM_ppt_stable_4kmM2_197011_bil", "PRISM_ppt_stable_4kmM2_197012_bil", 
   "PRISM_ppt_stable_4kmM2_1971_bil", "PRISM_tdmean_stable_4kmM3_201001_bil", 
-  "PRISM_tdmean_stable_4kmM3_201002_bil", "PRISM_tmean_30yr_normal_4kmM2_01_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_02_bil", "PRISM_tmean_30yr_normal_4kmM2_03_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_04_bil", "PRISM_tmean_30yr_normal_4kmM2_05_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_06_bil", "PRISM_tmean_30yr_normal_4kmM2_annual_bil", 
-  "PRISM_tmean_stable_4kmD2_20130601_bil", "PRISM_tmean_stable_4kmD2_20130602_bil", 
-  "PRISM_tmean_stable_4kmD2_20130603_bil", "PRISM_tmean_stable_4kmD2_20130604_bil", 
-  "PRISM_tmean_stable_4kmD2_20130605_bil", "PRISM_tmean_stable_4kmD2_20130606_bil", 
-  "PRISM_tmean_stable_4kmD2_20130607_bil", "PRISM_tmean_stable_4kmD2_20130608_bil", 
-  "PRISM_tmean_stable_4kmD2_20130609_bil", "PRISM_tmean_stable_4kmD2_20130610_bil", 
-  "PRISM_tmean_stable_4kmD2_20130611_bil", "PRISM_tmean_stable_4kmD2_20130612_bil", 
-  "PRISM_tmean_stable_4kmD2_20130613_bil", "PRISM_tmean_stable_4kmD2_20130614_bil", 
-  "PRISM_tmean_stable_4kmM3_1965_bil", "PRISM_tmean_stable_4kmM3_196502_bil", 
+  "PRISM_tdmean_stable_4kmM3_201002_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_01_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_02_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_03_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_04_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_05_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_06_bil", 
+  "PRISM_tmean_30yr_normal_4kmM2_annual_bil", 
+  "PRISM_tmean_stable_4kmD2_20130601_bil", 
+  "PRISM_tmean_stable_4kmD2_20130602_bil", 
+  "PRISM_tmean_stable_4kmD2_20130603_bil", 
+  "PRISM_tmean_stable_4kmD2_20130604_bil", 
+  "PRISM_tmean_stable_4kmD2_20130605_bil", 
+  "PRISM_tmean_stable_4kmD2_20130606_bil", 
+  "PRISM_tmean_stable_4kmD2_20130607_bil", 
+  "PRISM_tmean_stable_4kmD2_20130608_bil", 
+  "PRISM_tmean_stable_4kmD2_20130609_bil", 
+  "PRISM_tmean_stable_4kmD2_20130610_bil", 
+  "PRISM_tmean_stable_4kmD2_20130611_bil", 
+  "PRISM_tmean_stable_4kmD2_20130612_bil", 
+  "PRISM_tmean_stable_4kmD2_20130613_bil", 
+  "PRISM_tmean_stable_4kmD2_20130614_bil", 
+  "PRISM_tmean_stable_4kmM3_1965_bil", 
+  "PRISM_tmean_stable_4kmM3_196502_bil", 
   "PRISM_tmean_stable_4kmM3_196503_bil", "PRISM_tmean_stable_4kmM3_196504_bil", 
   "PRISM_tmean_stable_4kmM3_196505_bil", "PRISM_tmean_stable_4kmM3_196506_bil", 
   "PRISM_tmean_stable_4kmM3_196507_bil", "PRISM_tmean_stable_4kmM3_196508_bil", 
@@ -246,7 +258,10 @@ test_that("prism:::filter_folders monthly", {
   ))
   
   expect_length(filter_folders(folders, "ppt", "monthly", years = 1965), 12)
-  expect_length(filter_folders(folders, "ppt", "monthly", years = 1965:1967), 24)
+  expect_length(
+    filter_folders(folders, "ppt", "monthly", years = 1965:1967), 
+    24
+  )
 })
 
 # filter_folders daily ------------------
@@ -303,7 +318,9 @@ test_that("prism:::filter_folders normals", {
   
   expect_true(all_in(
     filter_folders(folders, "tdmean", "monthly normals", resolution = "4km"),
-    paste0("PRISM_tdmean_30yr_normal_4kmM2_", prism:::mon_to_string(1:3), "_bil")
+    paste0(
+      "PRISM_tdmean_30yr_normal_4kmM2_", prism:::mon_to_string(1:3), "_bil"
+    )
   ))
   
   expect_true(all_in(

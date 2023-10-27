@@ -227,12 +227,16 @@ gen_dates <- function(minDate, maxDate, dates){
   if(all(is.null(dates), is.null(minDate), is.null(maxDate)))
     stop("You must specify either a date range (minDate and maxDate) or a vector of dates")
   
-  if((!is.null(dates) && !is.null(maxDate)) | (!is.null(dates) && !is.null(minDate))){
+  if((!is.null(dates) && !is.null(maxDate)) | 
+     (!is.null(dates) && !is.null(minDate))) {
     stop("You can enter a date range or a vector of dates, but not both")
   }
   
-  if((!is.null(maxDate) & is.null(minDate)) | (!is.null(minDate) & is.null(maxDate))){
-    stop("Both minDate and maxDate must be specified if specifying a date range")
+  if((!is.null(maxDate) & is.null(minDate)) | 
+     (!is.null(minDate) & is.null(maxDate))) {
+    stop(
+      "Both minDate and maxDate must be specified if specifying a date range"
+    )
   }
   
   if(!is.null(dates)){
