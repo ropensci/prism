@@ -61,13 +61,8 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
     call_mon <- c(call_mon, "14")
   }
  
-  uris <- sapply(call_mon, function(x) {
-    paste(
-      "http://services.nacse.org/prism/data/public/normals",
-      resolution, type, x,
-      sep="/"
-    )
-  })
+  stemp <- "http://services.nacse.org/prism/data/public/normals"
+  uris <- gen_prism_url(call_mon, type, stemp, resolution) 
 
   mpb <- txtProgressBar(min = 0, max =length(uris), style = 3)
  

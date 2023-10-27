@@ -82,25 +82,11 @@ get_prism_annual <- function(type, years, keepZip = TRUE,
   }  
   
   if (length(pre_1981)) {
-    uris_pre81 <- sapply(
-      pre_1981,
-      function(x) {
-        paste(
-          service, type, x, sep = "/"
-        )
-      }
-    )
+    uris_pre81 <- gen_prism_url(pre_1981, type, service)
   }
   
   if (length(post_1981)) {  
-    uris_post81 <- sapply(
-      post_1981,
-      function(x) {
-        paste(
-          service, type, x, sep = "/"
-        )
-      }
-    )
+    uris_post81 <- gen_prism_url(post_1981, type, service) 
   }
   
   download_pb <- txtProgressBar(

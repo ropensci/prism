@@ -49,14 +49,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   }
   
   if (length(pre_1981)) {
-    uris_pre81 <- sapply(
-      pre_1981,
-      function(x) {
-        paste(
-          service, type, x, sep = "/"
-        )
-      }
-    )
+    uris_pre81 <- gen_prism_url(pre_1981, type, service)
   }
 
   if (length(post_1981)) {  
@@ -66,14 +59,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
       function(x) {paste(x[1], x[2], sep="")}
     )
     
-    uris_post81 <- sapply(
-      uri_dates_post81,
-      function(x) {
-        paste(
-          service, type, x, sep="/"
-        )
-      }
-    )
+    uris_pre81 <- gen_prism_url(uri_dates_post81, type, service)
   }
     
   download_pb <- txtProgressBar(
@@ -93,7 +79,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   }
     
   counter <- length(uris_post81)+1
-   
+
   ### Handle pre 1981 files
   if (length(uris_pre81) > 0) {
   
@@ -126,9 +112,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
           monstr <- mon_to_string(mon)
         }
         
-        to_split <-   sapply(monstr, function(x) {
-          gsub(pattern = "_all", replacement = x, x = pre_files[k])
-        })
+        to_split <- stringr::str_replace(pre_files[k], "_all", monstr)
         
         process_zip(pre_files[k], to_split)
       }

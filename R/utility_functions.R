@@ -24,10 +24,11 @@ mon_to_string <- function(month)
 
 prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
 {
-  file_bases <- unlist(sapply(zipfiles, strsplit, split=".zip"))
-  which_downloaded <- sapply(
+  file_bases <- stringr::str_remove(zipfiles, '.zip')
+  which_downloaded <- vapply(
     file_bases, 
     find_prism_file, 
+    FUN.VALUE = logical(1),
     pre81_months = pre81_months
   )
   
@@ -35,6 +36,17 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
     return(!which_downloaded)
   } else {
     return(zipfiles[!which_downloaded])    
+  }
+}
+
+# x can be vector of years/ months/datee
+# will return value that is same length as x
+gen_prism_url <- function(x, type, service, resolution = NULL) 
+{
+  if (is.null(resolution)) {
+    paste(service, type, x, sep = "/")
+  } else {
+    paste(service, resolution, type, x, sep = "/")
   }
 }
 
@@ -128,25 +140,24 @@ find_prism_file <- function(base_file, pre81_months)
 #' @noRd
 process_zip <- function(pfile, name) 
 {
-  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
+  tmpwd <- list.files(file.path(prism_get_dl_dir(), pfile))
   
   # Remove all.xml file
-  file.remove(paste(
-    options("prism.path")[[1]], 
+  file.remove(file.path(
+    prism_get_dl_dir(), 
     pfile, 
-    grep("all", tmpwd, value = TRUE), 
-    sep="/"
+    grep("all", tmpwd, value = TRUE)
   ))
   
   # Get new list of files after removing all.xml
-  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
+  tmpwd <- list.files(file.path(prism_get_dl_dir(), pfile))
   
   fstrip <- strsplit(tmpwd, "\\.")
   fstrip <- unlist(lapply(fstrip, function(x) return(x[1])))
   unames <- unique(fstrip)
   unames <- unames[unames %in% name]
   for(j in 1:length(unames)){
-    newdir <- paste(options("prism.path")[[1]], unames[j], sep="/")
+    newdir <- file.path(prism_get_dl_dir(), unames[j])
     tryCatch(
       dir.create(newdir), 
       error = function(e) e,
@@ -156,23 +167,22 @@ process_zip <- function(pfile, name)
     )
     
     f2copy <- grep(unames[j], tmpwd, value = TRUE)
-    sapply(f2copy, function(x){
-      file.copy(from = paste(options("prism.path")[[1]], pfile, x, sep="/"),
-                to = paste(newdir, x, sep="/"))
-    })
-    sapply(f2copy, function(x){
-      file.remove(paste(options("prism.path")[[1]], pfile, x, sep="/"))
-    })
+    
+    file.copy(
+      from = file.path(prism_get_dl_dir(), pfile, f2copy),
+      to = file.path(newdir, f2copy)
+    )
+    
+    file.remove(file.path(prism_get_dl_dir(), pfile, f2copy))
     # We lose all our metadata, so we need to rewrite it
   }
   # Remove all files so the directory can be created.
   # Update file list
-  tmpwd <- list.files(paste(options("prism.path")[[1]], pfile, sep="/"))
+  tmpwd <- list.files(file.path(prism_get_dl_dir(), pfile))
   ## Now loop delete them all
-  sapply(tmpwd, function(x){
-    file.remove(paste(options("prism.path")[[1]], pfile, x, sep="/"))
-  })
-  unlink(paste(options("prism.path")[[1]], pfile, sep="/"), recursive = TRUE)
+  file.remove(file.path(prism_get_dl_dir(), pfile, tmpwd))
+  
+  unlink(file.path(prism_get_dl_dir(), pfile), recursive = TRUE)
 }
 
 #' Checks to see if the dates (days) specified are within the available Prism 
