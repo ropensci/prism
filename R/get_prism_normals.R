@@ -66,7 +66,7 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
 
   mpb <- txtProgressBar(min = 0, max =length(uris), style = 3)
  
-  for(i in 1:length(uris)){
+  for(i in seq_along(uris)){
     prism_webservice(uris[i],keepZip)
     setTxtProgressBar(mpb, i)
     

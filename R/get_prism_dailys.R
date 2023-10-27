@@ -114,7 +114,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   download_pb <- txtProgressBar(min = 0, max = max(length(uris), 1), style = 3)
   
   if(length(uris) > 0){
-    for(i in 1:length(uris)){
+    for(i in seq_along(uris)){
       prism_webservice(uri = uris[i],keepZip)
       setTxtProgressBar(download_pb, i)
     }

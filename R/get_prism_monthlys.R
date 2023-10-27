@@ -72,7 +72,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
 
   ### Handle post 1981 data
   if(length(uris_post81) > 0){    
-      for(i in 1:length(uris_post81)){
+      for(i in seq_along(uris_post81)){
         prism_webservice(uris_post81[i],keepZip)
         setTxtProgressBar(download_pb, i)
     }
@@ -84,7 +84,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   if (length(uris_pre81) > 0) {
   
     pre_files <- c()
-    for (j in 1:length(uris_pre81)) {
+    for (j in seq_along(uris_pre81)) {
       tmp <- prism_webservice(
         uris_pre81[j], 
         keepZip, 
@@ -103,7 +103,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
       pre_files <- unlist(strsplit(pre_files,"\\."))
       pre_files <- pre_files[seq(1, length(pre_files), by = 2)]
       
-      for (k in 1:length(pre_files)) {
+      for (k in seq_along(pre_files)) {
         yr <- regmatches(pre_files[k], regexpr('[0-9]{4}', pre_files[k]))
         
         if (keep_pre81_months) {

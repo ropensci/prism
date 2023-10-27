@@ -12,7 +12,7 @@
 mon_to_string <- function(month)
 {
   out <- vector()
-  for(i in 1:length(month)){
+  for(i in seq_along(month)){
     if(month[i] < 1 || month[i] > 12) {
       stop("Please enter a valid numeric month")
     }
@@ -156,7 +156,7 @@ process_zip <- function(pfile, name)
   fstrip <- unlist(lapply(fstrip, function(x) return(x[1])))
   unames <- unique(fstrip)
   unames <- unames[unames %in% name]
-  for(j in 1:length(unames)){
+  for(j in seq_along(unames)){
     newdir <- file.path(prism_get_dl_dir(), unames[j])
     tryCatch(
       dir.create(newdir), 
