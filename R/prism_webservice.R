@@ -30,6 +30,14 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
 {
   ## Get file name
   x <- httr::HEAD(uri)
+  x2 <- check_status(x, uri)
+  
+  # check status - return NULL if status was not 200
+  if (!isTRUE(x2)) {
+    warning(x2)
+    return(NULL)
+  }
+  
   fn <- x$headers[["content-disposition"]]
   fn <- regmatches(fn, regexpr('\\"[a-zA-Z0-9_\\.]+', fn))
   fn <- substr(fn, 2, nchar((fn)))
@@ -95,6 +103,31 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
   
   if (returnName) {
     return(fn)
+  }
+}
+
+check_status <- function(x, uri) {
+  if (x$status_code == as.integer(200)) {
+    # status 200 is request has succeeded
+    return(TRUE)
+  } else {
+    # otherwise - tell user about status
+    y <- paste0(
+      "\nAttempted to download:\n",
+      uri,
+      '\nCould not reach url, with status:\n',
+      x$status_code, "\n",
+      'Please try pasting one or more of the following urls into your web browser:\n',
+      'https://services.nacse.org/prism/data/public/4km/tmin/20090405', '\n',
+      'https://services.nacse.org/prism/data/public/4km/tmin/200904', '\n',
+      'https://services.nacse.org/prism/data/public/4km/tmin/2009', '\n',
+      'https://services.nacse.org/prism/data/public/4km/tmin/1944', '\n',
+      'If you receive the same status code, then the issue is with the PRISM web service.\n',
+      'Please try again later or use the manual downloads at https://prism.oregonstate.edu.\n',
+      'If the status is different or download works, please file a bug at:\n',
+      'https://github.com/ropensci/prism/issues/'
+    )
+    return(y)
   }
 }
 
