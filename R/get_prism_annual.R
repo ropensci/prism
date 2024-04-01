@@ -13,9 +13,12 @@
 #'   mean(tmin, tmax)`.
 #'   
 #' @param years a valid numeric year, or vector of years, to download data for. 
-#'   
-#' @param keepZip if `TRUE`, leave the downloaded zip files in your 
-#'   'prism.path', if `FALSE`, they will be deleted.
+#'
+#' @param unzip if `TRUE`, unzip the downloaded zip files in your 'prism.path'.
+#' 
+#' @param keepZip if `TRUE`, leave the downloaded zip files in your
+#'   'prism.path', if `FALSE`, they will be deleted. If `unzip` is `FALSE`, this
+#'   argument has no effect.
 #'   
 #' @param keep_pre81_months The pre-1981 data includes all monthly data and the 
 #'   annual data for the specified year. If you need annual and monthly data it
@@ -55,7 +58,7 @@
 #' @rdname get_prism_data
 #' 
 #' @export
-get_prism_annual <- function(type, years, keepZip = TRUE, 
+get_prism_annual <- function(type, years, unzip = TRUE, keepZip = TRUE, 
                              keep_pre81_months = FALSE, service = NULL)
 {
   ### parameter and error handling
@@ -101,7 +104,7 @@ get_prism_annual <- function(type, years, keepZip = TRUE,
   if(length(uris_post81) > 0){    
     
     for(i in seq_along(uris_post81)) {
-      prism_webservice(uris_post81[i],keepZip)
+      prism_webservice(uris_post81[i],unzip,keepZip)
       setTxtProgressBar(download_pb, i)
     }
   }
@@ -115,6 +118,7 @@ get_prism_annual <- function(type, years, keepZip = TRUE,
     for(j in seq_along(uris_pre81)){
       tmp <- prism_webservice(
         uris_pre81[j], 
+        unzip,
         keepZip, 
         returnName = TRUE, 
         pre81_months = ""

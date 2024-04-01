@@ -13,7 +13,7 @@
 #' @rdname get_prism_data
 #' 
 #' @export
-get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
+get_prism_monthlys <- function(type, years, mon = 1:12, unzip = TRUE, keepZip = TRUE,
                                keep_pre81_months = TRUE, service = NULL)
 {
   ### parameter and error handling
@@ -73,7 +73,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   ### Handle post 1981 data
   if(length(uris_post81) > 0){    
       for(i in seq_along(uris_post81)){
-        prism_webservice(uris_post81[i],keepZip)
+        prism_webservice(uris_post81[i],unzip,keepZip)
         setTxtProgressBar(download_pb, i)
     }
   }
@@ -87,6 +87,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
     for (j in seq_along(uris_pre81)) {
       tmp <- prism_webservice(
         uris_pre81[j], 
+        unzip,
         keepZip, 
         returnName = TRUE,
         pre81_months = mon

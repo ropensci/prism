@@ -66,8 +66,8 @@
 #'
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, 
-                             dates = NULL, keepZip = TRUE, check = "httr",
-                             service = NULL)
+                             dates = NULL, unzip = TRUE, keepZip = TRUE, 
+                             check = "httr", service = NULL)
 {
   prism_check_dl_dir()
   
@@ -115,7 +115,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   
   if(length(uris) > 0){
     for(i in seq_along(uris)){
-      prism_webservice(uri = uris[i],keepZip)
+      prism_webservice(uri = uris[i],unzip,keepZip)
       setTxtProgressBar(download_pb, i)
     }
   } else {
