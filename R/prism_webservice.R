@@ -5,7 +5,10 @@
 #' 
 #' @param uri a valid PRISM web service URI
 #' 
-#' @param keepZip TRUE or FALSE, keep zip files once they have been unzipped
+#' @param unzip TRUE or FALSE, unzip the zip files after downloading them
+#' 
+#' @param keepZip TRUE or FALSE, keep zip files once they have been unzipped. If
+#'   `unzip` is FALSE, then this has no effect.
 #' 
 #' @param returnName TRUE or FALSE, if TRUE the name of the file that was 
 #'   downloaded is returned
@@ -25,7 +28,7 @@
 #' }
 #' @noRd
 
-prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE, 
+prism_webservice <- function(uri, unzip = TRUE, keepZip = FALSE, returnName = FALSE, 
                              pre81_months = NULL)
 {
   ## Get file name
@@ -46,7 +49,7 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     message("\n", fn, " already exists. Skipping downloading.")
     return(NULL)
   } else {
-  
+    
     outFile <- paste(options("prism.path"), fn, sep="/")
     
     tryNumber <- 1
@@ -69,7 +72,7 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
       
       tryNumber <- tryNumber + 1
     }
-  
+    
     if (!downloaded) {
       warning(paste0("Downloading failed"))
     } else {
@@ -87,16 +90,19 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
         return(NULL)
       }
       
-      ofolder <- strsplit(outFile, ".zip")[[1]]
-      suppressWarnings(
-        utils::unzip(outFile, exdir = ofolder)
-      )
-      
-      # make sure unzipped folder is not empty
-      check_unzipped_folder(ofolder, uri)
-      
-      if (!keepZip) {
-        file.remove(outFile)
+      if (isTRUE(unzip)) {
+        
+        ofolder <- strsplit(outFile, ".zip")[[1]]
+        suppressWarnings(
+          utils::unzip(outFile, exdir = ofolder)
+        )
+        
+        # make sure unzipped folder is not empty
+        check_unzipped_folder(ofolder, uri)
+        
+        if (!keepZip) {
+          file.remove(outFile)
+        }
       }
     }
   }
