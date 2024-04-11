@@ -45,9 +45,19 @@ prism_webservice <- function(uri, unzip = TRUE, keepZip = FALSE, returnName = FA
   fn <- regmatches(fn, regexpr('\\"[a-zA-Z0-9_\\.]+', fn))
   fn <- substr(fn, 2, nchar((fn)))
   
-  if (length(prism_not_downloaded(fn, pre81_months = pre81_months)) == 0) {
+  #if files aren't unzipped, circumvent usual download checking with prism_not_downloaded
+  if (isFALSE(unzip)) {
+    if (file.exists(file.path(getOption("prism.path"), fn))) {
+      message("\n", fn, " already exists. Skipping downloading.")
+      return(fn)
+    }
+  }
+  
+  #check for .zip file and don't download, just unzip
+  if (length(prism_not_downloaded(fn, pre81_months = pre81_months)) == 0 | 
+      file.exists(file.path(getOption("prism.path"), fn))) {
     message("\n", fn, " already exists. Skipping downloading.")
-    return(NULL)
+    return(fn)
   } else {
     
     outFile <- paste(options("prism.path"), fn, sep="/")
