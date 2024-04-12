@@ -11,6 +11,7 @@
 get_prism_annual(
   type,
   years,
+  unzip = TRUE,
   keepZip = TRUE,
   keep_pre81_months = FALSE,
   service = NULL
@@ -21,6 +22,7 @@ get_prism_dailys(
   minDate = NULL,
   maxDate = NULL,
   dates = NULL,
+  unzip = TRUE,
   keepZip = TRUE,
   check = "httr",
   service = NULL
@@ -30,12 +32,20 @@ get_prism_monthlys(
   type,
   years,
   mon = 1:12,
+  unzip = TRUE,
   keepZip = TRUE,
   keep_pre81_months = TRUE,
   service = NULL
 )
 
-get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
+get_prism_normals(
+  type,
+  resolution,
+  mon = NULL,
+  annual = FALSE,
+  unzip = TRUE,
+  keepZip = TRUE
+)
 }
 \arguments{
 \item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
@@ -43,8 +53,11 @@ get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
 
 \item{years}{a valid numeric year, or vector of years, to download data for.}
 
+\item{unzip}{if \code{TRUE}, unzip the downloaded zip files in your 'prism.path'.}
+
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your
-'prism.path', if \code{FALSE}, they will be deleted.}
+'prism.path', if \code{FALSE}, they will be deleted. If \code{unzip} is \code{FALSE}, this
+argument has no effect.}
 
 \item{keep_pre81_months}{The pre-1981 data includes all monthly data and the
 annual data for the specified year. If you need annual and monthly data it

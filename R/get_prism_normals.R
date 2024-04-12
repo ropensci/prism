@@ -35,7 +35,7 @@
 #' 
 #' @export
 get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,  
-                              keepZip = TRUE)
+                              unzip = TRUE, keepZip = TRUE)
 {
   ### parameter and error handling
   prism_check_dl_dir()
@@ -67,7 +67,7 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
   mpb <- txtProgressBar(min = 0, max =length(uris), style = 3)
  
   for(i in seq_along(uris)){
-    prism_webservice(uris[i],keepZip)
+    prism_webservice(uris[i],unzip,keepZip)
     setTxtProgressBar(mpb, i)
     
   }
