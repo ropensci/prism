@@ -285,18 +285,27 @@ gen_dates <- function(minDate, maxDate, dates){
 
 #' Returns the available prism variables.
 #' @noRd
-prism_vars <- function()
+prism_vars <- function(normals = FALSE)
 {
-  c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean")
+  x <- c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean")
+  
+  if (isTRUE(normals)) {
+    x <- c(x, "solclear", "solslope", "soltotal", "soltrans")
+  }
 }
 
 # maps prism variables and names
-prism_var_names <- function() {
+prism_var_names <- function(normals = FALSE) {
   x <- c("Precipitation", "Mean temperature", "Minimum temperature", 
          "Maximum temperature", "Minimum vapor pressure deficit",
          "Maximum vapor pressure deficit", "Mean dew point temperature")
   
-  names(x) <- prism_vars()
+  if (isTRUE(normals)) {
+    x <- c(x, "Solar radiation (clear sky)", "Solar radiation (sloped)", 
+              "Solar radiation (total)", "Cloud transmittance")
+  }
+  
+  names(x) <- prism_vars(normals = normals)
 
   x
 }
