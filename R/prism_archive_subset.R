@@ -89,12 +89,15 @@ prism_archive_subset <- function(type, temp_period, years = NULL, mon = NULL,
 {
   prism_check_dl_dir()
   
-  type <- match.arg(type, prism_vars())
 
   temp_period <- match.arg(
     temp_period, 
     c("annual", "monthly", "daily", "monthly normals", "annual normals")
   )
+  
+  normals <- grepl("normals", temp_period)
+  
+  type <- match.arg(type, prism_vars(normals = normals))
   
   check_subset_folders_args(
     type, temp_period, years, mon, minDate, maxDate, dates, resolution

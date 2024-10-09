@@ -292,6 +292,8 @@ prism_vars <- function(normals = FALSE)
   if (isTRUE(normals)) {
     x <- c(x, "solclear", "solslope", "soltotal", "soltrans")
   }
+  
+  x
 }
 
 # maps prism variables and names

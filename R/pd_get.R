@@ -134,7 +134,7 @@ pr_parse <- function(p,returnDate = FALSE){
     "800m resolution"
   )
   
-  type <- prism_var_names()[type]
+  type <- prism_var_names(normals = normals)[type]
 
   md_string <- paste(ds,ures,type,sep = " - ")
   if(!returnDate){
