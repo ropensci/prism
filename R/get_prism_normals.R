@@ -39,7 +39,7 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
 {
   ### parameter and error handling
   prism_check_dl_dir()
-  type <- match.arg(type, prism_vars())
+  type <- match.arg(type, prism_vars(normals = TRUE))
   resolution <- match.arg(resolution, c("4km","800m"))
   
   if (is.null(mon) & !annual) {
