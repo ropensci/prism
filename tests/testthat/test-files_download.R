@@ -31,6 +31,10 @@ test_that("normals download", {
   get_prism_normals("vpdmin", resolution = "4km", mon = 12)
   get_prism_normals("vpdmax", resolution = "4km", mon = 9)
   get_prism_normals("ppt", resolution = "800m", mon = 11)
+  get_prism_normals('solclear', '4km', mon = 1)
+  get_prism_normals('solslope', '4km', annual = TRUE)
+  get_prism_normals('soltotal', '800m', annual = TRUE)
+  get_prism_normals('soltrans', '800m', mon = 3:4)
   
   expect_true(file.exists(
     file.path(dl_folder, "PRISM_tmean_30yr_normal_4kmM2_annual_bil.zip")
@@ -79,6 +83,22 @@ test_that("normals download", {
   ))
   expect_true(dir.exists(
     file.path(dl_folder, "PRISM_ppt_30yr_normal_800mM2_11_bil")
+  ))
+  
+  expect_true(dir.exists(
+    file.path(dl_folder, "PRISM_solclear_30yr_normal_4kmM3_01_bil")
+  ))
+  expect_true(dir.exists(
+    file.path(dl_folder, "PRISM_solslope_30yr_normal_4kmM3_annual_bil")
+  ))
+  expect_true(dir.exists(
+    file.path(dl_folder, "PRISM_soltotal_30yr_normal_800mM3_annual_bil")
+  ))
+  expect_true(dir.exists(
+    file.path(dl_folder, "PRISM_soltrans_30yr_normal_800mM3_03_bil")
+  ))
+  expect_true(dir.exists(
+    file.path(dl_folder, "PRISM_soltrans_30yr_normal_800mM3_04_bil")
   ))
 })
 
