@@ -1,5 +1,5 @@
 
-# Check errors
+# Check errors ---------------------------------------
 test_that("get_prism_normals() errors correctly", {
   expect_error(
     get_prism_normals("vpdmin", "4km"),
@@ -18,4 +18,13 @@ test_that("get_prism_normals() errors correctly", {
     get_prism_normals("ppt", "800m", mon = 14, annual = TRUE),
     "You must enter a month between 1 and 12"
   )
+  
+  expect_error(
+    get_prism_normals('ppt')
+  )
+})
+
+# test the helper function --------------------------
+test_that('get_prism_normals() helper functions parse things correctly', {
+  
 })

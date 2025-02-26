@@ -37,17 +37,17 @@
 #' 
 #' @export
 get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,  
-                              keepZip = TRUE)
+                              keepZip = TRUE, day = NULL)
 {
   ### parameter and error handling
   prism_check_dl_dir()
   type <- match.arg(type, prism_vars(normals = TRUE))
   resolution <- match.arg(resolution, c("4km","800m"))
   
-  if (is.null(mon) & !annual) {
+  if (is.null(mon) & !annual & is.null(day)) {
     stop(
-      "`mon` is `NULL` and `annual` is `FALSE`.\n",
-      "Specify either monthly or/and annual data to download."
+      "`mon` and `day` are `NULL` and `annual` is `FALSE`.\n",
+      "Specify either daily and/or monthly and/or annual data to download."
     )
   }
   
@@ -62,6 +62,23 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
   if (annual) {
     call_mon <- c(call_mon, "14")
   }
+  
+  if (!is.null(day)) {
+    # check that day is specified correctly
+    if (isTRUE(day)) {
+      if (is.null(mon) & !annual) {
+        stop(
+          "If `day` is `TRUE`, then eith `mon`, or `annual` need to be specified too."
+        )
+      } else {
+        # day will be created to fill all annual/mon values
+        call_mon <- c(call_mon, get_days_from_mon_ann(mon, annual))
+      }
+    } else {
+      # need to check that day is specified correctly & parse to correct format
+      call_mon <- c(call_mon, check_parse_day(day))
+    }
+  }
  
   stemp <- "http://services.nacse.org/prism/data/public/normals"
   uris <- gen_prism_url(call_mon, type, stemp, resolution) 
@@ -75,4 +92,46 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
   }
   
   close(mpb)
+}
+
+get_days_from_mon_ann <- function(mon, annual) 
+{
+  if (isTRUE(annual)) {
+    mon <- 1:12
+  } 
+  
+  dd <- days_in_month(mon)
+  
+  all_days <- c()
+  
+  for (i in seq_along(mon)) {
+    tmp <- sprintf("%02d", mon[i])
+    tmp <- paste0(tmp, sprintf("%02d", 1:dd[i]))
+    all_days <- c(all_days, tmp)
+  }
+  
+  all_days
+}
+
+days_in_month <- function(x) 
+{
+  ifelse(x %in% c(1, 3, 5, 7, 8, 10, 12), 31,
+         ifelse(x == 2, 29, 30))
+}
+
+check_parse_day <- function(dd)
+{
+  # if its a Date, then strip off Year
+  if (inherits(x, 'Date')) {
+    dd <- format(dd, "%m%d")
+  } else {
+    # assume its a string, strip off the - and then check that it is in 
+    # expected range
+    dd <- gsub("-", "", dd)
+    if (!all(dd %in% get_days_from_mon_ann(NULL, TRUE))) {
+      stop("`day` was specified in a character and includes some invalid month day combinations")
+    }
+  }
+  
+  dd
 }
