@@ -9,8 +9,9 @@
 #' normals which can also be downloaded at 800m resolution.
 #' 
 #' @param type The type of data to download. Must be "ppt", "tmean", "tmin", 
-#'   "tmax", "tdmean", "vpdmin", or "vpdmax". Note that `tmean == 
-#'   mean(tmin, tmax)`.
+#'   "tmax", "tdmean", "vpdmin", or "vpdmax". "solclear", "solslope", 
+#'   "soltotal", and "soltrans" are also available only for 
+#'   `get_prism_normals()`. Note that `tmean == mean(tmin, tmax)`.
 #'   
 #' @param years a valid numeric year, or vector of years, to download data for. 
 #'   

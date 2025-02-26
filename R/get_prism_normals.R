@@ -1,8 +1,10 @@
 #' Download data for 30 year normals of climate variables
 #' 
 #' @description Download data from the prism project for 30 year normals at 4km 
-#'   or 800m grid cell resolution for precipitation, mean, min and max 
-#'   temperature
+#'   or 800m grid cell resolution for precipitation; mean, min and max 
+#'   temperature; clear sky, sloped, and total solar radiation; and cloud
+#'   transmittance.
+#'   
 #' 
 #' @param resolution The spatial resolution of the data, must be either "4km" 
 #'   or "800m".

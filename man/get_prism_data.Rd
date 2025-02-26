@@ -39,7 +39,9 @@ get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
 }
 \arguments{
 \item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
-"tmax", "tdmean", "vpdmin", or "vpdmax". Note that \code{tmean ==  mean(tmin, tmax)}.}
+"tmax", "tdmean", "vpdmin", or "vpdmax". "solclear", "solslope",
+"soltotal", and "soltrans" are also available only for
+\code{get_prism_normals()}. Note that \code{tmean == mean(tmin, tmax)}.}
 
 \item{years}{a valid numeric year, or vector of years, to download data for.}
 
@@ -96,8 +98,9 @@ averages (\code{get_prism_normals()}). Data are at 4km resolution, except for th
 normals which can also be downloaded at 800m resolution.
 
 Download data from the prism project for 30 year normals at 4km
-or 800m grid cell resolution for precipitation, mean, min and max
-temperature
+or 800m grid cell resolution for precipitation; mean, min and max
+temperature; clear sky, sloped, and total solar radiation; and cloud
+transmittance.
 }
 \details{
 A valid download directory must exist before downloading any prism data. This
