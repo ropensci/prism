@@ -35,54 +35,57 @@ test_that("normals download", {
   get_prism_normals('solslope', '4km', annual = TRUE)
   get_prism_normals('soltotal', '800m', annual = TRUE)
   get_prism_normals('soltrans', '800m', mon = 3:4)
+  get_prism_normals('ppt', '4km', NULL, FALSE, TRUE, c('0101', '0301'))
+  get_prism_normals('ppt', '4km', 2, FALSE, TRUE, TRUE)
+  get_prism_normals('tmean', '800m', NULL, FALSE, TRUE, as.Date('2000-07-04'))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmean_30yr_normal_4kmM2_annual_bil.zip")
+    file.path(dl_folder, "PRISM_tmean_30yr_normal_4kmM5_annual_bil.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_30yr_normal_4kmM2_annual_bil")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmax_30yr_normal_4kmM2_01_bil.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmax_30yr_normal_4kmM2_01_bil")
+    file.path(dl_folder, "PRISM_tmean_30yr_normal_4kmM5_annual_bil")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmin_30yr_normal_4kmM2_02_bil.zip")
+    file.path(dl_folder, "PRISM_tmax_30yr_normal_4kmM5_01_bil.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmin_30yr_normal_4kmM2_02_bil")
+    file.path(dl_folder, "PRISM_tmax_30yr_normal_4kmM5_01_bil")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tdmean_30yr_normal_4kmM2_06_bil.zip")
+    file.path(dl_folder, "PRISM_tmin_30yr_normal_4kmM5_02_bil.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tdmean_30yr_normal_4kmM2_06_bil")
+    file.path(dl_folder, "PRISM_tmin_30yr_normal_4kmM5_02_bil")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmin_30yr_normal_4kmM2_12_bil.zip")
+    file.path(dl_folder, "PRISM_tdmean_30yr_normal_4kmM5_06_bil.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmin_30yr_normal_4kmM2_12_bil")
+    file.path(dl_folder, "PRISM_tdmean_30yr_normal_4kmM5_06_bil")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmax_30yr_normal_4kmM2_09_bil.zip")
+    file.path(dl_folder, "PRISM_vpdmin_30yr_normal_4kmM5_12_bil.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmax_30yr_normal_4kmM2_09_bil")
+    file.path(dl_folder, "PRISM_vpdmin_30yr_normal_4kmM5_12_bil")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_ppt_30yr_normal_800mM2_11_bil.zip")
+    file.path(dl_folder, "PRISM_vpdmax_30yr_normal_4kmM5_09_bil.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_ppt_30yr_normal_800mM2_11_bil")
+    file.path(dl_folder, "PRISM_vpdmax_30yr_normal_4kmM5_09_bil")
+  ))
+  
+  expect_true(file.exists(
+    file.path(dl_folder, "PRISM_ppt_30yr_normal_800mM4_11_bil.zip")
+  ))
+  expect_true(dir.exists(
+    file.path(dl_folder, "PRISM_ppt_30yr_normal_800mM4_11_bil")
   ))
   
   expect_true(dir.exists(
@@ -99,6 +102,22 @@ test_that("normals download", {
   ))
   expect_true(dir.exists(
     file.path(dl_folder, "PRISM_soltrans_30yr_normal_800mM3_04_bil")
+  ))
+  
+  # daily normals
+  expect_true(all(dir.exists(
+    file.path(
+      dl_folder, 
+      paste0('PRISM_ppt_30yr_normal_4kmD1_02',sprintf("%02d",1:29), '_bil')
+    )
+  )))
+  expect_true(all(dir.exists(file.path(
+    dl_folder, 
+    c('PRISM_ppt_30yr_normal_4kmD1_0101_bil', 
+      'PRISM_ppt_30yr_normal_4kmD1_0301_bil')
+  ))))
+  expect_true(dir.exists(
+    file.path(dl_folder, 'PRISM_tmean_30yr_normal_800mD1_0704_bil')
   ))
 })
 

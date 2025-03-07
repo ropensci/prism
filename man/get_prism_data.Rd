@@ -35,7 +35,14 @@ get_prism_monthlys(
   service = NULL
 )
 
-get_prism_normals(type, resolution, mon = NULL, annual = FALSE, keepZip = TRUE)
+get_prism_normals(
+  type,
+  resolution,
+  mon = NULL,
+  annual = FALSE,
+  keepZip = TRUE,
+  day = NULL
+)
 }
 \arguments{
 \item{type}{The type of data to download. Must be "ppt", "tmean", "tmin",
@@ -83,6 +90,11 @@ character or \link[base:Dates]{base::Date} class.}
 or "800m".}
 
 \item{annual}{if \code{TRUE} download annual normals.}
+
+\item{day}{Download daily normals. If \code{TRUE}, then download all daily data
+for the specified months or entire year (if \code{annual} is \code{TRUE}). Individual
+days can be specified as a \code{Date} object, where the year is ignored or
+specified as characters in "mm-dd" or "mmdd" form.}
 }
 \value{
 Nothing is returned - an error will occcur if download is not
@@ -139,7 +151,8 @@ properly. Dates can be specified using either a date range via \code{minDate} an
 4km and 800m resolution. See
 \url{https://prism.nacse.org/normals/}.
 If \code{mon} is specified and \code{annual} is \code{TRUE}, then monthly and annual normal
-data will be downloaded.
+data will be downloaded. Clear sky, sloped, and total solar radiation; and
+cloud transmittance are not available for daily normals.
 }
 
 \examples{
@@ -202,6 +215,15 @@ get_prism_normals(
   annual = TRUE,
   keepZip = FALSE
 )
+
+# Get daily precip normals for January 1 and March 1
+get_prism_normals('ppt', '4km', NULL, FALSE, TRUE, c('0101', '0301'))
+
+# Get daily precip normals for all of February
+get_prism_normals('ppt', '4km', 2, FALSE, TRUE, TRUE)
+
+# Get July 2nd average temperature 30-year average
+get_prism_normals('tmean', '800m', NULL, FALSE, TRUE, as.Date('2000-07-02'))
 }
 
 }

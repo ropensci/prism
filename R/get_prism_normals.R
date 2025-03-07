@@ -3,13 +3,17 @@
 #' @description Download data from the prism project for 30 year normals at 4km 
 #'   or 800m grid cell resolution for precipitation; mean, min and max 
 #'   temperature; clear sky, sloped, and total solar radiation; and cloud
-#'   transmittance.
+#'   transmittance.  
 #'   
-#' 
 #' @param resolution The spatial resolution of the data, must be either "4km" 
 #'   or "800m".
 #' 
 #' @param annual if `TRUE` download annual normals.
+#' 
+#' @param day Download daily normals. If `TRUE`, then download all daily data
+#'   for the specified months or entire year (if `annual` is `TRUE`). Individual
+#'   days can be specified as a `Date` object, where the year is ignored or
+#'   specified as characters in "mm-dd" or "mmdd" form. 
 #' 
 #' @section Normals:
 #' 
@@ -17,7 +21,8 @@
 #' 4km and 800m resolution. See 
 #' [https://prism.nacse.org/normals/](https://prism.nacse.org/normals/).
 #' If `mon` is specified and `annual` is `TRUE`, then monthly and annual normal 
-#' data will be downloaded.
+#' data will be downloaded. Clear sky, sloped, and total solar radiation; and 
+#' cloud transmittance are not available for daily normals.
 #' 
 #' @examples \dontrun{
 #' # Get 30 year normal values for January rainfall
@@ -31,6 +36,15 @@
 #'   annual = TRUE,
 #'   keepZip = FALSE
 #' )
+#' 
+#' # Get daily precip normals for January 1 and March 1
+#' get_prism_normals('ppt', '4km', NULL, FALSE, TRUE, c('0101', '0301'))
+#' 
+#' # Get daily precip normals for all of February
+#' get_prism_normals('ppt', '4km', 2, FALSE, TRUE, TRUE)
+#' 
+#' # Get July 2nd average temperature 30-year average
+#' get_prism_normals('tmean', '800m', NULL, FALSE, TRUE, as.Date('2000-07-02'))
 #' }
 #' 
 #' @rdname get_prism_data
@@ -48,6 +62,13 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
     stop(
       "`mon` and `day` are `NULL` and `annual` is `FALSE`.\n",
       "Specify either daily and/or monthly and/or annual data to download."
+    )
+  }
+  
+  if (!is.null(day) & 
+      type %in% c( "solclear", "solslope", "soltotal","soltrans")) {
+    stop(
+      'Daily normals are not available for clear sky, sloped, and total solar radiation; nor cloud transmittance.'
     )
   }
   
@@ -122,7 +143,7 @@ days_in_month <- function(x)
 check_parse_day <- function(dd)
 {
   # if its a Date, then strip off Year
-  if (inherits(x, 'Date')) {
+  if (inherits(dd, 'Date')) {
     dd <- format(dd, "%m%d")
   } else {
     # assume its a string, strip off the - and then check that it is in 
