@@ -78,12 +78,12 @@ those years and months \strong{or} specify the specific dates using
 # get all annual tmin
 prism_archive_subset("tmin", "annual")
 # get only 2000-2015 annual tmin
-prism_subset_folder("tmin", "annual", years = 2000-2015)
+prism_subset_folder("tmin", "annual", years = 2000:2015)
 
 # get monthly precipitation for 2000-2010
-prism_archive_subset("ppt", "monthly", years = 2000-2010)
+prism_archive_subset("ppt", "monthly", years = 2000:2010)
 # get only June-August monthly precip data for 2000-2010
-prism_archive_subset("ppt", "monthly", years = 2000-2010, mon = 6:8)
+prism_archive_subset("ppt", "monthly", years = 2000:2010, mon = 6:8)
 
 # get all daily tmax for July-August in 2010
 prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8)

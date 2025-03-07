@@ -6,6 +6,7 @@
 * Added a better error message when the PRISM webservice is down (not returning status 200). (#122)
 * Added solar radiation (clear sky), solar radiation (sloped), solar radiation (total), and cloud transmittance as available variables to download for monthly and annual PRISM normals. The variables are `solclear`, `solslope`, `soltotal`, and `soltrans`. (#130, @brownag)
 * Added ability to download daily normals for all variables except solar radiation (clear sky), solar radiation (sloped), solar radiation (total), and cloud transmittance (#123). The `day` parameter was added to `get_prism_dailys()` to specify which days to get the normals for. It was added as the last parameter so previous code that does not specify arguments by name will still work.
+* Fixed examples in the `prism_archive_subset()` to use correct syntax for a range of years. (#128, @Archaeo-Programmer)
 
 # prism 0.2.1
 
