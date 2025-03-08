@@ -26,7 +26,8 @@
 #' `minDate`/`maxDate` or `dates` 
 #' 
 #' @param type The type of data you want to subset. Must be "ppt", "tmean", 
-#'   "tmin", "tmax", "tdmean", "vpdmin", or "vpdmax".
+#'   "tmin", "tmax", "tdmean", "vpdmin", "vpdmax", "solclear", "solslope", 
+#'   "soltotal", or "soltrans".
 #'   
 #' @param temp_period The temporal period to subset. Must be "annual", 
 #'   "monthly", "daily", "monthly normals", or "annual normals".
@@ -89,10 +90,10 @@ prism_archive_subset <- function(type, temp_period, years = NULL, mon = NULL,
 {
   prism_check_dl_dir()
   
-
   temp_period <- match.arg(
     temp_period, 
-    c("annual", "monthly", "daily", "monthly normals", "annual normals")
+    c("annual", "monthly", "daily", "monthly normals", "annual normals",
+      "daily normals")
   )
   
   normals <- grepl("normals", temp_period)
@@ -106,11 +107,14 @@ prism_archive_subset <- function(type, temp_period, years = NULL, mon = NULL,
   all_dates <- NULL
   if (!is.null(dates) | !is.null(minDate)) {
     all_dates <- gen_dates(minDate, maxDate, dates)
+    if (temp_period == "daily normals") {
+      # if daily normals instead of daily, then remove years
+      all_dates <- substring(all_dates, 6)
+    }
     all_dates <- gsub("-", "", all_dates)
   }
   
   # get all folder names
-  #prism_folders <- list.files(getOption("prism.path"))
   prism_folders <- prism_archive_ls()
   
   ff <- filter_folders(prism_folders, type, temp_period, years, mon, all_dates,
@@ -190,8 +194,24 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
       # specific dates have been specified
       pattern <- paste0("_", dates, "_")
     }
+  } else if (temp_period == "daily normals") {
+    # daily normals
+    type_folders <- stringr::str_subset(
+      type_folders, 
+      paste0("_30yr_normal_", resolution)
+    )
+    
+    if (!is.null(dates)) {
+      # if dates are specified, get specific dates
+      pattern <- paste0("_", dates, "_")
+    } else if (isTRUE(years)) {
+      pattern <- paste0("_", get_days_from_mon_ann(1:12, FALSE), "_")
+    } else {
+      # otherwise, get all days for the specified months
+      pattern <- paste0("_", get_days_from_mon_ann(mon, FALSE), "_")
+    }
   } else if (temp_period == "monthly normals") {
-    # normals
+    # monthly normals
     type_folders <- stringr::str_subset(
       type_folders, 
       paste0("_30yr_normal_", resolution)
@@ -235,7 +255,7 @@ filter_folders_by_n <- function(folders, n)
 check_subset_folders_args <- function(type, temp_period, years, mon, minDate, 
                                       maxDate, dates, resolution) 
 {
-  both_norm <- c("monthly normals", "annual normals")
+  both_norm <- c("monthly normals", "annual normals", "daily normals")
 
   # resolution only specified for normals and must be specified
   if (temp_period %in% both_norm) {
@@ -249,9 +269,16 @@ check_subset_folders_args <- function(type, temp_period, years, mon, minDate,
       "`resolution` should only be specified when `temp_period` is 'normals'"
     )
   
+  if (temp_period == "daily normals" & 
+      type %in% c( "solclear", "solslope", "soltotal","soltrans")) {
+    stop(
+      'Daily normals are not available for clear sky, sloped, and total solar radiation; nor cloud transmittance.'
+    )
+  }
+  
   # day specifications only for daily
   if (
-    temp_period != "daily" & 
+    !(temp_period %in% c("daily", "daily normals")) & 
     any(!is.null(minDate), !is.null(maxDate), !is.null(dates))
   )
     stop("`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'")
@@ -266,7 +293,7 @@ check_subset_folders_args <- function(type, temp_period, years, mon, minDate,
   if (temp_period == "annual" & !is.null(mon))
     stop("No need to specify `mon` for 'annual' `temp_period`")
  
-  if (temp_period == "daily" & (!is.null(mon) | !is.null(years)) & 
+  if (temp_period %in% c("daily", "daily normals") & (!is.null(mon) | !is.null(years)) & 
       (!is.null(dates) | !is.null(minDate) | !is.null(maxDate)))
     stop("Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`")
 }

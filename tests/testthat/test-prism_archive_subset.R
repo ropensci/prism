@@ -78,7 +78,12 @@ folders <-
   "PRISM_tdmean_30yr_normal_4kmM2_annual_bil",
   "PRISM_tdmean_30yr_normal_800mM2_09_bil", 
   "PRISM_tdmean_30yr_normal_800mM2_10_bil",
-  "PRISM_tdmean_30yr_normal_800mM2_annual_bil")
+  "PRISM_tdmean_30yr_normal_800mM2_annual_bil",
+  "PRISM_ppt_30yr_normal_4kmD1_0101_bil", 
+  "PRISM_ppt_30yr_normal_4kmD1_0301_bil", 
+  "PRISM_solclear_30yr_normal_4kmM3_01_bil",
+  "PRISM_solclear_30yr_normal_4kmM3_02_bil"
+  )
 
 # all_in helper ----------------
 all_in <- function(x, y) {
@@ -164,6 +169,11 @@ test_that("prism_archive_subset() errors correctly", {
     "No need to specify `years` for 'monthly normals'"
   )
   
+  expect_error(
+    prism_archive_subset('solclear', "daily normals", resolution = '4km', 
+                         mon = 1:2)
+  )
+  
   # daily unnecessary specifications
   expect_error(
     prism_archive_subset("ppt", "daily", resolution = "800m"),
@@ -175,6 +185,11 @@ test_that("prism_archive_subset() errors correctly", {
   )
   expect_error(
     prism_archive_subset("tmin", "daily", mon = 3, minDate = "1999-01-01"),
+    "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
+  )
+  
+  expect_error(
+    prism_archive_subset("tmin", "daily normals", mon = 3, minDate = "1999-01-01"),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
   )
 })
@@ -354,4 +369,41 @@ test_that("prism:::filter_folders normals", {
     filter_folders(folders, "tdmean", "annual normals", resolution = "800m"),
     "PRISM_tdmean_30yr_normal_800mM2_annual_bil"
   ))
+  
+  expect_equal(
+    filter_folders(folders, "solclear", "monthly normals", resolution = "4km", 
+                   mon = 1:2),
+    c("PRISM_solclear_30yr_normal_4kmM3_01_bil",
+      "PRISM_solclear_30yr_normal_4kmM3_02_bil")
+  )
+  
+  # daily normals
+  expect_equal(
+    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
+                   annual = TRUE),
+    c("PRISM_ppt_30yr_normal_4kmD1_0101_bil", 
+      "PRISM_ppt_30yr_normal_4kmD1_0301_bil")
+  )
+  expect_equal(
+    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
+                   annual = TRUE),
+    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
+                   mon = 1:3)
+  )
+  expect_equal(
+    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
+                   annual = TRUE),
+    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
+                   dates = as.Date(c("2000-01-01", "2000-03-01")))
+  )
+  expect_equal(
+    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
+                   annual = TRUE),
+    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
+                   minDate = as.Date("2000-01-01"),
+                   maxDate = as.Date("2000-03-02"))
+  )
+  
+  
+  
 })
