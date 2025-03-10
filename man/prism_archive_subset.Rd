@@ -17,7 +17,8 @@ prism_archive_subset(
 }
 \arguments{
 \item{type}{The type of data you want to subset. Must be "ppt", "tmean",
-"tmin", "tmax", "tdmean", "vpdmin", or "vpdmax".}
+"tmin", "tmax", "tdmean", "vpdmin", "vpdmax", "solclear", "solslope",
+"soltotal", or "soltrans".}
 
 \item{temp_period}{The temporal period to subset. Must be "annual",
 "monthly", "daily", "monthly normals", or "annual normals".}

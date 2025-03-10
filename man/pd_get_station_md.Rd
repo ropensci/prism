@@ -13,7 +13,8 @@ get_prism_station_md(type, minDate = NULL, maxDate = NULL, dates = NULL)
 \item{pd}{prism data character vector.}
 
 \item{type}{The type of data you want to subset. Must be "ppt", "tmean",
-"tmin", "tmax", "tdmean", "vpdmin", or "vpdmax".}
+"tmin", "tmax", "tdmean", "vpdmin", "vpdmax", "solclear", "solslope",
+"soltotal", or "soltrans".}
 
 \item{minDate}{Date to start subsetting daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
