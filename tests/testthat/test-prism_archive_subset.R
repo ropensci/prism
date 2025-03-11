@@ -189,7 +189,8 @@ test_that("prism_archive_subset() errors correctly", {
   )
   
   expect_error(
-    prism_archive_subset("tmin", "daily normals", mon = 3, minDate = "1999-01-01"),
+    prism_archive_subset("tmin", "daily normals", mon = 3, 
+                         minDate = "1999-01-01", resolution = '4km'),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
   )
 })
@@ -379,31 +380,22 @@ test_that("prism:::filter_folders normals", {
   
   # daily normals
   expect_equal(
-    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
-                   annual = TRUE),
+    filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
+                   years = TRUE),
     c("PRISM_ppt_30yr_normal_4kmD1_0101_bil", 
       "PRISM_ppt_30yr_normal_4kmD1_0301_bil")
   )
   expect_equal(
-    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
-                   annual = TRUE),
-    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
+    filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
+                   years = TRUE),
+    filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
                    mon = 1:3)
   )
   expect_equal(
-    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
-                   annual = TRUE),
-    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
-                   dates = as.Date(c("2000-01-01", "2000-03-01")))
+    filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
+                   years = TRUE),
+    filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
+                   dates = c("0101", "0301"))
   )
-  expect_equal(
-    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
-                   annual = TRUE),
-    filter_folders(folders, "ppt", "daily normals", resoultion = "4km", 
-                   minDate = as.Date("2000-01-01"),
-                   maxDate = as.Date("2000-03-02"))
-  )
-  
-  
   
 })

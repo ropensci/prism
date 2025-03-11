@@ -136,7 +136,8 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
   if (temp_period == "annual") {
     # yearly ------------
     type_folders <- type_folders %>%
-      filter_folders_by_n(4)
+      filter_folders_by_n(4) %>%
+      filter_no_normal()
     
     if (!is.null(years)) {
       pattern <- paste0("_", years, "_")
@@ -145,7 +146,8 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
   } else if (temp_period == "monthly") {
     # monthly ------------
     type_folders <- type_folders %>%
-      filter_folders_by_n(6)
+      filter_folders_by_n(6) %>%
+      filter_no_normal()
     
     if (!is.null(years)) {
       if (!is.null(mon)) {
@@ -170,7 +172,8 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
   } else if (temp_period == "daily") {
     # daily ------------
     type_folders <- type_folders %>%
-      filter_folders_by_n(8)
+      filter_folders_by_n(8) %>%
+      filter_no_normal()
    
     if (is.null(dates)) {
       if (is.null(years)) {
@@ -250,6 +253,12 @@ filter_folders_by_n <- function(folders, n)
 {
   pattern <- paste0("_", "\\d{", n, "}", "_")
   stringr::str_subset(folders, pattern)
+}
+
+# remove folders that have "normal" in them
+filter_no_normal <- function(folders)
+{
+  folders[!stringr::str_detect(folders, "normal")]
 }
 
 check_subset_folders_args <- function(type, temp_period, years, mon, minDate, 
