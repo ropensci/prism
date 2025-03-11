@@ -4,7 +4,7 @@ prism_set_dl_dir("prism_test")
 
 test_that("corrupt file is found", {
   expect_equal(
-    prism_archive_verify("ppt", "daily", 1991:2012, download_corrupt = FALSE),
+    expect_warning(prism_archive_verify("ppt", "daily", 1991:2012, download_corrupt = FALSE)),
     "PRISM_ppt_stable_4kmD2_20120101_bil"
   )
 })
