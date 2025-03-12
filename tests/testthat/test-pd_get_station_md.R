@@ -31,3 +31,8 @@ test_that("pd_get_station_md() works", {
   
   expect_equal(nrow(x), 3242 + 3255)
 })
+
+test_that("pd_get_station_md() fails correctly", {
+  prism_archive_subset("ppt", "daily normals", resolution = "4km", mon = 3)
+  expect_error(pd_get_station_md(pd))
+})

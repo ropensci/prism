@@ -108,7 +108,23 @@ pr_parse <- function(p,returnDate = FALSE){
     if(grepl("annual",paste(p,collapse=""))) {
       mon <- "Annual"
     } else {
-      mon <- month.abb[as.numeric(p[length(p)-1])]
+      # monthly or daily
+      mon <- p[length(p) - 1]
+      
+      if (grepl("^\\d{2}$", mon)) {
+        # monthly
+        mon <- month.abb[as.numeric(mon)]
+      } else if (grepl("^\\d{4}$", mon)) {
+        # daily
+        m <- substr(mon, 1, 2)  # First two characters
+        d <- substr(mon, nchar(mon) - 1, nchar(mon))
+        
+        mon <- paste(month.name[as.numeric(m)], as.numeric(d))
+      } else {
+        # error
+        stop("Cannot correctly parse the pd name.")
+      }
+      
     }
     ds <- paste(mon,"30-year normals",sep=" ")
     normals <- TRUE

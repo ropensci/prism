@@ -6,8 +6,8 @@
 #' the folder names returned by [prism_archive_ls()] or 
 #' [prism_archive_subset()].
 #' 
-#' Note that station metadata does not exist for "tmean" type or for any 
-#' "annual" temporal periods. 
+#' Note that station metadata does not exist for "tmean" type, any 
+#' "annual" temporal periods, nor for daily normals. 
 #' 
 #' See [prism_archive_subset()] for further details
 #' on specifying ranges of dates for different temporal periods.
@@ -47,6 +47,15 @@ pd_get_station_md <- function(pd)
     message("Removing tmean from specified `pd`.\n", 
             "Station metadata does not exist for tmean.")
     pd <- pd[!tmean]
+  }
+  
+  # remove daily normals
+  pattern <- "^PRISM_.*?_30yr_normal_.*?_\\d{4}_bil$"
+  dn <- stringr::str_detect(pd, pattern)
+  if (any(dn)) {
+    message("Removing daily normals from `pd`.\n",
+            "Station metadata does not exist for daily normals.")
+    pd <- pd[!dn]
   }
 
   folders_to_get <- file.path(prism_get_dl_dir(), pd)

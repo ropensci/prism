@@ -50,4 +50,14 @@ test_that("pd_get_md() works", {
   )
   expect_identical(dim(x), c(1L, 8L))
   expect_setequal(colnames(x), exp_cols)
+  
+  # daily normal
+  expect_s3_class(
+    x <- pd_get_md(
+      prism_archive_subset("ppt", "daily normals", resolution = "4km", mon = 3)
+    ), 
+    "data.frame"
+  )
+  expect_identical(dim(x), c(1L, 8L))
+  expect_setequal(colnames(x), exp_cols)
 })

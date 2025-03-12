@@ -49,8 +49,8 @@ the folder names returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}}
 \code{pd_get_station_md()} that only works with daily prism data.
 }
 \details{
-Note that station metadata does not exist for "tmean" type or for any
-"annual" temporal periods.
+Note that station metadata does not exist for "tmean" type, any
+"annual" temporal periods, nor for daily normals.
 
 See \code{\link[=prism_archive_subset]{prism_archive_subset()}} for further details
 on specifying ranges of dates for different temporal periods.
