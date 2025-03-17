@@ -17,7 +17,6 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
                                keep_pre81_months = TRUE, service = NULL)
 {
   ### parameter and error handling
-
   prism_check_dl_dir()
   type <- match.arg(type, prism_vars())
  
@@ -45,7 +44,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   uris_post81 <- vector()
   
   if (is.null(service)) {
-	service <- "http://services.nacse.org/prism/data/public/4km"
+	  service <- "http://services.nacse.org/prism/data/public/4km"
   }
   
   if (length(pre_1981)) {
@@ -59,7 +58,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
       function(x) {paste(x[1], x[2], sep="")}
     )
     
-    uris_pre81 <- gen_prism_url(uri_dates_post81, type, service)
+    uris_post81 <- gen_prism_url(uri_dates_post81, type, service)
   }
     
   download_pb <- txtProgressBar(
