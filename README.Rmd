@@ -63,7 +63,7 @@ The remainder of this README provides examples following this work flow.
 
 ## prism data and parameters
 
-Data are available in 4 different temporal scales as mentioned above. At each temporal scale, there are 7 different parameters/variables available. Keep in mind these are modeled parameters, not measured.  Please see the [full description](https://www.prism.oregonstate.edu/documents/PRISM_datasets.pdf) for how they are calculated.
+Data are available in 4 different temporal scales as mentioned above. At each temporal scale, there are 11 different parameters/variables available. Keep in mind these are modeled parameters, not measured.  Please see the [full description](https://www.prism.oregonstate.edu/documents/PRISM_datasets.pdf) for how they are calculated.
 
 | Parameter name| Description           |
 |:---------------|:-------------|
@@ -74,6 +74,44 @@ Data are available in 4 different temporal scales as mentioned above. At each te
 | *ppt*  | Total precipitation (rain and snow)|
 | *vpdmin* | Daily minimum vapor pressure deficit |
 | *vpdmax* |Daily maximum vapor pressure deficit |
+| *solclear* | Solar radiation (clear sky) |
+| *solslope* | Solar radiation (sloped) |
+| *soltotal* | Solar radiation (total) |
+| *soltrans* | Cloud transmittance |
+
+### Data availability 
+
+**Normals (4km or 800m resolution) based on 1991-2020 average:**
+
+| Variable    | Annual | Monthly | Daily |
+|:------------|:-------|:--------|:-----|
+| *tmean*     |   X    |    X    |   X  |
+| *tmax*      |   X    |    X    |   X  |
+| *tmin*      |   X    |    X    |   X  |
+| *tdmean*    |   X    |    X    |   X  |
+| *ppt*       |   X    |    X    |   X  |
+| *vpdmin*    |   X    |    X    |   X  |
+| *vpdmax*    |   X    |    X    |   X  |
+| *solclear*  |   X    |    X    |      |
+| *solslope*  |   X    |    X    |      |
+| *soltotal*  |   X    |    X    |      |
+| *soltrans*  |   X    |    X    |      |
+
+**Daily, monthly, and annual data:**
+
+| Variable    | Annual (1895-present) | Monthly (1895-present) | Daily (1981-present) |
+|:------------|:-------|:--------|:-----|
+| *tmean*     |   X    |    X    |   X  |
+| *tmax*      |   X    |    X    |   X  |
+| *tmin*      |   X    |    X    |   X  |
+| *tdmean*    |   X    |    X    |   X  |
+| *ppt*       |   X    |    X    |   X  |
+| *vpdmin*    |   X    |    X    |   X  |
+| *vpdmax*    |   X    |    X    |   X  |
+| *solclear*  |        |         |      |
+| *solslope*  |        |         |      |
+| *soltotal*  |        |         |      |
+| *soltrans*  |        |         |      |
 
 ## Downloading data
 
@@ -88,9 +126,12 @@ This is now referred to as the "prism archive". The `prism_archive_*()` function
 
 ### Download 30-year normal data
 
-Normals are based on the latest 30-year period; currently 1981 - 2010. Normals can be downloaded in two resolutions, 4km and 800m, and a resolution must be specified.  They can be downloaded for a given month, vector of months, or annual averages for all 30 years.
+Normals are based on the latest 30-year period; currently 1981 - 2010. Normals can be downloaded in two resolutions, 4km and 800m, and a resolution must be specified.  They can be downloaded for a given day, month, vector of days/months, or annual averages for all 30 years.
 
 ```{r get normals,results=FALSE, eval=FALSE}
+# Download March 14 30-year average precip. Note the year is ignored
+get_prism_normals('ppt', '4km', day = as.Date('2025-03-14'))
+
 # Download the January - June 30-year averages at 4km resolution
 get_prism_normals(type="tmean", resolution = "4km", mon = 1:6, keepZip = FALSE)
 

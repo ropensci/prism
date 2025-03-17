@@ -53,7 +53,7 @@ The remainder of this README provides examples following this work flow.
 ## prism data and parameters
 
 Data are available in 4 different temporal scales as mentioned above. At
-each temporal scale, there are 7 different parameters/variables
+each temporal scale, there are 11 different parameters/variables
 available. Keep in mind these are modeled parameters, not measured.
 Please see the [full
 description](https://www.prism.oregonstate.edu/documents/PRISM_datasets.pdf)
@@ -68,6 +68,44 @@ for how they are calculated.
 | *ppt*          | Total precipitation (rain and snow)  |
 | *vpdmin*       | Daily minimum vapor pressure deficit |
 | *vpdmax*       | Daily maximum vapor pressure deficit |
+| *solclear*     | Solar radiation (clear sky)          |
+| *solslope*     | Solar radiation (sloped)             |
+| *soltotal*     | Solar radiation (total)              |
+| *soltrans*     | Cloud transmittance                  |
+
+### Data availability
+
+**Normals (4km or 800m resolution) based on 1991-2020 average:**
+
+| Variable   | Annual | Monthly | Daily |
+|:-----------|:-------|:--------|:------|
+| *tmean*    | X      | X       | X     |
+| *tmax*     | X      | X       | X     |
+| *tmin*     | X      | X       | X     |
+| *tdmean*   | X      | X       | X     |
+| *ppt*      | X      | X       | X     |
+| *vpdmin*   | X      | X       | X     |
+| *vpdmax*   | X      | X       | X     |
+| *solclear* | X      | X       |       |
+| *solslope* | X      | X       |       |
+| *soltotal* | X      | X       |       |
+| *soltrans* | X      | X       |       |
+
+**Daily, monthly, and annual data:**
+
+| Variable   | Annual (1895-present) | Monthly (1895-present) | Daily (1981-present) |
+|:-----------|:----------------------|:-----------------------|:---------------------|
+| *tmean*    | X                     | X                      | X                    |
+| *tmax*     | X                     | X                      | X                    |
+| *tmin*     | X                     | X                      | X                    |
+| *tdmean*   | X                     | X                      | X                    |
+| *ppt*      | X                     | X                      | X                    |
+| *vpdmin*   | X                     | X                      | X                    |
+| *vpdmax*   | X                     | X                      | X                    |
+| *solclear* |                       |                        |                      |
+| *solslope* |                       |                        |                      |
+| *soltotal* |                       |                        |                      |
+| *soltrans* |                       |                        |                      |
 
 ## Downloading data
 
@@ -76,10 +114,6 @@ be saved to:
 
 ``` r
 library(prism)
-#> The legacy packages maptools, rgdal, and rgeos, underpinning this package
-#> will retire shortly. Please refer to R-spatial evolution reports on
-#> https://r-spatial.org/r/2023/05/15/evolution4.html for details.
-#> This package is now running under evolution status 0
 #> Be sure to set the download folder using `prism_set_dl_dir()`.
 prism_set_dl_dir("~/prismtmp")
 ```
@@ -95,10 +129,13 @@ using the `pd_*()` functions.
 
 Normals are based on the latest 30-year period; currently 1981 - 2010.
 Normals can be downloaded in two resolutions, 4km and 800m, and a
-resolution must be specified. They can be downloaded for a given month,
-vector of months, or annual averages for all 30 years.
+resolution must be specified. They can be downloaded for a given day,
+month, vector of days/months, or annual averages for all 30 years.
 
 ``` r
+# Download March 14 30-year average precip. Note the year is ignored
+get_prism_normals('ppt', '4km', day = as.Date('2025-03-14'))
+
 # Download the January - June 30-year averages at 4km resolution
 get_prism_normals(type="tmean", resolution = "4km", mon = 1:6, keepZip = FALSE)
 
@@ -143,16 +180,16 @@ work off of one or more of these folder names (`pd`).
 ``` r
 ## Truncated to keep file list short
 prism_archive_ls()
-#>   [1] "PRISM_ppt_30yr_normal_4kmM4_01_bil"      
-#>   [2] "PRISM_ppt_30yr_normal_4kmM4_annual_bil"  
-#>   [3] "PRISM_ppt_stable_4kmM2_1950_bil"         
-#>   [4] "PRISM_ppt_stable_4kmM2_195001_bil"       
-#>   [5] "PRISM_ppt_stable_4kmM2_195002_bil"       
-#>   [6] "PRISM_ppt_stable_4kmM2_195003_bil"       
-#>   [7] "PRISM_ppt_stable_4kmM2_195004_bil"       
-#>   [8] "PRISM_ppt_stable_4kmM2_195005_bil"       
-#>   [9] "PRISM_ppt_stable_4kmM2_195006_bil"       
-#>  [10] "PRISM_ppt_stable_4kmM2_195007_bil"       
+#>   [1] "PRISM_ppt_30yr_normal_4kmD1_0101_bil"       
+#>   [2] "PRISM_ppt_30yr_normal_4kmD1_0301_bil"       
+#>   [3] "PRISM_ppt_30yr_normal_4kmD1_0314_bil"       
+#>   [4] "PRISM_ppt_30yr_normal_4kmD1_0505_bil"       
+#>   [5] "PRISM_ppt_30yr_normal_4kmM4_02_bil"         
+#>   [6] "PRISM_ppt_30yr_normal_4kmM4_annual_bil"     
+#>   [7] "PRISM_ppt_30yr_normal_800mM4_11_bil"        
+#>   [8] "PRISM_ppt_stable_4kmD2_20150718_bil"        
+#>   [9] "PRISM_ppt_stable_4kmM3_199002_bil"          
+#>  [10] "PRISM_ppt_stable_4kmM3_1999_bil"            
 ....
 ```
 
@@ -165,19 +202,19 @@ can get that with the `pd_get_name()` function.
 ``` r
 ## Truncated to keep file list short
 pd_to_file(prism_archive_ls())
-#>   [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM4_01_bil\\PRISM_ppt_30yr_normal_4kmM4_01_bil.bil"            
-#>   [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM4_annual_bil\\PRISM_ppt_30yr_normal_4kmM4_annual_bil.bil"    
-#>   [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM2_1950_bil\\PRISM_ppt_stable_4kmM2_1950_bil.bil"                  
-#>   [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM2_195001_bil\\PRISM_ppt_stable_4kmM2_195001_bil.bil"              
-#>   [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_stable_4kmM2_195002_bil\\PRISM_ppt_stable_4kmM2_195002_bil.bil"              
+#>   [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmD1_0101_bil\\PRISM_ppt_30yr_normal_4kmD1_0101_bil.bil"              
+#>   [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmD1_0301_bil\\PRISM_ppt_30yr_normal_4kmD1_0301_bil.bil"              
+#>   [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmD1_0314_bil\\PRISM_ppt_30yr_normal_4kmD1_0314_bil.bil"              
+#>   [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmD1_0505_bil\\PRISM_ppt_30yr_normal_4kmD1_0505_bil.bil"              
+#>   [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM4_02_bil\\PRISM_ppt_30yr_normal_4kmM4_02_bil.bil"                  
 ....
 
 pd_get_name(prism_archive_ls())
-#>   [1] "Jan 30-year normals - 4km resolution - Precipitation"      
-#>   [2] "Annual 30-year normals - 4km resolution - Precipitation"   
-#>   [3] "1950 - 4km resolution - Precipitation"                     
-#>   [4] "Jan  1950 - 4km resolution - Precipitation"                
-#>   [5] "Feb  1950 - 4km resolution - Precipitation"                
+#>   [1] "January 1 30-year normals - 4km resolution - Precipitation"              
+#>   [2] "March 1 30-year normals - 4km resolution - Precipitation"                
+#>   [3] "March 14 30-year normals - 4km resolution - Precipitation"               
+#>   [4] "May 5 30-year normals - 4km resolution - Precipitation"                  
+#>   [5] "Feb 30-year normals - 4km resolution - Precipitation"                    
 ....
 ```
 
@@ -236,7 +273,9 @@ them out of our archive.
 
 ``` r
 library(raster)
+#> Warning: package 'raster' was built under R version 4.4.2
 #> Loading required package: sp
+#> Warning: package 'sp' was built under R version 4.4.2
 # knowing the name of the files you are after allows you to find them in the 
 # list of all files that exist
 # jnorm_name <- "PRISM_tmean_30yr_normal_4kmM2_01_bil"
