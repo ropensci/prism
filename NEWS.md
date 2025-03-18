@@ -1,4 +1,4 @@
-# prism 0.2.2 (development version)
+# prism 0.2.2 
 
 ## Minor Enhancements (non-API breaking changes)
 * Added solar radiation (clear sky), solar radiation (sloped), solar radiation (total), and cloud transmittance as available variables to download for monthly and annual normals. The variables are `solclear`, `solslope`, `soltotal`, and `soltrans`. (#130, @brownag)
