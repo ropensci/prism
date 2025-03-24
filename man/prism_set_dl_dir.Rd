@@ -34,8 +34,8 @@ remember the option name.
 
 \code{prism_check_dl_dir()} checks that prism download folder has been set. If it
 has not been set, and in interactive mode, then prompt user to specify the
-download location. If not in interactive mode, and it has not been set, then
-set to "~/prismtmp".
+download location. If not in interactive mode and it has not been set then
+it will stop and post an error.
 
 \code{path_check()} is a deprecated version of \code{prism_check_dl_dir()}.
 }

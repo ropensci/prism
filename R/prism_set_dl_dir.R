@@ -54,8 +54,8 @@ prism_get_dl_dir <- function() {
 #' @description 
 #' `prism_check_dl_dir()` checks that prism download folder has been set. If it 
 #' has not been set, and in interactive mode, then prompt user to specify the 
-#' download location. If not in interactive mode, and it has not been set, then 
-#' set to "~/prismtmp".
+#' download location. If not in interactive mode and it has not been set then 
+#' it will stop and post an error. 
 #' 
 #' @examples
 #' \dontrun{
