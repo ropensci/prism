@@ -11,9 +11,10 @@
 #' @returns Invisibly returns `path`
 #'
 #' @examples
+#' \dontrun{
 #' prism_set_dl_dir('.')
-#' prism_set_dl_dir('~/prismtmp') # default
-#' 
+#' prism_set_dl_dir('~/prism_data')
+#' }
 #'   
 #' @export
 
@@ -57,8 +58,9 @@ prism_get_dl_dir <- function() {
 #' set to "~/prismtmp".
 #' 
 #' @examples
+#' \dontrun{
 #' prism_check_dl_dir()
-#' 
+#' }
 #' 
 #' @export
 #' 
@@ -70,25 +72,48 @@ prism_check_dl_dir <- function()
     if (interactive()) {
       message("You have not set a path to hold your prism files.")
       user_path <- readline(
-        "Please enter the full or relative path to download files to or hit enter to use default ('~/prismtmp'): "
+        "Please enter the full or relative path to download files to: "
       )
+      
+      if (nchar(user_path) == 0)
+        stop("You did not enter a path. Please call `prism_set_dl_dir()` again.")
+      
       # User may have input path with quotes. Remove these.
       user_path <- gsub(pattern = c("\"|'"), "", user_path)
       # Deal with relative paths
-      user_path <- ifelse(
-        nchar(user_path) == 0,
-        file.path(Sys.getenv("HOME"), "prismtmp"),
-        file.path(normalizePath(user_path, winslash = "/"))
-      )
+      user_path <- normalizePath(user_path, winslash = "/", mustWork = FALSE)
+      
     } else {
       stop(paste(
         "prism.path has not been set and this is being called non interactively.",
         "You must set the prism download directory using `prism_set_dl_dir()`"
       ))
-      user_path <- file.path(Sys.getenv("HOME"), "prismtmp")
     }
     
-    prism_set_dl_dir(user_path)
+    # check that specified path exists. if it does not confirm from user that
+    # they do want to create the folder
+    if (!dir.exists(user_path)) {
+      cat("The folder does not exist.\n")
+      repeat {
+        
+        cat("Press 1 to create the folder or 2 to cancel: ")
+        user_input <- as.integer(readline())
+        
+        if (is.na(user_input)) {
+          cat("Invalid input. Please enter 1 or 2.\n")
+        } else if (user_input == 1) {
+          cat(user_path, "will be created.\n")
+          break
+        } else if (user_input == 2) {
+          cat("Cancelling setting the prism download folder.\n")
+          stop("prism download folder is not set, and user canclled creating the folder.")
+        } else {
+          cat("Invalid input. Please enter 1 or 2.\n")
+        }
+      }
+    }
+    
+    prism_set_dl_dir(user_path, create = TRUE)
   }
   
   invisible(user_path)

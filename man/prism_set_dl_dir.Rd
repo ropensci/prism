@@ -40,14 +40,16 @@ set to "~/prismtmp".
 \code{path_check()} is a deprecated version of \code{prism_check_dl_dir()}.
 }
 \examples{
+\dontrun{
 prism_set_dl_dir('.')
-prism_set_dl_dir('~/prismtmp') # default
-
+prism_set_dl_dir('~/prism_data')
+}
   
 prism_get_dl_dir()
 
 
+\dontrun{
 prism_check_dl_dir()
-
+}
 
 }
