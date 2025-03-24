@@ -9,8 +9,6 @@ cat("\n\n***************************************")
 cat("\nmake sure you run this 2x or less in any given day!!!!\n")
 cat("****************************************\n")
 
-#teardown(unlink(dl_folder, recursive = TRUE))
-
 # skip flags -----------------
 skip_normals <- TRUE
 skip_annual <- TRUE
@@ -362,7 +360,7 @@ test_that("daily provisional", {
     file.path(
       dl_folder,
       paste0(
-        "PRISM_tmax_provisional_4kmD2_",
+        "PRISM_tmax_early_4kmD2_",
         stringr::str_remove_all(prov_date, "-"),
         "_bil"
       )
