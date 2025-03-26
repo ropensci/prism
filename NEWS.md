@@ -1,4 +1,8 @@
+# prism 0.2.3.9000 (development version)
+
 # prism 0.2.3
+
+**Released March 25, 2025**
 
 * Changed `prism_check_dl_dir()` so that it no longer suggests ~/prismtmp as a default. The user must specify where the data should be downloaded to either using `prism_set_dl_dir()` or via the prompts in `prism_check_dl_dir()`. Additionally, if following the prompts in `prism_check_dl_dir()`, if a user specifies a folder that does not exist, then it confirms that user wants the folder to be created. 
 
