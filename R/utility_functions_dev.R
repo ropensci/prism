@@ -53,7 +53,7 @@
 #'
 #' @seealso \code{\link{get_prism_dailys}} for downloading daily PRISM data
 #'
-#' @export
+#' @noRd
 gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us", 
                              format = "bil", dataset_type = "an") {
   
