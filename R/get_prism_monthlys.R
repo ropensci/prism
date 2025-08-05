@@ -48,7 +48,8 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   }
   
   if (length(pre_1981)) {
-    uris_pre81 <- gen_prism_url(pre_1981, type, service)
+    # uris_pre81 <- gen_prism_url(pre_1981, type, service)
+    uris_pre81 <- gen_prism_url_v2(pre_1981, type)
   }
 
   if (length(post_1981)) {  
@@ -58,7 +59,8 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
       function(x) {paste(x[1], x[2], sep="")}
     )
     
-    uris_post81 <- gen_prism_url(uri_dates_post81, type, service)
+    # uris_post81 <- gen_prism_url(uri_dates_post81, type, service)
+    uris_post81 <- gen_prism_url_v2(uri_dates_post81, type)
   }
     
   download_pb <- txtProgressBar(
