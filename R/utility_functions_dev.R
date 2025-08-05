@@ -10,7 +10,7 @@
 #'   "tmean" (mean temperature), "tdmean" (mean dewpoint), "vpdmin" (minimum vapor pressure deficit),
 #'   "vpdmax" (maximum vapor pressure deficit)
 #' @param resolution Character string specifying spatial resolution. One of:
-#'   "400m", "800m", "4km". Default is "4km". Note: 400m not yet implemented by PRISM.
+#'    "800m", "4km". Default is "4km". Note: 400m not yet implemented by PRISM.
 #' @param region Character string specifying the geographic region. One of:
 #'   "us" (CONUS), "ak" (Alaska), "hi" (Hawaii), "pr" (Puerto Rico).
 #'   Default is "us". Note: Only CONUS currently available.
@@ -74,7 +74,7 @@ gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us",
   }
   
   # Validate resolution
-  valid_resolutions <- c("400m", "800m", "4km")
+  valid_resolutions <- c( "800m", "4km")
   if (!resolution %in% valid_resolutions) {
     stop("'resolution' must be one of: ", paste(valid_resolutions, collapse = ", "))
   }
