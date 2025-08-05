@@ -117,7 +117,6 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   if(length(uris) > 0){
     for(i in seq_along(uris)){
       prism_webservice(uri = uris[i],keepZip)
-      cli::cli_alert_success("Downloaded {uris[i]}")
       setTxtProgressBar(download_pb, i)
     }
   } else {
