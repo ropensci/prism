@@ -94,8 +94,9 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   }
 
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
-  uris <- gen_prism_url(uri_dates, type, service)
- 
+  # uris <- gen_prism_url(uri_dates, type, service)
+  uris <- gen_prism_url_v2(uri_dates, type)
+  
   if(check == "internal"){
     x <- httr::HEAD(uris[1])
     fn <- x$headers$`content-disposition`
@@ -116,6 +117,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   if(length(uris) > 0){
     for(i in seq_along(uris)){
       prism_webservice(uri = uris[i],keepZip)
+      cli::cli_alert_success("Downloaded {uris[i]}")
       setTxtProgressBar(download_pb, i)
     }
   } else {
