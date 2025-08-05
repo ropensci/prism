@@ -80,6 +80,9 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   }
   
   ### Check resolution
+  if (is.null(resolution)) {
+    stop("'resolution' must be '4km' or '800m'. See ?get_prism_monthlys for details.")
+  }
   if (!resolution %in% c("4km", "800m")) {
     stop("'resolution' must be '4km' or '800m'. See ?get_prism_monthlys for details.")
   }

@@ -115,6 +115,10 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
     stop("You must enter a date that is on or after Januyar 1, 1981.")
   }
   
+  ### Check resolution
+  if (is.null(resolution)) {
+    stop("'resolution' must be '4km' or '800m'. See ?get_prism_monthlys for details.")
+  }
   if (!resolution %in% c("4km", "800m")) {
     stop("'resolution' must be '4km' or '800m'. See ?get_prism_dailys for details.")
   }
