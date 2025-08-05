@@ -5,8 +5,9 @@
 #' and mean), mean dewpoint temperature, precipitation, and vapor pressure 
 #' deficit (min and max) can be downloaded for annual (`get_prism_annual()`), 
 #' monthly (`get_prism_monthlys()`), daily (`get_prism_dailys()`), and 30-year
-#' averages (`get_prism_normals()`). Data are at 4km resolution, except for the 
-#' normals which can also be downloaded at 800m resolution.
+#' averages (`get_prism_normals()`). Data are available at 4km and 800m 
+#' resolution for daily, monthly, and annual data. Normals can also be 
+#' downloaded at 800m resolution.
 #' 
 #' @param type The type of data to download. Must be "ppt", "tmean", "tmin", 
 #'   "tmax", "tdmean", "vpdmin", or "vpdmax". "solclear", "solslope", 
@@ -32,6 +33,10 @@
 #'   staff. When `NULL`, URL defaults to: 
 #'   "http://services.nacse.org/prism/data/public/4km".
 #'
+#' @param resolution Character string specifying spatial resolution. One of 
+#'   "4km" or "800m". Default is "4km". Note that "400m" resolution is planned 
+#'   but not yet available from the PRISM web service.
+#'
 #' @details 
 #' A valid download directory must exist before downloading any prism data. This
 #' can be set using [prism_set_dl_dir()] and can be verified using 
@@ -39,25 +44,73 @@
 #' 
 #' @section Annual and Monthly:
 #' 
-#' Annual and monthly prism data are available from 1891 to present. For 
-#' 1891-1980 data, monthly and annual data are grouped together in one download 
+#' Annual and monthly prism data are available from 1895 to present. For 
+#' 1895-1980 data, monthly and annual data are grouped together in one download 
 #' file; `keep_pre81_months` determines if the other months/yearly data are kept
 #' after the download.  Data will be downloaded for all specified months (`mon`)
 #' in all the `years` in the supplied vectors.
 #' 
-#' @return Nothing is returned - an error will occcur if download is not 
+#' Data are available at two spatial resolutions: 4km (approximately 2.5 
+#' arc-minutes) and 800m. The 4km resolution covers the entire CONUS and is 
+#' suitable for most applications. The 800m resolution provides higher spatial 
+#' detail but results in larger file sizes and longer download times.
+#' 
+#' @return Nothing is returned - an error will occur if download is not 
 #'   successful.
 #' 
 #' @examples \dontrun{
-#' # Get all annual average temperature data from 1990 to 2000
-#' get_prism_annual(type = "tmean", year = 1990:2000, keepZip = FALSE)
+#' # Get all annual average temperature data from 1990 to 2000 at default resolution
+#' get_prism_annual(type = "tmean", years = 1990:2000, keepZip = FALSE)
+#' 
+#' # Get annual precipitation for multiple years at 800m resolution
+#' get_prism_annual(
+#'   type = "ppt", 
+#'   years = 2020:2022, 
+#'   resolution = "800m",
+#'   keepZip = FALSE
+#' )
+#' 
+#' # Get single year of annual temperature data at high resolution
+#' get_prism_annual(
+#'   type = "tmax",
+#'   years = 2023,
+#'   resolution = "800m",
+#'   keepZip = TRUE
+#' )
+#' 
+#' # Get pre-1981 annual data (resolution applies to both pre and post-1981 data)
+#' get_prism_annual(
+#'   type = "tmean",
+#'   years = 1975,
+#'   resolution = "4km",
+#'   keep_pre81_months = FALSE,
+#'   keepZip = FALSE
+#' )
+#' 
+#' # Get pre-1981 data and keep all monthly data too
+#' get_prism_annual(
+#'   type = "ppt",
+#'   years = c(1970, 1975),
+#'   resolution = "800m",
+#'   keep_pre81_months = TRUE,
+#'   keepZip = TRUE
+#' )
+#' 
+#' # will fail - invalid resolution:
+#' get_prism_annual(
+#'   type = "tmean",
+#'   years = 2023,
+#'   resolution = "1km",
+#'   keepZip = FALSE
+#' )
 #' }
 #' 
 #' @rdname get_prism_data
 #' 
 #' @export
 get_prism_annual <- function(type, years, keepZip = TRUE, 
-                             keep_pre81_months = FALSE, service = NULL)
+                             keep_pre81_months = FALSE, service = NULL,
+                             resolution = "4km")
 {
   ### parameter and error handling
   
@@ -72,7 +125,12 @@ get_prism_annual <- function(type, years, keepZip = TRUE,
   if(any(years < 1895)){
     stop("You must enter a year from 1895 onwards.")
   }
-    
+  
+  ### Check resolution
+  if (!resolution %in% c("4km", "800m")) {
+    stop("'resolution' must be '4km' or '800m'. See ?get_prism_annual for details.")
+  }
+  
   pre_1981 <- years[years < 1981]
   post_1981 <- years[years >= 1981]
   uris_pre81 <- vector()
@@ -84,12 +142,12 @@ get_prism_annual <- function(type, years, keepZip = TRUE,
   
   if (length(pre_1981)) {
     # uris_pre81 <- gen_prism_url(pre_1981, type, service)
-    uris_pre81 <- gen_prism_url_v2(pre_1981, type)
+    uris_pre81 <- gen_prism_url_v2(pre_1981, type, resolution)
   }
   
   if (length(post_1981)) {  
     # uris_post81 <- gen_prism_url(post_1981, type, service) 
-    uris_post81 <- gen_prism_url_v2(post_1981, type)
+    uris_post81 <- gen_prism_url_v2(post_1981, type, resolution)
   }
   
   download_pb <- txtProgressBar(
