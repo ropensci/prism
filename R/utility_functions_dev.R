@@ -10,16 +10,13 @@
 #'   "tmean" (mean temperature), "tdmean" (mean dewpoint), "vpdmin" (minimum vapor pressure deficit),
 #'   "vpdmax" (maximum vapor pressure deficit)
 #' @param resolution Character string specifying spatial resolution. One of:
-#'   "800m", "4km". 
-#'   Default is "4km". Note: 400m not yet implemented by PRISM so
-#'   we do not include it as a valid option.
+#'   "400m", "800m", "4km". Default is "4km". Note: 400m not yet implemented by PRISM.
 #' @param region Character string specifying the geographic region. One of:
-#'   "us" (CONUS).
-#'   Default is "us". Note: Only CONUS currently available. , "ak" (Alaska), 
-#'   "hi" (Hawaii), "pr" (Puerto Rico) have not yet been added to web services.
+#'   "us" (CONUS), "ak" (Alaska), "hi" (Hawaii), "pr" (Puerto Rico).
+#'   Default is "us". Note: Only CONUS currently available.
 #' @param format Optional character string specifying output format. One of:
-#'   "nc" (netCDF), "asc" (ASCII Grid), "bil" (BIL format). If NULL (default),
-#'   returns BIL format.
+#'   "nc" (netCDF), "asc" (ASCII Grid), "bil" (BIL format), "cog" (Cloud Optimized GeoTIFF). 
+#'   Default is "bil".
 #' @param dataset_type Character string specifying dataset type. One of:
 #'   "an" (all networks, default) or "lt" (long-term networks). Only applies
 #'   to monthly 800m data.
@@ -41,6 +38,7 @@
 #' Format options are appended as query parameters (e.g., "?format=nc").
 #'
 #' @examples
+#' \dontrun{
 #' # Generate URLs for daily temperature data
 #' dates <- c("20130601", "20130602", "20130603")
 #' urls <- gen_prism_url_v2(dates, "tmean")
@@ -53,34 +51,44 @@
 #' urls <- gen_prism_url_v2(monthly_dates, "tmax", resolution = "800m", dataset_type = "lt")
 #' }
 #'
-#' @noRd
-gen_prism_url_v2 <- function(dates, 
-                             type, 
-                             resolution = "4km", 
-                             region = "us", 
-                             format = "bil", 
-                             dataset_type = "an") {
+#' @seealso \code{\link{get_prism_dailys}} for downloading daily PRISM data
+#'
+#' @export
+gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us", 
+                             format = "bil", dataset_type = "an") {
   
- 
+  # Input validation
+  if (missing(dates) || missing(type)) {
+    stop("Both 'dates' and 'type' arguments are required")
+  }
+  
+  # Validate date format (should be 8 digits: YYYYMMDD or 6 digits: YYYYMM or 4 digits: YYYY)
+  if (!all(grepl("^\\d{4}(\\d{2}(\\d{2})?)?$", dates))) {
+    stop("Dates must be in YYYYMMDD (daily), YYYYMM (monthly), or YYYY (annual) format")
+  }
+  
+  # Validate climate variable
+  valid_types <- c("ppt", "tmin", "tmax", "tmean", "tdmean", "vpdmin", "vpdmax")
+  if (!type %in% valid_types) {
+    stop("'type' must be one of: ", paste(valid_types, collapse = ", "))
+  }
   
   # Validate resolution
-  valid_resolutions <- c("800m", "4km")
+  valid_resolutions <- c("400m", "800m", "4km")
   if (!resolution %in% valid_resolutions) {
     stop("'resolution' must be one of: ", paste(valid_resolutions, collapse = ", "))
   }
   
   # Validate region
-  valid_regions <- c("us")
+  valid_regions <- c("us", "ak", "hi", "pr")
   if (!region %in% valid_regions) {
     stop("'region' must be one of: ", paste(valid_regions, collapse = ", "))
   }
   
   # Validate format
-  if (!is.null(format)) {
-    valid_formats <- c("nc", "asc", "bil")
-    if (!format %in% valid_formats) {
-      stop("'format' must be one of: ", paste(valid_formats, collapse = ", "))
-    }
+  valid_formats <- c("nc", "asc", "bil", "cog")
+  if (!format %in% valid_formats) {
+    stop("'format' must be one of: ", paste(valid_formats, collapse = ", "))
   }
   
   # Validate dataset type
@@ -109,8 +117,8 @@ gen_prism_url_v2 <- function(dates,
     urls <- paste0(urls, "/lt")
   }
   
-  # Add format parameter (defaults to BIL)
-  if (!is.null(format)) {
+  # Add format parameter (COG is default so no parameter needed)
+  if (format != "cog") {
     urls <- paste0(urls, "?format=", format)
   }
   
