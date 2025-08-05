@@ -1,20 +1,61 @@
-
 #' @param mon a valid numeric month, or vector of months. Required for 
 #'   `get_prism_monthlys()`. Can be `NULL` for `get_prism_normals()`.
+#'
+#' @param resolution Character string specifying spatial resolution. One of 
+#'   "4km" or "800m". Default is "4km". Note that "400m" resolution is planned 
+#'   but not yet available from the PRISM web service.
 #' 
 #' @examples \dontrun{
-#' # Get all the precipitation data for January from 1990 to 2000
+#' # Get all the precipitation data for January from 1990 to 2000 at 4km resolution
 #' get_prism_monthlys(type = "ppt", years = 1990:2000, mon = 1, keepZip = FALSE)
 #' 
-#' # Get January-December 2005 monthly precipitation
+#' # Get January-December 2005 monthly precipitation at default resolution
 #' get_prism_monthlys(type = "ppt", years = 2005, mon = 1:12, keepZip = FALSE)
+#' 
+#' # Get high-resolution monthly temperature data for summer months
+#' get_prism_monthlys(
+#'   type = "tmean", 
+#'   years = 2023, 
+#'   mon = 6:8, 
+#'   resolution = "800m",
+#'   keepZip = FALSE
+#' )
+#' 
+#' # Get multiple years of winter precipitation at 800m resolution
+#' get_prism_monthlys(
+#'   type = "ppt",
+#'   years = 2020:2022,
+#'   mon = c(12, 1, 2),
+#'   resolution = "800m",
+#'   keepZip = TRUE
+#' )
+#' 
+#' # Get pre-1981 data (resolution applies to both pre and post-1981 data)
+#' get_prism_monthlys(
+#'   type = "tmax",
+#'   years = 1975,
+#'   mon = 7,
+#'   resolution = "4km",
+#'   keep_pre81_months = FALSE,
+#'   keepZip = FALSE
+#' )
+#' 
+#' # will fail - invalid resolution:
+#' get_prism_monthlys(
+#'   type = "ppt",
+#'   years = 2023,
+#'   mon = 6,
+#'   resolution = "1km",
+#'   keepZip = FALSE
+#' )
 #' }
 #' 
 #' @rdname get_prism_data
 #' 
 #' @export
 get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
-                               keep_pre81_months = TRUE, service = NULL)
+                               keep_pre81_months = TRUE, service = NULL, 
+                               resolution = "4km")
 {
   ### parameter and error handling
   prism_check_dl_dir()
@@ -38,6 +79,11 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
     stop("You must enter a year from 1895 onwards.")
   }
   
+  ### Check resolution
+  if (!resolution %in% c("4km", "800m")) {
+    stop("'resolution' must be '4km' or '800m'. See ?get_prism_monthlys for details.")
+  }
+  
   pre_1981 <- years[years<1981]
   post_1981 <- years[years>=1981]
   uris_pre81 <- vector()
@@ -49,7 +95,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   
   if (length(pre_1981)) {
     # uris_pre81 <- gen_prism_url(pre_1981, type, service)
-    uris_pre81 <- gen_prism_url_v2(pre_1981, type)
+    uris_pre81 <- gen_prism_url_v2(pre_1981, type, resolution)
   }
 
   if (length(post_1981)) {  
@@ -60,7 +106,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
     )
     
     # uris_post81 <- gen_prism_url(uri_dates_post81, type, service)
-    uris_post81 <- gen_prism_url_v2(uri_dates_post81, type)
+    uris_post81 <- gen_prism_url_v2(uri_dates_post81, type, resolution)
   }
     
   download_pb <- txtProgressBar(
