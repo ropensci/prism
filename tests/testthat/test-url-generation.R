@@ -26,7 +26,7 @@ test_that("URL generation validates inputs", {
   # Invalid date format
   expect_error(
     prism:::gen_prism_url_v2("2023-06-01", "tmean"),
-    "Dates must be in YYYYMMDD \\(daily\\), YYYYMM \\(monthly\\), or YYYY \\(annual\\) format"
+    "Dates must be in YYYYMMDD \\(daily\\), YYYYMM \\(monthly\\), YYYY \\(annual\\), MM \\(monthly normals\\), or MMDD \\(daily normals\\) format"
   )
   
   # Invalid climate variable
