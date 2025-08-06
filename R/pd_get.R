@@ -130,7 +130,7 @@ pr_parse <- function(p,returnDate = FALSE){
     normals <- TRUE
   } else {
    
-    d <- p[length(p)-1]
+    d <- p[length(p)]
     yr <- substr(d,1,4)
     mon <- substr(d,5,6)
     day <- substr(d,7,8)
