@@ -3,7 +3,14 @@ cur_prism <- getOption("prism.path")
 options("prism.path.tmp" = cur_prism)
 
 # the dl directory is the test file directory
-dl_dir <- file.path("tests/testthat/prism_test")
+# Handle different working directories (project root vs tests/testthat)
+if (basename(getwd()) == "testthat") {
+  # Running from tests/testthat directory (e.g., via test_file())
+  dl_dir <- "prism_test"
+} else {
+  # Running from project root (e.g., interactive or R CMD check)
+  dl_dir <- file.path("tests", "testthat", "prism_test")
+}
 prism_set_dl_dir(dl_dir)
 
 # need to unzip all the zip files, then delete the unzipped folder when exiting
