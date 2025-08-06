@@ -122,7 +122,8 @@ prism_archive_subset <- function(type, temp_period, years = NULL, mon = NULL,
   
   ff
 }
-
+#     x <- pd_get_md(prism_archive_subset("ppt", "daily", year = 1981:2019)),
+# type = "ppt"; temp_period = 'daily'; years = 1981:2019; mon = NULL;
 filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
                            mon = NULL, dates = NULL, resolution = NULL)
 {
@@ -251,7 +252,12 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
 # the folder name. This filters based on that number
 filter_folders_by_n <- function(folders, n)
 {
-  pattern <- paste0("_", "\\d{", n, "}", "$")
+  web_service_version = ifelse(
+    grepl('PRISM',folders),
+    'v1','v2'
+  )
+  pattern <- paste0("_", "\\d{", n, "}", ifelse(web_service_version == 'v1', "_", "$")
+  )
   stringr::str_subset(folders, pattern)
 }
 
