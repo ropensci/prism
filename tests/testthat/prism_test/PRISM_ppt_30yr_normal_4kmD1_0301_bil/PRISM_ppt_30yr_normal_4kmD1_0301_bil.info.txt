@@ -1,6 +1,0 @@
-PRISM_DATASET_FILENAME: prism_ppt_us_30s_20200301_avg_30y.bil
-PRISM_DATASET_CREATE_DATE: 20231101-1454
-PRISM_DATASET_TYPE: prism_current/D2, normals/9120.b
-PRISM_DATASET_VERSION: D1
-PRISM_CODE_VERSION: 16.1-20220830-1154
-PRISM_DATASET_REMARKS: This grid was initially modeled with PRISM at 30-arc-second (~800-m) resolution to produce the source grid listed under PRISM_FILENAME, on the date(s) listed under PRISM_CREATE_DATE. This source grid was then upscaled to 2.5-arc-minute (~4-km) resolution with a Gaussian filter.
