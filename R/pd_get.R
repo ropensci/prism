@@ -130,7 +130,8 @@ pr_parse <- function(p,returnDate = FALSE){
     normals <- TRUE
   } else {
    
-    d <- p[length(p)]
+    web_service_version = ifelse(p[1]=='PRISM', 'v1', 'v2')
+    d <- ifelse(web_service_version=='v1', p[length(p)-1], p[length(p)])
     yr <- substr(d,1,4)
     mon <- substr(d,5,6)
     day <- substr(d,7,8)
