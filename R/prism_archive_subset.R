@@ -140,7 +140,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
       filter_no_normal()
     
     if (!is.null(years)) {
-      pattern <- paste0("_", years, )
+      pattern <- paste0("_", years)
     }
     
   } else if (temp_period == "monthly") {
@@ -165,7 +165,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
       # years are not specified
       if (!is.null(mon)) {
         # but months are, so get all the years for the specified months
-        pattern <- paste0("_\\d{4}", mon_to_string(mon), )
+        pattern <- paste0("_\\d{4}", mon_to_string(mon))
       }
     }
     
@@ -195,7 +195,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
       
     } else {
       # specific dates have been specified
-      pattern <- paste0("_", dates, )
+      pattern <- paste0("_", dates)
     }
   } else if (temp_period == "daily normals") {
     # daily normals
@@ -206,12 +206,12 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     
     if (!is.null(dates)) {
       # if dates are specified, get specific dates
-      pattern <- paste0("_", dates, )
+      pattern <- paste0("_", dates)
     } else if (isTRUE(years)) {
-      pattern <- paste0("_", get_days_from_mon_ann(1:12, FALSE), )
+      pattern <- paste0("_", get_days_from_mon_ann(1:12, FALSE))
     } else {
       # otherwise, get all days for the specified months
-      pattern <- paste0("_", get_days_from_mon_ann(mon, FALSE), )
+      pattern <- paste0("_", get_days_from_mon_ann(mon, FALSE))
     }
   } else if (temp_period == "monthly normals") {
     # monthly normals
