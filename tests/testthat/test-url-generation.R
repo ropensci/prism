@@ -1,3 +1,5 @@
+# Web Service v2  ---------------------------------------------------------------
+
 test_that("URL generation works with new web service", {
   # Basic functionality
   urls <- prism:::gen_prism_url_v2(c("20230601", "20230602"), "tmean")
@@ -54,4 +56,67 @@ test_that("URL generation produces expected format", {
   expected_pattern <- "^https://services\\.nacse\\.org/prism/data/get/us/4km/ppt/20230615\\?format=bil$"
   expect_match(url, expected_pattern)
 })
+
+
+# FTP Normals_Bil  ---------------------------------------------------------------
+
+
+test_that("FTP normals service generates correct URLs", {
+  # Test monthly normals (MM format)
+  urls_monthly_normals <- prism:::gen_prism_url_v2(
+    c("01", "06", "12"), "tmean", 
+    service = "ftp_v2_normals_bil"
+  )
+  expect_length(urls_monthly_normals, 3)
+  expect_true(all(grepl("^https://data\\.prism\\.oregonstate\\.edu/normals_bil", urls_monthly_normals)))
+  expect_true(all(grepl("tmean", urls_monthly_normals)))
+  
+  # Test daily normals (MMDD format)  
+  urls_daily_normals <- prism:::gen_prism_url_v2(
+    c("0101", "0301", "1225"), "ppt",
+    service = "ftp_v2_normals_bil" 
+  )
+  expect_length(urls_daily_normals, 3)
+  expect_true(all(grepl("normals_bil", urls_daily_normals)))
+  
+  # Test annual normals (special case "14" -> "annual")
+  url_annual_normals <- prism:::gen_prism_url_v2(
+    "14", "tmax",
+    service = "ftp_v2_normals_bil"
+  )
+  expect_length(url_annual_normals, 1)
+  expect_true(grepl("normals_bil", url_annual_normals))
+})
+
+test_that("FTP normals service handles different resolutions", {
+  # Test 4km resolution with normals
+  url_normals_4km <- prism:::gen_prism_url_v2(
+    "01", "ppt", resolution = "4km",
+    service = "ftp_v2_normals_bil"
+  )
+  expect_true(grepl("normals_bil", url_normals_4km))
+  expect_true(grepl("4km", url_normals_4km))
+  
+  # Test 800m resolution with normals
+  url_normals_800m <- prism:::gen_prism_url_v2(
+    "03", "tdmean", resolution = "800m",
+    service = "ftp_v2_normals_bil"
+  )
+  expect_true(grepl("normals_bil", url_normals_800m))
+  expect_true(grepl("800m", url_normals_800m))
+})
+
+test_that("FTP normals service handles all climate variables", {
+  valid_types <- c("tmean", "tmax", "tmin", "tdmean", "ppt", "vpdmin", "vpdmax")
+  
+  for (var_type in valid_types) {
+    url <- prism:::gen_prism_url_v2(
+      "06", var_type, 
+      service = "ftp_v2_normals_bil"
+    )
+    expect_true(grepl("normals_bil", url))
+    expect_true(grepl(var_type, url))
+  }
+})
+
 
