@@ -130,7 +130,7 @@ gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us",
   }
   
   
-  # Web service v2 -------------------------------------------------------------------------
+  # FTP Normals_Bil -------------------------------------------------------------------------
   if (service == "ftp_v2_normals_bil") {
     
     # Function to get version available in Normals_bil FTP (this logic may be required to future proof against
@@ -177,9 +177,7 @@ gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us",
     
     # Generate URLs for each date
     urls <- sapply(dates, function(date_str) {
-      time_scale <- ifelse(nchar(date_str) == 4, 'annual', 
-                           ifelse(nchar(date_str) == 2, 'monthly', 'daily'))
-      
+      time_scale <- ifelse(nchar(date_str) == 2, 'monthly', 'daily')
       get_current_version(base_url, time_scale, resolution, type, date_str)
     }) %>% unname()
     
