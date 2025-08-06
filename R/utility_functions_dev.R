@@ -54,17 +54,19 @@
 #' @seealso \code{\link{get_prism_dailys}} for downloading daily PRISM data
 #'
 #' @noRd
+#' 
+#' type = "ppt"; resolution = "4km"; mon = 1; annual = FALSE; keepZip = FALSE; day = NULL; service = 'ftp_v2_normals_bil'
 gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us", 
-                             format = "bil", dataset_type = "an") {
+                             format = "bil", dataset_type = "an", service = "web_service_v2") {
   
   # Input validation
   if (missing(dates) || missing(type)) {
     stop("Both 'dates' and 'type' arguments are required")
   }
   
-  # Validate date format (should be 8 digits: YYYYMMDD or 6 digits: YYYYMM or 4 digits: YYYY)
-  if (!all(grepl("^\\d{4}(\\d{2}(\\d{2})?)?$", dates))) {
-    stop("Dates must be in YYYYMMDD (daily), YYYYMM (monthly), or YYYY (annual) format")
+  # Validate date format: YYYY/YYYYMM/YYYYMMDD (time-series) or MM/MMDD (normals)
+  if (!all(grepl("^(\\d{4}(\\d{2}(\\d{2})?)?|\\d{2}(\\d{2})?)$", dates))) {
+    stop("Dates must be in YYYYMMDD (daily), YYYYMM (monthly), YYYY (annual), MM (monthly normals), or MMDD (daily normals) format")
   }
   
   # Validate climate variable
@@ -106,20 +108,82 @@ gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us",
     warning("Only CONUS ('us') region is currently available. Other regions not yet implemented.")
   }
   
-  # Base URL structure
-  base_url <- "https://services.nacse.org/prism/data/get"
-  
-  # Generate URLs for each date
-  urls <- paste(base_url, region, resolution, type, dates, sep = "/")
-  
-  # Add dataset type if LT (long-term)
-  if (dataset_type == "lt") {
-    urls <- paste0(urls, "/lt")
+  # Web service v2 -------------------------------------------------------------------------
+  if (service == "web_service_v2"){
+
+    ## Base URL
+    base_url <- "https://services.nacse.org/prism/data/get"
+    
+    # Generate URLs for each date
+    urls <- paste(base_url, region, resolution, type, dates, sep = "/")
+    
+    # Add dataset type if LT (long-term)
+    if (dataset_type == "lt") {
+      urls <- paste0(urls, "/lt")
+    }
+    
+    # Add format parameter (COG is default so no parameter needed)
+    if (format != "cog") {
+      urls <- paste0(urls, "?format=", format)
+    }
+    
   }
   
-  # Add format parameter (COG is default so no parameter needed)
-  if (format != "cog") {
-    urls <- paste0(urls, "?format=", format)
+  
+  # Web service v2 -------------------------------------------------------------------------
+  if (service == "ftp_v2_normals_bil") {
+    
+    # Function to get version available in Normals_bil FTP (this logic may be required to future proof against
+    # changes in the normals versions in normals_bil folder). May deprecate once we shift to COG?
+    get_current_version <- function(base_url, time_scale, resolution, type, date_str) {
+      
+      # Build directory URL
+      dir_url <- paste(base_url, time_scale, resolution, type, sep = "/")
+      
+      # Get directory listing using only httr
+      tryCatch({
+        response <- httr::GET(paste0(dir_url, "/"))
+        if (httr::status_code(response) == 200) {
+          content_html <- httr::content(response, "text", encoding = "UTF-8")
+          
+          # Use base regex to extract file links (no 
+          # Look for href="filename.zip" patterns
+          file_pattern <- paste0('href="[^"]*PRISM_', type, '_30yr_normal_', resolution, '[DM]\\d+_', date_str, '_bil\\.zip"')
+          matches <- regmatches(content_html, gregexpr(file_pattern, content_html))[[1]]
+          
+          if (length(matches) > 0) {
+            # Extract just the filename from href="filename"
+            filename <- sub('href="([^"]*)"', '\\1', matches[1])
+            return(paste(dir_url, filename, sep = "/"))
+          } else {
+            warning("No matching file found for: ", type, " ", resolution, " ", date_str)
+            return(NULL)
+          }
+        } else {
+          warning("Failed to access directory: ", dir_url)
+          return(NULL)
+        }
+      }, error = function(e) {
+        warning("Error accessing directory: ", e$message)
+        return(NULL)
+      })
+    }
+    
+    ## Base URL
+    base_url <- 'https://data.prism.oregonstate.edu/normals_bil'
+    
+    # Generate URLs for each date
+    urls <- sapply(dates, function(date_str) {
+      time_scale <- ifelse(nchar(date_str) == 4, 'annual', 
+                           ifelse(nchar(date_str) == 2, 'monthly', 'daily'))
+      
+      get_current_version(base_url, time_scale, resolution, type, date_str)
+    }) %>% unname()
+    
+    # Remove any NULL entries
+    urls <- urls[!sapply(urls, is.null)]
+    
+    return(urls)
   }
   
   return(urls)
