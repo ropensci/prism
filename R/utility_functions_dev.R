@@ -54,8 +54,6 @@
 #' @seealso \code{\link{get_prism_dailys}} for downloading daily PRISM data
 #'
 #' @noRd
-#' 
-#' type = "ppt"; resolution = "4km"; mon = 1; annual = FALSE; keepZip = FALSE; day = NULL; service = 'ftp_v2_normals_bil'
 gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us", 
                              format = "bil", dataset_type = "an", service = "web_service_v2") {
   
