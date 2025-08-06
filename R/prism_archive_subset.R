@@ -154,7 +154,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
         # years and mon are specified; paste them together and match those 
         # specified years and months
         pattern <- paste0(
-          "_", as.vector(outer(years, mon_to_string(mon), paste0)), "_"
+          "_", as.vector(outer(years, mon_to_string(mon), paste0))
         )
       } else {
         # years are specified, but months are not, so get all months for the
@@ -251,7 +251,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
 # the folder name. This filters based on that number
 filter_folders_by_n <- function(folders, n)
 {
-  pattern <- paste0("_", "\\d{", n, "}")
+  pattern <- paste0("_", "\\d{", n, "}", "$")
   stringr::str_subset(folders, pattern)
 }
 
