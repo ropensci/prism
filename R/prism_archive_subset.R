@@ -188,7 +188,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
         } else {
           # years are specified, months are specified
           pattern <- paste0(
-            "_", as.vector(outer(years, mon_to_string(mon), paste0)), "\\d{2}_"
+            "_", as.vector(outer(years, mon_to_string(mon), paste0)), "\\d{2}"
           )
         }
       }
