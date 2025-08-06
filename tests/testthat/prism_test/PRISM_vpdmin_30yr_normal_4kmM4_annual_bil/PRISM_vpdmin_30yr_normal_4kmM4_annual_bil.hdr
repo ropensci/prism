@@ -1,0 +1,25 @@
+NROWS           228 
+NCOLS           246 
+NBANDS          1 
+NBITS           32 
+BYTEORDER       I 
+PIXELTYPE       FLOAT 
+LAYOUT          BIL 
+SKIPBYTES       0
+ULXMAP          -124.374999999995 
+ULYMAP          41.999999999937 
+XDIM            0.04166667 
+YDIM            0.04166667 
+BANDROWBYTES    984 
+TOTALROWBYTES   984 
+BANDGAPBYTES    0
+NODATA          -3.4e+38 
+
+
+The below is additional metadata, not part of the BIL/HDR format
+----------------------------------------------------------------
+CREATOR=R package:x
+CREATED= 2023-10-17 20:26:46 
+Projection= +proj=longlat +datum=NAD83 +no_defs 
+MinValue= 0.09999999 
+MaxValue= 17.11 

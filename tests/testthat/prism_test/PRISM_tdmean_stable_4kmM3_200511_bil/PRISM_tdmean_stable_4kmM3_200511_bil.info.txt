@@ -1,0 +1,6 @@
+PRISM_DATASET_FILENAME: cai_tdmean_us_us_30s_200511.bil
+PRISM_DATASET_CREATE_DATE: 20190923
+PRISM_DATASET_TYPE: an81/r1812
+PRISM_DATASET_VERSION: M3
+PRISM_CODE_VERSION: 14.1-20140502-1000
+PRISM_DATASET_REMARKS: This grid was initially modeled with PRISM at 30-arc-second (~800-m) resolution to produce the source grid listed under PRISM_FILENAME, on the date(s) listed under PRISM_CREATE_DATE. This source grid was then upscaled to 2.5-arc-minute (~4-km) resolution with a Gaussian filter.
