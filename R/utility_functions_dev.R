@@ -140,6 +140,9 @@ gen_prism_url_v2 <- function(dates, type, resolution = "4km", region = "us",
       # Build directory URL
       dir_url <- paste(base_url, time_scale, resolution, type, sep = "/")
       
+      # Recode Annual date_str
+      date_str = ifelse(date_str == '14', 'annual', date_str)
+      
       # Get directory listing using only httr
       tryCatch({
         response <- httr::GET(paste0(dir_url, "/"))
