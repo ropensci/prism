@@ -50,6 +50,52 @@ gen_prism_url <- function(x, type, service, resolution = NULL)
   }
 }
 
+prism_not_downloaded_as_v1 <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
+{
+  file_bases <- stringr::str_remove(zipfiles, '.zip')
+  
+  v1_file_bases <- vapply(file_bases, function(x) {
+    web_service_version <- ifelse(grepl("PRISM", x), "v1", "v2")
+    
+    if (web_service_version == 'v1') {
+      return(x)
+    }
+    
+    if (web_service_version == 'v2') {
+      ## get v1 regex
+      parts <- strsplit(x, "_")[[1]]
+      var <- parts[2]       
+      region <- parts[3]     
+      resolution <- parts[4] 
+      date <- parts[5]      
+      res_map <- c("25m" = "4km", "4km" = "4km", "800m" = "800m")
+      v1_resolution <- res_map[resolution]
+      v1_regex <- paste0("PRISM_", var, "_stable_", v1_resolution, "..", "_", date, "_bil")
+      
+      ## get v1 file if possible
+      v1_fn = list.files(getOption("prism.path"), pattern = v1_regex)
+      if (length(v1_fn) > 0) {
+        return(v1_fn[1])
+      } else {
+        return(v1_regex)
+      }
+    }
+  }, character(1), USE.NAMES = FALSE)
+  
+  which_downloaded <- vapply(
+    v1_file_bases,
+    find_prism_file,
+    FUN.VALUE = logical(1),
+    pre81_months = pre81_months
+  )
+  
+  if(lgl){
+    return(!which_downloaded)
+  } else {
+    return(zipfiles[!which_downloaded])    
+  }
+}
+
 #' Check if prism files exist
 #' 
 #' Helper function to check if files already exist in the prism download 
