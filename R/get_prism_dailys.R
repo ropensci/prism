@@ -134,7 +134,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
 
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
   # uris <- gen_prism_url(uri_dates, type, service)
-  uris <- gen_prism_url_v2(uri_dates, type, resolution)
+  uris <- gen_prism_url(uri_dates, type, resolution)
   
   if(check == "internal"){
     x <- httr::HEAD(uris[1])
