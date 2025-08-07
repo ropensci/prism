@@ -52,6 +52,9 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
   if (length(prism_not_downloaded(fn, pre81_months = pre81_months)) == 0) {
     message("\n", fn, " already exists. Skipping downloading.")
     return(NULL)
+  } else if (length(prism_not_downloaded_as_v1(fn, pre81_months = pre81_months)) == 0) {
+    message("\n", fn, " is a webservice v2 request that already exists as v1 file. Skipping downloading. (Delete original webservice v1 file if you want ot update).")
+    return(NULL)
   } else {
   
     outFile <- paste(options("prism.path"), fn, sep="/")
