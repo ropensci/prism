@@ -57,10 +57,20 @@ pd_get_date <- function(pd) {
 #' @export
 #' @rdname pd_get
 pd_get_type <- function(pd) {
-  p <- stringr::str_remove(pd, "PRISM_")
-  p <- stringr::str_split(p, "_", simplify = TRUE)
   
-  p[,1]
+  vapply(pd, function(x) {
+    web_service_version <- ifelse(grepl("PRISM", x), "v1", "v2")
+    if (web_service_version == 'v1'){
+      p <- stringr::str_remove(x, "PRISM_")
+      p <- stringr::str_split(p, "_", simplify = TRUE)
+      return(p[,1])
+    }
+    if (web_service_version == 'v2'){
+      parts <- strsplit(x, "_")[[1]]
+      return(parts[2])
+    }
+  }, character(1), USE.NAMES = FALSE)
+  
 }
 
 #' @description 
