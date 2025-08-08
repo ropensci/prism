@@ -22,17 +22,19 @@
 #' @examples \dontrun{
 #' # delete any provisional annual precipitation data from 2000-2023
 #' # del_files will containg any deleted files
-#' del_files <- prism_archive_clean('ppt', 'annual', 2000:2023)
+#' del_files <- prism_archive_clean('ppt', 'annual', 2000:2023, resolution = "4km")
 #' }
 #' 
 #' @export
 
 prism_archive_clean <- function(type, temp_period, years = NULL, mon = NULL, 
-                             minDate = NULL, maxDate = NULL, dates = NULL) {
+                                minDate = NULL, maxDate = NULL, dates = NULL,
+                                resolution = NULL) {
   prism_check_dl_dir()
   
   pd <- prism_archive_subset(type, temp_period, years = years, mon = mon, 
-                          minDate = minDate, maxDate = maxDate, dates = dates)
+                             minDate = minDate, maxDate = maxDate, dates = dates,
+                             resolution = resolution)
   
   # identify folders for removal ----------------
   # find any folders with "early"
@@ -147,7 +149,7 @@ folders_to_remove <- function(x) {
       # else delete all (don't need to reset x)
     }
   }
-    
+  
   x
 }
 
@@ -164,10 +166,11 @@ del_early_prov <- function (type, minDate = NULL, maxDate = NULL, dates = NULL)
   .Deprecated("`prism_archive_clean()`")
   prism_check_dl_dir()
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, 
-                             dates = dates)
-  pd <- prism_archive_subset(type = type, temp_period = "daily", dates = dates)
+                     dates = dates)
+  pd <- prism_archive_subset(type = type, temp_period = "daily", dates = dates, 
+                             resolution = "4km")
   mddf <- pd_get_md(pd)
-
+  
   mddf$dates_str <- stringr::str_extract(mddf$PRISM_DATASET_FILENAME, 
                                          "[0-9]{8}")
   duplicates <- mddf$dates_str[duplicated(mddf$dates_str)]
