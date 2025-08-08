@@ -106,6 +106,12 @@ all_in <- function(x, y) {
 
 # prism_archive_subset() errors ------------------
 test_that("prism_archive_subset() errors correctly", {
+  # missing resolution (now required for all files in webservice v2 migration)
+  expect_error(prism_archive_subset("tmean", "daily", mon = 6))
+  expect_error(prism_archive_subset("tmean", "annual", years = 2013))
+  # unsupported resolution
+  expect_error(prism_archive_subset("tmean", "daily", resolution = '1m', minDate = "2013-06-07", maxDate = "2013-06-10"))
+  expect_error(prism_archive_subset("ppt", "daily", resolution = '400m', mon = 1, years = 1981:2011))
   # unsupported variables
   expect_error(prism_archive_subset("tmaxx", "annual"))
   expect_error(prism_archive_subset("vpdmiin", "annual"))
