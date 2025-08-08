@@ -291,7 +291,7 @@ check_subset_folders_args <- function(type, temp_period, years, mon, minDate,
   
   # resolution must be specified 
   if (is.null(resolution))
-    stop("`resolution` must be specified when subsetting normals")
+    stop("`resolution` must be specified for all temporal periods")
   resolution <- match.arg(resolution, c("4km", "800m"))
   
   if (temp_period == "daily normals" & 
