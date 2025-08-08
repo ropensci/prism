@@ -1,6 +1,6 @@
 # the 2012-01-01 ppt is corrupt. Will check and see if it is found
 
-prism_set_dl_dir("prism_test")
+# prism_set_dl_dir("prism_test")
 
 test_that("corrupt file is found", {
   expect_equal(
