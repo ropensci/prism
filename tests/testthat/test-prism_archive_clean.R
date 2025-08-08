@@ -35,7 +35,7 @@ day_delete <- c(
 )
 
 teardown(
-  unlink(file.path(prism_get_dl_dir(), c(mon_keep, day_keep)), recursive = TRUE)
+  unlink(file.path(prism_get_dl_dir(), c(mon_keep, day_keep, mon_delete, day_delete)), recursive = TRUE)
 )
  
 test_that("prism_archive_clean() works", {
