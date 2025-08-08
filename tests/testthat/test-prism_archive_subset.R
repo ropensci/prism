@@ -119,11 +119,11 @@ test_that("prism_archive_subset() errors correctly", {
   # unsupported resolution
   expect_error(
     prism_archive_subset("tmean", "daily", resolution = '1m', minDate = "2013-06-07", maxDate = "2013-06-10"), 
-    "'arg' should be one of “4km”, “800m”"
+    "'arg' should be one of.*4km.*800m"
   )
   expect_error(
     prism_archive_subset("ppt", "daily", resolution = '400m', mon = 1, years = 1981:2011), 
-    "'arg' should be one of “4km”, “800m”"
+    "'arg' should be one of.*4km.*800m"
   )
   
   # unsupported variables
@@ -189,11 +189,11 @@ test_that("prism_archive_subset() errors correctly", {
   )
   expect_error(
     prism_archive_subset("tmean", "annual normals", resolution = "4pm"),
-    "'arg' should be one of “4km”, “800m”"
+    "'arg' should be one of.*4km.*800m"
   )
   expect_error(
     prism_archive_subset("tmean", "monthly normals", resolution = "800mm"),
-    "'arg' should be one of “4km”, “800m”"
+    "'arg' should be one of.*4km.*800m"
   )
   expect_error(
     prism_archive_subset(
