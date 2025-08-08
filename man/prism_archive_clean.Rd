@@ -12,7 +12,8 @@ prism_archive_clean(
   mon = NULL,
   minDate = NULL,
   maxDate = NULL,
-  dates = NULL
+  dates = NULL,
+  resolution = NULL
 )
 
 del_early_prov(type, minDate = NULL, maxDate = NULL, dates = NULL)
@@ -40,6 +41,9 @@ character or \link[base:Dates]{base::Date} class.}
 \item{dates}{A vector of daily dates to subset. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Dates]{base::Date} class.}
+
+\item{resolution}{The spatial resolution of the data, must be either "4km" or
+"800m". Required for all temporal periods.}
 }
 \value{
 Invisibly returns vector of all deleted folders.
@@ -69,7 +73,7 @@ presumably yearly) provisional data.
 \dontrun{
 # delete any provisional annual precipitation data from 2000-2023
 # del_files will containg any deleted files
-del_files <- prism_archive_clean('ppt', 'annual', 2000:2023)
+del_files <- prism_archive_clean('ppt', 'annual', 2000:2023, resolution = "4km")
 }
 
 }
