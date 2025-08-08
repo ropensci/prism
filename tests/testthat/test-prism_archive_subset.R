@@ -82,7 +82,21 @@ folders <-
   "PRISM_ppt_30yr_normal_4kmD1_0101_bil", 
   "PRISM_ppt_30yr_normal_4kmD1_0301_bil", 
   "PRISM_solclear_30yr_normal_4kmM3_01_bil",
-  "PRISM_solclear_30yr_normal_4kmM3_02_bil"
+  "PRISM_solclear_30yr_normal_4kmM3_02_bil",
+  # Add webservice v2 files
+  "prism_ppt_us_30s_19810101",
+  "prism_ppt_us_30s_2000", 
+  "prism_ppt_us_30s_20110101",
+  "prism_ppt_us_30s_2015",
+  "prism_tmean_us_25m_199601",
+  "prism_tmean_us_25m_201001", 
+  "prism_tmean_us_25m_201301",
+  "prism_tmean_us_30s_198201",
+  "prism_tmean_us_30s_2000",
+  "prism_tmean_us_30s_20130601",
+  "prism_tmean_us_30s_20130602",
+  "prism_tmean_us_30s_201401",
+  "prism_tmean_us_30s_2015"
   )
 
 # all_in helper ----------------
