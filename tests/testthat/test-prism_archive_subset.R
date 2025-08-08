@@ -92,11 +92,11 @@ folders <-
   "prism_tmean_us_25m_201001", 
   "prism_tmean_us_25m_201301",
   "prism_tmean_us_30s_198201",
-  "prism_tmean_us_30s_2000",
+  "prism_tmax_us_30s_2000",
   "prism_tmean_us_30s_20130601",
   "prism_tmean_us_30s_20130602",
   "prism_tmean_us_30s_201401",
-  "prism_tmean_us_30s_2015"
+  "prism_tmax_us_30s_2015"
   )
 
 # all_in helper ----------------
@@ -289,7 +289,8 @@ test_that("prism:::filter_folders annual", {
   expect_true(all_in(
     filter_folders(folders, "ppt", "annual"),
     c("PRISM_ppt_stable_4kmM2_1965_bil", "PRISM_ppt_stable_4kmM2_1967_bil",
-      "PRISM_ppt_stable_4kmM2_1970_bil", "PRISM_ppt_stable_4kmM2_1971_bil")
+      "PRISM_ppt_stable_4kmM2_1970_bil", "PRISM_ppt_stable_4kmM2_1971_bil",
+      "prism_ppt_us_30s_2000", "prism_ppt_us_30s_2015")
   ))
   
   expect_true(all_in(
@@ -358,7 +359,7 @@ test_that("prism:::filter_folders annual", {
   
   expect_true(all_in(
     filter_folders(folders, "tmean", "daily", dates = tmp_days),
-    paste0("PRISM_tmean_stable_4kmD2_", tmp_days, "_bil")
+    c(paste0("PRISM_tmean_stable_4kmD2_", tmp_days, "_bil"),'prism_tmean_us_30s_20130601')
   ))
 })
 
@@ -444,3 +445,4 @@ test_that("prism:::filter_folders normals", {
   )
   
 })
+
