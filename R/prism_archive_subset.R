@@ -49,7 +49,7 @@
 #'   character or [base::Date] class.
 #' 
 #' @param resolution The spatial resolution of the data, must be either "4km" or
-#'   "800m". Should only be specified for `temp_period` of "normals".
+#'   "800m". Required for all temporal periods.
 #'   
 #' @return A character vector of the folders that meet the type and temporal
 #'   period specified. `character(0)` is returned if no folders are found that
@@ -61,22 +61,25 @@
 #' \dontrun{
 #' # get all annual tmin
 #' prism_archive_subset("tmin", "annual")
-#' # get only 2000-2015 annual tmin
-#' prism_subset_folder("tmin", "annual", years = 2000:2015)
+#' # get only 2000-2015 annual tmin at 800m resolution
+#' prism_archive_subset("tmin", "annual", years = 2000:2015, resolution = "800m")
 #' 
 #' # get monthly precipitation for 2000-2010
 #' prism_archive_subset("ppt", "monthly", years = 2000:2010)
-#' # get only June-August monthly precip data for 2000-2010
-#' prism_archive_subset("ppt", "monthly", years = 2000:2010, mon = 6:8)
+#' # get only June-August monthly precip data for 2000-2010 at 4km resolution
+#' prism_archive_subset("ppt", "monthly", years = 2000:2010, mon = 6:8, resolution = "4km")
 #' 
 #' # get all daily tmax for July-August in 2010
 #' prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8)
+#' # get 800m daily tmax for July-August in 2010
+#' prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8, resolution = "800m")
 #' # same as:
 #' prism_archive_subset(
 #'   "tmax", 
 #'   "daily", 
 #'   minDate = "2010-07-01", 
-#'   maxDate = "2010-08-31"
+#'   maxDate = "2010-08-31",
+#'   resolution = "800m"
 #' )
 #' 
 #' # get the 4km 30-year average precip for January and February
@@ -122,14 +125,28 @@ prism_archive_subset <- function(type, temp_period, years = NULL, mon = NULL,
   
   ff
 }
-#     x <- pd_get_md(prism_archive_subset("ppt", "daily", year = 1981:2019)),
-# type = "ppt"; temp_period = 'daily'; years = 1981:2019; mon = NULL;
+
+# filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
+#                            mon = NULL, dates = NULL, resolution = NULL)
 filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
                            mon = NULL, dates = NULL, resolution = NULL)
 {
   # filter down to only the requested type
   type_folders <- folders %>% 
     stringr::str_subset(paste0("_", type, "_"))
+  
+  # filter by resolution if specified (applies to all temporal periods now)
+  if (!is.null(resolution)) {
+    if (resolution == "800m") {
+      # For webservice v2: look for "30s", for webservice v1: look for "800m" 
+      type_folders <- type_folders %>%
+        stringr::str_subset("(30s|800m)")
+    } else if (resolution == "4km") {
+      # For webservice v2: look for "25m", for webservice v1: look for "4km"
+      type_folders <- type_folders %>%
+        stringr::str_subset("(25m|4km)")
+    }
+  }
   
   # filter down to the temporal period in question and then filter down to the
   # specified years/months/dates via the pattern
@@ -271,18 +288,11 @@ check_subset_folders_args <- function(type, temp_period, years, mon, minDate,
                                       maxDate, dates, resolution) 
 {
   both_norm <- c("monthly normals", "annual normals", "daily normals")
-
-  # resolution only specified for normals and must be specified
-  if (temp_period %in% both_norm) {
-    if (is.null(resolution))
-      stop("`resolution` must be specified when subsetting normals")
-    resolution <- match.arg(resolution, c("4km", "800m"))
-  }
   
-  if (!(temp_period %in% both_norm) & !is.null(resolution))
-    stop(
-      "`resolution` should only be specified when `temp_period` is 'normals'"
-    )
+  # resolution must be specified 
+  if (is.null(resolution))
+    stop("`resolution` must be specified when subsetting normals")
+  resolution <- match.arg(resolution, c("4km", "800m"))
   
   if (temp_period == "daily normals" & 
       type %in% c( "solclear", "solslope", "soltotal","soltrans")) {
