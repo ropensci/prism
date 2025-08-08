@@ -109,6 +109,8 @@ prism_md <- function(f, returnDate = FALSE) {
 #' @noRd
 
 pr_parse <- function(p,returnDate = FALSE){
+  ## Get webservice version of file
+  web_service_version = ifelse(p[1]=='PRISM', 'v1', 'v2')
   ## Extract the climate variable
   type <- p[2]
   ## Extract the date the data is for
@@ -140,7 +142,6 @@ pr_parse <- function(p,returnDate = FALSE){
     normals <- TRUE
   } else {
    
-    web_service_version = ifelse(p[1]=='PRISM', 'v1', 'v2')
     d <- ifelse(web_service_version=='v1', p[length(p)-1], p[length(p)])
     yr <- substr(d,1,4)
     mon <- substr(d,5,6)
@@ -155,11 +156,23 @@ pr_parse <- function(p,returnDate = FALSE){
     )
   }
   
-  ures <- ifelse(
-    grepl("4km",paste(p,collapse="")),
-    "4km resolution",
-    "800m resolution"
-  )
+  if (web_service_version == 'v1'){
+    ures <- ifelse(
+      grepl("4km",paste(p,collapse="")),
+      "4km resolution",
+      "800m resolution"
+    )
+  } else {
+    ures <- ifelse(
+      grepl("25m",paste(p,collapse="")),
+      "4km resolution",
+      ifelse(
+        grepl("30s",paste(p,collapse="")),
+        "800m resolution",
+        "400m resolution"
+      )
+    )
+  }
   
   type <- prism_var_names(normals = normals)[type]
 
