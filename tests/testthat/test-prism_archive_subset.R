@@ -243,33 +243,33 @@ test_that("prism_archive_subset() errors correctly", {
 # prism_archive_subset() with test folders -------------
 test_that("prism_archive_subset() works", {
   expect_equal(
-    prism_archive_subset("ppt", "daily"),
-    prism_archive_subset("ppt", "daily", years = c(1981, 1991, 2011, 2012))
+    prism_archive_subset("ppt", "daily", resolution = "4km"),
+    prism_archive_subset("ppt", "daily", resolution = "4km", years = c(1981, 1991, 2011, 2012))
   )
   expect_equal(
-    prism_archive_subset("ppt", "daily"),
-    prism_archive_subset("ppt", "daily", mon = 1)
+    prism_archive_subset("ppt", "daily", resolution = "4km"),
+    prism_archive_subset("ppt", "daily", mon = 1, resolution = "4km")
   )
   expect_equal(
-    prism_archive_subset("tmin", "daily"),
-    prism_archive_subset("tmin", "daily", mon = c(1,6))
+    prism_archive_subset("tmin", "daily", resolution = "4km"),
+    prism_archive_subset("tmin", "daily", mon = c(1,6), resolution = "4km")
   )
   expect_equal(
-    prism_archive_subset("tmin", "daily"),
-    prism_archive_subset("tmin", "daily", years = c(1981, 2011))
+    prism_archive_subset("tmin", "daily", resolution = "4km"),
+    prism_archive_subset("tmin", "daily", years = c(1981, 2011), resolution = "4km")
   )
   expect_equal(
-    prism_archive_subset("tmin", "daily"),
-    prism_archive_subset("tmin", "daily", years = 1981:2011)
+    prism_archive_subset("tmin", "daily", resolution = "4km"),
+    prism_archive_subset("tmin", "daily", years = 1981:2011, resolution = "4km")
   )
   expect_true(all_in(
-    prism_archive_subset("tmin", "daily"),
+    prism_archive_subset("tmin", "daily", resolution = "4km"),
     c("PRISM_tmin_stable_4kmD2_19810101_bil", 
       "PRISM_tmin_stable_4kmD2_20110615_bil")
   ))
   
   expect_identical(
-    prism_archive_subset("tmin", "daily", years = 2020), 
+    prism_archive_subset("tmin", "daily", years = 2020, resolution = "4km"), 
     character(0)
   )
 })
