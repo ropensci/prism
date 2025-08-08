@@ -14,6 +14,9 @@
 #'   downloading data before 1981. This is so that the existence of the data can
 #'   be correctly checked, as the file includes all monthly data for a given 
 #'   year.
+#'   
+#' @param service Character string specifying the service type. Must be 
+#'   'web_service_v2' (default) or 'ftp_v2_normals_bil'.
 #' 
 #' @examples 
 #' \dontrun{

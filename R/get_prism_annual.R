@@ -30,8 +30,8 @@
 #'   for subscription-based service. Example:
 #'   "http://services.nacse.org/prism/data/subscription/800m". To use the
 #'	 subscription option, you must use an IP address registered with PRISM
-#'   staff. When `NULL`, URL defaults to: 
-#'   "http://services.nacse.org/prism/data/public/4km".
+#'   staff. When `NULL`, the new PRISM web service endpoints are used based on 
+#'   the specified resolution.
 #'
 #' @param resolution Character string specifying spatial resolution. One of 
 #'   "4km" or "800m". Default is "4km". Note that "400m" resolution is planned 
