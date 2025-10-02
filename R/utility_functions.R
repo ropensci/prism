@@ -171,50 +171,31 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
     
     # Function to get version available in Normals_bil FTP (this logic may be required to future proof against
     # changes in the normals versions in normals_bil folder). May deprecate once we shift to COG?
-    get_current_version <- function(base_url, time_scale, resolution, type, date_str) {
+    get_current_version <- function(base_url, region, time_scale, resolution, type, 
+                                    date_str) {
       
       # Build directory URL
-      dir_url <- paste(base_url, time_scale, resolution, type, sep = "/")
+      dir_url <- paste(base_url, region, resolution, type, time_scale, sep = "/")
       
       # Recode Annual date_str
-      date_str = ifelse(date_str == '14', 'annual', date_str)
+      date_str = ifelse(date_str == '14', '', date_str)
       
-      # Get directory listing using only httr
-      tryCatch({
-        response <- httr::GET(paste0(dir_url, "/"))
-        if (httr::status_code(response) == 200) {
-          content_html <- httr::content(response, "text", encoding = "UTF-8")
-          
-          # Use base regex to extract file links (no 
-          # Look for href="filename.zip" patterns
-          file_pattern <- paste0('href="[^"]*PRISM_', type, '_30yr_normal_', resolution, '[DM]\\d+_', date_str, '_bil\\.zip"')
-          matches <- regmatches(content_html, gregexpr(file_pattern, content_html))[[1]]
-          
-          if (length(matches) > 0) {
-            # Extract just the filename from href="filename"
-            filename <- sub('href="([^"]*)"', '\\1', matches[1])
-            return(paste(dir_url, filename, sep = "/"))
-          } else {
-            warning("No matching file found for: ", type, " ", resolution, " ", date_str)
-            return(NULL)
-          }
-        } else {
-          warning("Failed to access directory: ", dir_url)
-          return(NULL)
-        }
-      }, error = function(e) {
-        warning("Error accessing directory: ", e$message)
-        return(NULL)
-      })
+      rmap <- c('4km' = '25m', '800m' = '30s', '400m' = '15s')
+      
+      ff <- paste('prism', type, region, rmap[resolution], 
+                   paste0('2020', date_str), 'avg', '30y.zip', 
+                   sep = '_')
+      
+      return(paste(dir_url, ff, sep = '/'))
     }
     
     ## Base URL
-    base_url <- 'https://data.prism.oregonstate.edu/normals_bil'
+    base_url <- 'https://data.prism.oregonstate.edu/normals'
     
     # Generate URLs for each date
     urls <- sapply(dates, function(date_str) {
       time_scale <- ifelse(nchar(date_str) == 2, 'monthly', 'daily')
-      get_current_version(base_url, time_scale, resolution, type, date_str)
+      get_current_version(base_url, region, time_scale, resolution, type, date_str)
     }) %>% unname()
     
     # Remove any NULL entries
