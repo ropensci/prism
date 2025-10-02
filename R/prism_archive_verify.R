@@ -25,19 +25,20 @@
 #' @examples \dontrun{
 #' # check all annual precipitation data from 2000-2023 are readable
 #' # x will contain any corrupt files, or be TRUE if they are all readable
-#' x <- prism_archive_verify('ppt', 'annual', 2000:2023)
+#' x <- prism_archive_verify('ppt', 'annual', 2000:2023, resolution = "4km")
 #' }
 #' 
 #'   
 #' @export
 prism_archive_verify <- function(type, temp_period, years = NULL, mon = NULL, 
                                  minDate = NULL, maxDate = NULL, dates = NULL,
-                                 download_corrupt = TRUE, keepZip = TRUE) {
+                                 resolution = NULL, download_corrupt = TRUE, 
+                                 keepZip = TRUE) {
   prism_check_dl_dir()
   
   pd <- prism_archive_subset(type, temp_period, years = years, mon = mon, 
                              minDate = minDate, maxDate = maxDate, 
-                             dates = dates)
+                             dates = dates, resolution = resolution)
   
   # check every folder to ensure it is readable --------------------
   is_readable <- simplify2array(lapply(pd, function(pp) pd_is_readable(pp)))
@@ -47,7 +48,7 @@ prism_archive_verify <- function(type, temp_period, years = NULL, mon = NULL,
   
   if (length(dl_files) > 0 && download_corrupt) {
     message("Re-downloading ", length(dl_files), " corrupt prism files.\n")
-    dl_url <- folder_to_url(dl_files)
+    dl_url <- folder_to_url(dl_files, resolution)
     
     mpb <- txtProgressBar(min = 0, max =length(dl_url), style = 3)
     
@@ -80,8 +81,10 @@ check_corrupt <- function(type, minDate = NULL, maxDate = NULL, dates = NULL) {
   
   type <- match.arg(type, prism_vars())
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
-  folders_to_check <- prism_archive_subset(type, "daily", dates = dates)
-
+  
+  # Use 4km as default resolution for backward compatibility
+  folders_to_check <- prism_archive_subset(type, "daily", dates = dates, resolution = "4km")
+  
   # Check for missing dates:
   folders_dates <- stringr::str_extract(folders_to_check, "[0-9]{8}")
   folders_dates <- as.Date(folders_dates, "%Y%m%d")
@@ -128,7 +131,8 @@ check_corrupt <- function(type, minDate = NULL, maxDate = NULL, dates = NULL) {
         prism::get_prism_dailys(
           type = type, 
           dates = date_broken, 
-          keepZip = FALSE
+          keepZip = FALSE,
+          resolution = "4km"
         )
         
         if (identical(files_to_check_tmp_old, files_to_check_tmp)) {
@@ -169,34 +173,54 @@ pd_is_readable <- function(pd) {
   is_readable
 }
 
-folder_to_url <- function(pd) {
-  pd <- stringr::str_split(pd, "_", simplify = TRUE)
-  
-  pd_norm <- pd[pd[,3] == "30yr",,drop = FALSE]
-  pd_other <- pd[pd[,3] != "30yr",,drop = FALSE]
-
+folder_to_url <- function(pd, resolution = "4km") {
   urls <- c()
   
-  if (length(pd_other) > 0) {
-    # daily, monthly, annual
-    urls <- c(urls, paste0(
-      "http://services.nacse.org/prism/data/public/4km/",
-      pd_other[,2], "/", pd_other[,5]
-    ))
-  } 
-  
-  if (length(pd_norm) > 0) {
-    # normals
-    # if any are annual, change to "14"
-    pd_norm[pd_norm[,6] == "annual",6] <- "14"
+  for (i in seq_along(pd)) {
+    folder <- pd[i]
+    web_service_version <- ifelse(grepl("PRISM", folder), "v1", "v2")
     
-    # strip off "M2" from resolution
-    pd_norm[,5] <- stringr::str_remove(pd_norm[,5], "M2")
-    
-    urls <- c(urls, paste0(
-      "http://services.nacse.org/prism/data/public/normals/",
-      pd_norm[,5], "/", pd_norm[,2], "/", pd_norm[,6]
-    ))
+    if (web_service_version == "v1") {
+      # Parse webservice v1 folder names
+      parts <- stringr::str_split(folder, "_", simplify = TRUE)
+      
+      if (parts[3] == "30yr") {
+        # Normals - use FTP service
+        var_type <- parts[2]
+        resolution_part <- stringr::str_remove(parts[5], "M[0-9]")
+        time_part <- parts[6]
+        
+        # Convert annual to "14" for normals
+        if (time_part == "annual") {
+          time_part <- "14"
+        }
+        
+        urls <- c(urls, gen_prism_url(time_part, var_type, resolution, 
+                                      service = "ftp_v2_normals_bil"))
+      } else {
+        # Non-normals - use webservice v2
+        var_type <- parts[2]
+        date_part <- parts[5]
+        
+        urls <- c(urls, gen_prism_url(date_part, var_type, resolution))
+      }
+    } else {
+      # Parse webservice v2 folder names
+      parts <- stringr::str_split(folder, "_", simplify = TRUE)
+      var_type <- parts[2]
+      date_part <- parts[5]
+      
+      # Detect resolution from filename
+      if (grepl("30s", folder)) {
+        file_resolution <- "800m"
+      } else if (grepl("25m", folder)) {
+        file_resolution <- "4km"
+      } else {
+        file_resolution <- resolution  # fallback to provided resolution
+      }
+      
+      urls <- c(urls, gen_prism_url(date_part, var_type, file_resolution))
+    }
   }
   
   urls

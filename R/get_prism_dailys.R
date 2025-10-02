@@ -1,4 +1,3 @@
-
 #' @param minDate Date to start downloading daily data. Must be specified in 
 #'   a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a 
 #'   character or [base::Date] class.
@@ -13,6 +12,10 @@
 #'
 #' @param check One of "httr" or "internal". See details.
 #'
+#' @param resolution Character string specifying spatial resolution. One of 
+#'   "4km" or "800m". Default is "4km". Note that "400m" resolution is planned 
+#'   but not yet available from the PRISM web service.
+#'
 #' @details 
 #' For the `check` parameter, "httr", the default, checks the file name using 
 #' the web service, and downloads if that file name is not in the file system. 
@@ -26,28 +29,47 @@
 #' daily data, dates must be in the proper format or downloading will not work 
 #' properly. Dates can be specified using either a date range via `minDate` and 
 #' `maxDate`, or a vector of `dates`, but not both. 
+#' 
+#' Data are available at two spatial resolutions: 4km (approximately 2.5 
+#' arc-minutes) and 800m. The 4km resolution covers the entire CONUS and is 
+#' suitable for most applications. The 800m resolution provides higher spatial 
+#' detail but results in larger file sizes and longer download times.
 #'
 #' @examples 
 #' \dontrun{
-#' # get daily average temperature data for June 1 - 14, 2013
+#' # get daily average temperature data for June 1 - 14, 2013 at 4km resolution
 #' get_prism_dailys(
 #'   type = "tmean", 
 #'   minDate = "2013-06-01", 
 #'   maxDate = "2013-06-14", 
-#'   keepZip=FALSE
+#'   keepZip = FALSE
 #' )
 #' 
-#' # get precipitation datat for June 1, 2013
-#' get_prism_dailys(type = "ppt", dates = "2013/06/01", keepZip = FALSE)
-#' 
-#' # get average temperature for three specific days
+#' # get precipitation data for June 1, 2013 at 800m resolution
 #' get_prism_dailys(
-#'   type="tmean", 
-#'   dates = as.Date("2013-06-01", "2013-06-14", "2014-06-30"), 
-#'   keepZip=FALSE
+#'   type = "ppt", 
+#'   dates = "2013/06/01", 
+#'   resolution = "800m",
+#'   keepZip = FALSE
 #' )
 #' 
-#' # will fail:
+#' # get average temperature for three specific days at default resolution
+#' get_prism_dailys(
+#'   type = "tmean", 
+#'   dates = c("2013-06-01", "2013-06-14", "2014-06-30"), 
+#'   keepZip = FALSE
+#' )
+#' 
+#' # get high-resolution daily maximum temperature for a date range
+#' get_prism_dailys(
+#'   type = "tmax",
+#'   minDate = "2013-06-01",
+#'   maxDate = "2013-06-07", 
+#'   resolution = "800m",
+#'   keepZip = FALSE
+#' )
+#' 
+#' # will fail - both minDate and dates specified:
 #' get_prism_dailys(
 #'   type = "ppt", 
 #'   minDate = "2013-06-01", 
@@ -55,10 +77,19 @@
 #'   keepZip = FALSE
 #' )
 #' 
+#' # will fail - minDate without maxDate:
 #' get_prism_dailys(
 #'   type = "ppt", 
 #'   minDate = "2013-06-01", 
-#'   keepZip=FALSE
+#'   keepZip = FALSE
+#' )
+#' 
+#' # will fail - invalid resolution:
+#' get_prism_dailys(
+#'   type = "tmean",
+#'   dates = "2013-06-01",
+#'   resolution = "1km",
+#'   keepZip = FALSE
 #' )
 #' }
 #'
@@ -67,7 +98,7 @@
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, 
                              dates = NULL, keepZip = TRUE, check = "httr",
-                             service = NULL)
+                             service = NULL, resolution = "4km")
 {
   prism_check_dl_dir()
   
@@ -84,6 +115,14 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
     stop("You must enter a date that is on or after Januyar 1, 1981.")
   }
   
+  ### Check resolution
+  if (is.null(resolution)) {
+    stop("'resolution' must be '4km' or '800m'. See ?get_prism_monthlys for details.")
+  }
+  if (!resolution %in% c("4km", "800m")) {
+    stop("'resolution' must be '4km' or '800m'. See ?get_prism_dailys for details.")
+  }
+  
   ## Get years
   years <- unique(format(dates,"%Y"))
   
@@ -94,8 +133,9 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   }
 
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
-  uris <- gen_prism_url(uri_dates, type, service)
- 
+  # uris <- gen_prism_url(uri_dates, type, service)
+  uris <- gen_prism_url(uri_dates, type, resolution)
+  
   if(check == "internal"){
     x <- httr::HEAD(uris[1])
     fn <- x$headers$`content-disposition`

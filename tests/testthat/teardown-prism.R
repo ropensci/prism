@@ -1,4 +1,11 @@
-dl_dir <- file.path("prism_test")
+# Handle different working directories (project root vs tests/testthat)
+if (basename(getwd()) == "testthat") {
+  # Running from tests/testthat directory (e.g., via test_file())
+  dl_dir <- "prism_test"
+} else {
+  # Running from project root (e.g., interactive or R CMD check)
+  dl_dir <- file.path("tests", "testthat", "prism_test")
+}
 
 # need to unzip all the zip files, then delete the unzipped folder when exiting
 avail_ppt <- paste0(

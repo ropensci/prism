@@ -40,7 +40,7 @@ a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Dates]{base::Date} class.}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km" or
-"800m". Should only be specified for \code{temp_period} of "normals".}
+"800m". Required for all temporal periods.}
 }
 \value{
 A character vector of the folders that meet the type and temporal
@@ -78,22 +78,25 @@ those years and months \strong{or} specify the specific dates using
 \dontrun{
 # get all annual tmin
 prism_archive_subset("tmin", "annual")
-# get only 2000-2015 annual tmin
-prism_subset_folder("tmin", "annual", years = 2000:2015)
+# get only 2000-2015 annual tmin at 800m resolution
+prism_archive_subset("tmin", "annual", years = 2000:2015, resolution = "800m")
 
 # get monthly precipitation for 2000-2010
 prism_archive_subset("ppt", "monthly", years = 2000:2010)
-# get only June-August monthly precip data for 2000-2010
-prism_archive_subset("ppt", "monthly", years = 2000:2010, mon = 6:8)
+# get only June-August monthly precip data for 2000-2010 at 4km resolution
+prism_archive_subset("ppt", "monthly", years = 2000:2010, mon = 6:8, resolution = "4km")
 
 # get all daily tmax for July-August in 2010
 prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8)
+# get 800m daily tmax for July-August in 2010
+prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8, resolution = "800m")
 # same as:
 prism_archive_subset(
   "tmax", 
   "daily", 
   minDate = "2010-07-01", 
-  maxDate = "2010-08-31"
+  maxDate = "2010-08-31",
+  resolution = "800m"
 )
 
 # get the 4km 30-year average precip for January and February

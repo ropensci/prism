@@ -13,7 +13,8 @@ get_prism_annual(
   years,
   keepZip = TRUE,
   keep_pre81_months = FALSE,
-  service = NULL
+  service = NULL,
+  resolution = "4km"
 )
 
 get_prism_dailys(
@@ -23,7 +24,8 @@ get_prism_dailys(
   dates = NULL,
   keepZip = TRUE,
   check = "httr",
-  service = NULL
+  service = NULL,
+  resolution = "4km"
 )
 
 get_prism_monthlys(
@@ -32,7 +34,8 @@ get_prism_monthlys(
   mon = 1:12,
   keepZip = TRUE,
   keep_pre81_months = TRUE,
-  service = NULL
+  service = NULL,
+  resolution = "4km"
 )
 
 get_prism_normals(
@@ -69,6 +72,9 @@ subscription option, you must use an IP address registered with PRISM
 staff. When \code{NULL}, URL defaults to:
 "http://services.nacse.org/prism/data/public/4km".}
 
+\item{resolution}{The spatial resolution of the data, must be either "4km"
+or "800m".}
+
 \item{minDate}{Date to start downloading daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Dates]{base::Date} class.}
@@ -86,9 +92,6 @@ character or \link[base:Dates]{base::Date} class.}
 \item{mon}{a valid numeric month, or vector of months. Required for
 \code{get_prism_monthlys()}. Can be \code{NULL} for \code{get_prism_normals()}.}
 
-\item{resolution}{The spatial resolution of the data, must be either "4km"
-or "800m".}
-
 \item{annual}{if \code{TRUE} download annual normals.}
 
 \item{day}{Download daily normals. If \code{TRUE}, then download all daily data
@@ -97,7 +100,7 @@ days can be specified as a \code{Date} object, where the year is ignored or
 specified as characters in "mm-dd" or "mmdd" form.}
 }
 \value{
-Nothing is returned - an error will occcur if download is not
+Nothing is returned - an error will occur if download is not
 successful.
 }
 \description{
@@ -106,8 +109,9 @@ Download grid cell data from the
 and mean), mean dewpoint temperature, precipitation, and vapor pressure
 deficit (min and max) can be downloaded for annual (\code{get_prism_annual()}),
 monthly (\code{get_prism_monthlys()}), daily (\code{get_prism_dailys()}), and 30-year
-averages (\code{get_prism_normals()}). Data are at 4km resolution, except for the
-normals which can also be downloaded at 800m resolution.
+averages (\code{get_prism_normals()}). Data are available at 4km and 800m
+resolution for daily, monthly, and annual data. Normals can also be
+downloaded at 800m resolution.
 
 Download data from the prism project for 30 year normals at 4km
 or 800m grid cell resolution for precipitation; mean, min and max
@@ -128,11 +132,16 @@ as it is not robust to changes in version or file names.
 \section{Annual and Monthly}{
 
 
-Annual and monthly prism data are available from 1891 to present. For
-1891-1980 data, monthly and annual data are grouped together in one download
+Annual and monthly prism data are available from 1895 to present. For
+1895-1980 data, monthly and annual data are grouped together in one download
 file; \code{keep_pre81_months} determines if the other months/yearly data are kept
 after the download.  Data will be downloaded for all specified months (\code{mon})
 in all the \code{years} in the supplied vectors.
+
+Data are available at two spatial resolutions: 4km (approximately 2.5
+arc-minutes) and 800m. The 4km resolution covers the entire CONUS and is
+suitable for most applications. The 800m resolution provides higher spatial
+detail but results in larger file sizes and longer download times.
 }
 
 \section{Daily}{
@@ -142,6 +151,11 @@ Daily prism data are available beginning on January 1, 1981. To download the
 daily data, dates must be in the proper format or downloading will not work
 properly. Dates can be specified using either a date range via \code{minDate} and
 \code{maxDate}, or a vector of \code{dates}, but not both.
+
+Data are available at two spatial resolutions: 4km (approximately 2.5
+arc-minutes) and 800m. The 4km resolution covers the entire CONUS and is
+suitable for most applications. The 800m resolution provides higher spatial
+detail but results in larger file sizes and longer download times.
 }
 
 \section{Normals}{
@@ -157,30 +171,86 @@ cloud transmittance are not available for daily normals.
 
 \examples{
 \dontrun{
-# Get all annual average temperature data from 1990 to 2000
-get_prism_annual(type = "tmean", year = 1990:2000, keepZip = FALSE)
+# Get all annual average temperature data from 1990 to 2000 at default resolution
+get_prism_annual(type = "tmean", years = 1990:2000, keepZip = FALSE)
+
+# Get annual precipitation for multiple years at 800m resolution
+get_prism_annual(
+  type = "ppt", 
+  years = 2020:2022, 
+  resolution = "800m",
+  keepZip = FALSE
+)
+
+# Get single year of annual temperature data at high resolution
+get_prism_annual(
+  type = "tmax",
+  years = 2023,
+  resolution = "800m",
+  keepZip = TRUE
+)
+
+# Get pre-1981 annual data (resolution applies to both pre and post-1981 data)
+get_prism_annual(
+  type = "tmean",
+  years = 1975,
+  resolution = "4km",
+  keep_pre81_months = FALSE,
+  keepZip = FALSE
+)
+
+# Get pre-1981 data and keep all monthly data too
+get_prism_annual(
+  type = "ppt",
+  years = c(1970, 1975),
+  resolution = "800m",
+  keep_pre81_months = TRUE,
+  keepZip = TRUE
+)
+
+# will fail - invalid resolution:
+get_prism_annual(
+  type = "tmean",
+  years = 2023,
+  resolution = "1km",
+  keepZip = FALSE
+)
 }
 
 \dontrun{
-# get daily average temperature data for June 1 - 14, 2013
+# get daily average temperature data for June 1 - 14, 2013 at 4km resolution
 get_prism_dailys(
   type = "tmean", 
   minDate = "2013-06-01", 
   maxDate = "2013-06-14", 
-  keepZip=FALSE
+  keepZip = FALSE
 )
 
-# get precipitation datat for June 1, 2013
-get_prism_dailys(type = "ppt", dates = "2013/06/01", keepZip = FALSE)
-
-# get average temperature for three specific days
+# get precipitation data for June 1, 2013 at 800m resolution
 get_prism_dailys(
-  type="tmean", 
-  dates = as.Date("2013-06-01", "2013-06-14", "2014-06-30"), 
-  keepZip=FALSE
+  type = "ppt", 
+  dates = "2013/06/01", 
+  resolution = "800m",
+  keepZip = FALSE
 )
 
-# will fail:
+# get average temperature for three specific days at default resolution
+get_prism_dailys(
+  type = "tmean", 
+  dates = c("2013-06-01", "2013-06-14", "2014-06-30"), 
+  keepZip = FALSE
+)
+
+# get high-resolution daily maximum temperature for a date range
+get_prism_dailys(
+  type = "tmax",
+  minDate = "2013-06-01",
+  maxDate = "2013-06-07", 
+  resolution = "800m",
+  keepZip = FALSE
+)
+
+# will fail - both minDate and dates specified:
 get_prism_dailys(
   type = "ppt", 
   minDate = "2013-06-01", 
@@ -188,19 +258,65 @@ get_prism_dailys(
   keepZip = FALSE
 )
 
+# will fail - minDate without maxDate:
 get_prism_dailys(
   type = "ppt", 
   minDate = "2013-06-01", 
-  keepZip=FALSE
+  keepZip = FALSE
+)
+
+# will fail - invalid resolution:
+get_prism_dailys(
+  type = "tmean",
+  dates = "2013-06-01",
+  resolution = "1km",
+  keepZip = FALSE
 )
 }
 
 \dontrun{
-# Get all the precipitation data for January from 1990 to 2000
+# Get all the precipitation data for January from 1990 to 2000 at 4km resolution
 get_prism_monthlys(type = "ppt", years = 1990:2000, mon = 1, keepZip = FALSE)
 
-# Get January-December 2005 monthly precipitation
+# Get January-December 2005 monthly precipitation at default resolution
 get_prism_monthlys(type = "ppt", years = 2005, mon = 1:12, keepZip = FALSE)
+
+# Get high-resolution monthly temperature data for summer months
+get_prism_monthlys(
+  type = "tmean", 
+  years = 2023, 
+  mon = 6:8, 
+  resolution = "800m",
+  keepZip = FALSE
+)
+
+# Get multiple years of winter precipitation at 800m resolution
+get_prism_monthlys(
+  type = "ppt",
+  years = 2020:2022,
+  mon = c(12, 1, 2),
+  resolution = "800m",
+  keepZip = TRUE
+)
+
+# Get pre-1981 data (resolution applies to both pre and post-1981 data)
+get_prism_monthlys(
+  type = "tmax",
+  years = 1975,
+  mon = 7,
+  resolution = "4km",
+  keep_pre81_months = FALSE,
+  keepZip = FALSE
+)
+
+# will fail - invalid resolution:
+get_prism_monthlys(
+  type = "ppt",
+  years = 2023,
+  mon = 6,
+  resolution = "1km",
+  keepZip = FALSE
+)
 }
 
 \dontrun{

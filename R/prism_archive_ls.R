@@ -36,7 +36,7 @@ prism_archive_ls <- function() {
   data <- list.dirs(prism_get_dl_dir(), full.names = FALSE, recursive = FALSE)
 
   # Attempt to ensure that only PRISM folders are counted. 
-  data <- data[grep("PRISM", data)]
+  data <- data[grep("prism|PRISM", data)]
   
   data
 }

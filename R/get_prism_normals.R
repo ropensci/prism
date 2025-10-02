@@ -101,13 +101,15 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
     }
   }
  
-  stemp <- "http://services.nacse.org/prism/data/public/normals"
-  uris <- gen_prism_url(call_mon, type, stemp, resolution) 
-
+  # stemp <- "http://services.nacse.org/prism/data/public/normals"
+  # uris <- gen_prism_url(call_mon, type, stemp, resolution) 
+  uris <- gen_prism_url(call_mon, type, resolution,
+                           service = 'ftp_v2_normals_bil') 
+  
   mpb <- txtProgressBar(min = 0, max =length(uris), style = 3)
  
   for(i in seq_along(uris)){
-    prism_webservice(uris[i],keepZip)
+    prism_webservice(uris[i],keepZip, service = 'ftp_v2_normals_bil' )
     setTxtProgressBar(mpb, i)
     
   }

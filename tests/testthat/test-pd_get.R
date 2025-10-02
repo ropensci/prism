@@ -5,7 +5,13 @@ tst_files <- c(
   "PRISM_tmax_provisional_4kmM3_2019_bil", 
   "PRISM_vpdmin_stable_4kmM2_196710_bil", 
   "PRISM_vpdmax_30yr_normal_4kmM2_04_bil",
-  "PRISM_ppt_30yr_normal_4kmD1_0301_bil"
+  "PRISM_ppt_30yr_normal_4kmD1_0301_bil",
+  "prism_ppt_us_30s_1981",
+  "prism_tmean_us_30s_200004", 
+  "prism_tmean_us_30s_20140603",
+  "prism_tmean_us_25m_1999",
+  "prism_tmean_us_25m_201001",
+  "prism_tmean_us_25m_20130113"
 )
 
 exp <- c(
@@ -15,22 +21,31 @@ exp <- c(
   "2019 - 4km resolution - Maximum temperature", 
   "Oct  1967 - 4km resolution - Minimum vapor pressure deficit", 
   "Apr 30-year normals - 4km resolution - Maximum vapor pressure deficit",
-  "March 1 30-year normals - 4km resolution - Precipitation"
+  "March 1 30-year normals - 4km resolution - Precipitation",
+  "1981 - 800m resolution - Precipitation",
+  "Apr  2000 - 800m resolution - Mean temperature",
+  "Jun 03 2014 - 800m resolution - Mean temperature",
+  "1999 - 4km resolution - Mean temperature",
+  "Jan  2010 - 4km resolution - Mean temperature",
+  "Jan 13 2013 - 4km resolution - Mean temperature"
 )
+
 
 test_that("pd_get_name() works.", {
   expect_identical(pd_get_name(tst_files), exp)
   expect_identical(expect_warning(prism_md(tst_files)), exp)
 })
 
-exp <- c("1967-06-15", "2020-04-01", "", "2019-01-01", "1967-10-01", "", "")
+exp <- c("1967-06-15", "2020-04-01", "", "2019-01-01", "1967-10-01", "", "", 
+         "1981-01-01", "2000-04-01", "2014-06-03", "1999-01-01", "2010-01-01", "2013-01-13")
 
 test_that("pd_get_date() works.", {
   expect_identical(pd_get_date(tst_files), exp)
   expect_identical(expect_warning(prism_md(tst_files, TRUE)), exp)
 })
 
-exp <- c('ppt', 'tmin', 'tmean', 'tmax', 'vpdmin', 'vpdmax', 'ppt')
+exp <- c('ppt', 'tmin', 'tmean', 'tmax', 'vpdmin', 'vpdmax', 'ppt', 
+         'ppt', 'tmean', 'tmean', 'tmean', 'tmean', 'tmean')
 test_that("pd_get_type() works.", {
   expect_identical(pd_get_type(tst_files), exp)
 })

@@ -49,7 +49,7 @@
 #'   character or [base::Date] class.
 #' 
 #' @param resolution The spatial resolution of the data, must be either "4km" or
-#'   "800m". Should only be specified for `temp_period` of "normals".
+#'   "800m". Required for all temporal periods.
 #'   
 #' @return A character vector of the folders that meet the type and temporal
 #'   period specified. `character(0)` is returned if no folders are found that
@@ -61,22 +61,25 @@
 #' \dontrun{
 #' # get all annual tmin
 #' prism_archive_subset("tmin", "annual")
-#' # get only 2000-2015 annual tmin
-#' prism_subset_folder("tmin", "annual", years = 2000:2015)
+#' # get only 2000-2015 annual tmin at 800m resolution
+#' prism_archive_subset("tmin", "annual", years = 2000:2015, resolution = "800m")
 #' 
 #' # get monthly precipitation for 2000-2010
 #' prism_archive_subset("ppt", "monthly", years = 2000:2010)
-#' # get only June-August monthly precip data for 2000-2010
-#' prism_archive_subset("ppt", "monthly", years = 2000:2010, mon = 6:8)
+#' # get only June-August monthly precip data for 2000-2010 at 4km resolution
+#' prism_archive_subset("ppt", "monthly", years = 2000:2010, mon = 6:8, resolution = "4km")
 #' 
 #' # get all daily tmax for July-August in 2010
 #' prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8)
+#' # get 800m daily tmax for July-August in 2010
+#' prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8, resolution = "800m")
 #' # same as:
 #' prism_archive_subset(
 #'   "tmax", 
 #'   "daily", 
 #'   minDate = "2010-07-01", 
-#'   maxDate = "2010-08-31"
+#'   maxDate = "2010-08-31",
+#'   resolution = "800m"
 #' )
 #' 
 #' # get the 4km 30-year average precip for January and February
@@ -123,12 +126,27 @@ prism_archive_subset <- function(type, temp_period, years = NULL, mon = NULL,
   ff
 }
 
+# filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
+#                            mon = NULL, dates = NULL, resolution = NULL)
 filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
                            mon = NULL, dates = NULL, resolution = NULL)
 {
   # filter down to only the requested type
   type_folders <- folders %>% 
     stringr::str_subset(paste0("_", type, "_"))
+  
+  # filter by resolution if specified (applies to all temporal periods now)
+  if (!is.null(resolution)) {
+    if (resolution == "800m") {
+      # For webservice v2: look for "30s", for webservice v1: look for "800m" 
+      type_folders <- type_folders %>%
+        stringr::str_subset("(30s|800m)")
+    } else if (resolution == "4km") {
+      # For webservice v2: look for "25m", for webservice v1: look for "4km"
+      type_folders <- type_folders %>%
+        stringr::str_subset("(25m|4km)")
+    }
+  }
   
   # filter down to the temporal period in question and then filter down to the
   # specified years/months/dates via the pattern
@@ -140,7 +158,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
       filter_no_normal()
     
     if (!is.null(years)) {
-      pattern <- paste0("_", years, "_")
+      pattern <- paste0("_", years)
     }
     
   } else if (temp_period == "monthly") {
@@ -154,18 +172,18 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
         # years and mon are specified; paste them together and match those 
         # specified years and months
         pattern <- paste0(
-          "_", as.vector(outer(years, mon_to_string(mon), paste0)), "_"
+          "_", as.vector(outer(years, mon_to_string(mon), paste0))
         )
       } else {
         # years are specified, but months are not, so get all months for the
         # specified year
-        pattern <- paste0("_", years, "\\d{2}_")
+        pattern <- paste0("_", years, "\\d{2}")
       }
     } else {
       # years are not specified
       if (!is.null(mon)) {
         # but months are, so get all the years for the specified months
-        pattern <- paste0("_\\d{4}", mon_to_string(mon), "_")
+        pattern <- paste0("_\\d{4}", mon_to_string(mon))
       }
     }
     
@@ -179,23 +197,23 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
       if (is.null(years)) {
         if (!is.null(mon)) {
           # months are specified, but years are not
-          pattern <- paste0("_\\d{4}", mon_to_string(mon), "\\d{2}_")
+          pattern <- paste0("_\\d{4}", mon_to_string(mon), "\\d{2}")
         }        
       } else {
         if (is.null(mon)) {
           # years are specified, months are not
-          pattern <- paste0("_", years, "\\d{4}_")
+          pattern <- paste0("_", years, "\\d{4}")
         } else {
           # years are specified, months are specified
           pattern <- paste0(
-            "_", as.vector(outer(years, mon_to_string(mon), paste0)), "\\d{2}_"
+            "_", as.vector(outer(years, mon_to_string(mon), paste0)), "\\d{2}"
           )
         }
       }
       
     } else {
       # specific dates have been specified
-      pattern <- paste0("_", dates, "_")
+      pattern <- paste0("_", dates)
     }
   } else if (temp_period == "daily normals") {
     # daily normals
@@ -206,12 +224,12 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     
     if (!is.null(dates)) {
       # if dates are specified, get specific dates
-      pattern <- paste0("_", dates, "_")
+      pattern <- paste0("_", dates)
     } else if (isTRUE(years)) {
-      pattern <- paste0("_", get_days_from_mon_ann(1:12, FALSE), "_")
+      pattern <- paste0("_", get_days_from_mon_ann(1:12, FALSE))
     } else {
       # otherwise, get all days for the specified months
-      pattern <- paste0("_", get_days_from_mon_ann(mon, FALSE), "_")
+      pattern <- paste0("_", get_days_from_mon_ann(mon, FALSE))
     }
   } else if (temp_period == "monthly normals") {
     # monthly normals
@@ -222,10 +240,10 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     
     if (is.null(mon)) {
       # get all monthly
-      pattern <- paste0("_", mon_to_string(1:12), "_")
+      pattern <- paste0("_", mon_to_string(1:12))
     } else {
       # get specified monthly
-      pattern <- paste0("_", mon_to_string(mon), "_")
+      pattern <- paste0("_", mon_to_string(mon) )
     }
     
   } else {
@@ -251,7 +269,12 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
 # the folder name. This filters based on that number
 filter_folders_by_n <- function(folders, n)
 {
-  pattern <- paste0("_", "\\d{", n, "}", "_")
+  web_service_version = ifelse(
+    grepl('PRISM',folders),
+    'v1','v2'
+  )
+  pattern <- paste0("_", "\\d{", n, "}", ifelse(web_service_version == 'v1', "_", "$")
+  )
   stringr::str_subset(folders, pattern)
 }
 
@@ -265,18 +288,11 @@ check_subset_folders_args <- function(type, temp_period, years, mon, minDate,
                                       maxDate, dates, resolution) 
 {
   both_norm <- c("monthly normals", "annual normals", "daily normals")
-
-  # resolution only specified for normals and must be specified
-  if (temp_period %in% both_norm) {
-    if (is.null(resolution))
-      stop("`resolution` must be specified when subsetting normals")
-    resolution <- match.arg(resolution, c("4km", "800m"))
-  }
   
-  if (!(temp_period %in% both_norm) & !is.null(resolution))
-    stop(
-      "`resolution` should only be specified when `temp_period` is 'normals'"
-    )
+  # resolution must be specified 
+  if (is.null(resolution))
+    stop("`resolution` must be specified for all temporal periods")
+  resolution <- match.arg(resolution, c("4km", "800m"))
   
   if (temp_period == "daily normals" & 
       type %in% c( "solclear", "solslope", "soltotal","soltrans")) {

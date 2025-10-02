@@ -13,6 +13,7 @@ prism_archive_verify(
   minDate = NULL,
   maxDate = NULL,
   dates = NULL,
+  resolution = NULL,
   download_corrupt = TRUE,
   keepZip = TRUE
 )
@@ -42,6 +43,9 @@ character or \link[base:Dates]{base::Date} class.}
 \item{dates}{A vector of daily dates to subset. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Dates]{base::Date} class.}
+
+\item{resolution}{The spatial resolution of the data, must be either "4km" or
+"800m". Required for all temporal periods.}
 
 \item{download_corrupt}{If \code{TRUE}, then any unreadable prism data are
 automatically re-downloaded.}
@@ -76,7 +80,7 @@ to successfully read the files, they are assumed to be valid/readable.
 \dontrun{
 # check all annual precipitation data from 2000-2023 are readable
 # x will contain any corrupt files, or be TRUE if they are all readable
-x <- prism_archive_verify('ppt', 'annual', 2000:2023)
+x <- prism_archive_verify('ppt', 'annual', 2000:2023, resolution = "4km")
 }
 
   

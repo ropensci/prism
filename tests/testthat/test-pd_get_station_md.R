@@ -13,7 +13,8 @@ test_that("pd_get_station_md() works", {
       x <- pd_get_station_md(prism_archive_subset(
         avail_files[i, 1], 
         "daily", 
-        dates = avail_files[i, 2]
+        dates = avail_files[i, 2],
+        resolution = '4km'
       )),
       "tbl_df"
     )
@@ -24,7 +25,7 @@ test_that("pd_get_station_md() works", {
   
   expect_s3_class(
     x <- pd_get_station_md(prism_archive_subset(
-      "tdmean", "monthly", years = 2005:2006, mon = 11:12
+      "tdmean", "monthly", years = 2005:2006, mon = 11:12, resolution = '4km'
     )),
     "tbl_df"
   )

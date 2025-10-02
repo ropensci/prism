@@ -126,7 +126,7 @@ This is now referred to as the "prism archive". The `prism_archive_*()` function
 
 ### Download 30-year normal data
 
-Normals are based on the latest 30-year period; currently 1981 - 2010. Normals can be downloaded in two resolutions, 4km and 800m, and a resolution must be specified.  They can be downloaded for a given day, month, vector of days/months, or annual averages for all 30 years.
+Normals are based on the latest 30-year period; currently 1991 - 2020. Normals can be downloaded in two resolutions, 4km and 800m, and a resolution must be specified.  They can be downloaded for a given day, month, vector of days/months, or annual averages for all 30 years.
 
 ```{r get normals,results=FALSE, eval=FALSE}
 # Download March 14 30-year average precip. Note the year is ignored
@@ -144,17 +144,29 @@ If the archive has not already been set, calling any of the `get_prism_*()` func
 
 ### Download daily, monthly, and annual data
 
-Let us download daily average temperatures from June 1 to June 14, 2013. We can also download January average temperature data from 1982 to 2014. Finally, we will download annual average precipitation for 2000 to 2015. 
+Let us download daily average temperatures from June 1 to June 14, 2013. We can also download January average temperature data from 1982 to 2014. Finally, we will download annual average precipitation for 2000 to 2015. **Note that resolution must now be specified for all data downloads.**
 
 ```{r get daily monthly, message=FALSE, results=FALSE, eval=FALSE}
 get_prism_dailys(
   type = "tmean", 
   minDate = "2013-06-01", 
   maxDate = "2013-06-14", 
+  resolution = "4km",
   keepZip = FALSE
 )
-get_prism_monthlys(type = "tmean", year = 1982:2014, mon = 1, keepZip = FALSE)
-get_prism_annual("ppt", years = 2000:2015, keepZip = FALSE)
+get_prism_monthlys(
+  type = "tmean", 
+  years = 1982:2014, 
+  mon = 1, 
+  resolution = "4km", 
+  keepZip = FALSE
+)
+get_prism_annual(
+  type = "ppt", 
+  years = 2000:2015, 
+  resolution = "4km", 
+  keepZip = FALSE
+)
 ```
 
 Note that for daily data you need to give a well formed date string in the form of "YYYY-MM-DD".
@@ -177,15 +189,18 @@ pd_to_file(prism_archive_ls())
 pd_get_name(prism_archive_ls())
 ```
 
-Finally, `prism_archive_subset()` is a convenient way to search for specific parameters, time steps, days, months, years, or ranges of days, months, years. 
+Finally, `prism_archive_subset()` is a convenient way to search for specific parameters, time steps, days, months, years, or ranges of days, months, years. **Note that resolution must be specified for all archive subset operations.**
 
 ```{r}
 # we know we have downloaded June 2013 daily data, so lets search for those 
-prism_archive_subset("tmean", "daily", mon = 6)
+prism_archive_subset("tmean", "daily", mon = 6, resolution = "4km")
 
 # or we can look for days between June 7 and June 10
 prism_archive_subset(
-  "tmean", "daily", minDate = "2013-06-07", maxDate = "2013-06-10"
+  "tmean", "daily", 
+  minDate = "2013-06-07", 
+  maxDate = "2013-06-10",
+  resolution = "4km"
 )
 ```
 
@@ -214,7 +229,9 @@ library(raster)
 jnorm <- prism_archive_subset(
   "tmean", "monthly normals", mon = 1, resolution = "4km"
 )
-j2013 <- prism_archive_subset("tmean", "monthly", years = 2013, mon = 1)
+j2013 <- prism_archive_subset(
+  "tmean", "monthly", years = 2013, mon = 1, resolution = "4km"
+)
 
 # raster needs a full path, not the "short" prism data name
 jnorm <- pd_to_file(jnorm)
@@ -250,7 +267,7 @@ boulder <- c(-105.2797, 40.0176)
 
 # prism_archive_subset() will return prism data that matches the specified 
 # variable, time step, years, months, days, etc.
-to_slice <- prism_archive_subset("tmean", "monthly", mon = 1)
+to_slice <- prism_archive_subset("tmean", "monthly", mon = 1, resolution = "4km")
 p <- pd_plot_slice(to_slice, boulder)
 
 # add a linear average and title
