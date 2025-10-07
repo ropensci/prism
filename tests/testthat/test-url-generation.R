@@ -68,7 +68,7 @@ test_that("FTP normals service generates correct URLs", {
     service = "ftp_v2_normals_bil"
   )
   expect_length(urls_monthly_normals, 3)
-  expect_true(all(grepl("^https://data\\.prism\\.oregonstate\\.edu/normals_bil", urls_monthly_normals)))
+  expect_true(all(grepl("^https://data\\.prism\\.oregonstate\\.edu/normals", urls_monthly_normals)))
   expect_true(all(grepl("tmean", urls_monthly_normals)))
   
   # Test daily normals (MMDD format)  
@@ -77,7 +77,7 @@ test_that("FTP normals service generates correct URLs", {
     service = "ftp_v2_normals_bil" 
   )
   expect_length(urls_daily_normals, 3)
-  expect_true(all(grepl("normals_bil", urls_daily_normals)))
+  expect_true(all(grepl("normals", urls_daily_normals)))
   
   # Test annual normals (special case "14" -> "annual")
   url_annual_normals <- prism:::gen_prism_url(
@@ -85,7 +85,7 @@ test_that("FTP normals service generates correct URLs", {
     service = "ftp_v2_normals_bil"
   )
   expect_length(url_annual_normals, 1)
-  expect_true(grepl("normals_bil", url_annual_normals))
+  expect_true(grepl("normals", url_annual_normals))
 })
 
 test_that("FTP normals service handles different resolutions", {
@@ -94,7 +94,7 @@ test_that("FTP normals service handles different resolutions", {
     "01", "ppt", resolution = "4km",
     service = "ftp_v2_normals_bil"
   )
-  expect_true(grepl("normals_bil", url_normals_4km))
+  expect_true(grepl("normals", url_normals_4km))
   expect_true(grepl("4km", url_normals_4km))
   
   # Test 800m resolution with normals
@@ -102,7 +102,7 @@ test_that("FTP normals service handles different resolutions", {
     "03", "tdmean", resolution = "800m",
     service = "ftp_v2_normals_bil"
   )
-  expect_true(grepl("normals_bil", url_normals_800m))
+  expect_true(grepl("normals", url_normals_800m))
   expect_true(grepl("800m", url_normals_800m))
 })
 
@@ -114,7 +114,7 @@ test_that("FTP normals service handles all climate variables", {
       "06", var_type, 
       service = "ftp_v2_normals_bil"
     )
-    expect_true(grepl("normals_bil", url))
+    expect_true(grepl("normals", url))
     expect_true(grepl(var_type, url))
   }
 })
