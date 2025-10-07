@@ -86,26 +86,26 @@ for how they are calculated.
 | *ppt*      | X      | X       | X     |
 | *vpdmin*   | X      | X       | X     |
 | *vpdmax*   | X      | X       | X     |
-| *solclear* | X      | X       |       |
-| *solslope* | X      | X       |       |
-| *soltotal* | X      | X       |       |
-| *soltrans* | X      | X       |       |
+| *solclear* | 800m   | 800m    |       |
+| *solslope* | 800m   | 800m    |       |
+| *soltotal* | 800m   | 800m    |       |
+| *soltrans* | 800m   | 800m    |       |
 
 **Daily, monthly, and annual data:**
 
-| Variable | Annual (1895-present) | Monthly (1895-present) | Daily (1981-present) |
-|:---|:---|:---|:---|
-| *tmean* | X | X | X |
-| *tmax* | X | X | X |
-| *tmin* | X | X | X |
-| *tdmean* | X | X | X |
-| *ppt* | X | X | X |
-| *vpdmin* | X | X | X |
-| *vpdmax* | X | X | X |
-| *solclear* |  |  |  |
-| *solslope* |  |  |  |
-| *soltotal* |  |  |  |
-| *soltrans* |  |  |  |
+| Variable   | Annual (1895-present) | Monthly (1895-present) | Daily (1981-present) |
+|:-----------|:----------------------|:-----------------------|:---------------------|
+| *tmean*    | X                     | X                      | X                    |
+| *tmax*     | X                     | X                      | X                    |
+| *tmin*     | X                     | X                      | X                    |
+| *tdmean*   | X                     | X                      | X                    |
+| *ppt*      | X                     | X                      | X                    |
+| *vpdmin*   | X                     | X                      | X                    |
+| *vpdmax*   | X                     | X                      | X                    |
+| *solclear* |                       |                        |                      |
+| *solslope* |                       |                        |                      |
+| *soltotal* |                       |                        |                      |
+| *soltrans* |                       |                        |                      |
 
 ## Downloading data
 
@@ -115,9 +115,6 @@ be saved to:
 ``` r
 library(prism)
 #> Be sure to set the download folder using `prism_set_dl_dir()`.
-```
-
-``` r
 prism_set_dl_dir("~/prismtmp")
 ```
 
@@ -129,6 +126,8 @@ files that exist in the folder. The prism data (`pd`) can be accessed
 using the `pd_*()` functions.
 
 ### Download 30-year normal data
+
+**IMPORTANT** - nolonger bil data …. fill in
 
 Normals are based on the latest 30-year period; currently 1991 - 2020.
 Normals can be downloaded in two resolutions, 4km and 800m, and a
@@ -196,16 +195,16 @@ work off of one or more of these folder names (`pd`).
 ``` r
 ## Truncated to keep file list short
 prism_archive_ls()
-#>  [1] "PRISM_ppt_30yr_normal_4kmD1_0314_bil"    
-#>  [2] "PRISM_ppt_30yr_normal_4kmM4_annual_bil"  
-#>  [3] "prism_ppt_us_25m_2000"                   
-#>  [4] "prism_ppt_us_25m_2001"                   
-#>  [5] "prism_ppt_us_25m_2002"                   
-#>  [6] "prism_ppt_us_25m_2003"                   
-#>  [7] "prism_ppt_us_25m_2004"                   
-#>  [8] "prism_ppt_us_25m_2005"                   
-#>  [9] "prism_ppt_us_25m_2006"                   
-#> [10] "prism_ppt_us_25m_2007"                   
+#>  [1] "prism_ppt_us_25m_2000"             "prism_ppt_us_25m_2001"            
+#>  [3] "prism_ppt_us_25m_2002"             "prism_ppt_us_25m_2003"            
+#>  [5] "prism_ppt_us_25m_2004"             "prism_ppt_us_25m_2005"            
+#>  [7] "prism_ppt_us_25m_2006"             "prism_ppt_us_25m_2007"            
+#>  [9] "prism_ppt_us_25m_2008"             "prism_ppt_us_25m_2009"            
+#> [11] "prism_ppt_us_25m_2010"             "prism_ppt_us_25m_2011"            
+#> [13] "prism_ppt_us_25m_2012"             "prism_ppt_us_25m_2013"            
+#> [15] "prism_ppt_us_25m_2014"             "prism_ppt_us_25m_2015"            
+#> [17] "prism_ppt_us_25m_2020_avg_30y"     "prism_ppt_us_25m_20200314_avg_30y"
+#> [19] "prism_tmean_us_25m_198201"         "prism_tmean_us_25m_198301"        
 ....
 ```
 
@@ -217,23 +216,20 @@ can get that with the `pd_get_name()` function.
 
 ``` r
 ## Truncated to keep file list short
-pd_to_file(prism_archive_ls())
-#>  [1] "C:\\Users\\rl627\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmD1_0314_bil\\PRISM_ppt_30yr_normal_4kmD1_0314_bil.bil"        
-#>  [2] "C:\\Users\\rl627\\Documents\\prismtmp\\PRISM_ppt_30yr_normal_4kmM4_annual_bil\\PRISM_ppt_30yr_normal_4kmM4_annual_bil.bil"    
-#>  [3] "C:\\Users\\rl627\\Documents\\prismtmp\\prism_ppt_us_25m_2000\\prism_ppt_us_25m_2000.bil"                                      
-#>  [4] "C:\\Users\\rl627\\Documents\\prismtmp\\prism_ppt_us_25m_2001\\prism_ppt_us_25m_2001.bil"                                      
-#>  [5] "C:\\Users\\rl627\\Documents\\prismtmp\\prism_ppt_us_25m_2002\\prism_ppt_us_25m_2002.bil"                                      
+pd_to_file(prism_archive_ls()[1:10])
+#>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2000\\prism_ppt_us_25m_2000.bil"
+#>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2001\\prism_ppt_us_25m_2001.bil"
+#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2002\\prism_ppt_us_25m_2002.bil"
+#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2003\\prism_ppt_us_25m_2003.bil"
+#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2004\\prism_ppt_us_25m_2004.bil"
 ....
-```
 
-``` r
-
-pd_get_name(prism_archive_ls())
-#>  [1] "March 14 30-year normals - 4km resolution - Precipitation" 
-#>  [2] "Annual 30-year normals - 4km resolution - Precipitation"   
-#>  [3] "2000 - 4km resolution - Precipitation"                     
-#>  [4] "2001 - 4km resolution - Precipitation"                     
-#>  [5] "2002 - 4km resolution - Precipitation"                     
+pd_get_name(prism_archive_ls()[1:10])
+#>  [1] "2000 - 4km resolution - Precipitation"
+#>  [2] "2001 - 4km resolution - Precipitation"
+#>  [3] "2002 - 4km resolution - Precipitation"
+#>  [4] "2003 - 4km resolution - Precipitation"
+#>  [5] "2004 - 4km resolution - Precipitation"
 ....
 ```
 
@@ -252,9 +248,6 @@ prism_archive_subset("tmean", "daily", mon = 6, resolution = "4km")
 #>  [9] "prism_tmean_us_25m_20130609" "prism_tmean_us_25m_20130610"
 #> [11] "prism_tmean_us_25m_20130611" "prism_tmean_us_25m_20130612"
 #> [13] "prism_tmean_us_25m_20130613" "prism_tmean_us_25m_20130614"
-```
-
-``` r
 
 # or we can look for days between June 7 and June 10
 prism_archive_subset(
@@ -273,68 +266,64 @@ You can easily make a quick plot of your data using the output of
 `prism_archive_ls()` or `prism_archive_subset()` with `pd_image()`.
 
 ``` r
-# Plot the January 30-year average temperatures
-jmean <- prism_archive_subset(
-  "tmean", "monthly normals", mon = 1, resolution = "4km"
+# Plot the precipitation in 2000
+ppt2002 <- prism_archive_subset(
+  "ppt", "annual", year = 2002, resolution = "4km"
 )
-pd_image(jmean)
+pd_image(ppt2002)
 ```
 
 ![](man/figures/README-quick_plot-1.png)<!-- -->
 
 It is easy to load the prism data with the raster package. This time we
-will look at January temperature anomalies. To do this we will examine
-the difference between January 2013 and the January 30-year normals.
+will look at the difference in precipitation between 2011 and 2002.
 Conveniently, we already downloaded these data. We just need to grab
 them out of our archive.
 
 ``` r
 library(raster)
-#> Warning: package 'raster' was built under R version 4.3.3
+#> Warning: package 'raster' was built under R version 4.5.1
 #> Loading required package: sp
-#> Warning: package 'sp' was built under R version 4.3.3
-```
-
-``` r
+#> Warning: package 'sp' was built under R version 4.5.1
 # knowing the name of the files you are after allows you to find them in the 
 # list of all files that exist
-# jnorm_name <- "PRISM_tmean_30yr_normal_4kmM2_01_bil"
-# j2013_name <- "PRISM_tmean_stable_4kmM3_201301_bil"
+# ppt2002 <- "prism_ppt_us_25m_2002"
+# ppt2011 <- "prism_ppt_us_25m_2011"
 # but we will use prism_archive_subset() to find the files we need
 
-jnorm <- prism_archive_subset(
-  "tmean", "monthly normals", mon = 1, resolution = "4km"
+ppt2002_name <- prism_archive_subset(
+  "ppt", "annual", year = 2002, resolution = "4km"
 )
-j2013 <- prism_archive_subset(
-  "tmean", "monthly", years = 2013, mon = 1, resolution = "4km"
+ppt2011_name <- prism_archive_subset(
+  "ppt", "annual", year = 2011, resolution = "4km"
 )
 
 # raster needs a full path, not the "short" prism data name
-jnorm <- pd_to_file(jnorm)
-j2013 <- pd_to_file(j2013)
+ppt2002 <- pd_to_file(ppt2002_name)
+ppt2011 <- pd_to_file(ppt2011_name)
 
 ## Now we'll load the rasters.
-jnorm_rast <- raster(jnorm)
-j2013_rast <- raster(j2013)
+ppt2002_rast <- raster(ppt2002)
+ppt2011_rast <- raster(ppt2011)
 
 # Now we can do simple subtraction to get the anomaly by subtracting 2014 
 # from the 30 year normal map
-anomCalc <- function(x, y) {
+diff_calc <- function(x, y) {
   return(x - y)
 }
 
-anom_rast <- raster::overlay(j2013_rast,jnorm_rast,fun = anomCalc)
+anom_rast <- raster::overlay(ppt2002_rast, ppt2011_rast, fun = diff_calc)
 
 plot(anom_rast)
 ```
 
 ![](man/figures/README-raster_math-1.png)<!-- -->
 
-The plot shows that January 2013 was warmer than the average over the
-last 30 years. It also shows how easy it is to use the raster library to
-work with prism data. The package provides a simple framework to work
-with a large number of rasters that you can easily download and
-visualize or use with other data sets.
+The plot shows which regions were wetter in 2011 than 2002 (and the
+reverse). It also shows how easy it is to use the raster library to work
+with prism data. The package provides a simple framework to work with a
+large number of rasters that you can easily download and visualize or
+use with other data sets.
 
 ### Single grid cell plot
 
@@ -352,10 +341,7 @@ ggplot functions.
 
 ``` r
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 4.3.3
-```
-
-``` r
+#> Warning: package 'ggplot2' was built under R version 4.5.1
 # data already exist in the prism dl dir
 boulder <- c(-105.2797, 40.0176)
 
@@ -392,9 +378,9 @@ library(leaflet)
 library(raster)
 library(prism)
 
-# 30-year normal average temperature have already been downloaded for 
+# January 2002 average temperature has already been downloaded
 norm <- prism_archive_subset(
-  "tmean", "annual normals", resolution = "4km"
+  "tmean", "monthly", mon = 1, year = 2002, resolution = "4km"
 )
 rast <- raster(pd_to_file(norm))
 

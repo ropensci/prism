@@ -92,10 +92,10 @@ Data are available in 4 different temporal scales as mentioned above. At each te
 | *ppt*       |   X    |    X    |   X  |
 | *vpdmin*    |   X    |    X    |   X  |
 | *vpdmax*    |   X    |    X    |   X  |
-| *solclear*  |   X    |    X    |      |
-| *solslope*  |   X    |    X    |      |
-| *soltotal*  |   X    |    X    |      |
-| *soltrans*  |   X    |    X    |      |
+| *solclear*  |   800m    |    800m    |      |
+| *solslope*  |   800m    |    800m    |      |
+| *soltotal*  |   800m    |    800m    |      |
+| *soltrans*  |   800m    |    800m    |      |
 
 **Daily, monthly, and annual data:**
 
@@ -125,6 +125,8 @@ prism_set_dl_dir("~/prismtmp")
 This is now referred to as the "prism archive". The `prism_archive_*()` functions allow the user to search through the archive. The prism archive contains "prism data". The prism data are referred to by their folder names, even though the "real" data are the .bil, .txt, and other files that exist in the folder. The prism data (`pd`) can be accessed using the `pd_*()` functions. 
 
 ### Download 30-year normal data
+
+**IMPORTANT** - nolonger bil data .... fill in
 
 Normals are based on the latest 30-year period; currently 1991 - 2020. Normals can be downloaded in two resolutions, 4km and 800m, and a resolution must be specified.  They can be downloaded for a given day, month, vector of days/months, or annual averages for all 30 years.
 
@@ -184,9 +186,9 @@ While prism functions use this folder format, other files may need an absolute p
 
 ```{r moreListing, out.lines=5}
 ## Truncated to keep file list short
-pd_to_file(prism_archive_ls())
+pd_to_file(prism_archive_ls()[1:10])
 
-pd_get_name(prism_archive_ls())
+pd_get_name(prism_archive_ls()[1:10])
 ```
 
 Finally, `prism_archive_subset()` is a convenient way to search for specific parameters, time steps, days, months, years, or ranges of days, months, years. **Note that resolution must be specified for all archive subset operations.**
@@ -209,50 +211,50 @@ prism_archive_subset(
 You can easily make a quick plot of your data using the output of `prism_archive_ls()` or `prism_archive_subset()` with `pd_image()`. 
 
 ```{r quick_plot,fig.height=5,fig.width=7}
-# Plot the January 30-year average temperatures
-jmean <- prism_archive_subset(
-  "tmean", "monthly normals", mon = 1, resolution = "4km"
+# Plot the precipitation in 2000
+ppt2002 <- prism_archive_subset(
+  "ppt", "annual", year = 2002, resolution = "4km"
 )
-pd_image(jmean)
+pd_image(ppt2002)
 ```
 
-It is easy to load the prism data with the raster package. This time we will look at January temperature anomalies.  To do this we will examine the difference between January 2013 and the January 30-year normals. Conveniently, we already downloaded these data. We just need to grab them out of our archive.
+It is easy to load the prism data with the raster package. This time we will look at the difference in precipitation between 2011 and 2002. Conveniently, we already downloaded these data. We just need to grab them out of our archive.
 
 ```{r raster_math,fig.height=5,fig.width=7}
 library(raster)
 # knowing the name of the files you are after allows you to find them in the 
 # list of all files that exist
-# jnorm_name <- "PRISM_tmean_30yr_normal_4kmM2_01_bil"
-# j2013_name <- "PRISM_tmean_stable_4kmM3_201301_bil"
+# ppt2002 <- "prism_ppt_us_25m_2002"
+# ppt2011 <- "prism_ppt_us_25m_2011"
 # but we will use prism_archive_subset() to find the files we need
 
-jnorm <- prism_archive_subset(
-  "tmean", "monthly normals", mon = 1, resolution = "4km"
+ppt2002_name <- prism_archive_subset(
+  "ppt", "annual", year = 2002, resolution = "4km"
 )
-j2013 <- prism_archive_subset(
-  "tmean", "monthly", years = 2013, mon = 1, resolution = "4km"
+ppt2011_name <- prism_archive_subset(
+  "ppt", "annual", year = 2011, resolution = "4km"
 )
 
 # raster needs a full path, not the "short" prism data name
-jnorm <- pd_to_file(jnorm)
-j2013 <- pd_to_file(j2013)
+ppt2002 <- pd_to_file(ppt2002_name)
+ppt2011 <- pd_to_file(ppt2011_name)
 
 ## Now we'll load the rasters.
-jnorm_rast <- raster(jnorm)
-j2013_rast <- raster(j2013)
+ppt2002_rast <- raster(ppt2002)
+ppt2011_rast <- raster(ppt2011)
 
 # Now we can do simple subtraction to get the anomaly by subtracting 2014 
 # from the 30 year normal map
-anomCalc <- function(x, y) {
+diff_calc <- function(x, y) {
   return(x - y)
 }
 
-anom_rast <- raster::overlay(j2013_rast,jnorm_rast,fun = anomCalc)
+anom_rast <- raster::overlay(ppt2002_rast, ppt2011_rast, fun = diff_calc)
 
 plot(anom_rast)
 ```
 
-The plot shows that January 2013 was warmer than the average over the last 30 years. It also shows how easy it is to use the raster library to work with prism data. The package provides a simple framework to work with a large number of rasters that you can easily download and visualize or use with other data sets.
+The plot shows which regions were wetter in 2011 than 2002 (and the reverse). It also shows how easy it is to use the raster library to work with prism data. The package provides a simple framework to work with a large number of rasters that you can easily download and visualize or use with other data sets.
 
 ### Single grid cell plot
 
@@ -286,9 +288,9 @@ library(leaflet)
 library(raster)
 library(prism)
 
-# 30-year normal average temperature have already been downloaded for 
+# January 2002 average temperature has already been downloaded
 norm <- prism_archive_subset(
-  "tmean", "annual normals", resolution = "4km"
+  "tmean", "monthly", mon = 1, year = 2002, resolution = "4km"
 )
 rast <- raster(pd_to_file(norm))
 
