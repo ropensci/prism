@@ -26,8 +26,8 @@ test_that("url is created correctly", {
           "PRISM_tmax_30yr_normal_4kmM2_annual_bil")
   f2 <- c(
     "https://services.nacse.org/prism/data/get/us/4km/ppt/20120101?format=bil",
-    "https://data.prism.oregonstate.edu/normals_bil/monthly/4km/ppt/PRISM_ppt_30yr_normal_4kmM4_02_bil.zip",
-    "https://data.prism.oregonstate.edu/normals_bil/monthly/4km/tmax/PRISM_tmax_30yr_normal_4kmM5_annual_bil.zip"
+    "https://data.prism.oregonstate.edu/normals/us/4km/ppt/monthly/prism_ppt_us_25m_202002_avg_30y.zip",
+    "https://data.prism.oregonstate.edu/normals/us/4km/tmax/monthly/prism_tmax_us_25m_2020_avg_30y.zip"
   )
   
   expect_equal(prism:::folder_to_url(ff), f2)
