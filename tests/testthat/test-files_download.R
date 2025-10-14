@@ -10,7 +10,7 @@ cat("\nmake sure you run this 2x or less in any given day!!!!\n")
 cat("****************************************\n")
 
 # skip flags -----------------
-skip_normals <- TRUE
+skip_normals <- FALSE
 skip_annual <- TRUE
 skip_monthly <- TRUE
 skip_daily <- TRUE
@@ -38,84 +38,84 @@ test_that("normals download", {
   get_prism_normals('tmean', '800m', NULL, FALSE, TRUE, as.Date('2000-07-04'))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmean_30yr_normal_4kmM5_annual_bil.zip")
+    file.path(dl_folder, "prism_tmean_us_25m_2020_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_30yr_normal_4kmM5_annual_bil")
+    file.path(dl_folder, "prism_tmean_us_25m_2020_avg_30y")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmax_30yr_normal_4kmM5_01_bil.zip")
+    file.path(dl_folder, "prism_tmax_us_25m_202001_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmax_30yr_normal_4kmM5_01_bil")
+    file.path(dl_folder, "prism_tmax_us_25m_202001_avg_30y")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmin_30yr_normal_4kmM5_02_bil.zip")
+    file.path(dl_folder, "prism_tmin_us_25m_202002_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmin_30yr_normal_4kmM5_02_bil")
+    file.path(dl_folder, "prism_tmin_us_25m_202002_avg_30y")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tdmean_30yr_normal_4kmM5_06_bil.zip")
+    file.path(dl_folder, "prism_tdmean_us_25m_202006_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tdmean_30yr_normal_4kmM5_06_bil")
+    file.path(dl_folder, "prism_tdmean_us_25m_202006_avg_30y")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmin_30yr_normal_4kmM5_12_bil.zip")
+    file.path(dl_folder, "prism_vpdmin_us_25m_202012_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmin_30yr_normal_4kmM5_12_bil")
+    file.path(dl_folder, "prism_vpdmin_us_25m_202012_avg_30y")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmax_30yr_normal_4kmM5_09_bil.zip")
+    file.path(dl_folder, "prism_vpdmax_us_25m_202009_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmax_30yr_normal_4kmM5_09_bil")
+    file.path(dl_folder, "prism_vpdmax_us_25m_202009_avg_30y")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_ppt_30yr_normal_800mM4_11_bil.zip")
+    file.path(dl_folder, "prism_ppt_us_30s_202011_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_ppt_30yr_normal_800mM4_11_bil")
+    file.path(dl_folder, "prism_ppt_us_30s_202011_avg_30y")
   ))
   
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_solclear_30yr_normal_4kmM3_01_bil")
+    file.path(dl_folder, "prism_solclear_us_25m_202001_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_solslope_30yr_normal_4kmM3_annual_bil")
+    file.path(dl_folder, "prism_solslope_us_25m_2020_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_soltotal_30yr_normal_800mM3_annual_bil")
+    file.path(dl_folder, "prism_soltotal_us_30s_2020_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_soltrans_30yr_normal_800mM3_03_bil")
+    file.path(dl_folder, "prism_soltrans_us_30s_202003_avg_30y.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_soltrans_30yr_normal_800mM3_04_bil")
+    file.path(dl_folder, "prism_soltrans_us_30s_202004_avg_30y.zip")
   ))
   
   # daily normals
   expect_true(all(dir.exists(
     file.path(
       dl_folder, 
-      paste0('PRISM_ppt_30yr_normal_4kmD1_02',sprintf("%02d",1:29), '_bil')
+      paste0('prism_ppt_us_25m_202002',sprintf("%02d",1:29), '_avg_30y')
     )
   )))
   expect_true(all(dir.exists(file.path(
     dl_folder, 
-    c('PRISM_ppt_30yr_normal_4kmD1_0101_bil', 
-      'PRISM_ppt_30yr_normal_4kmD1_0301_bil')
+    c('prism_ppt_us_25m_20200201_avg_30y', 
+      'prism_ppt_us_25m_20200301_avg_30y')
   ))))
   expect_true(dir.exists(
-    file.path(dl_folder, 'PRISM_tmean_30yr_normal_800mD1_0704_bil')
+    file.path(dl_folder, 'prism_tmean_us_30s_20200704_avg_30y')
   ))
 })
 
