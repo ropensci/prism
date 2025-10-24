@@ -96,7 +96,8 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
 #'
 #' @noRd
 gen_prism_url <- function(dates, type, resolution = "4km", region = "us", 
-                          format = "bil", dataset_type = "an", service = "web_service_v2") {
+                          format = "bil", dataset_type = "an", service = NULL,
+                          ts_service = "web_service_v2") {
   
   # Input validation
   if (missing(dates) || missing(type)) {
@@ -141,10 +142,14 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
     warning("Only CONUS ('us') region is currently available. Other regions not yet implemented.")
   }
   
-  if (service == "web_service_v2"){
+  if (ts_service == "web_service_v2") {
     
     ## Base URL
-    base_url <- "https://services.nacse.org/prism/data/get"
+    if (is.null(service)) {
+      base_url <- "https://services.nacse.org/prism/data/get"
+    } else {
+      base_url <- service
+    }
     
     # Generate URLs for each date
     urls <- paste(base_url, region, resolution, type, dates, sep = "/")
@@ -161,7 +166,7 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
     
   }
   
-  if (service == "ftp_v2_normals_bil") {
+  if (ts_service == "ftp_v2_normals_bil") {
     
     # Function to get version available in Normals_bil FTP (this logic may be required to future proof against
     # changes in the normals versions in normals_bil folder). May deprecate once we shift to COG?

@@ -127,14 +127,9 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   years <- unique(format(dates,"%Y"))
   
   type <- match.arg(type, prism_vars())
-  
-  if (is.null(service)) {
-	  service <- "http://services.nacse.org/prism/data/public/4km"
-  }
 
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
-  # uris <- gen_prism_url(uri_dates, type, service)
-  uris <- gen_prism_url(uri_dates, type, resolution)
+  uris <- gen_prism_url(uri_dates, type, resolution, service = service)
   
   if(check == "internal"){
     x <- httr::HEAD(uris[1])

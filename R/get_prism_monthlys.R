@@ -82,10 +82,6 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   }
   
   uris <- vector()
-  
-  if (is.null(service)) {
-	  service <- "http://services.nacse.org/prism/data/public/4km"
-  }
 
   if (length(years)) {
     uri_dates <- apply(
@@ -95,7 +91,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
     )
 
     # uris_post81 <- gen_prism_url(uri_dates_post81, type, service)
-    uris <- gen_prism_url(uri_dates, type, resolution)
+    uris <- gen_prism_url(uri_dates, type, resolution, service = service)
   }
     
   download_pb <- txtProgressBar(

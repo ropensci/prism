@@ -117,12 +117,7 @@ get_prism_annual <- function(type, years, keepZip = TRUE,
   
   uris <- vector()
   
-  if (is.null(service)) {
-	  service <- "http://services.nacse.org/prism/data/public/4km"
-  }  
-  
-  # uris_pre81 <- gen_prism_url(pre_1981, type, service)
-  uris <- gen_prism_url(years, type, resolution)
+  uris <- gen_prism_url(years, type, resolution, service = service)
 
   download_pb <- txtProgressBar(
     min = 0,
