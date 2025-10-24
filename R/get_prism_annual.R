@@ -19,12 +19,7 @@
 #' @param keepZip if `TRUE`, leave the downloaded zip files in your 
 #'   'prism.path', if `FALSE`, they will be deleted.
 #'   
-#' @param keep_pre81_months The pre-1981 data includes all monthly data and the 
-#'   annual data for the specified year. If you need annual and monthly data it
-#'   is advantageous to keep all the monthly data when downloading the annual 
-#'   data so you don't have to download the zip file again. When downloading 
-#'   annual data, this defaults to `FALSE`. When downloading monthly data, this
-#'   defaults to `TRUE`.
+#' @param keep_pre81_months Deprecated
 #'   
 #' @param service Either `NULL` (default) or a URL provided by PRISM staff
 #'   for subscription-based service. Example:
@@ -78,24 +73,6 @@
 #'   keepZip = TRUE
 #' )
 #' 
-#' # Get pre-1981 annual data (resolution applies to both pre and post-1981 data)
-#' get_prism_annual(
-#'   type = "tmean",
-#'   years = 1975,
-#'   resolution = "4km",
-#'   keep_pre81_months = FALSE,
-#'   keepZip = FALSE
-#' )
-#' 
-#' # Get pre-1981 data and keep all monthly data too
-#' get_prism_annual(
-#'   type = "ppt",
-#'   years = c(1970, 1975),
-#'   resolution = "800m",
-#'   keep_pre81_months = TRUE,
-#'   keepZip = TRUE
-#' )
-#' 
 #' # will fail - invalid resolution:
 #' get_prism_annual(
 #'   type = "tmean",
@@ -109,7 +86,7 @@
 #' 
 #' @export
 get_prism_annual <- function(type, years, keepZip = TRUE, 
-                             keep_pre81_months = FALSE, service = NULL,
+                             keep_pre81_months = NULL, service = NULL,
                              resolution = "4km")
 {
   ### parameter and error handling
@@ -128,95 +105,43 @@ get_prism_annual <- function(type, years, keepZip = TRUE,
   
   ### Check resolution
   if (is.null(resolution)) {
-    stop("'resolution' must be '4km' or '800m'. See ?get_prism_monthlys for details.")
+    stop("'resolution' must be '4km' or '800m'. See ?get_prism_annual for details.")
   }
   if (!resolution %in% c("4km", "800m")) {
     stop("'resolution' must be '4km' or '800m'. See ?get_prism_annual for details.")
   }
   
-  pre_1981 <- years[years < 1981]
-  post_1981 <- years[years >= 1981]
-  uris_pre81 <- vector()
-  uris_post81 <- vector()
+  if (!is.null(keep_pre81_months)) {
+    warning('`keep_pre81_months` is deprecated and no longer has any effect. It will be removed in a future release.')
+  }
+  
+  uris <- vector()
   
   if (is.null(service)) {
 	  service <- "http://services.nacse.org/prism/data/public/4km"
   }  
   
-  if (length(pre_1981)) {
-    # uris_pre81 <- gen_prism_url(pre_1981, type, service)
-    uris_pre81 <- gen_prism_url(pre_1981, type, resolution)
-  }
-  
-  if (length(post_1981)) {  
-    # uris_post81 <- gen_prism_url(post_1981, type, service) 
-    uris_post81 <- gen_prism_url(post_1981, type, resolution)
-  }
-  
+  # uris_pre81 <- gen_prism_url(pre_1981, type, service)
+  uris <- gen_prism_url(years, type, resolution)
+
   download_pb <- txtProgressBar(
     min = 0,
-    max = length(uris_post81) + length(uris_pre81),
+    max = length(uris),
     style = 3
   )
   
   counter <- 0
   
-  ### Handle post 1980 data
-  if(length(uris_post81) > 0){    
+  ### Handle all years
+  if(length(uris) > 0){    
     
-    for(i in seq_along(uris_post81)) {
-      prism_webservice(uris_post81[i],keepZip)
+    for(i in seq_along(uris)) {
+      prism_webservice(uris[i], keepZip)
       setTxtProgressBar(download_pb, i)
     }
   }
   
-  counter <- length(uris_post81) + 1
+  counter <- length(uris) + 1
   
-  ### Handle pre 1981 files
-  if (length(uris_pre81) > 0) {
-    
-    pre_files <-c() 
-    for(j in seq_along(uris_pre81)){
-      tmp <- prism_webservice(
-        uris_pre81[j], 
-        keepZip, 
-        returnName = TRUE, 
-        pre81_months = ""
-      )
-      
-      if (!is.null(tmp)) {
-        pre_files <- c(pre_files, tmp)
-      }
-      
-      setTxtProgressBar(download_pb, counter) 
-      counter <- counter + 1
-    }
-    
-    ### Process pre 1981 files
-    if (length(pre_files) > 0) {
-      pre_files <- unlist(strsplit(pre_files,"\\."))
-      pre_files <- pre_files[seq(1,length(pre_files),by =2)]
-    
-      for (k in seq_along(pre_files)) {
-        if (keep_pre81_months) {
-          # keep the annual data
-          to_split <- gsub(pattern = "_all", replacement = "", x = pre_files[k])
-          
-          # and keep all 12 months of data
-          all_months <- mon_to_string(1:12)
-          for (m in all_months) {
-            to_split <- c(
-              to_split, 
-              gsub(pattern = "_all", replacement = m, x = pre_files[k])
-            )
-          }
-        } else {
-          to_split <- gsub(pattern = "_all", replacement = "", x = pre_files[k])
-        }
-          
-        process_zip(pre_files[k], to_split)
-      }
-    }
-  }
   close(download_pb)
 }

@@ -1,5 +1,7 @@
 # prism 0.2.3.9000 (development version)
 
+- deprecated keep_pre81_months in get_prism_monthlys() and get_prism_annual(). No longer needed.
+
 # prism 0.2.3
 
 **Released March 25, 2025**

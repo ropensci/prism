@@ -12,7 +12,7 @@ get_prism_annual(
   type,
   years,
   keepZip = TRUE,
-  keep_pre81_months = FALSE,
+  keep_pre81_months = NULL,
   service = NULL,
   resolution = "4km"
 )
@@ -33,7 +33,7 @@ get_prism_monthlys(
   years,
   mon = 1:12,
   keepZip = TRUE,
-  keep_pre81_months = TRUE,
+  keep_pre81_months = NULL,
   service = NULL,
   resolution = "4km"
 )
@@ -58,19 +58,14 @@ get_prism_normals(
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your
 'prism.path', if \code{FALSE}, they will be deleted.}
 
-\item{keep_pre81_months}{The pre-1981 data includes all monthly data and the
-annual data for the specified year. If you need annual and monthly data it
-is advantageous to keep all the monthly data when downloading the annual
-data so you don't have to download the zip file again. When downloading
-annual data, this defaults to \code{FALSE}. When downloading monthly data, this
-defaults to \code{TRUE}.}
+\item{keep_pre81_months}{Deprecated}
 
 \item{service}{Either \code{NULL} (default) or a URL provided by PRISM staff
 for subscription-based service. Example:
 "http://services.nacse.org/prism/data/subscription/800m". To use the
 subscription option, you must use an IP address registered with PRISM
-staff. When \code{NULL}, URL defaults to:
-"http://services.nacse.org/prism/data/public/4km".}
+staff. When \code{NULL}, the new PRISM web service endpoints are used based on
+the specified resolution.}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km"
 or "800m".}
@@ -190,24 +185,6 @@ get_prism_annual(
   keepZip = TRUE
 )
 
-# Get pre-1981 annual data (resolution applies to both pre and post-1981 data)
-get_prism_annual(
-  type = "tmean",
-  years = 1975,
-  resolution = "4km",
-  keep_pre81_months = FALSE,
-  keepZip = FALSE
-)
-
-# Get pre-1981 data and keep all monthly data too
-get_prism_annual(
-  type = "ppt",
-  years = c(1970, 1975),
-  resolution = "800m",
-  keep_pre81_months = TRUE,
-  keepZip = TRUE
-)
-
 # will fail - invalid resolution:
 get_prism_annual(
   type = "tmean",
@@ -297,16 +274,6 @@ get_prism_monthlys(
   mon = c(12, 1, 2),
   resolution = "800m",
   keepZip = TRUE
-)
-
-# Get pre-1981 data (resolution applies to both pre and post-1981 data)
-get_prism_monthlys(
-  type = "tmax",
-  years = 1975,
-  mon = 7,
-  resolution = "4km",
-  keep_pre81_months = FALSE,
-  keepZip = FALSE
 )
 
 # will fail - invalid resolution:
