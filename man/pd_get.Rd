@@ -73,7 +73,7 @@ pd_get_type(pd)
 ## [1] "ppt" "ppt" "ppt"
 
 pd_to_file(pd[1])
-## [1] "C:/prismdir/PRISM_ppt_stable_4kmM3_2000_bil/PRISM_ppt_stable_4kmM3_2000_bil.bil""
+## [1] "C:/prismdir/PRISM_ppt_stable_4kmM3_2000_bil/PRISM_ppt_stable_4kmM3_2000_bil.bil"
 }
 
 }

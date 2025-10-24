@@ -34,4 +34,14 @@ test_that("get_prism_normals() errors correctly", {
     get_prism_monthlys(type = "tmean", years = 2023, mon = 1, resolution = NULL),
     "'resolution' must be '4km' or '800m'"
   )
+  
+  expect_error(
+    get_prism_normals(type = "solclear", mon = 1, resolution = '4km'),
+    "Clear sky, sloped, and total solar radiation are only available in 800m."
+  )
+  
+  expect_error(
+    get_prism_normals(type = "soltrans", mon = 4, resolution = '4km'),
+    "Clear sky, sloped, and total solar radiation are only available in 800m."
+  )
 })

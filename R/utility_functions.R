@@ -108,12 +108,6 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
     stop("Dates must be in YYYYMMDD (daily), YYYYMM (monthly), YYYY (annual), MM (monthly normals), or MMDD (daily normals) format")
   }
   
-  # Validate climate variable
-  valid_types <- c("ppt", "tmin", "tmax", "tmean", "tdmean", "vpdmin", "vpdmax")
-  if (!type %in% valid_types) {
-    stop("'type' must be one of: ", paste(valid_types, collapse = ", "))
-  }
-  
   # Validate resolution
   valid_resolutions <- c( "800m", "4km")
   if (!resolution %in% valid_resolutions) {

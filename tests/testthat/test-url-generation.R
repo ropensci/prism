@@ -31,12 +31,6 @@ test_that("URL generation validates inputs", {
     "Dates must be in YYYYMMDD \\(daily\\), YYYYMM \\(monthly\\), YYYY \\(annual\\), MM \\(monthly normals\\), or MMDD \\(daily normals\\) format"
   )
   
-  # Invalid climate variable
-  expect_error(
-    prism:::gen_prism_url("20230601", "invalid_var"),
-    "must be one of.*ppt.*tmin.*tmax"
-  )
-  
   # Invalid resolution
   expect_error(
     prism:::gen_prism_url("20230601", "tmean", resolution = "1km"),

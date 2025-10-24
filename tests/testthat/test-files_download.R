@@ -10,9 +10,9 @@ cat("\nmake sure you run this 2x or less in any given day!!!!\n")
 cat("****************************************\n")
 
 # skip flags -----------------
-skip_normals <- FALSE
+skip_normals <- TRUE
 skip_annual <- TRUE
-skip_monthly <- TRUE
+skip_monthly <- FALSE
 skip_daily <- TRUE
 skip_daily_3 <- TRUE
 skip_daily_prov <- TRUE
@@ -29,8 +29,8 @@ test_that("normals download", {
   get_prism_normals("vpdmin", resolution = "4km", mon = 12)
   get_prism_normals("vpdmax", resolution = "4km", mon = 9)
   get_prism_normals("ppt", resolution = "800m", mon = 11)
-  get_prism_normals('solclear', '4km', mon = 1)
-  get_prism_normals('solslope', '4km', annual = TRUE)
+  get_prism_normals('solclear', '800m', mon = 1)
+  get_prism_normals('solslope', '800m', annual = TRUE)
   get_prism_normals('soltotal', '800m', annual = TRUE)
   get_prism_normals('soltrans', '800m', mon = 3:4)
   get_prism_normals('ppt', '4km', NULL, FALSE, TRUE, c('0101', '0301'))
@@ -134,52 +134,52 @@ test_that("annuals download", {
   get_prism_annual("ppt", years = 1999)
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmM3_2010_bil.zip")
+    file.path(dl_folder, "prism_tmean_us_25m_2010.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmM3_2010_bil")
+    file.path(dl_folder, "prism_tmean_us_25m_2010")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmax_stable_4kmM3_2011_bil.zip")
+    file.path(dl_folder, "prism_tmax_us_25m_2011.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmax_stable_4kmM3_2011_bil")
+    file.path(dl_folder, "prism_tmax_us_25m_2011")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmin_stable_4kmM3_2012_bil.zip")
+    file.path(dl_folder, "prism_tmin_us_25m_2012.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmin_stable_4kmM3_2012_bil")
+    file.path(dl_folder, "prism_tmin_us_25m_2012")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tdmean_stable_4kmM3_1944_all_bil.zip")
+    file.path(dl_folder, "prism_tdmean_us_25m_1944.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tdmean_stable_4kmM3_1944_bil")
+    file.path(dl_folder, "prism_tdmean_us_25m_1944")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmin_stable_4kmM3_1982_bil.zip")
+    file.path(dl_folder, "prism_vpdmin_us_25m_1982.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmin_stable_4kmM3_1982_bil")
+    file.path(dl_folder, "prism_vpdmin_us_25m_1982")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmax_stable_4kmM3_1933_all_bil.zip")
+    file.path(dl_folder, "prism_vpdmax_us_25m_1933.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmax_stable_4kmM3_1933_bil")
+    file.path(dl_folder, "prism_vpdmax_us_25m_1933")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_ppt_stable_4kmM3_1999_bil.zip")
+    file.path(dl_folder, "prism_ppt_us_25m_1999.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_ppt_stable_4kmM3_1999_bil")
+    file.path(dl_folder, "prism_ppt_us_25m_1999")
   ))
 })
 
@@ -198,52 +198,52 @@ test_that("monthlys download", {
   get_prism_monthlys("ppt", years = 1925, mon = 3)
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmM3_201001_bil.zip")
+    file.path(dl_folder, "prism_tmean_us_25m_201001.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmM3_201001_bil")
+    file.path(dl_folder, "prism_tmean_us_25m_201001")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmax_stable_4kmM3_198312_bil.zip")
+    file.path(dl_folder, "prism_tmax_us_25m_198312.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmM3_201001_bil")
+    file.path(dl_folder, "prism_tmean_us_25m_201001")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmin_stable_4kmM3_201509_bil.zip")
+    file.path(dl_folder, "prism_tmin_us_25m_201509.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmM3_201001_bil")
+    file.path(dl_folder, "prism_tmean_us_25m_201001")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tdmean_stable_4kmM3_200003_bil.zip")
+    file.path(dl_folder, "prism_tdmean_us_25m_200003.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmM3_201001_bil")
+    file.path(dl_folder, "prism_tmean_us_25m_201001")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmin_stable_4kmM3_200206_bil.zip")
+    file.path(dl_folder, "prism_vpdmin_us_25m_200206.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmM3_201001_bil")
+    file.path(dl_folder, "prism_tmean_us_25m_201001")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmax_stable_4kmM3_1970_all_bil.zip")
+    file.path(dl_folder, "prism_vpdmax_us_25m_1970_all.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmax_stable_4kmM3_197001_bil")
+    file.path(dl_folder, "prism_vpdmax_us_25m_197001")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_ppt_stable_4kmM2_1925_all_bil.zip")
+    file.path(dl_folder, "prism_ppt_us_4kmM2_1925_all.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_ppt_stable_4kmM2_192503_bil")
+    file.path(dl_folder, "prism_ppt_us_4kmM2_192503")
   ))
   
   # three consecutive --------------
@@ -252,7 +252,7 @@ test_that("monthlys download", {
   for (i in 2:4) {
     expect_true(dir.exists(file.path(
       dl_folder, 
-      paste0("PRISM_tmean_stable_4kmM3_2014", prism:::mon_to_string(i), "_bil")
+      paste0("prism_tmean_us_25m_2014", prism:::mon_to_string(i), "")
     )))
   }
 })
@@ -272,52 +272,52 @@ test_that("daily download", {
   get_prism_dailys("ppt", dates = "2015-11-05")
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmD2_19810101_bil.zip")
+    file.path(dl_folder, "prism_tmean_us_4kmD2_19810101.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmean_stable_4kmD2_19810101_bil")
+    file.path(dl_folder, "prism_tmean_us_4kmD2_19810101")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmax_stable_4kmD2_19850220_bil.zip")
+    file.path(dl_folder, "prism_tmax_us_4kmD2_19850220.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmax_stable_4kmD2_19850220_bil")
+    file.path(dl_folder, "prism_tmax_us_4kmD2_19850220")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tmin_stable_4kmD2_19910601_bil.zip")
+    file.path(dl_folder, "prism_tmin_us_4kmD2_19910601.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tmin_stable_4kmD2_19910601_bil")
+    file.path(dl_folder, "prism_tmin_us_4kmD2_19910601")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_tdmean_stable_4kmD2_19970927_bil.zip")
+    file.path(dl_folder, "prism_tdmean_us_4kmD2_19970927.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_tdmean_stable_4kmD2_19970927_bil")
+    file.path(dl_folder, "prism_tdmean_us_4kmD2_19970927")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmax_stable_4kmD2_20061231_bil.zip")
+    file.path(dl_folder, "prism_vpdmax_us_4kmD2_20061231.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmax_stable_4kmD2_20061231_bil")
+    file.path(dl_folder, "prism_vpdmax_us_4kmD2_20061231")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_vpdmin_stable_4kmD2_20120101_bil.zip")
+    file.path(dl_folder, "prism_vpdmin_us_4kmD2_20120101.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_vpdmin_stable_4kmD2_20120101_bil")
+    file.path(dl_folder, "prism_vpdmin_us_4kmD2_20120101")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "PRISM_ppt_stable_4kmD2_20151105_bil.zip")
+    file.path(dl_folder, "prism_ppt_us_4kmD2_20151105.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "PRISM_ppt_stable_4kmD2_20151105_bil")
+    file.path(dl_folder, "prism_ppt_us_4kmD2_20151105")
   ))
 })
 
@@ -337,11 +337,11 @@ test_that("daily gets 3 in a row", {
   
   for (i in 13:15) {
     expect_true(dir.exists(
-      file.path(dl_folder, paste0("PRISM_ppt_stable_4kmD2_200006",i ,"_bil"))
+      file.path(dl_folder, paste0("prism_ppt_us_4kmD2_200006",i ,""))
     ))
     
     expect_true(dir.exists(
-      file.path(dl_folder, paste0("PRISM_tmean_stable_4kmD2_201401", i,"_bil"))
+      file.path(dl_folder, paste0("prism_tmean_us_4kmD2_201401", i,""))
     ))
   }
 })
@@ -360,9 +360,9 @@ test_that("daily provisional", {
     file.path(
       dl_folder,
       paste0(
-        "PRISM_tmax_early_4kmD2_",
+        "prism_tmax_early_4kmD2_",
         stringr::str_remove_all(prov_date, "-"),
-        "_bil"
+        ""
       )
     )
   ))

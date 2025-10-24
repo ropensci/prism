@@ -72,6 +72,12 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
     )
   }
   
+  if (type %in% c( "solclear", "solslope", "soltotal","soltrans") & resolution == '4km') {
+    stop(
+      "Clear sky, sloped, and total solar radiation are only available in 800m."
+    )
+  }
+  
   call_mon <- c()
   if(!is.null(mon)){
     if(any(mon < 1 | mon > 12)) {
