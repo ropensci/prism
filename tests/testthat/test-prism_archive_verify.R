@@ -10,7 +10,7 @@ test_that("corrupt file is found", {
 })
 
 test_that("returns true when all valid", {
-  expect_true(prism_archive_verify("tmin", "daily", resolution = '4km'))
+  expect_true(expect_warning(prism_archive_verify("tmin", "daily", resolution = '4km')))
 })
 
 # check that url is correctly recreated

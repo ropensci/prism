@@ -107,171 +107,171 @@ all_in <- function(x, y) {
 # prism_archive_subset() errors ------------------
 test_that("prism_archive_subset() errors correctly", {
   # missing resolution (now required for all files in webservice v2 migration)
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "daily", mon = 6), 
     "`resolution` must be specified for all temporal periods"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "annual", years = 2013), 
     "`resolution` must be specified for all temporal periods"
-  )
+  ))
   
   # unsupported resolution
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "daily", resolution = '1m', minDate = "2013-06-07", maxDate = "2013-06-10"), 
     "'arg' should be one of.*4km.*800m"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("ppt", "daily", resolution = '400m', mon = 1, years = 1981:2011), 
     "'arg' should be one of.*4km.*800m"
-  )
+  ))
   
   # unsupported variables
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmaxx", "annual", resolution = '800m'), 
     "'arg' should be one of"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("vpdmiin", "annual", resolution = '800m'), 
     "'arg' should be one of"
-  )
+  ))
   
   # unsupported temp_period
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "ann", resolution = '800m'), 
     "'arg' should be one of"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "annual_normals", resolution = '800m'), 
     "'arg' should be one of"
-  )
+  ))
   # annual - unnecessary specifications
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "annual", mon = 1, resolution = '800m'),
     "No need to specify `mon` for 'annual' `temp_period`"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "annual", dates = "2018-01-01", resolution = '800m'),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset(
       "tmean", "annual", minDate = "2018-01-01", maxDate = "2018-01-05", resolution = '800m'
     ),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
-  )
+  ))
 
   
   # monthly - unnecessary specifications
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "monthly", dates = "2018-01-01", resolution = '800m'),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset(
       "tmean", "monthly", minDate = "2018-01-01", maxDate = "2018-01-05", resolution = '800m'
     ),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
-  )
-  expect_no_error(
+  ))
+  expect_warning(expect_no_error(
     prism_archive_subset("tmean", "monthly", resolution = "800m"),
     ## Now all subset require resolution; this now expects to work
-  )
+  ))
   
   # normals - unecessary/incomplete specifications
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "annual normals"),
     "`resolution` must be specified for all temporal periods"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "monthly normals"),
     "`resolution` must be specified for all temporal periods"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "annual normals", resolution = "4pm"),
     "'arg' should be one of.*4km.*800m"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("tmean", "monthly normals", resolution = "800mm"),
     "'arg' should be one of.*4km.*800m"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset(
       "tmean", "annual normals", resolution = "4km", years = 2015
     ),
     "No need to specify `years` or `mon` when subsetting 'annual normals'"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset(
       "tmean", "annual normals", resolution = "800m", mon = 1:12
     ),
     "No need to specify `years` or `mon` when subsetting 'annual normals'"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset(
       "tmean", "monthly normals", resolution = "4km", years = 2015
     ),
     "No need to specify `years` for 'monthly normals'"
-  )
+  ))
   
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset('solclear', "daily normals", resolution = '4km', 
                          mon = 1:2)
-  )
+  ))
   
   # daily unnecessary specifications
   expect_no_error(
-    prism_archive_subset("ppt", "daily", resolution = "800m"),
+    expect_warning(prism_archive_subset("ppt", "daily", resolution = "800m")),
     ## Webservice v2 all subset require resolution; this now expects to work
   )
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmin", "daily", years = 1999, dates = "1999-01-01", resolution = "800m"),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     prism_archive_subset("tmin", "daily", mon = 3, minDate = "1999-01-01", resolution = "800m"),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
-  )
+  ))
   
-  expect_error(
+  expect_warning(expect_error(
     prism_archive_subset("tmin", "daily normals", mon = 3, 
                          minDate = "1999-01-01", resolution = '4km'),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
-  )
+  ))
 })
 
 # prism_archive_subset() with test folders -------------
 test_that("prism_archive_subset() works", {
-  expect_equal(
+  expect_warning(expect_equal(
     prism_archive_subset("ppt", "daily", resolution = "4km"),
     prism_archive_subset("ppt", "daily", resolution = "4km", years = c(1981, 1991, 2011, 2012))
-  )
-  expect_equal(
+  ))
+  expect_warning(expect_equal(
     prism_archive_subset("ppt", "daily", resolution = "4km"),
     prism_archive_subset("ppt", "daily", mon = 1, resolution = "4km")
-  )
-  expect_equal(
+  ))
+  expect_warning(expect_equal(
     prism_archive_subset("tmin", "daily", resolution = "4km"),
     prism_archive_subset("tmin", "daily", mon = c(1,6), resolution = "4km")
-  )
-  expect_equal(
+  ))
+  expect_warning(expect_equal(
     prism_archive_subset("tmin", "daily", resolution = "4km"),
     prism_archive_subset("tmin", "daily", years = c(1981, 2011), resolution = "4km")
-  )
-  expect_equal(
+  ))
+  expect_warning(expect_equal(
     prism_archive_subset("tmin", "daily", resolution = "4km"),
     prism_archive_subset("tmin", "daily", years = 1981:2011, resolution = "4km")
-  )
-  expect_true(all_in(
+  ))
+  expect_warning(expect_true(all_in(
     prism_archive_subset("tmin", "daily", resolution = "4km"),
     c("PRISM_tmin_stable_4kmD2_19810101_bil", 
       "PRISM_tmin_stable_4kmD2_20110615_bil")
-  ))
+  )))
   
-  expect_identical(
+  expect_warning(expect_identical(
     prism_archive_subset("tmin", "daily", years = 2020, resolution = "4km"), 
     character(0)
-  )
+  ))
 })
 
 # filter_folders annual -----------------
