@@ -30,6 +30,8 @@ prism_set_dl_dir <- function(path, create = TRUE)
     }
   }
   
+  prism_dl_dir_check_for_v1(path)
+  
   options(prism.path = path)
   invisible(path)
 }
@@ -111,13 +113,34 @@ prism_check_dl_dir <- function()
           cat("Invalid input. Please enter 1 or 2.\n")
         }
       }
-    }
+    } 
     
     prism_set_dl_dir(user_path, create = TRUE)
+  } else {
+    prism_dl_dir_check_for_v1(user_path)
   }
   
   invisible(user_path)
 }
+
+prism_dl_dir_check_for_v1 <- function(user_path) {
+  ff <- list.dirs(user_path)
+  
+  if(any(c(
+    grepl('PRISM', ff),
+    grepl('stable', ff),
+    grepl('4kmD2', ff),
+    grepl('4kmM3', ff)
+  ))) {
+    warning(paste(
+      "The specified PRISM download directory appears to have data from the pre September 2025 API.",
+      "We recommend either starting a new download directory for the new API and/or",
+      "deleting and redownloading all data from the new API.",
+      sep = '\n'
+    ))
+  }
+}
+
 
 #' @description 
 #' `path_check()` is a deprecated version of `prism_check_dl_dir()`.
