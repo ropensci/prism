@@ -21,13 +21,13 @@ test_that("url is created correctly", {
     "https://services.nacse.org/prism/data/get/us/4km/ppt/20120101?format=bil"
   )
   
-  ff <- c("PRISM_ppt_stable_4kmD2_20120101_bil", 
-          "PRISM_ppt_30yr_normal_800mM2_02_bil",
-          "PRISM_tmax_30yr_normal_4kmM2_annual_bil")
+  ff <- c("prism_ppt_us_25m_191501", 
+          "prism_tmean_us_30s_20200101_avg_30y",
+          "prism_ppt_us_25m_202001_avg_30y")
   f2 <- c(
-    "https://services.nacse.org/prism/data/get/us/4km/ppt/20120101?format=bil",
-    "https://data.prism.oregonstate.edu/normals/us/4km/ppt/monthly/prism_ppt_us_25m_202002_avg_30y.zip",
-    "https://data.prism.oregonstate.edu/normals/us/4km/tmax/monthly/prism_tmax_us_25m_2020_avg_30y.zip"
+    "https://services.nacse.org/prism/data/get/us/4km/ppt/191501?format=bil",
+    "https://data.prism.oregonstate.edu/normals/us/800m/tmean/daily/prism_tmean_us_30s_20200101_avg_30y.zip",
+    "https://data.prism.oregonstate.edu/normals/us/4km/ppt/monthly/prism_ppt_us_25m_202001_avg_30y.zip"
   )
   
   expect_equal(prism:::folder_to_url(ff), f2)

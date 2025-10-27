@@ -59,9 +59,10 @@ test_that("FTP normals service generates correct URLs", {
   # Test monthly normals (MM format)
   urls_monthly_normals <- prism:::gen_prism_url(
     c("01", "06", "12"), "tmean", 
-    service = "ftp_v2_normals_bil"
+    ts_service = "ftp_v2_normals_bil"
   )
   expect_length(urls_monthly_normals, 3)
+  # https://data.prism.oregonstate.edu/normals/us/4km/ppt/monthly/prism_ppt_us_25m_202001_avg_30y.zip
   expect_true(all(grepl("^https://data\\.prism\\.oregonstate\\.edu/normals", urls_monthly_normals)))
   expect_true(all(grepl("tmean", urls_monthly_normals)))
   

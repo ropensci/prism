@@ -219,7 +219,22 @@ folder_to_url <- function(pd, resolution = "4km") {
         file_resolution <- resolution  # fallback to provided resolution
       }
       
-      urls <- c(urls, gen_prism_url(date_part, var_type, file_resolution))
+      if (grepl('avg', folder)) {
+        service_part <- 'ftp_v2_normals_bil'
+        date_part <- substring(date_part, 5) 
+      }
+      else(
+        service_part <- 'web_service_v2'
+      )
+      
+      urls <- c(
+        urls, 
+        gen_prism_url(
+          date_part, 
+          var_type, 
+          file_resolution, 
+          ts_service = service_part
+      ))
     }
   }
   

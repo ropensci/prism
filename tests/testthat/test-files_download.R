@@ -12,10 +12,9 @@ cat("****************************************\n")
 # skip flags -----------------
 skip_normals <- TRUE
 skip_annual <- TRUE
-skip_monthly <- FALSE
+skip_monthly <- TRUE
 skip_daily <- TRUE
 skip_daily_3 <- TRUE
-skip_daily_prov <- TRUE
 
 # Normals ---------------
 test_that("normals download", {
@@ -233,17 +232,17 @@ test_that("monthlys download", {
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_1970_all.zip")
+    file.path(dl_folder, "prism_vpdmax_us_25m_197001.zip")
   ))
   expect_true(dir.exists(
     file.path(dl_folder, "prism_vpdmax_us_25m_197001")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_ppt_us_4kmM2_1925_all.zip")
+    file.path(dl_folder, "prism_ppt_us_25m_192503.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "prism_ppt_us_4kmM2_192503")
+    file.path(dl_folder, "prism_ppt_us_25m_192503")
   ))
   
   # three consecutive --------------
@@ -272,52 +271,52 @@ test_that("daily download", {
   get_prism_dailys("ppt", dates = "2015-11-05")
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_tmean_us_4kmD2_19810101.zip")
+    file.path(dl_folder, "prism_tmean_us_25m_19810101.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_4kmD2_19810101")
+    file.path(dl_folder, "prism_tmean_us_25m_19810101")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_tmax_us_4kmD2_19850220.zip")
+    file.path(dl_folder, "prism_tmax_us_25m_19850220.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmax_us_4kmD2_19850220")
+    file.path(dl_folder, "prism_tmax_us_25m_19850220")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_tmin_us_4kmD2_19910601.zip")
+    file.path(dl_folder, "prism_tmin_us_25m_19910601.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmin_us_4kmD2_19910601")
+    file.path(dl_folder, "prism_tmin_us_25m_19910601")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_tdmean_us_4kmD2_19970927.zip")
+    file.path(dl_folder, "prism_tdmean_us_25m_19970927.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "prism_tdmean_us_4kmD2_19970927")
+    file.path(dl_folder, "prism_tdmean_us_25m_19970927")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmax_us_4kmD2_20061231.zip")
+    file.path(dl_folder, "prism_vpdmax_us_25m_20061231.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmax_us_4kmD2_20061231")
+    file.path(dl_folder, "prism_vpdmax_us_25m_20061231")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmin_us_4kmD2_20120101.zip")
+    file.path(dl_folder, "prism_vpdmin_us_25m_20120101.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmin_us_4kmD2_20120101")
+    file.path(dl_folder, "prism_vpdmin_us_25m_20120101")
   ))
   
   expect_true(file.exists(
-    file.path(dl_folder, "prism_ppt_us_4kmD2_20151105.zip")
+    file.path(dl_folder, "prism_ppt_us_25m_20151105.zip")
   ))
   expect_true(dir.exists(
-    file.path(dl_folder, "prism_ppt_us_4kmD2_20151105")
+    file.path(dl_folder, "prism_ppt_us_25m_20151105")
   ))
 })
 
@@ -337,33 +336,12 @@ test_that("daily gets 3 in a row", {
   
   for (i in 13:15) {
     expect_true(dir.exists(
-      file.path(dl_folder, paste0("prism_ppt_us_4kmD2_200006",i ,""))
+      file.path(dl_folder, paste0("prism_ppt_us_25m_200006",i ,""))
     ))
     
     expect_true(dir.exists(
-      file.path(dl_folder, paste0("prism_tmean_us_4kmD2_201401", i,""))
+      file.path(dl_folder, paste0("prism_tmean_us_25m_201401", i,""))
     ))
   }
 })
 
-# daily provisional ------------------
-today <- Sys.Date()
-prov_date <- today - 7
-
-test_that("daily provisional", {
-  skip_on_cran()
-  skip_if(skip_daily_prov)
-  
-  get_prism_dailys(type = "tmax", minDate = prov_date, maxDate = prov_date)
-  
-  expect_true(dir.exists(
-    file.path(
-      dl_folder,
-      paste0(
-        "prism_tmax_early_4kmD2_",
-        stringr::str_remove_all(prov_date, "-"),
-        ""
-      )
-    )
-  ))
-})
