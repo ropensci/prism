@@ -14,7 +14,7 @@ test_that("Directory listings work",{
     c(n_files, 3)
   )
   
-  expect_length(x <- prism_archive_ls(), n_files)
+  expect_warning(expect_length(x <- prism_archive_ls(), n_files))
   
   df <- data.frame(
     files = x,

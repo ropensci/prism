@@ -9,7 +9,7 @@ avail_files <- rbind(c("ppt", "1981-01-01"), c("ppt", "1991-01-01"),
 
 test_that("pd_get_station_md() works", {
   for (i in seq_len(nrow(avail_files))) {
-    expect_s3_class(
+    expect_warning(expect_s3_class(
       x <- pd_get_station_md(prism_archive_subset(
         avail_files[i, 1], 
         "daily", 
@@ -17,23 +17,23 @@ test_that("pd_get_station_md() works", {
         resolution = '4km'
       )),
       "tbl_df"
-    )
+    ))
     expect_gt(nrow(x), 0, label = avail_files[i,])
     expect_true(all(colnames(x) %in% exp_cols))
     expect_true(all(exp_cols %in% colnames(x)))
   }
   
-  expect_s3_class(
+  expect_warning(expect_s3_class(
     x <- pd_get_station_md(prism_archive_subset(
       "tdmean", "monthly", years = 2005:2006, mon = 11:12, resolution = '4km'
     )),
     "tbl_df"
-  )
+  ))
   
   expect_equal(nrow(x), 3242 + 3255)
 })
 
 test_that("pd_get_station_md() fails correctly", {
-  prism_archive_subset("ppt", "daily normals", resolution = "4km", mon = 3)
-  expect_error(pd_get_station_md(pd))
+  expect_warning(prism_archive_subset("ppt", "daily normals", resolution = "4km", mon = 3))
+  expect_error(expect_warning(pd_get_station_md(pd)))
 })

@@ -1,21 +1,23 @@
 
-setup({
-  ofolder <- prism_get_dl_dir()
-  last_char <- substr(
-    prism_get_dl_dir(), 
-    nchar(prism_get_dl_dir()), 
-    nchar(prism_check_dl_dir())
-  )
-  if (last_char %in% c("/", "\\")) {
-    ofolder <- substr(prism_get_dl_dir(), 1, nchar(prism_get_dl_dir()) - 1)
-  }
-
-  unzip(
-    file.path(ofolder, "test_prism_archive_clean.zip"), 
-    # must remove trailing slash for this to work
-    exdir =  ofolder
-  )
-})
+expect_warning(
+  setup({
+    ofolder <- prism_get_dl_dir()
+    last_char <- substr(
+      prism_get_dl_dir(), 
+      nchar(prism_get_dl_dir()), 
+      nchar(prism_check_dl_dir())
+    )
+    if (last_char %in% c("/", "\\")) {
+      ofolder <- substr(prism_get_dl_dir(), 1, nchar(prism_get_dl_dir()) - 1)
+    }
+  
+    unzip(
+      file.path(ofolder, "test_prism_archive_clean.zip"), 
+      # must remove trailing slash for this to work
+      exdir =  ofolder
+    )
+  })
+)
 
 mon_keep <- c(
   "PRISM_ppt_stable_4kmM3_202001_bil", 
@@ -39,25 +41,25 @@ teardown(
 )
  
 test_that("prism_archive_clean() works", {
-  expect_setequal(
+  expect_warning(expect_setequal(
     prism_archive_subset("ppt", "daily", years = 2020, resolution = '4km'),
     c(day_keep, day_delete)
-  )
-  expect_setequal(
+  ))
+  expect_warning(expect_setequal(
     prism_archive_subset("ppt", "monthly", years = 2020, resolution = '4km'),
     c(mon_keep, mon_delete)
-  )
+  ))
   
   ## To fix after fixing prism_archive_clean()
-  expect_setequal(prism_archive_clean("ppt", "daily", years = 2020, resolution = '4km'), day_delete)
-  expect_setequal(prism_archive_subset("ppt", "daily", years = 2020, resolution = '4km'), day_keep)
+  expect_warning(expect_setequal(prism_archive_clean("ppt", "daily", years = 2020, resolution = '4km'), day_delete))
+  expect_warning(expect_setequal(prism_archive_subset("ppt", "daily", years = 2020, resolution = '4km'), day_keep))
   
-  expect_setequal(
+  expect_warning(expect_setequal(
     prism_archive_clean("ppt", "monthly", years = 2020, resolution = '4km'), 
     mon_delete
-  )
-  expect_setequal(
+  ))
+  expect_warning(expect_setequal(
     prism_archive_subset("ppt", "monthly", years = 2020, resolution = '4km'), 
     mon_keep
-  )
+  ))
 })

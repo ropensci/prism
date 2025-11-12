@@ -1,31 +1,31 @@
 
 # Check errors ---------------------------------------
 test_that("get_prism_normals() errors correctly", {
-  expect_error(
+  expect_warning(expect_error(
     get_prism_normals("vpdmin", "4km"),
     paste0("`mon` and `day` are `NULL` and `annual` is `FALSE`.\n",
     "Specify either daily and/or monthly and/or annual data to download."),
     fixed = TRUE
-  )
+  ))
   
-  expect_error(get_prism_normals("tmax", "400km", mon = 1))
-  expect_error(get_prism_normals("tmaxtin", "4km", mon = 1))
-  expect_error(
+  expect_warning(expect_error(get_prism_normals("tmax", "400km", mon = 1)))
+  expect_warning(expect_error(get_prism_normals("tmaxtin", "4km", mon = 1)))
+  expect_warning(expect_error(
     get_prism_normals("tmin", "4km", mon = 0:3),
     "You must enter a month between 1 and 12"
-  )
-  expect_error(
+  ))
+  expect_warning(expect_error(
     get_prism_normals("ppt", "800m", mon = 14, annual = TRUE),
     "You must enter a month between 1 and 12"
-  )
+  ))
   
-  expect_error(
+  expect_warning(expect_error(
     get_prism_normals('ppt')
-  )
+  ))
   
-  expect_error(
+  expect_warning(expect_error(
     get_prism_normals('solclear', '4km', NULL, FALSE, TRUE, c('0101', '0301'))
-  )
+  ))
 })
 
 # test the helper function --------------------------

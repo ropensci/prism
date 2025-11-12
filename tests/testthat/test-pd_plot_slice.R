@@ -1,22 +1,22 @@
 lat_lon <- c(-122.0307963, 36.9741171) # Santa Cruz, CA
 
 test_that("pd_plot_slice() works", {
-  expect_s3_class(
+  expect_warning(expect_s3_class(
     gg <- pd_plot_slice(
       prism_archive_subset("ppt", "daily", years = 1981:2011, resolution = '4km'),
       lat_lon
     ), 
     "gg"
-  )
+  ))
   expect_s3_class(ggplot2::ggplot_build(gg), "ggplot_built")
   
-  expect_s3_class(
+  expect_warning(expect_s3_class(
     gg <- pd_plot_slice(
       prism_archive_subset("tdmean", "monthly", years = 2005, resolution = '4km'),
       lat_lon
     ), 
     "gg"
-  )
+  ))
   expect_s3_class(ggplot2::ggplot_build(gg), "ggplot_built")
   
   bad <- c("PRISM_tdmean_stable_4kmM3_200511_bil", 
