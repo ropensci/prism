@@ -1,6 +1,20 @@
 # prism 0.2.3.9000 (development version)
 
-- deprecated keep_pre81_months in get_prism_monthlys() and get_prism_annual(). No longer needed.
+I am very sorry for the delay in getting a working version of prism updated based on the API changes that were made in September 2025. In the near future, we will be updating the entire package to take advantage of the newly available cloud optimized GeoTiff (COG) format. For now, most of the package still downloads the previously relied on .bil files. The exception is described more below. Thank you to @ran-codes for the heavy lifting in switching to the new API.
+
+The package now posts a warning if the prism archive contains folders from the old API. Our recommendation is to start fresh, and re-download any old data you need. The package has probably not been fully stress tested with a combination of data from the old API with the new API.
+
+## Breaking Changes
+
+* `get_prism_normals()` no longer downloads .bil files, and instead downloads the data in COG format. For this reason, all of the helper functions, e.g., `pd_plot_slice()`, `pd_image()`, etc., do not work with the normals. 
+
+## Major but Under-the-Hood Changes
+
+* Switched all code to use the new API provided by Oregon State. (@ran-codes, #135)
+
+## Minor Enhancements (non-API breaking changes)
+
+* Based on the updated API, there is no longer any difference in the packaging of pre/post 1981 data. Therefore,  `keep_pre81_months` is deprecated in `get_prism_monthlys()` and `get_prism_annual()`.
 
 # prism 0.2.3
 
