@@ -154,21 +154,10 @@ pd_is_readable <- function(pd) {
   
   is_readable <- TRUE
   
-  # first error check
-  tryCatch(
-    {
-      my_stack <- raster::stack(pf)
-    },
-    error = function(e) is_readable <<- FALSE
-  )
-  
-  # second error check
-  if (is_readable) {
-    tryCatch(
-      rr <-  raster::rasterToPoints(my_stack),
-      error = function(e) is_readable <<- FALSE
-    )
-  }
+  tryCatch({
+    x <- terra::rast(pf)
+    terra::as.data.frame(x, xy = TRUE)
+  }, error = function(e) is_readable <<- FALSE)
   
   is_readable
 }
