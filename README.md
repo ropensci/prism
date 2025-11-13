@@ -202,16 +202,16 @@ work off of one or more of these folder names (`pd`).
 ``` r
 ## Truncated to keep file list short
 prism_archive_ls()
-#>  [1] "prism_ppt_us_25m_2000"             "prism_ppt_us_25m_2001"            
-#>  [3] "prism_ppt_us_25m_2002"             "prism_ppt_us_25m_2003"            
-#>  [5] "prism_ppt_us_25m_2004"             "prism_ppt_us_25m_2005"            
-#>  [7] "prism_ppt_us_25m_2006"             "prism_ppt_us_25m_2007"            
-#>  [9] "prism_ppt_us_25m_2008"             "prism_ppt_us_25m_2009"            
-#> [11] "prism_ppt_us_25m_2010"             "prism_ppt_us_25m_2011"            
-#> [13] "prism_ppt_us_25m_2012"             "prism_ppt_us_25m_2013"            
-#> [15] "prism_ppt_us_25m_2014"             "prism_ppt_us_25m_2015"            
-#> [17] "prism_ppt_us_25m_2020_avg_30y"     "prism_ppt_us_25m_20200314_avg_30y"
-#> [19] "prism_tmean_us_25m_198201"         "prism_tmean_us_25m_198301"        
+#>  [1] "prism_ppt_us_25m_191004"             
+#>  [2] "prism_ppt_us_25m_191401"             
+#>  [3] "prism_ppt_us_25m_191402"             
+#>  [4] "prism_ppt_us_25m_191403"             
+#>  [5] "prism_ppt_us_25m_191404"             
+#>  [6] "prism_ppt_us_25m_191405"             
+#>  [7] "prism_ppt_us_25m_191406"             
+#>  [8] "prism_ppt_us_25m_191407"             
+#>  [9] "prism_ppt_us_25m_191408"             
+#> [10] "prism_ppt_us_25m_191409"             
 ....
 ```
 
@@ -224,19 +224,19 @@ can get that with the `pd_get_name()` function.
 ``` r
 ## Truncated to keep file list short
 pd_to_file(prism_archive_ls()[1:10])
-#>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2000\\prism_ppt_us_25m_2000.bil"
-#>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2001\\prism_ppt_us_25m_2001.bil"
-#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2002\\prism_ppt_us_25m_2002.bil"
-#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2003\\prism_ppt_us_25m_2003.bil"
-#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_2004\\prism_ppt_us_25m_2004.bil"
+#>  [1] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_191004\\prism_ppt_us_25m_191004.bil"
+#>  [2] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_191401\\prism_ppt_us_25m_191401.bil"
+#>  [3] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_191402\\prism_ppt_us_25m_191402.bil"
+#>  [4] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_191403\\prism_ppt_us_25m_191403.bil"
+#>  [5] "C:\\Users\\RAButler\\Documents\\prismtmp\\prism_ppt_us_25m_191404\\prism_ppt_us_25m_191404.bil"
 ....
 
 pd_get_name(prism_archive_ls()[1:10])
-#>  [1] "2000 - 4km resolution - Precipitation"
-#>  [2] "2001 - 4km resolution - Precipitation"
-#>  [3] "2002 - 4km resolution - Precipitation"
-#>  [4] "2003 - 4km resolution - Precipitation"
-#>  [5] "2004 - 4km resolution - Precipitation"
+#>  [1] "Apr  1910 - 4km resolution - Precipitation"
+#>  [2] "Jan  1914 - 4km resolution - Precipitation"
+#>  [3] "Feb  1914 - 4km resolution - Precipitation"
+#>  [4] "Mar  1914 - 4km resolution - Precipitation"
+#>  [5] "Apr  1914 - 4km resolution - Precipitation"
 ....
 ```
 

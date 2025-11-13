@@ -143,11 +143,11 @@ Finally, `prism_archive_subset()` is a convenient way to search for specific par
 
 ```{r}
 # we know we have downloaded June 2013 daily data, so lets search for those 
-prism_archive_subset("tmean", "daily", mon = 6)
+prism_archive_subset("tmean", "daily", mon = 6, resolution = "4km")
 
 # or we can look for days between June 7 and June 10
 prism_archive_subset(
-  "tmean", "daily", minDate = "2013-06-07", maxDate = "2013-06-10"
+  "tmean", "daily", minDate = "2013-06-07", maxDate = "2013-06-10", resolution = "4km"
 )
 ```
 
@@ -215,7 +215,7 @@ boulder <- c(-105.2797, 40.0176)
 
 # prism_archive_subset() will return prism data that matches the specified 
 # variable, time step, years, months, days, etc.
-to_slice <- prism_archive_subset("tmean", "monthly", mon = 1)
+to_slice <- prism_archive_subset("tmean", "monthly", mon = 1, resolution = "4km")
 p <- pd_plot_slice(to_slice, boulder)
 
 # add a linear average and title
