@@ -34,6 +34,10 @@ test_that("pd_get_station_md() works", {
 })
 
 test_that("pd_get_station_md() fails correctly", {
-  expect_warning(prism_archive_subset("ppt", "daily normals", resolution = "4km", mon = 3))
+  expect_warning(
+    pd <- prism_archive_subset(
+      "ppt", "daily normals", resolution = "4km", mon = 3
+    )
+  )
   expect_error(expect_warning(pd_get_station_md(pd)))
 })
