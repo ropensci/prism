@@ -1,25 +1,13 @@
-This submission fixes the policy violation that resulted in the package being 
-archived on 2025-3-20 b/c it creates '~/prismtmp'. 
-
-A user must call prism_set_dl_dir('some/path') to tell the package where to 
-download data to. If one of the functions that downloads data from the PRISM API 
-is called before this happens, then prism_check_dl_dir() will see that it 
-doesn't know where to download the data to. In this case: if R is in interactive 
-mode, it will prompt the user asking them where to download the data to. If the 
-folder the user provides does not exist it will confirm from the user that the 
-user wants the folder created. If R is not in interactive mode it will fail. 
-There is no suggestion of a default anymore (~/prismtmp) - it is entirely left 
-to the user to say where the data should go to. The "~/prismtmp" path shows up 
-in the vignette, but nowhere else in the package. I assume this is ok as it is 
-an example of where a user might want to save the data. 
+# prism v0.3.0
 
 ## Test environment
 
-* Local: Windows 10 Enterprise: R 4.4.3
-* Ubuntu 20.04 (using GitHub Actions): oldrel-3, oldrel-2, oldrel-1, release, devel
+* Local: Windows 11 Enterprise: R 4.5.2
+* Ubuntu-latest (using GitHub Actions): oldrel-3, oldrel-2, oldrel-1, release, devel
 * MacOS-latest (using GitHub Actions): release
 * Windows (using GitHub Actions): oldrel-2, oldrel-1, release, devel
-* R-project Win-Builder: devel
+* MacOS: release using devtools::check_mac_release()
+* Windows: devel using devtools::check_win_devl()
 
 ## R CMD check results
 
