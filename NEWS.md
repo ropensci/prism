@@ -1,3 +1,5 @@
+# prism (development version)
+
 # prism 0.3.0
 
 I am very sorry for the delay in getting a working version of prism updated based on the API changes that were made in September 2025. In the near future, we will be updating the entire package to take advantage of the newly available cloud optimized GeoTiff (COG) format. For now, most of the package still downloads the previously relied on .bil files. The exception is described more below. Thank you to @ran-codes for the heavy lifting in switching to the new API.
