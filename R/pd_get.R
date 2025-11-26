@@ -73,30 +73,6 @@ pd_get_type <- function(pd) {
   
 }
 
-#' @description 
-#' `prism_md()` is a deprecated function that has been replaced with 
-#' `pd_get_name()` and `pd_get_date()`
-#' 
-#' @param f 1 or more prism directories name or .bil files. 
-#' 
-#' @param returnDate TRUE or FALSE. If TRUE, an ISO date is returned.  By 
-#'   default years will come back with YYYY-01-01 and months as YYYY-MM-01
-#'   
-#' @export
-#' @rdname pd_get
-prism_md <- function(f, returnDate = FALSE) {
-  if (returnDate) {
-    msg <- "`pd_get_name()`"
-  } else {
-    msg <- "`pd_get_date()`"
-  }
-  
-  .Deprecated(msg)
-  
-  p <- strsplit(f,"_")
-  unlist(lapply(p,pr_parse,returnDate = returnDate))
-}
-
 #' name parse
 #' @description parse the directory name into relevant metadata (name or date)
 #' 
@@ -215,25 +191,3 @@ pd_to_file <- function(pd) {
   
   pfile
 }
-
-#' Extract select prism metadata
-#' 
-#' used to extract some prism metadata used in other functions
-#' 
-#' @param f a location of xml metadata.
-#' 
-#' @return a character vector of metadata.
-#' 
-#' @details Archived function, was really useful, but non-standarded metadata
-#' across files prevents this from being a useable solution atm
-#' @noRd
-
-#prism_md <- function(f){
-#  m <- xmlParse(f)
-#  m <- xmlToList(m)
-#  date <- m$idinfo$timeperd$timeinfo$rngdates$begdate
-#  prod_title <- m$idinfo$citation$citeinfo$title 
-#  prod_name <- strsplit(m$eainfo$detailed$attr$attrlabl,'\\(')[[1]][1]
-#  return(c(date,prod_title,prod_name))
-#}
-

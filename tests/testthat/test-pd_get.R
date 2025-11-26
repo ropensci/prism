@@ -33,7 +33,6 @@ exp <- c(
 
 test_that("pd_get_name() works.", {
   expect_identical(pd_get_name(tst_files), exp)
-  expect_identical(expect_warning(prism_md(tst_files)), exp)
 })
 
 exp <- c("1967-06-15", "2020-04-01", "", "2019-01-01", "1967-10-01", "", "", 
@@ -41,7 +40,6 @@ exp <- c("1967-06-15", "2020-04-01", "", "2019-01-01", "1967-10-01", "", "",
 
 test_that("pd_get_date() works.", {
   expect_identical(pd_get_date(tst_files), exp)
-  expect_identical(expect_warning(prism_md(tst_files, TRUE)), exp)
 })
 
 exp <- c('ppt', 'tmin', 'tmean', 'tmax', 'vpdmin', 'vpdmax', 'ppt', 
