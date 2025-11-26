@@ -1,6 +1,7 @@
 # prism (development version)
 
 - deleted `prism_md()`. Deprecated in version XXX.
+- deleted `prism_image()`. Deprecated in version XXX.
 
 # prism 0.3.0
 

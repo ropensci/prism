@@ -2,12 +2,9 @@
 % Please edit documentation in R/pd_image.R
 \name{pd_image}
 \alias{pd_image}
-\alias{prism_image}
 \title{Quick spatial image of prism data}
 \usage{
 pd_image(pd, col = "heat")
-
-prism_image(prismfile, col = "heat")
 }
 \arguments{
 \item{pd, prismfile}{the name of a single file to be plotted, this is most
@@ -23,8 +20,6 @@ Invisibly returns \code{gg} object of the image.
 \code{pd_image()} makes a spatial image plot of the specified prism
 data (single variable and time step.). It is meant for rapid visualization,
 but more detailed plots will require other methods.
-
-\code{prism_image()} is the deprecated version of \code{pd_image()}.
 }
 \examples{
 \dontrun{

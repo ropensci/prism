@@ -88,12 +88,3 @@ pd_image <- function(pd, col = "heat") {
   print(prPlot)
   invisible(prPlot)
 }
-
-#' @description `prism_image()` is the deprecated version of `pd_image()`.
-#' @export
-#' @rdname pd_image
-prism_image <- function(prismfile, col = "heat") {
-  .Deprecated("`pd_image()`")
-
-  invisible(pd_image(prismfile, col = col))
-}

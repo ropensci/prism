@@ -4,7 +4,6 @@
 \alias{pd_get_name}
 \alias{pd_get_date}
 \alias{pd_get_type}
-\alias{prism_md}
 \alias{pd_to_file}
 \title{Perform action on "prism data"}
 \usage{
@@ -14,17 +13,10 @@ pd_get_date(pd)
 
 pd_get_type(pd)
 
-prism_md(f, returnDate = FALSE)
-
 pd_to_file(pd)
 }
 \arguments{
 \item{pd}{prism data character vector.}
-
-\item{f}{1 or more prism directories name or .bil files.}
-
-\item{returnDate}{TRUE or FALSE. If TRUE, an ISO date is returned.  By
-default years will come back with YYYY-01-01 and months as YYYY-MM-01}
 }
 \value{
 \code{pd_get_name()} and \code{pd_get_date()} return a character vector of
@@ -45,9 +37,6 @@ Date is returned in yyyy-mm-dd format. For monthly data, dd is 01 and
 for annual data mm is also 01. For normals, an empty character is returned.
 
 \code{pd_get_type()} parses the variable from the prism data.
-
-\code{prism_md()} is a deprecated function that has been replaced with
-\code{pd_get_name()} and \code{pd_get_date()}
 
 \code{pd_to_file()} converts prism data  to a fully specified .bil file, i.e., the
 full path to the file in the prism archive. A warning is posted if the
