@@ -7,7 +7,7 @@
 pd_image(pd, col = "heat")
 }
 \arguments{
-\item{pd, prismfile}{the name of a single file to be plotted, this is most
+\item{pd}{the name of a single file to be plotted, this is most
 easily found through \code{\link[=prism_archive_ls]{prism_archive_ls()}} or \code{\link[=prism_archive_subset]{prism_archive_subset()}}.}
 
 \item{col}{the color pattern to use.  The default is heat, the other valid

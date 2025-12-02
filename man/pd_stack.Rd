@@ -7,7 +7,7 @@
 pd_stack(pd)
 }
 \arguments{
-\item{pd, prismfile}{A vector of prism data returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}}
+\item{pd}{A vector of prism data returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}}
 or \code{\link[=prism_archive_subset]{prism_archive_subset()}}.}
 }
 \value{

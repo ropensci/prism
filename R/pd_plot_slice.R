@@ -10,7 +10,7 @@
 #' 
 #' @param location a vector of a single location in the form of long,lat
 #' 
-#' @param pd,prismfile a vector of output from [prism_archive_ls()] or 
+#' @param pd a vector of output from [prism_archive_ls()] or 
 #'   [prism_archive_subset()] giving a list of prism files to extract data from 
 #'   and plot. The latter is preferred as it will help ensure the prism data 
 #'   are from the same variable and temporal period.

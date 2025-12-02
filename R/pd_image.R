@@ -4,7 +4,7 @@
 #' data (single variable and time step.). It is meant for rapid visualization,
 #' but more detailed plots will require other methods.
 #'
-#' @param pd,prismfile the name of a single file to be plotted, this is most 
+#' @param pd the name of a single file to be plotted, this is most 
 #'   easily found through [prism_archive_ls()] or [prism_archive_subset()].
 #'
 #' @param col the color pattern to use.  The default is heat, the other valid

@@ -7,7 +7,7 @@
 pd_plot_slice(pd, location)
 }
 \arguments{
-\item{pd, prismfile}{a vector of output from \code{\link[=prism_archive_ls]{prism_archive_ls()}} or
+\item{pd}{a vector of output from \code{\link[=prism_archive_ls]{prism_archive_ls()}} or
 \code{\link[=prism_archive_subset]{prism_archive_subset()}} giving a list of prism files to extract data from
 and plot. The latter is preferred as it will help ensure the prism data
 are from the same variable and temporal period.}
