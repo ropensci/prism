@@ -140,15 +140,3 @@ prism_dl_dir_check_for_v1 <- function(user_path) {
     ))
   }
 }
-
-
-#' @description 
-#' `path_check()` is a deprecated version of `prism_check_dl_dir()`.
-#' 
-#' @export
-#' @rdname prism_set_dl_dir
-path_check <- function()
-{
-  .Deprecated("`prism_check_dl_dir()`")
-  prism_check_dl_dir()
-}

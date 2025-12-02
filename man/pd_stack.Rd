@@ -2,12 +2,9 @@
 % Please edit documentation in R/pd_stack.R
 \name{pd_stack}
 \alias{pd_stack}
-\alias{prism_stack}
 \title{Stack prism data}
 \usage{
 pd_stack(pd)
-
-prism_stack(prismfile)
 }
 \arguments{
 \item{pd, prismfile}{A vector of prism data returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}}
@@ -22,8 +19,6 @@ are provided in \code{pd}.
 ensure that \code{pd} is of the expected variable and temporal period, i.e., the
 function does no checking and will stack data with different variables or
 temporal periods.
-
-\code{prism_stack()} is the deprecated version of \code{pd_stack()}.
 }
 \examples{
 \dontrun{
@@ -34,7 +29,7 @@ get_prism_dailys(
   keepZip = FALSE
 )
 # get a raster stack of June 1-14 daily tmean
-mystack <- prism_stack(prism_archive_subset(
+mystack <- pd_stack(prism_archive_subset(
   "tmean", 
   minDate = "2013-06-01", 
   maxDate = "2013-06-14"

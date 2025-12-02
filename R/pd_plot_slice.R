@@ -78,19 +78,6 @@ pd_plot_slice <- function(pd, location) {
   return(out)
 }
 
-#' @description `prism_slice()` is the deprecated version of `pd_plot_slice()`.
-#' @export
-#' @rdname pd_plot_slice
-prism_slice <- function(location, prismfile) {
-  .Deprecated(msg = paste0(
-    "prism_slice() is deprecated.\n",
-    "Use `pd_plot_slice()` instead.\n",
-    "Note the order of paramters changed."
-  ))
-  
-  pd_plot_slice(prismfile, location)
-}
-
 get_units <- function(type, pre_txt = NULL) {
   # get units for plot
   if(type %in% c("tmin", "tmax", "tmean")) {

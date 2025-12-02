@@ -2,8 +2,9 @@
 
 - deleted `prism_md()`. Deprecated in version XXX.
 - deleted `prism_image()`. Deprecated in version XXX.
-- deleted `check` parameter from `get_prism_dailys()`. Deprecated in versino XXX.
+- deleted `check` parameter from `get_prism_dailys()`. Deprecated in version XXX.
 - deleted `keep_pre81_months` paramter from `get_prism_annual()` and `get_prism_monthlys()`. Deprecated in v0.3.0
+- deleted `get_prism_station_md()`, `prism_slice()`, `prism_stack()`, `del_early_prov()`, `ls_prism_data()`, `check_corrupt()`, `path_check()`, `prism_check()`. Deprecated in version XXX.
 
 # prism 0.3.0
 

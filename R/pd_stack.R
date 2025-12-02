@@ -19,7 +19,7 @@
 #'   keepZip = FALSE
 #' )
 #' # get a raster stack of June 1-14 daily tmean
-#' mystack <- prism_stack(prism_archive_subset(
+#' mystack <- pd_stack(prism_archive_subset(
 #'   "tmean", 
 #'   minDate = "2013-06-01", 
 #'   maxDate = "2013-06-14"
@@ -42,13 +42,4 @@ pd_stack <- function(pd) {
   }
   
   return(masterRaster)
-}
-
-#' @description `prism_stack()` is the deprecated version of `pd_stack()`.
-#' @export
-#' @rdname pd_stack
-prism_stack <- function(prismfile) {
-  .Deprecated("`pd_stack()`") 
-  
-  pd_stack(prismfile)
 }

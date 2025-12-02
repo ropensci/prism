@@ -2,7 +2,6 @@
 % Please edit documentation in R/prism_archive_clean.R
 \name{prism_archive_clean}
 \alias{prism_archive_clean}
-\alias{del_early_prov}
 \title{Clean the prism data by removing early and provisional data}
 \usage{
 prism_archive_clean(
@@ -15,8 +14,6 @@ prism_archive_clean(
   dates = NULL,
   resolution = NULL
 )
-
-del_early_prov(type, minDate = NULL, maxDate = NULL, dates = NULL)
 }
 \arguments{
 \item{type}{The type of data you want to subset. Must be "ppt", "tmean",
@@ -54,10 +51,6 @@ and/or provisional data if newer (provisional or stable) data also exist
 for the same variable and temporal period. Stable data are newer than
 provisional data that are newer than early data; only the newest data are
 kept when the "clean" is performed.
-
-\code{del_early_prov()} is a deprecated version of \code{prism_archive_clean()} that
-only works for daily data, and does not prompt the user to confirm which
-folders should be removed.
 }
 \details{
 \code{prism_archive_clean()} prompts the user to verify the folders that should be

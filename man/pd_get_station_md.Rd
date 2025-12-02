@@ -2,31 +2,12 @@
 % Please edit documentation in R/pd_get_station_md.R
 \name{pd_get_station_md}
 \alias{pd_get_station_md}
-\alias{get_prism_station_md}
 \title{Extract prism station metadata}
 \usage{
 pd_get_station_md(pd)
-
-get_prism_station_md(type, minDate = NULL, maxDate = NULL, dates = NULL)
 }
 \arguments{
 \item{pd}{prism data character vector.}
-
-\item{type}{The type of data you want to subset. Must be "ppt", "tmean",
-"tmin", "tmax", "tdmean", "vpdmin", "vpdmax", "solclear", "solslope",
-"soltotal", or "soltrans".}
-
-\item{minDate}{Date to start subsetting daily data. Must be specified in
-a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Dates]{base::Date} class.}
-
-\item{maxDate}{Date to end subsetting daily data.  Must be specified in
-a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Dates]{base::Date} class.}
-
-\item{dates}{A vector of daily dates to subset. Must be specified in
-a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Dates]{base::Date} class.}
 }
 \value{
 A \code{tbl_df} containing metadata on the stations used for the specified
@@ -44,9 +25,6 @@ generate the prism data. \strong{The data must already be downloaded
 and available in the prism download folder.} "prism data", i.e., \code{pd} are
 the folder names returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}} or
 \code{\link[=prism_archive_subset]{prism_archive_subset()}}.
-
-\code{get_prism_station_md()} is a deprecated version of
-\code{pd_get_station_md()} that only works with daily prism data.
 }
 \details{
 Note that station metadata does not exist for "tmean" type, any

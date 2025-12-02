@@ -252,39 +252,6 @@ prism_not_downloaded_as_v1 <- function(zipfiles, lgl = FALSE, pre81_months = NUL
   }
 }
 
-#' Check if prism files exist
-#' 
-#' Helper function to check if files already exist in the prism download 
-#' directory. Determines if files have **not** been downloaded yet, i.e., 
-#' returns `TRUE` if they do not exist. 
-#' 
-#' @param prismfiles a list of full prism file names ending in ".zip". 
-#' 
-#' @param lgl `TRUE` returns a logical vector indicating those
-#'   not yet downloaded; `FALSE` returns the file names that are not yet 
-#'   downloaded.
-#'   
-#' @param pre81_months Numeric vector of months that will be downloaded, if 
-#'   downloading data before 1981. This is so that the existence of the data can
-#'   be correctly checked, as the file includes all monthly data for a given 
-#'   year.
-#' 
-#' @return a character vector of file names that are not yet downloaded
-#'   or a logical vector indication those not yet downloaded.
-#' @export
-#' 
-prism_check <- function(prismfiles, lgl = FALSE, pre81_months = NULL)
-{
-  .Deprecated(
-    msg = paste0(
-      "`prism_check()` will be removed in the next release.\n", 
-      "If you need this function, please file a bug at https://github.com/ropensci/prism/issues."
-    )
-  )
-  
-  prism_not_downloaded(prismfiles, lgl = lgl, pre81_months = pre81_months)
-}
-
 # return TRUE if all file(s) are found for the specified base_file
 find_prism_file <- function(base_file, pre81_months)
 {

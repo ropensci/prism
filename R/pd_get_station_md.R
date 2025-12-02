@@ -171,27 +171,3 @@ read_md_csv <- function(x) {
     dplyr::select(date, prism_data, type, station, name, longitude, 
                   latitude, elevation, network, stnid)
 }
-
-#' @inheritParams prism_archive_subset
-#' 
-#' @description 
-#' `get_prism_station_md()` is a deprecated version of 
-#' `pd_get_station_md()` that only works with daily prism data.
-#' 
-#' @export
-#' @rdname pd_get_station_md
-get_prism_station_md <- function(type, minDate = NULL, maxDate = NULL, 
-                                 dates = NULL)
-{
-  .Deprecated("`pd_get_station_md()`")
-  
-  pd <- prism_archive_subset(
-    type, 
-    temp_period = "daily", 
-    minDate = minDate, 
-    maxDate = maxDate, 
-    dates = dates
-  )
-  
-  pd_get_station_md(pd)
-}

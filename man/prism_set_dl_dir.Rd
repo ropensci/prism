@@ -4,7 +4,6 @@
 \alias{prism_set_dl_dir}
 \alias{prism_get_dl_dir}
 \alias{prism_check_dl_dir}
-\alias{path_check}
 \title{Set, check, and get prism download directory}
 \usage{
 prism_set_dl_dir(path, create = TRUE)
@@ -12,8 +11,6 @@ prism_set_dl_dir(path, create = TRUE)
 prism_get_dl_dir()
 
 prism_check_dl_dir()
-
-path_check()
 }
 \arguments{
 \item{path}{The path that prism data will be unzipped into.}
@@ -36,8 +33,6 @@ remember the option name.
 has not been set, and in interactive mode, then prompt user to specify the
 download location. If not in interactive mode and it has not been set then
 it will stop and post an error.
-
-\code{path_check()} is a deprecated version of \code{prism_check_dl_dir()}.
 }
 \examples{
 \dontrun{

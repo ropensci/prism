@@ -2,7 +2,6 @@
 % Please edit documentation in R/prism_archive_verify.R
 \name{prism_archive_verify}
 \alias{prism_archive_verify}
-\alias{check_corrupt}
 \title{Check the integrity of downloaded PRISM data}
 \usage{
 prism_archive_verify(
@@ -17,8 +16,6 @@ prism_archive_verify(
   download_corrupt = TRUE,
   keepZip = TRUE
 )
-
-check_corrupt(type, minDate = NULL, maxDate = NULL, dates = NULL)
 }
 \arguments{
 \item{type}{The type of data you want to subset. Must be "ppt", "tmean",
@@ -57,9 +54,6 @@ automatically re-downloaded.}
 \code{prism_archive_verify()} returns \code{TRUE} if all data are readable.
 Any prism data that are not readable are returned (folder names), whether
 they are re-downloaded or not.
-
-\code{check_corrupt()} returns \code{logical} indicating whether the process
-succeeded.
 }
 \description{
 \code{prism_archive_verify()} checks the data in the prism archive to ensure it
@@ -67,9 +61,6 @@ is valid, or at least can be read into R, i.e., it is not corrupt. The
 prism variable type, time period, etc. is specified the same as for
 \code{\link[=prism_archive_subset]{prism_archive_subset()}}. Any files that are not readable can automatically
 be re-downloaded.
-
-\code{check_corrupt()} is the deprecated version of
-\code{prism_archive_verify()}
 }
 \details{
 Under the hood, it uses \code{raster::stack()} and then \code{raster::rasterToPoints()}
