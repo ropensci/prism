@@ -44,8 +44,7 @@
 #' 
 #' @export
 get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
-                               keep_pre81_months = NULL, service = NULL, 
-                               resolution = "4km")
+                               service = NULL, resolution = "4km")
 {
   ### parameter and error handling
   prism_check_dl_dir()
@@ -75,10 +74,6 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   }
   if (!resolution %in% c("4km", "800m")) {
     stop("'resolution' must be '4km' or '800m'. See ?get_prism_monthlys for details.")
-  }
-  
-  if (!is.null(keep_pre81_months)) {
-    warning('`keep_pre81_months` is deprecated and no longer has any effect. It will be removed in a future release.')
   }
   
   uris <- vector()

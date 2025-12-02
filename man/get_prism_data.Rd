@@ -12,7 +12,6 @@ get_prism_annual(
   type,
   years,
   keepZip = TRUE,
-  keep_pre81_months = NULL,
   service = NULL,
   resolution = "4km"
 )
@@ -32,7 +31,6 @@ get_prism_monthlys(
   years,
   mon = 1:12,
   keepZip = TRUE,
-  keep_pre81_months = NULL,
   service = NULL,
   resolution = "4km"
 )
@@ -56,8 +54,6 @@ get_prism_normals(
 
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your
 'prism.path', if \code{FALSE}, they will be deleted.}
-
-\item{keep_pre81_months}{Deprecated}
 
 \item{service}{Either \code{NULL} (default) or a URL provided by PRISM staff
 for subscription-based service. Example:
@@ -118,11 +114,9 @@ can be set using \code{\link[=prism_set_dl_dir]{prism_set_dl_dir()}} and can be 
 \section{Annual and Monthly}{
 
 
-Annual and monthly prism data are available from 1895 to present. For
-1895-1980 data, monthly and annual data are grouped together in one download
-file; \code{keep_pre81_months} determines if the other months/yearly data are kept
-after the download.  Data will be downloaded for all specified months (\code{mon})
-in all the \code{years} in the supplied vectors.
+Annual and monthly prism data are available from 1895 to present. Data will
+be downloaded for all specified months (\code{mon}) in all the \code{years} in the
+supplied vectors.
 
 Data are available at two spatial resolutions: 4km (approximately 2.5
 arc-minutes) and 800m. The 4km resolution covers the entire CONUS and is

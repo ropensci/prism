@@ -19,8 +19,6 @@
 #' @param keepZip if `TRUE`, leave the downloaded zip files in your 
 #'   'prism.path', if `FALSE`, they will be deleted.
 #'   
-#' @param keep_pre81_months Deprecated
-#'   
 #' @param service Either `NULL` (default) or a URL provided by PRISM staff
 #'   for subscription-based service. Example:
 #'   "http://services.nacse.org/prism/data/subscription/800m". To use the
@@ -39,11 +37,9 @@
 #' 
 #' @section Annual and Monthly:
 #' 
-#' Annual and monthly prism data are available from 1895 to present. For 
-#' 1895-1980 data, monthly and annual data are grouped together in one download 
-#' file; `keep_pre81_months` determines if the other months/yearly data are kept
-#' after the download.  Data will be downloaded for all specified months (`mon`)
-#' in all the `years` in the supplied vectors.
+#' Annual and monthly prism data are available from 1895 to present. Data will 
+#' be downloaded for all specified months (`mon`) in all the `years` in the 
+#' supplied vectors.
 #' 
 #' Data are available at two spatial resolutions: 4km (approximately 2.5 
 #' arc-minutes) and 800m. The 4km resolution covers the entire CONUS and is 
@@ -85,8 +81,7 @@
 #' @rdname get_prism_data
 #' 
 #' @export
-get_prism_annual <- function(type, years, keepZip = TRUE, 
-                             keep_pre81_months = NULL, service = NULL,
+get_prism_annual <- function(type, years, keepZip = TRUE, service = NULL,
                              resolution = "4km")
 {
   ### parameter and error handling
@@ -109,10 +104,6 @@ get_prism_annual <- function(type, years, keepZip = TRUE,
   }
   if (!resolution %in% c("4km", "800m")) {
     stop("'resolution' must be '4km' or '800m'. See ?get_prism_annual for details.")
-  }
-  
-  if (!is.null(keep_pre81_months)) {
-    warning('`keep_pre81_months` is deprecated and no longer has any effect. It will be removed in a future release.')
   }
   
   uris <- vector()
