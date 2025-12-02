@@ -2,6 +2,7 @@
 
 - deleted `prism_md()`. Deprecated in version XXX.
 - deleted `prism_image()`. Deprecated in version XXX.
+- deleted `check` parameter from `get_prism_dailys()`. Deprecated in versino XXX.
 
 # prism 0.3.0
 

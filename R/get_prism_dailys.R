@@ -10,18 +10,9 @@
 #'   a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a 
 #'   character or [base::Date] class.
 #'
-#' @param check One of "httr" or "internal". See details.
-#'
 #' @param resolution Character string specifying spatial resolution. One of 
 #'   "4km" or "800m". Default is "4km". Note that "400m" resolution is planned 
 #'   but not yet available from the PRISM web service.
-#'
-#' @details 
-#' For the `check` parameter, "httr", the default, checks the file name using 
-#' the web service, and downloads if that file name is not in the file system. 
-#' "internal" (much faster) only attempts to download layers that are not 
-#' already in the file system as stable. "internal" should be used with caution 
-#' as it is not robust to changes in version or file names.
 #' 
 #' @section Daily:
 #' 
@@ -97,18 +88,11 @@
 #'
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, 
-                             dates = NULL, keepZip = TRUE, check = "httr",
+                             dates = NULL, keepZip = TRUE, 
                              service = NULL, resolution = "4km")
 {
   prism_check_dl_dir()
-  
-  if (!missing(check)) {
-    warning(paste('You provided the `check` argument.',
-    '  This argument will be removed in the next release of prism.', 
-    sep = '\n'))
-  }
-  
-  check <- match.arg(check, c("httr", "internal"))
+
   dates <- gen_dates(minDate = minDate, maxDate = maxDate, dates = dates)
 
   if( min(as.numeric(format(dates,"%Y"))) < 1981 ) { 
@@ -130,21 +114,6 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
 
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
   uris <- gen_prism_url(uri_dates, type, resolution, service = service)
-  
-  if(check == "internal"){
-    x <- httr::HEAD(uris[1])
-    fn <- x$headers$`content-disposition`
-    fn <- regmatches(fn,regexpr('\\"[a-zA-Z0-9_\\.]+',fn))
-    fn <- substr(fn,2,nchar((fn)))
-    fn <- gsub("provisional|early", "stable", fn)
-    file_names <- stringr::str_replace(
-      fn, 
-      "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]", 
-      uri_dates
-    )
-    to_download_lgl <- prism_check(file_names, lgl = TRUE)
-    uris <- uris[to_download_lgl]
-  }
   
   download_pb <- txtProgressBar(min = 0, max = max(length(uris), 1), style = 3)
   

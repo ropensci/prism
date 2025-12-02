@@ -23,7 +23,6 @@ get_prism_dailys(
   maxDate = NULL,
   dates = NULL,
   keepZip = TRUE,
-  check = "httr",
   service = NULL,
   resolution = "4km"
 )
@@ -82,8 +81,6 @@ character or \link[base:Dates]{base::Date} class.}
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
 character or \link[base:Dates]{base::Date} class.}
 
-\item{check}{One of "httr" or "internal". See details.}
-
 \item{mon}{a valid numeric month, or vector of months. Required for
 \code{get_prism_monthlys()}. Can be \code{NULL} for \code{get_prism_normals()}.}
 
@@ -117,12 +114,6 @@ transmittance.
 A valid download directory must exist before downloading any prism data. This
 can be set using \code{\link[=prism_set_dl_dir]{prism_set_dl_dir()}} and can be verified using
 \code{\link[=prism_check_dl_dir]{prism_check_dl_dir()}}.
-
-For the \code{check} parameter, "httr", the default, checks the file name using
-the web service, and downloads if that file name is not in the file system.
-"internal" (much faster) only attempts to download layers that are not
-already in the file system as stable. "internal" should be used with caution
-as it is not robust to changes in version or file names.
 }
 \section{Annual and Monthly}{
 
