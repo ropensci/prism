@@ -195,7 +195,7 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
     urls <- sapply(dates, function(date_str) {
       time_scale <- ifelse(nchar(date_str) == 2, 'monthly', 'daily')
       get_current_version(base_url, region, time_scale, resolution, type, date_str)
-    }) %>% unname()
+    }) |> unname()
     
     # Remove any NULL entries
     urls <- urls[!sapply(urls, is.null)]

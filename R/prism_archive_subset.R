@@ -132,18 +132,18 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
                            mon = NULL, dates = NULL, resolution = NULL)
 {
   # filter down to only the requested type
-  type_folders <- folders %>% 
+  type_folders <- folders |> 
     stringr::str_subset(paste0("_", type, "_"))
   
   # filter by resolution if specified (applies to all temporal periods now)
   if (!is.null(resolution)) {
     if (resolution == "800m") {
       # For webservice v2: look for "30s", for webservice v1: look for "800m" 
-      type_folders <- type_folders %>%
+      type_folders <- type_folders |>
         stringr::str_subset("(30s|800m)")
     } else if (resolution == "4km") {
       # For webservice v2: look for "25m", for webservice v1: look for "4km"
-      type_folders <- type_folders %>%
+      type_folders <- type_folders |>
         stringr::str_subset("(25m|4km)")
     }
   }
@@ -153,8 +153,8 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
   pattern <- NULL
   if (temp_period == "annual") {
     # yearly ------------
-    type_folders <- type_folders %>%
-      filter_folders_by_n(4) %>%
+    type_folders <- type_folders |>
+      filter_folders_by_n(4) |>
       filter_no_normal()
     
     if (!is.null(years)) {
@@ -163,8 +163,8 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     
   } else if (temp_period == "monthly") {
     # monthly ------------
-    type_folders <- type_folders %>%
-      filter_folders_by_n(6) %>%
+    type_folders <- type_folders |>
+      filter_folders_by_n(6) |>
       filter_no_normal()
     
     if (!is.null(years)) {
@@ -189,8 +189,8 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     
   } else if (temp_period == "daily") {
     # daily ------------
-    type_folders <- type_folders %>%
-      filter_folders_by_n(8) %>%
+    type_folders <- type_folders |>
+      filter_folders_by_n(8) |>
       filter_no_normal()
    
     if (is.null(dates)) {
@@ -252,7 +252,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     type_folders <- stringr::str_subset(
       type_folders, 
       paste0("_30yr_normal_", resolution)
-    ) %>%
+    ) |>
       stringr::str_subset("_annual_")
   }
   

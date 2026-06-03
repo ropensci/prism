@@ -301,11 +301,11 @@ pal <- colorNumeric(
   na.color = "transparent"
 )
 
-leaflet() %>% 
+leaflet() |> 
   addTiles(
     urlTemplate = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-  ) %>% 
-  addRasterImage(rast, colors = pal, opacity=.65) %>% 
+  ) |> 
+  addRasterImage(rast, colors = pal, opacity=.65) |> 
   addLegend(pal = pal, values = values(rast), title = "Deg C")
 ```
 

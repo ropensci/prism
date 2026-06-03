@@ -18,7 +18,6 @@ Imports:
     dplyr,
     ggplot2,
     httr,
-    magrittr,
     raster,
     readr,
     stringr,
@@ -30,6 +29,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 2.1.0)
+Depends: R (>= 4.1.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Encoding: UTF-8
+Config/roxygen2/version: 8.0.0

@@ -1,6 +1,5 @@
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom httr HEAD
-#' @importFrom magrittr %>%
 
 .onAttach <- function(libname, pkgname){
   packageStartupMessage(

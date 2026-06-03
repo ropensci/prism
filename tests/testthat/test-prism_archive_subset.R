@@ -303,7 +303,7 @@ test_that("prism:::filter_folders annual", {
 test_that("prism:::filter_folders monthly", {
   expect_true(all_in(
     filter_folders(folders, "ppt", "monthly"),
-    stringr::str_subset(folders, "_ppt") %>% 
+    stringr::str_subset(folders, "_ppt") |> 
       stringr::str_subset("_\\d{6}_bil")
   ))
   

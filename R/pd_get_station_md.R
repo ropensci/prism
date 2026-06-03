@@ -68,8 +68,8 @@ pd_get_station_md <- function(pd)
     )
   }
   
-  zz <- folders_to_get %>% 
-    lapply(read_md_csv) %>% 
+  zz <- folders_to_get |> 
+    lapply(read_md_csv) |> 
     dplyr::bind_rows()
   
   # check to make sure all pd show up in the meta data
@@ -162,12 +162,12 @@ read_md_csv <- function(x) {
   
   # add in the date and variable and file name to the data frame and then 
   # select specific columns
-  out_df %>% 
+  out_df |> 
     dplyr::mutate(
       date = pd_get_date(x), 
       type = pd_get_type(x),
       prism_data = x
-    ) %>% 
+    ) |> 
     dplyr::select(date, prism_data, type, station, name, longitude, 
                   latitude, elevation, network, stnid)
 }

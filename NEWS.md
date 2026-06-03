@@ -5,6 +5,7 @@
 - deleted `check` parameter from `get_prism_dailys()`. Deprecated in version XXX.
 - deleted `keep_pre81_months` paramter from `get_prism_annual()` and `get_prism_monthlys()`. Deprecated in v0.3.0
 - deleted `get_prism_station_md()`, `prism_slice()`, `prism_stack()`, `del_early_prov()`, `ls_prism_data()`, `check_corrupt()`, `path_check()`, `prism_check()`. Deprecated in version XXX.
+- removed dependency on magrittr package; now depends on R >= 4.1.0. replaced %>% with |>.
 
 # prism 0.3.0
 

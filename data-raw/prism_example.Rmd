@@ -56,7 +56,7 @@ First, we will get the states outline.
 IF we did have a shapefile, we could use it to crop the PRISM data to 
 
 ```{r, eval=FALSE}
-crb <- readOGR("LC_UC_Basin 2011.shp")[2,] %>% # UB only but in UTM
+crb <- readOGR("LC_UC_Basin 2011.shp")[2,] |> # UB only but in UTM
   # transform to the same projection that the raster data is using
   spTransform("+proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0")
 
@@ -107,7 +107,7 @@ crb_avg <- cellStats(ps_crop, "mean")
 # PRISM_var_stable_4kmM3_yyyymm_bil, where var is tmean in this example, 
 # so we can parse this to create a data frame with year, month, and value
 
-df <- data.frame(ts = names(crb_avg), value = unname(crb_avg)) %>%
+df <- data.frame(ts = names(crb_avg), value = unname(crb_avg)) |>
     # we want just the yyyymm_bil part, and then remove _bil
     mutate(
       ts = str_extract(ts, "\\d{6}_bil"),
