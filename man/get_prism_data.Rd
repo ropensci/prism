@@ -67,15 +67,15 @@ or "800m".}
 
 \item{minDate}{Date to start downloading daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Dates]{base::Date} class.}
+character or \link[base:Date]{base::Date} class.}
 
 \item{maxDate}{Date to end downloading daily data.  Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Dates]{base::Date} class.}
+character or \link[base:Date]{base::Date} class.}
 
 \item{dates}{A vector of dates to download daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Dates]{base::Date} class.}
+character or \link[base:Date]{base::Date} class.}
 
 \item{mon}{a valid numeric month, or vector of months. Required for
 \code{get_prism_monthlys()}. Can be \code{NULL} for \code{get_prism_normals()}.}
