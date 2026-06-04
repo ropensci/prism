@@ -112,7 +112,10 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
   # Validate resolution
   valid_resolutions <- c( "800m", "4km")
   if (!resolution %in% valid_resolutions) {
-    stop("'resolution' must be one of: ", paste(valid_resolutions, collapse = ", "))
+    stop(
+      "'resolution' must be one of: ", 
+        paste(valid_resolutions, collapse = ", ")
+    )
   }
   
   # Validate region
@@ -122,15 +125,17 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
   }
   
   # Validate format
-  valid_formats <- c("nc", "asc", "bil", "cog")
   if (!format %in% valid_formats) {
-    stop("'format' must be one of: ", paste(valid_formats, collapse = ", "))
+    stop("'format' must be one of: ", paste(prism_formats, collapse = ", "))
   }
   
   # Validate dataset type
   valid_dataset_types <- c("an", "lt")
   if (!dataset_type %in% valid_dataset_types) {
-    stop("'dataset_type' must be one of: ", paste(valid_dataset_types, collapse = ", "))
+    stop(
+      "'dataset_type' must be one of: ", 
+      paste(valid_dataset_types, collapse = ", ")
+    )
   }
   
   # Warn about unimplemented features
