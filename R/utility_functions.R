@@ -47,17 +47,18 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
 #'
 #' @param dates Character vector of dates in YYYYMMDD format (no hyphens)
 #' @param type Character string specifying the climate variable. One of:
-#'   "ppt" (precipitation), "tmin" (minimum temperature), "tmax" (maximum temperature),
-#'   "tmean" (mean temperature), "tdmean" (mean dewpoint), "vpdmin" (minimum vapor pressure deficit),
-#'   "vpdmax" (maximum vapor pressure deficit)
+#'   "ppt" (precipitation), "tmin" (minimum temperature), "tmax" (maximum 
+#'   temperature), "tmean" (mean temperature), "tdmean" (mean dewpoint), 
+#'   "vpdmin" (minimum vapor pressure deficit), "vpdmax" (maximum vapor pressure 
+#'   deficit)
 #' @param resolution Character string specifying spatial resolution. One of:
 #'    "800m", "4km". Default is "4km". Note: 400m not yet implemented by PRISM.
 #' @param region Character string specifying the geographic region. One of:
 #'   "us" (CONUS), "ak" (Alaska), "hi" (Hawaii), "pr" (Puerto Rico).
 #'   Default is "us". Note: Only CONUS currently available.
 #' @param format Optional character string specifying output format. One of:
-#'   "nc" (netCDF), "asc" (ASCII Grid), "bil" (BIL format), "cog" (Cloud Optimized GeoTIFF). 
-#'   Default is "bil".
+#'   "nc" (netCDF), "asc" (ASCII Grid), "bil" (BIL format), "cog" (Cloud 
+#'   Optimized GeoTIFF). Default is obtained from `prism_get_format()`.
 #' @param dataset_type Character string specifying dataset type. One of:
 #'   "an" (all networks, default) or "lt" (long-term networks). Only applies
 #'   to monthly 800m data.
@@ -75,8 +76,9 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
 #'   \item Resolution and region combinations are valid
 #' }
 #'
-#' For long-term (LT) datasets, "/lt" is appended to the URL before any format options.
-#' Format options are appended as query parameters (e.g., "?format=nc").
+#' For long-term (LT) datasets, "/lt" is appended to the URL before any format 
+#' options. Format options are appended as query parameters 
+#' (e.g., "?format=nc").
 #'
 #' @examples
 #' \dontrun{
@@ -89,14 +91,17 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
 #'
 #' # Generate URLs for long-term monthly data
 #' monthly_dates <- c("201306", "201307")
-#' urls <- gen_prism_url(monthly_dates, "tmax", resolution = "800m", dataset_type = "lt")
+#' urls <- gen_prism_url(
+#'   monthly_dates, "tmax", resolution = "800m", dataset_type = "lt"
+#' )
 #' }
 #'
 #' @seealso \code{\link{get_prism_dailys}} for downloading daily PRISM data
 #'
 #' @noRd
 gen_prism_url <- function(dates, type, resolution = "4km", region = "us", 
-                          format = "bil", dataset_type = "an", service = NULL,
+                          format = prism_get_format(), dataset_type = "an", 
+                          service = NULL,
                           ts_service = "web_service_v2") {
   
   # Input validation
@@ -125,7 +130,7 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
   }
   
   # Validate format
-  if (!format %in% valid_formats) {
+  if (!format %in% prism_formats) {
     stop("'format' must be one of: ", paste(prism_formats, collapse = ", "))
   }
   
@@ -165,7 +170,7 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
     }
     
     # Add format parameter (COG is default so no parameter needed)
-    if (format != "cog") {
+    if (format != "geotiff") {
       urls <- paste0(urls, "?format=", format)
     }
     

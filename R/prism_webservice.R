@@ -50,7 +50,6 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
   } else {
     stop("Invalid service type. Must be 'web_service_v1' or 'ftp_v2_normals_bil'.")
   }
- 
   
   if (length(prism_not_downloaded(fn, pre81_months = pre81_months)) == 0) {
     message("\n", fn, " already exists. Skipping downloading.")
