@@ -38,7 +38,7 @@ for annual data mm is also 01. For normals, an empty character is returned.
 
 \code{pd_get_type()} parses the variable from the prism data.
 
-\code{pd_to_file()} converts prism data  to a fully specified .bil file, i.e., the
+\code{pd_to_file()} converts prism data to a fully specified file, i.e., the
 full path to the file in the prism archive. A warning is posted if the
 file does not exist in the local prism archive.
 }

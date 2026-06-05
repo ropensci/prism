@@ -172,7 +172,7 @@ pr_parse <- function(p,returnDate = FALSE){
 }
 
 #' @description 
-#' `pd_to_file()` converts prism data  to a fully specified .bil file, i.e., the
+#' `pd_to_file()` converts prism data to a fully specified file, i.e., the
 #' full path to the file in the prism archive. A warning is posted if the 
 #' file does not exist in the local prism archive. 
 #' 
@@ -185,8 +185,10 @@ pr_parse <- function(p,returnDate = FALSE){
 #' @rdname pd_get
 pd_to_file <- function(pd) {
   
+  pd_fext <- c("geotiff" = "tif", "bil" = "bil", "asc" = "asc", "nc" = "nc")
+  
   pfile <- normalizePath(file.path(
-    prism_get_dl_dir(), pd, paste0(pd, ".bil")
+    prism_get_dl_dir(), pd, paste0(pd, ".", pd_fext[prism_get_format()])
   ))
   
   pfile

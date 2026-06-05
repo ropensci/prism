@@ -8,6 +8,7 @@
 - removed dependency on magrittr package; now depends on R >= 4.1.0. replaced %>% with |>.
 - adding new download formats (#131)
   - added `prism_set_format()` and `prism_get_format()`
+  - updated `pd_to_file()`
 
 # prism 0.3.0
 
