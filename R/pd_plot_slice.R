@@ -57,10 +57,15 @@ pd_plot_slice <- function(pd, location) {
   param_name <- strsplit(meta_names,"-")[[1]][3]
 
   pstack <- pd_stack(pd)
-  data <- unlist(
-    raster::extract(pstack, matrix(location, nrow = 1), buffer = 10)
-  )
-  data <- as.data.frame(data)
+  pt <- terra::vect(matrix(location, nrow = 1), crs = terra::crs(pstack[[1]]))
+  pt_buf <- terra::buffer(pt, width = 10)
+  
+  data <- terra::extract(pstack, pt_buf, fun = mean)
+  
+  data <- as.data.frame(t(unlist(data)))
+  data <- data[, -1]
+  data <- stack(data)
+  colnames(data) <- c("data", "layer")
   data$date <- as.Date(meta_d)
   
   ## Re order

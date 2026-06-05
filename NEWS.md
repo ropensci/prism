@@ -9,6 +9,7 @@
 - adding new download formats (#131)
   - added `prism_set_format()` and `prism_get_format()`
   - updated `pd_to_file()`
+- replaced all use of raster:: with terra:: Package no longer depends on raster. 
 
 # prism 0.3.0
 

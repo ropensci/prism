@@ -221,7 +221,7 @@ pd_image(ppt2002)
 It is easy to load the prism data with the raster package. This time we will look at the difference in precipitation between 2011 and 2002. Conveniently, we already downloaded these data. We just need to grab them out of our archive.
 
 ```{r raster_math,fig.height=5,fig.width=7}
-library(raster)
+library(terra)
 # knowing the name of the files you are after allows you to find them in the 
 # list of all files that exist
 # ppt2002 <- "prism_ppt_us_25m_2002"
@@ -240,16 +240,13 @@ ppt2002 <- pd_to_file(ppt2002_name)
 ppt2011 <- pd_to_file(ppt2011_name)
 
 ## Now we'll load the rasters.
-ppt2002_rast <- raster(ppt2002)
-ppt2011_rast <- raster(ppt2011)
+ppt2002_rast <- terra::rast(ppt2002)
+ppt2011_rast <- terra::rast(ppt2011)
 
 # Now we can do simple subtraction to get the anomaly by subtracting 2014 
 # from the 30 year normal map
-diff_calc <- function(x, y) {
-  return(x - y)
-}
 
-anom_rast <- raster::overlay(ppt2002_rast, ppt2011_rast, fun = diff_calc)
+anom_rast <- ppt2011_rast - ppt2002_rast
 
 plot(anom_rast)
 ```

@@ -18,7 +18,6 @@ Imports:
     dplyr,
     ggplot2,
     httr,
-    raster,
     readr,
     stringr,
     terra,

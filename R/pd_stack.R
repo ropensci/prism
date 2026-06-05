@@ -31,15 +31,5 @@ pd_stack <- function(pd) {
   
   prismfile_fp <- pd_to_file(pd)
   
-  masterRaster <- raster::stack(raster::raster(prismfile_fp[1]))
-  if (length(prismfile_fp) > 1) {
-    for (i in 2:length(prismfile_fp)) {
-      masterRaster <- raster::addLayer(
-        masterRaster,
-        raster::raster(prismfile_fp[i])
-      )  
-    }
-  }
-  
-  return(masterRaster)
+  terra::rast(prismfile_fp)
 }

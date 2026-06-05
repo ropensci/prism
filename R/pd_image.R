@@ -60,8 +60,8 @@ pd_image <- function(pd, col = "heat") {
     warning = stop_file
   )
 
-  out <- raster(prismfile)
-  out <- data.frame(raster::rasterToPoints(out))
+  out <- terra::rast(prismfile)
+  out <- as.data.frame(out, xy=TRUE)
   colnames(out) <- c("x", "y", "data")
   
   u <- get_units(ptype)
