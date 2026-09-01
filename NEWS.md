@@ -1,15 +1,14 @@
 # prism (development version)
 
-- deleted `prism_md()`. Deprecated in version XXX.
-- deleted `prism_image()`. Deprecated in version XXX.
-- deleted `check` parameter from `get_prism_dailys()`. Deprecated in version XXX.
-- deleted `keep_pre81_months` paramter from `get_prism_annual()` and `get_prism_monthlys()`. Deprecated in v0.3.0
-- deleted `get_prism_station_md()`, `prism_slice()`, `prism_stack()`, `del_early_prov()`, `ls_prism_data()`, `check_corrupt()`, `path_check()`, `prism_check()`. Deprecated in version XXX.
+- deleted `check` parameter from `get_prism_dailys()`. Deprecated in 0.2.1.
+- deleted `keep_pre81_months` parameter from `get_prism_annual()` and `get_prism_monthlys()`. Deprecated in 0.3.0
+- deleted `prism_md()`, `prism_image()`, `get_prism_station_md()`, `prism_slice()`, `prism_stack()`, `del_early_prov()`, `ls_prism_data()`, `check_corrupt()`, `path_check()`, `prism_check()`. Deprecated in 0.2.0.
 - removed dependency on magrittr package; now depends on R >= 4.1.0. replaced %>% with |>.
 - adding new download formats (#131)
   - added `prism_set_format()` and `prism_get_format()`
   - updated `pd_to_file()`
 - replaced all use of raster:: with terra:: Package no longer depends on raster. 
+- message posts indicating 30-year normals are only available in geotiff format
 
 # prism 0.3.0
 

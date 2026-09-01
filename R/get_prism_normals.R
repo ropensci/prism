@@ -78,6 +78,13 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
     )
   }
   
+  if (prism_get_format() != "geotiff") {
+    message(
+      "PRISM 30-year normals are available only in GeoTIFF format. ",
+      "Downloading GeoTIFF files."
+    )
+  }
+  
   call_mon <- c()
   if(!is.null(mon)){
     if(any(mon < 1 | mon > 12)) {
