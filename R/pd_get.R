@@ -33,20 +33,141 @@
 #' @export
 #' @rdname pd_get
 pd_get_name <- function(pd) {
-  p <- strsplit(pd, "_")
-  unlist(lapply(p, pr_parse, returnDate = FALSE))
+  normals <- pd_is_normal(pd)
+  pd[normals] <- stringr::str_remove(pd[normals], "_avg_30y")
+  pd_parse <- stringr::str_split(pd, "_", simplify = TRUE)
+  
+  type <- unname(prism_var_names(normals = FALSE)[pd_parse[,2]])
+  type <- unname(prism_var_names(normals = TRUE)[pd_parse[normals, 2]])
+  
+  res <- ifelse(
+    pd_parse[,4] == "25m",
+    "4km resolution",
+    ifelse(
+      pd_parse[,4] == "30s",
+      "800m resolution",
+      "400m resolution"
+    )
+  )
+  # normals date conversion
+  # not normal date conversion
+  dd <- pd_get_date(pd[!normals]) |>
+    format_prism_time()
+  
+  # normals date conversion
+  dd_norm <- pd_get_date(pd[normals]) |>
+    format_prism_normals_time()
+  
+  dates <- rep('', nrow(pd_parse))
+  dates[normals] <- dd_norm
+  dates[!normals] <- dd
+  
+  out <- paste(dates, res, type, sep = '-')
 }
 
+format_prism_normals_time <- function(x) {
+  n <- nchar(x)
+  
+  if (any(!n %in% c(9L, 13L, 18L))) {
+    bad <- unique(x[!n %in% c(9L, 13L, 18L)])
+    
+    stop(
+      "`x` must contain dates in YYYY-YYYY, YYYY-YYYY-MM, or YYYY-YYYY-MM-DD format. ",
+      "Invalid value(s): ",
+      paste(bad, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  
+  out <- n
+  out[n == 9L] <- "Annual 30-year normals"
+  
+  x_parse <- stringr::str_split(x, "-", simplify = TRUE)
+  
+  out[n == 13L] <- paste(month.abb[x_parse[n==13L, 3]], "30-year normals")
+  out[n == 18L] <- paste(month.abb[x_parse[n==18L, 3]], x_parse[n==18L, 4], 
+                         "30-year normals")
+  
+  out
+}
+
+format_prism_time <- function(x) {
+  n <- nchar(x)
+  
+  if (any(!n %in% c(4L, 7L, 10L))) {
+    bad <- unique(x[!n %in% c(4L, 7L, 10L)])
+    
+    stop(
+      "`x` must contain dates in YYYY, YYYY-MM, or YYYY-MM-DD format. ",
+      "Invalid value(s): ",
+      paste(bad, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  
+  out <- x
+  
+  monthly <- n == 7L
+  daily <- n == 10L
+  
+  out[monthly] <- format(
+    as.Date(paste0(x[monthly], "-01")),
+    "%b %Y"
+  )
+  
+  out[daily] <- format(
+    as.Date(x[daily]),
+    "%b %d, %Y"
+  )
+  
+  out
+}
+
+#' @param legacy Boolean. If `TRUE`, then maintains the convention in v0.30 
+#'   and earlier. See description for details.
+#'   
 #' @description 
-#' `pd_get_date()` extracts the date from the prism data.
-#' Date is returned in yyyy-mm-dd format. For monthly data, dd is 01 and
-#' for annual data mm is also 01. For normals, an empty character is returned.
+#' `pd_get_date()` extracts the date from the prism data. Returns a date that 
+#' matches the timestep of the prism data. For annual data a year is returned, 
+#' for monthly data year-month is returned, and for daily data year-month-day. 
+#' For normals, the 30-year range is returned + the month and day, as 
+#' approriate.
+#' 
+#' If `legacy = TRUE`, date is returned in yyyy-mm-dd format. For monthly data, 
+#' dd is 01 and for annual data mm is also 01. For normals, an empty character 
+#' is returned.
 #' 
 #' @export
 #' @rdname pd_get
-pd_get_date <- function(pd) {
-  p <- strsplit(pd, "_")
-  unlist(lapply(p, pr_parse, returnDate = TRUE))
+pd_get_date <- function(pd, legacy = FALSE) {
+  normals <- pd_is_normal(pd)
+  pd[normals] <- stringr::str_remove(pd[normals], "_avg_30y")
+  
+  parsed_pd <- stringr::str_split(pd, "_", simplify = TRUE)
+  
+  dates <- parsed_pd[,5]
+  # add hyphens, as appropriate
+  dates <- stringr::str_replace(
+    dates, 
+    "^(\\d{4})(\\d{2})(\\d+)$", "\\1-\\2-\\3"
+  )
+  dates <- stringr::str_replace(dates, "^(\\d{4})(\\d+)$", "\\1-\\2")
+  
+  # deal with normals
+  dates[normals] <- paste0("1991-", dates[normals])
+  
+  # and now deal with legacy
+  if (legacy) {
+    # change normals to ""
+    dates[normals] <- ""
+    # add "01" to monthly and "01-01" to daily
+    
+    ts <- pd_get_time_step()
+    dates[ts=="daily"] <- paste0(dates[ts=="daily"], "-01-01")
+    dates[ts=="monthly"] <- paste0(dates[ts=="monthly"], "-01")
+  }
+  
+  dates
 }
 
 #' @description `pd_get_type()` parses the variable from the prism data.
@@ -70,7 +191,45 @@ pd_get_type <- function(pd) {
       return(parts[2])
     }
   }, character(1), USE.NAMES = FALSE)
+}
+
+#' @description `pd_get_time_step()` parses the time step from the prism data.
+#' 
+#' @return `pd_get_time_step()` returns a character vector of time steps. One 
+#' of: "daily", "monthly", "annual", "daily normals", "monthly normals", 
+#' "annual normals".
+#' 
+#' @export
+#' @rdname pd_get
+pd_get_time_step <- function(pd) {
+  num_to_ts <- c(`4` = 'annual', `6` = 'monthly', `8` = 'daily')
   
+  normals <- pd_is_normal(pd)
+  pd[normals] <- stringr::str_remove(pd[normals], "_avg_30y")
+  
+  parsed_pd <- stringr::str_split(pd, "_", simplify = TRUE)
+  n <- nchar(parsed_pd[5])
+  
+  ts_out <- unname(num_to_ts[as.character[n]])
+  
+  if (anyNA(out)) {
+    bad <- unique(n[is.na(out)])
+    
+    stop(
+      "Could not determine PRISM time step from date-token length: ",
+      paste(bad, collapse = ", "),
+      ". Expected 4 (annual), 6 (monthly), or 8 (daily).",
+      call. = FALSE
+    )
+  }
+  
+  ts_out[normals] <- paste(ts_out[normals], "normals")
+  
+  ts_out
+}
+
+pd_is_normal <- function(pd) {
+  stringr::str_detect(pd, 'avg_30y')
 }
 
 #' name parse
@@ -150,7 +309,7 @@ pr_parse <- function(p,returnDate = FALSE){
     )
   }
   
-  type <- prism_var_names(normals = normals)[type]
+  type <- unname(prism_var_names(normals = normals)[type])
 
   md_string <- paste(ds,ures,type,sep = " - ")
   if(!returnDate){
@@ -187,8 +346,14 @@ pd_to_file <- function(pd) {
   
   pd_fext <- c("geotiff" = "tif", "bil" = "bil", "asc" = "asc", "nc" = "nc")
   
+  if (stringr::str_detect(pd, "_avg_30y$")) {
+    fext <- "tif"
+  } else {
+    fext <- unname(pd_fext[prism_get_format()])
+  }
+  
   pfile <- normalizePath(file.path(
-    prism_get_dl_dir(), pd, paste0(pd, ".", pd_fext[prism_get_format()])
+    prism_get_dl_dir(), pd, paste0(pd, ".", fext)
   ))
   
   pfile

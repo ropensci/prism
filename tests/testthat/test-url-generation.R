@@ -40,7 +40,7 @@ test_that("URL generation validates inputs", {
   # Invalid format
   expect_error(
     prism:::gen_prism_url("20230601", "tmean", format = "pdf"),
-    "must be one of.*nc.*asc.*bil"
+    "must be one of geotiff, bil, asc, nc"
   )
 })
 

@@ -9,6 +9,9 @@
   - updated `pd_to_file()`
 - replaced all use of raster:: with terra:: Package no longer depends on raster. 
 - message posts indicating 30-year normals are only available in geotiff format
+  - updated pd_to_file() to account for this
+- no longer guarantee backwards compatibility with pre 2025 API.
+- added `pd_get_time_step()`
 
 # prism 0.3.0
 
