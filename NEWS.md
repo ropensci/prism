@@ -12,6 +12,7 @@
   - updated pd_to_file() to account for this
 - no longer guarantee backwards compatibility with pre 2025 API.
 - added `pd_get_time_step()`
+- changed `pd_get_date()`. It now returns a date that matches the timestep of the prism data. Because the previous version added on months and days to monthly and annual data, that behviour can be preserved using the `legacy=TRUE` parameter, which is `FALSE` by default.
 
 # prism 0.3.0
 

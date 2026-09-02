@@ -34,11 +34,24 @@
 #' @rdname pd_get
 pd_get_name <- function(pd) {
   normals <- pd_is_normal(pd)
-  pd[normals] <- stringr::str_remove(pd[normals], "_avg_30y")
-  pd_parse <- stringr::str_split(pd, "_", simplify = TRUE)
   
-  type <- unname(prism_var_names(normals = FALSE)[pd_parse[,2]])
-  type <- unname(prism_var_names(normals = TRUE)[pd_parse[normals, 2]])
+  pd_strp <- pd
+  pd_strp[normals] <- stringr::str_remove(pd_strp[normals], "_avg_30y")
+  pd_parse <- stringr::str_split(pd_strp, "_", simplify = TRUE)
+  
+  type <- pd
+  
+  if (any(!normals)) {
+    type[!normals] <- unname(
+      prism_var_names(normals = FALSE)[pd_parse[!normals,2]]
+    )
+  }
+  
+  if (any(normals)) {
+    type[normals] <- unname(
+      prism_var_names(normals = TRUE)[pd_parse[normals, 2]]
+    )
+  }
   
   res <- ifelse(
     pd_parse[,4] == "25m",
@@ -49,27 +62,33 @@ pd_get_name <- function(pd) {
       "400m resolution"
     )
   )
-  # normals date conversion
-  # not normal date conversion
-  dd <- pd_get_date(pd[!normals]) |>
-    format_prism_time()
   
-  # normals date conversion
-  dd_norm <- pd_get_date(pd[normals]) |>
-    format_prism_normals_time()
   
   dates <- rep('', nrow(pd_parse))
-  dates[normals] <- dd_norm
-  dates[!normals] <- dd
   
-  out <- paste(dates, res, type, sep = '-')
+  if (any(!normals)) {
+    dd <- pd_get_date(pd[!normals]) |>
+      format_prism_time()
+    dates[!normals] <- dd
+  }
+  
+  # normals date conversion
+  if (any(normals)) {
+    dd_norm <- pd_get_date(pd[normals]) |>
+      format_prism_normals_time()
+    
+    dates[normals] <- dd_norm
+  }
+  
+  out <- paste(dates, res, type, sep = ' - ')
+  out
 }
 
 format_prism_normals_time <- function(x) {
   n <- nchar(x)
   
-  if (any(!n %in% c(9L, 13L, 18L))) {
-    bad <- unique(x[!n %in% c(9L, 13L, 18L)])
+  if (any(!n %in% c(9L, 12L, 15L))) {
+    bad <- unique(x[!n %in% c(9L, 12L, 15L)])
     
     stop(
       "`x` must contain dates in YYYY-YYYY, YYYY-YYYY-MM, or YYYY-YYYY-MM-DD format. ",
@@ -80,14 +99,26 @@ format_prism_normals_time <- function(x) {
   }
   
   out <- n
-  out[n == 9L] <- "Annual 30-year normals"
+  annual <- n == 9L
+  monthly <- n == 12L
+  daily <- n == 15L
   
-  x_parse <- stringr::str_split(x, "-", simplify = TRUE)
+  if (any(annual)) {
+    out[annual] <- "Annual 30-year normals"
+  }
   
-  out[n == 13L] <- paste(month.abb[x_parse[n==13L, 3]], "30-year normals")
-  out[n == 18L] <- paste(month.abb[x_parse[n==18L, 3]], x_parse[n==18L, 4], 
-                         "30-year normals")
-  
+  if (any(monthly) | any(daily)) {
+    x_parse <- stringr::str_split(x, "-", simplify = TRUE)
+    
+    out[monthly] <- paste(
+      month.abb[as.numeric(x_parse[monthly, 3])], "30-year normals"
+    )
+    out[daily] <- paste(
+      month.abb[as.numeric(x_parse[daily, 3])], 
+      x_parse[daily, 4], 
+      "30-year normals"
+    )
+  }
   out
 }
 
@@ -110,15 +141,19 @@ format_prism_time <- function(x) {
   monthly <- n == 7L
   daily <- n == 10L
   
-  out[monthly] <- format(
-    as.Date(paste0(x[monthly], "-01")),
-    "%b %Y"
-  )
+  if (any(monthly)) {
+    out[monthly] <- format(
+      as.Date(paste0(x[monthly], "-01")),
+      "%b %Y"
+    )
+  }
   
-  out[daily] <- format(
-    as.Date(x[daily]),
-    "%b %d, %Y"
-  )
+  if (any(daily)) {
+    out[daily] <- format(
+      as.Date(x[daily]),
+      "%b %d, %Y"
+    )
+  }
   
   out
 }
@@ -140,10 +175,17 @@ format_prism_time <- function(x) {
 #' @export
 #' @rdname pd_get
 pd_get_date <- function(pd, legacy = FALSE) {
-  normals <- pd_is_normal(pd)
-  pd[normals] <- stringr::str_remove(pd[normals], "_avg_30y")
+  if (legacy) {
+    message("`legacy=TRUE` maintains the behavior in v0.3.0 and earlier.", 
+    "\nThe legacy paramter will be removed in a future release.")
+  }
   
-  parsed_pd <- stringr::str_split(pd, "_", simplify = TRUE)
+  normals <- pd_is_normal(pd)
+  
+  pd_strp <- pd
+  pd_strp[normals] <- stringr::str_remove(pd_strp[normals], "_avg_30y")
+  
+  parsed_pd <- stringr::str_split(pd_strp, "_", simplify = TRUE)
   
   dates <- parsed_pd[,5]
   # add hyphens, as appropriate
@@ -159,12 +201,18 @@ pd_get_date <- function(pd, legacy = FALSE) {
   # and now deal with legacy
   if (legacy) {
     # change normals to ""
-    dates[normals] <- ""
-    # add "01" to monthly and "01-01" to daily
+    if (any(normals))
+      dates[normals] <- ""
     
-    ts <- pd_get_time_step()
-    dates[ts=="daily"] <- paste0(dates[ts=="daily"], "-01-01")
-    dates[ts=="monthly"] <- paste0(dates[ts=="monthly"], "-01")
+    # add "01" to monthly and "01-01" to daily
+    ts <- pd_get_time_step(pd)
+    annual <- ts == "annual"
+    monthly <- ts == "monthly"
+    if (any(annual))
+      dates[annual] <- paste0(dates[annual], "-01-01")
+    
+    if (any(monthly))
+      dates[monthly] <- paste0(dates[monthly], "-01")
   }
   
   dates
@@ -208,12 +256,12 @@ pd_get_time_step <- function(pd) {
   pd[normals] <- stringr::str_remove(pd[normals], "_avg_30y")
   
   parsed_pd <- stringr::str_split(pd, "_", simplify = TRUE)
-  n <- nchar(parsed_pd[5])
+  n <- nchar(parsed_pd[,5])
   
-  ts_out <- unname(num_to_ts[as.character[n]])
+  ts_out <- unname(num_to_ts[as.character(n)])
   
-  if (anyNA(out)) {
-    bad <- unique(n[is.na(out)])
+  if (anyNA(ts_out)) {
+    bad <- unique(n[is.na(ts_out)])
     
     stop(
       "Could not determine PRISM time step from date-token length: ",
@@ -346,10 +394,16 @@ pd_to_file <- function(pd) {
   
   pd_fext <- c("geotiff" = "tif", "bil" = "bil", "asc" = "asc", "nc" = "nc")
   
-  if (stringr::str_detect(pd, "_avg_30y$")) {
-    fext <- "tif"
-  } else {
-    fext <- unname(pd_fext[prism_get_format()])
+  normals <- pd_is_normal(pd)
+  
+  fext <- pd
+  # normals are only ever geotiff
+  if (any(normals)) {
+    fext[normals] <- 'tif' 
+  } 
+  
+  if (any(!normals)) {
+    fext[!normals] <- unname(pd_fext[prism_get_format()])
   }
   
   pfile <- normalizePath(file.path(
