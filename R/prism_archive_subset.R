@@ -219,7 +219,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     # daily normals
     type_folders <- stringr::str_subset(
       type_folders, 
-      paste0("_30yr_normal_", resolution)
+      "^.*_\\d{8}_avg_30y$"
     )
     
     if (!is.null(dates)) {
@@ -235,7 +235,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     # monthly normals
     type_folders <- stringr::str_subset(
       type_folders, 
-      paste0("_30yr_normal_", resolution)
+      "^.*_\\d{6}_avg_30y$"
     )
     
     if (is.null(mon)) {
@@ -251,9 +251,8 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     # monthly normals
     type_folders <- stringr::str_subset(
       type_folders, 
-      paste0("_30yr_normal_", resolution)
-    ) |>
-      stringr::str_subset("_annual_")
+      "^.*_\\d{4}_avg_30y$"
+    )
   }
   
   # final filter by pattern -----------
