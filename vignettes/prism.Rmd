@@ -87,7 +87,7 @@ library(prism)
 prism_set_dl_dir("~/prismtmp")
 ```
 
-This is now referred to as the "prism archive". The `prism_archive_*()` functions allow the user to search through the archive. The prism archive contains "prism data". The prism data are referred to by their folder names, even though the "real" data are the .bil, .txt, and other files that exist in the folder. The prism data (`pd`) can be accessed using the `pd_*()` functions. 
+This is now referred to as the "prism archive". The `prism_archive_*()` functions allow the user to search through the archive. The prism archive contains "prism data". The prism data are referred to by their folder names, even though the "real" data are the .bil/.tif/.nc/.asc, .txt, and other files that exist in the folder. The prism data (`pd`) can be accessed using the `pd_*()` functions. 
 
 ### Download 30-year normal data
 

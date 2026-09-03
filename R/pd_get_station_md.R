@@ -50,8 +50,7 @@ pd_get_station_md <- function(pd)
   }
   
   # remove daily normals
-  pattern <- "^PRISM_.*?_30yr_normal_.*?_\\d{4}_bil$"
-  dn <- stringr::str_detect(pd, pattern)
+  dn <- pd_is_normal(pd)
   if (any(dn)) {
     message("Removing daily normals from `pd`.\n",
             "Station metadata does not exist for daily normals.")

@@ -75,7 +75,6 @@ test_that("pd_get_type() works.", {
 })
 
 test_that("pd_to_file() works.", {
-  fmap <- c('bil' = '.bil', 'geotiff' = '.tif', 'asc' = '.asc', 'nc' = '.nc')
   
   pd_to_file_and_split <- function(x) {
     # because files won't be found
@@ -95,7 +94,7 @@ test_that("pd_to_file() works.", {
     
     expect_identical(tmp[,ncol(tmp) - 1], tst_files)
     
-    base_ext <- unname(fmap[ff])
+    base_ext <- prism:::prism_format_file_ext() 
     expect_identical(
       tmp[!normals,ncol(tmp)], 
       paste0(tst_files[!normals], base_ext)

@@ -265,11 +265,11 @@ prism_not_downloaded_as_v1 <- function(zipfiles, lgl = FALSE, pre81_months = NUL
 # return TRUE if all file(s) are found for the specified base_file
 find_prism_file <- function(base_file, pre81_months)
 {
-  # Look inside the folder to see if the .bil is there
+  # Look inside the folder to see if the .bil/.tif/.nc/.asc is there
   # Won't be able to check for all other files. Unlikely to matter.
   if (is.null(pre81_months)) {
-    ls_folder <- list.files(file.path(getOption("prism.path"), base_file))
-    found_file <- any(grepl("\\.bil", ls_folder))
+    ls_folder <- list.files(prism_get_dl_dir(), base_file)
+    found_file <- any(grepl(paste0("\\", prism_format_file_ext()), ls_folder))
   } else {
     # check for all the monthly data. If any of the monthly data do not exist
     # will need to download the entire file again.
@@ -286,7 +286,8 @@ find_prism_file <- function(base_file, pre81_months)
     for (m in all_months) {
       ls_folder <- gsub(pattern = "_all", replacement = m, x = base_file)
       ls_folder <- list.files(file.path(getOption("prism.path"), ls_folder))
-      found_file <- found_file & any(grepl("\\.bil", ls_folder))
+      found_file <- found_file & 
+        any(grepl(paste0("\\", prism_format_file_ext()), ls_folder))
     }
   }
   
@@ -305,14 +306,14 @@ find_prism_file <- function(base_file, pre81_months)
 #' 
 #' @examples \dontrun{
 #' process_zip(
-#'   'PRISM_tmean_stable_4kmM2_1980_all_bil',
-#'   'PRISM_tmean_stable_4kmM2_198001_bil'
+#'   'PRISM_tmean_stable_4kmM2_1980_all',
+#'   'PRISM_tmean_stable_4kmM2_198001'
 #' )
 #' 
 #' process_zip(
-#'   'PRISM_tmean_stable_4kmM2_1980_all_bil',
-#'   c('PRISM_tmean_stable_4kmM2_198001_bil',
-#'   'PRISM_tmean_stable_4kmM2_198002_bil')
+#'   'PRISM_tmean_stable_4kmM2_1980_all',
+#'   c('PRISM_tmean_stable_4kmM2_198001',
+#'   'PRISM_tmean_stable_4kmM2_198002')
 #' )
 #' }
 #' 

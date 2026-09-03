@@ -83,7 +83,7 @@ Data are available in 4 different temporal scales as mentioned above. At each te
 
 **Normals (4km or 800m resolution) based on 1991-2020 average:**
 
-<span style="color:red; font-weight:bold;">Important</span> .bil files are no longer available in .bil format. The `get_prism_normals()` functions still work and will download the data in GeoTiff format. **But** - the rest of the prism R package has not been updated to work with GeoTiff, so none of the other functions will work with the 30-year normal data, e.g., `prism_archive_subset(temp_period = "monthly normals")` will return `character(0)` and plotting functions will not work.
+<span style="color:red; font-weight:bold;">Important:</span>. Normals are only available in GeoTiff format, while all other data are available in GeoTiff, nc, asci, or bil format. `get_prism_normals()` functions only download the data in GeoTiff format. All other functions *should* work with all formats. 
 
 | Variable    | Annual | Monthly | Daily |
 |:------------|:-------|:--------|:-----|

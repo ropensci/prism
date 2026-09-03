@@ -4,19 +4,25 @@
 \alias{pd_get_name}
 \alias{pd_get_date}
 \alias{pd_get_type}
+\alias{pd_get_time_step}
 \alias{pd_to_file}
 \title{Perform action on "prism data"}
 \usage{
 pd_get_name(pd)
 
-pd_get_date(pd)
+pd_get_date(pd, legacy = FALSE)
 
 pd_get_type(pd)
+
+pd_get_time_step(pd)
 
 pd_to_file(pd)
 }
 \arguments{
 \item{pd}{prism data character vector.}
+
+\item{legacy}{Boolean. If \code{TRUE}, then maintains the convention in v0.30
+and earlier. See description for details.}
 }
 \value{
 \code{pd_get_name()} and \code{pd_get_date()} return a character vector of
@@ -25,6 +31,10 @@ names/dates.
 \code{pd_get_type()} returns a character vector of prism variable types,
 e.g., 'ppt'.
 
+\code{pd_get_time_step()} returns a character vector of time steps. One
+of: "daily", "monthly", "annual", "daily normals", "monthly normals",
+"annual normals".
+
 \code{pd_to_file()} returns a character vector with the full path to the
 bil file.
 }
@@ -32,11 +42,19 @@ bil file.
 \code{pd_get_name()} extracts a long, human readable name from the prism
 data.
 
-\code{pd_get_date()} extracts the date from the prism data.
-Date is returned in yyyy-mm-dd format. For monthly data, dd is 01 and
-for annual data mm is also 01. For normals, an empty character is returned.
+\code{pd_get_date()} extracts the date from the prism data. Returns a date that
+matches the timestep of the prism data. For annual data a year is returned,
+for monthly data year-month is returned, and for daily data year-month-day.
+For normals, the 30-year range is returned + the month and day, as
+approriate.
+
+If \code{legacy = TRUE}, date is returned in yyyy-mm-dd format. For monthly data,
+dd is 01 and for annual data mm is also 01. For normals, an empty character
+is returned.
 
 \code{pd_get_type()} parses the variable from the prism data.
+
+\code{pd_get_time_step()} parses the time step from the prism data.
 
 \code{pd_to_file()} converts prism data to a fully specified file, i.e., the
 full path to the file in the prism archive. A warning is posted if the
@@ -50,19 +68,21 @@ name or date from these data, or convert these data to a file name.
 \examples{
 \dontrun{
 # Assumes 2000-2002 annual precipitation data is already downloaded
-pd <- prism_archive_subset('ppt', 'annual', years = 2000:2002)
+pd <- prism_archive_subset(
+  'ppt', 'annual', years = 2000:2002, resolution = '4km'
+)
 pd_get_name(pd)
 ## [1] "2000 - 4km resolution - Precipitation" "2001 - 4km resolution - Precipitation"
 ## [3] "2002 - 4km resolution - Precipitation"
 
 pd_get_date(pd)
-## [1] "2000-01-01" "2001-01-01" "2002-01-01"
+## [1] "2000" "2001" "2002"
 
 pd_get_type(pd)
 ## [1] "ppt" "ppt" "ppt"
 
 pd_to_file(pd[1])
-## [1] "C:/prismdir/PRISM_ppt_stable_4kmM3_2000_bil/PRISM_ppt_stable_4kmM3_2000_bil.bil"
+## [1] "C:/prismdir/prism_ppt_us_25m_2000/prism_ppt_us_25m_2000.tif"
 }
 
 }

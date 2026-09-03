@@ -15,19 +15,21 @@
 #' 
 #' @examples \dontrun{
 #' # Assumes 2000-2002 annual precipitation data is already downloaded
-#' pd <- prism_archive_subset('ppt', 'annual', years = 2000:2002)
+#' pd <- prism_archive_subset(
+#'   'ppt', 'annual', years = 2000:2002, resolution = '4km'
+#' )
 #' pd_get_name(pd)
 #' ## [1] "2000 - 4km resolution - Precipitation" "2001 - 4km resolution - Precipitation"
 #' ## [3] "2002 - 4km resolution - Precipitation"
 #' 
 #' pd_get_date(pd)
-#' ## [1] "2000-01-01" "2001-01-01" "2002-01-01"
+#' ## [1] "2000" "2001" "2002"
 #' 
 #' pd_get_type(pd)
 #' ## [1] "ppt" "ppt" "ppt"
 #' 
 #' pd_to_file(pd[1])
-#' ## [1] "C:/prismdir/PRISM_ppt_stable_4kmM3_2000_bil/PRISM_ppt_stable_4kmM3_2000_bil.bil"
+#' ## [1] "C:/prismdir/prism_ppt_us_25m_2000/prism_ppt_us_25m_2000.tif"
 #' }
 #' 
 #' @export
@@ -391,9 +393,7 @@ pr_parse <- function(p,returnDate = FALSE){
 #' @export
 #' @rdname pd_get
 pd_to_file <- function(pd) {
-  
-  pd_fext <- c("geotiff" = "tif", "bil" = "bil", "asc" = "asc", "nc" = "nc")
-  
+
   normals <- pd_is_normal(pd)
   
   fext <- pd
@@ -403,7 +403,7 @@ pd_to_file <- function(pd) {
   } 
   
   if (any(!normals)) {
-    fext[!normals] <- unname(pd_fext[prism_get_format()])
+    fext[!normals] <- unname(prism_format_file_ext())
   }
   
   pfile <- normalizePath(file.path(

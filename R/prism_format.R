@@ -28,3 +28,12 @@ prism_get_format <- function()
 {
   return(getOption('prism.format'))
 }
+
+# returns the current file extension; can't use prism_get_format directly b/c
+# it uses geotiff insead of tif
+prism_format_file_ext <- function()
+{
+  fext <- c('geotiff' = '.tif', 'bil' = '.bil', 'asc' = '.asc', 'nc' = '.nc')
+  
+  unname(fext[prism_get_format()])
+}
