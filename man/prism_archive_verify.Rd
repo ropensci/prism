@@ -63,9 +63,9 @@ prism variable type, time period, etc. is specified the same as for
 be re-downloaded.
 }
 \details{
-Under the hood, it uses \code{raster::stack()} and then \code{raster::rasterToPoints()}
-to determine if the bil files are readable. If both those files are able
-to successfully read the files, they are assumed to be valid/readable.
+Under the hood, it uses \code{terra::rast()} to determine if the PRISM data files
+are readable. If both those files are able to successfully read the files,
+they are assumed to be valid/readable.
 }
 \examples{
 \dontrun{
