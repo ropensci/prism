@@ -1,0 +1,6 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <Description>prism_tmax_us_25m_2025</Description>
+    <NoDataValue le_hex_equiv="000000000000F87F">nan</NoDataValue>
+  </PAMRasterBand>
+</PAMDataset>

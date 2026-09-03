@@ -1,0 +1,9 @@
+PRISM_DATASET_FILENAME: prism_tmax_us_25m_2025.bil
+PRISM_DATASET_CREATE_DATE: 20260217-0715
+PRISM_SOURCE_FILENAME: cai_tmax_us_us_30s_202501.bil, cai_tmax_us_us_30s_202502.bil, cai_tmax_us_us_30s_202503.bil, cai_tmax_us_us_30s_202504.bil, cai_tmax_us_us_30s_202505.bil, cai_tmax_us_us_30s_202506.bil, cai_tmax_us_us_30s_202507.bil, cai_tmax_us_us_30s_202508.bil, cai_tmax_us_us_30s_202509.bil, cai_tmax_us_us_30s_202510.bil, cai_tmax_us_us_30s_202511.bil, cai_tmax_us_us_30s_202512.bil
+PRISM_SOURCE_CREATE_DATE: 20250715-2021, 20250817-1744, 20250914-1638, 20251017-1653, 20251116-1936, 20251216-2231, 20260128-1041, 20260216-0014, 20260216-0014, 20260216-0014, 20260216-0014, 20260216-0013
+PRISM_DATASET_TYPE: an91/r2112
+PRISM_DATASET_VERSION: M3
+PRISM_CODE_VERSION: 16.2-20250715-1813
+PRISM_DATASET_RELEASE_NUMBER: 3
+PRISM_DATASET_REMARKS: This grid was developed in three steps: (1) temperature data were modeled with PRISM at 30-arc-second (~800m) resolution to produce the source grid(s) listed under PRISM_SOURCE_FILENAME, on the date(s) listed under PRISM_SOURCE_CREATE_DATE; (2) These twelve monthly 800m grids were then upscaled to 2.5-arc-minute(~ 4km) resolution with a Gaussian filter; and (3) The resulting twelve monthly 4km grids were averaged to obtain a 4km mean annual temperature grid.

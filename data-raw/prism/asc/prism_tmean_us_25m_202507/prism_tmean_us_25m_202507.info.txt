@@ -1,0 +1,9 @@
+PRISM_DATASET_FILENAME: prism_tmean_us_25m_202507.bil
+PRISM_DATASET_CREATE_DATE: 20260118-1051
+PRISM_SOURCE_FILENAME: cai_tmax_us_us_30s_202507.bil, cai_tmin_us_us_30s_202507.bil
+PRISM_SOURCE_CREATE_DATE: 20260116-1022, 20260116-1442
+PRISM_DATASET_TYPE: an91/r2112
+PRISM_DATASET_VERSION: M3
+PRISM_CODE_VERSION: 16.2-20250715-1813
+PRISM_DATASET_RELEASE_NUMBER: 7
+PRISM_DATASET_REMARKS: This grid was developed in three steps: (1) tmin and tmax data were modeled with PRISM at 30-arc-second (~800m) resolution to produce the source grid(s) listed under PRISM_SOURCE_FILENAME, on the date(s) listed under PRISM_SOURCE_CREATE_DATE; (2) These 800m grids were then upscaled to 2.5-arc-minute(~ 4km) resolution with a Gaussian filter; and (3) The resulting 4km tmin and tmax grids were averaged to obtain a 4km mean temperature grid.
