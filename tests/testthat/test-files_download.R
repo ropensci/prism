@@ -1,6 +1,6 @@
 
 dl_folder <- file.path(tempdir(), "prism")
-cur_path <- getOption("prism.path")
+cur_path <- prism_get_dl_dir()
 setup({prism_set_dl_dir(dl_folder)})
 teardown({prism_set_dl_dir(cur_path)})
 

@@ -2,7 +2,7 @@ f1 <- file.path(tempdir(), "prism", "new")
 f2 <- file.path(tempdir(), "prism2")
 f3 <- file.path(tempdir(), "*$.txt")
 
-orig_prism_path <- getOption("prism.path")
+orig_prism_path <- prism_get_dl_dir()
 teardown(options(prism.path = orig_prism_path))
 
 test_that("prism_set_dl_dir() works", {

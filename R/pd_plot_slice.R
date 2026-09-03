@@ -52,6 +52,15 @@ pd_plot_slice <- function(pd, location) {
     )
   }
   
+  time_step <- unique(pd_get_time_step(pd))
+  
+  if (length(time_step) != 1L) {
+    stop(
+      "`pd` must contain a single time step for plotting.",
+      call. = FALSE
+    )
+  }
+  
   meta_d <- pd_get_date(pd)
   meta_names <- pd_get_name(pd)[1]
   param_name <- strsplit(meta_names,"-")[[1]][3]
@@ -63,24 +72,71 @@ pd_plot_slice <- function(pd, location) {
   data <- terra::extract(pstack, pt_buf, fun = mean)
   
   data <- as.data.frame(t(unlist(data)))
-  data <- data[, -1]
+  data <- data[, -1, drop = FALSE]
   data <- stack(data)
   colnames(data) <- c("data", "layer")
-  data$date <- as.Date(meta_d)
+  data$date <- fully_specifiy_dates(meta_d)
   
   ## Re order
   data <- data[order(data$date),]
   
   # units
   u <- get_units(ptype, param_name)
+  
+  date_scale <- switch(
+    time_step,
+    
+    daily = ggplot2::scale_x_date(
+      date_breaks = "1 month",
+      date_labels = "%b %d\n%Y"
+    ),
+    
+    monthly = ggplot2::scale_x_date(
+      date_breaks = "3 months",
+      date_labels = "%b\n%Y"
+    ),
+    
+    annual = ggplot2::scale_x_date(
+      date_breaks = "1 year",
+      date_labels = "%Y"
+    ),
+    
+    stop(
+      "Unsupported PRISM time step for plotting: `",
+      time_step,
+      "`.",
+      call. = FALSE
+    )
+  )
     
   out <- ggplot(data,aes(x=date,y=data)) +
     geom_path() +
     geom_point() +
     xlab("Date") + 
-    ylab(u)
+    ylab(u) +
+    date_scale
   
   return(out)
+}
+
+fully_specifiy_dates <- function(x) {
+  n <- nchar(x)
+  
+  if (any(!n %in% c(4L, 7L, 10L))) {
+    bad <- unique(x[!n %in% c(4L, 7L, 10L)])
+    
+    stop(
+      "`x` must contain YYYY, YYYY-MM, or YYYY-MM-DD values. ",
+      "Invalid value(s): ",
+      paste(bad, collapse = ", "),
+      call. = FALSE
+    )
+  }
+  
+  x[n == 4L] <- paste0(x[n == 4L], "-01-01")
+  x[n == 7L] <- paste0(x[n == 7L], "-01")
+  
+  as.Date(x)
 }
 
 get_units <- function(type, pre_txt = NULL) {

@@ -1,102 +1,161 @@
 
 # sample folders -----------------
 folders <- 
-  c("PRISM_ppt_stable_4kmM2_1965_bil", "PRISM_ppt_stable_4kmM2_196501_bil", 
-  "PRISM_ppt_stable_4kmM2_196502_bil", "PRISM_ppt_stable_4kmM2_196503_bil", 
-  "PRISM_ppt_stable_4kmM2_196504_bil", "PRISM_ppt_stable_4kmM2_196505_bil", 
-  "PRISM_ppt_stable_4kmM2_196506_bil", "PRISM_ppt_stable_4kmM2_196507_bil", 
-  "PRISM_ppt_stable_4kmM2_196508_bil", "PRISM_ppt_stable_4kmM2_196509_bil", 
-  "PRISM_ppt_stable_4kmM2_196510_bil", "PRISM_ppt_stable_4kmM2_196511_bil", 
-  "PRISM_ppt_stable_4kmM2_196512_bil", "PRISM_ppt_stable_4kmM2_1967_bil", 
-  "PRISM_ppt_stable_4kmM2_196701_bil", "PRISM_ppt_stable_4kmM2_196702_bil", 
-  "PRISM_ppt_stable_4kmM2_196703_bil", "PRISM_ppt_stable_4kmM2_196704_bil", 
-  "PRISM_ppt_stable_4kmM2_196705_bil", "PRISM_ppt_stable_4kmM2_196706_bil", 
-  "PRISM_ppt_stable_4kmM2_196707_bil", "PRISM_ppt_stable_4kmM2_196708_bil", 
-  "PRISM_ppt_stable_4kmM2_196709_bil", "PRISM_ppt_stable_4kmM2_196710_bil", 
-  "PRISM_ppt_stable_4kmM2_196711_bil", "PRISM_ppt_stable_4kmM2_196712_bil", 
-  "PRISM_ppt_stable_4kmM2_196901_bil", 
-  "PRISM_ppt_stable_4kmM2_196902_bil", "PRISM_ppt_stable_4kmM2_1970_bil", 
-  "PRISM_ppt_stable_4kmM2_197001_bil", "PRISM_ppt_stable_4kmM2_197002_bil", 
-  "PRISM_ppt_stable_4kmM2_197003_bil", "PRISM_ppt_stable_4kmM2_197004_bil", 
-  "PRISM_ppt_stable_4kmM2_197005_bil", "PRISM_ppt_stable_4kmM2_197006_bil", 
-  "PRISM_ppt_stable_4kmM2_197007_bil", "PRISM_ppt_stable_4kmM2_197008_bil", 
-  "PRISM_ppt_stable_4kmM2_197009_bil", "PRISM_ppt_stable_4kmM2_197010_bil", 
-  "PRISM_ppt_stable_4kmM2_197011_bil", "PRISM_ppt_stable_4kmM2_197012_bil", 
-  "PRISM_ppt_stable_4kmM2_1971_bil", "PRISM_tdmean_stable_4kmM3_201001_bil", 
-  "PRISM_tdmean_stable_4kmM3_201002_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_01_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_02_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_03_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_04_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_05_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_06_bil", 
-  "PRISM_tmean_30yr_normal_4kmM2_annual_bil", 
-  "PRISM_tmean_stable_4kmD2_20130601_bil", 
-  "PRISM_tmean_stable_4kmD2_20130602_bil", 
-  "PRISM_tmean_stable_4kmD2_20130603_bil", 
-  "PRISM_tmean_stable_4kmD2_20130604_bil", 
-  "PRISM_tmean_stable_4kmD2_20130605_bil", 
-  "PRISM_tmean_stable_4kmD2_20130606_bil", 
-  "PRISM_tmean_stable_4kmD2_20130607_bil", 
-  "PRISM_tmean_stable_4kmD2_20130608_bil", 
-  "PRISM_tmean_stable_4kmD2_20130609_bil", 
-  "PRISM_tmean_stable_4kmD2_20130610_bil", 
-  "PRISM_tmean_stable_4kmD2_20130611_bil", 
-  "PRISM_tmean_stable_4kmD2_20130612_bil", 
-  "PRISM_tmean_stable_4kmD2_20130613_bil", 
-  "PRISM_tmean_stable_4kmD2_20130614_bil", 
-  "PRISM_tmean_stable_4kmM3_1965_bil", 
-  "PRISM_tmean_stable_4kmM3_196502_bil", 
-  "PRISM_tmean_stable_4kmM3_196503_bil", "PRISM_tmean_stable_4kmM3_196504_bil", 
-  "PRISM_tmean_stable_4kmM3_196505_bil", "PRISM_tmean_stable_4kmM3_196506_bil", 
-  "PRISM_tmean_stable_4kmM3_196507_bil", "PRISM_tmean_stable_4kmM3_196508_bil", 
-  "PRISM_tmean_stable_4kmM3_196509_bil", "PRISM_tmean_stable_4kmM3_196510_bil", 
-  "PRISM_tmean_stable_4kmM3_196511_bil", "PRISM_tmean_stable_4kmM3_196512_bil", 
-  "PRISM_tmean_stable_4kmM3_198201_bil", "PRISM_tmean_stable_4kmM3_198301_bil", 
-  "PRISM_tmean_stable_4kmM3_198401_bil", "PRISM_tmean_stable_4kmM3_198501_bil", 
-  "PRISM_tmean_stable_4kmM3_198601_bil", "PRISM_tmean_stable_4kmM3_198701_bil", 
-  "PRISM_tmean_stable_4kmM3_198801_bil", "PRISM_tmean_stable_4kmM3_198901_bil", 
-  "PRISM_tmean_stable_4kmM3_199001_bil", "PRISM_tmean_stable_4kmM3_199101_bil", 
-  "PRISM_tmean_stable_4kmM3_199201_bil", "PRISM_tmean_stable_4kmM3_199301_bil", 
-  "PRISM_tmean_stable_4kmM3_199401_bil", "PRISM_tmean_stable_4kmM3_199501_bil", 
-  "PRISM_tmean_stable_4kmM3_199601_bil", "PRISM_tmean_stable_4kmM3_199701_bil", 
-  "PRISM_tmean_stable_4kmM3_199801_bil", "PRISM_tmean_stable_4kmM3_199901_bil", 
-  "PRISM_tmean_stable_4kmM3_200001_bil", "PRISM_tmean_stable_4kmM3_200101_bil", 
-  "PRISM_tmean_stable_4kmM3_200201_bil", "PRISM_tmean_stable_4kmM3_200301_bil", 
-  "PRISM_tmean_stable_4kmM3_200401_bil", "PRISM_tmean_stable_4kmM3_200501_bil", 
-  "PRISM_tmean_stable_4kmM3_200601_bil", "PRISM_tmean_stable_4kmM3_200701_bil", 
-  "PRISM_tmean_stable_4kmM3_200801_bil", "PRISM_tmean_stable_4kmM3_200901_bil", 
-  "PRISM_tmean_stable_4kmM3_201001_bil", "PRISM_tmean_stable_4kmM3_201101_bil", 
-  "PRISM_tmean_stable_4kmM3_201102_bil", "PRISM_tmean_stable_4kmM3_201201_bil", 
-  "PRISM_tmean_stable_4kmM3_201202_bil", "PRISM_tmean_stable_4kmM3_201301_bil", 
-  "PRISM_tmean_stable_4kmM3_201302_bil", "PRISM_tmean_stable_4kmM3_201401_bil", 
-  "PRISM_tmin_30yr_normal_4kmM2_04_bil", 
-  "PRISM_vpdmax_stable_4kmD2_20100101_bil", 
-  "PRISM_vpdmin_stable_4kmM3_2010_bil", "PRISM_tdmean_30yr_normal_4kmM2_01_bil",
-  "PRISM_tdmean_30yr_normal_4kmM2_02_bil", 
-  "PRISM_tdmean_30yr_normal_4kmM2_03_bil",
-  "PRISM_tdmean_30yr_normal_4kmM2_annual_bil",
-  "PRISM_tdmean_30yr_normal_800mM2_09_bil", 
-  "PRISM_tdmean_30yr_normal_800mM2_10_bil",
-  "PRISM_tdmean_30yr_normal_800mM2_annual_bil",
-  "PRISM_ppt_30yr_normal_4kmD1_0101_bil", 
-  "PRISM_ppt_30yr_normal_4kmD1_0301_bil", 
-  "PRISM_solclear_30yr_normal_4kmM3_01_bil",
-  "PRISM_solclear_30yr_normal_4kmM3_02_bil",
-  # Add webservice v2 files
-  "prism_ppt_us_30s_19810101",
-  "prism_ppt_us_30s_2000", 
-  "prism_ppt_us_30s_20110101",
-  "prism_ppt_us_30s_2015",
-  "prism_tmean_us_25m_199601",
-  "prism_tmean_us_25m_201001", 
-  "prism_tmean_us_25m_201301",
-  "prism_tmean_us_30s_198201",
-  "prism_tmax_us_30s_2000",
-  "prism_tmean_us_30s_20130601",
-  "prism_tmean_us_30s_20130602",
-  "prism_tmean_us_30s_201401",
-  "prism_tmax_us_30s_2015"
+  c(
+    "prism_ppt_us_25m_1965",
+    "prism_ppt_us_25m_196501",
+    "prism_ppt_us_25m_196502",
+    "prism_ppt_us_25m_196503",
+    "prism_ppt_us_25m_196504",
+    "prism_ppt_us_25m_196505",
+    "prism_ppt_us_25m_196506",
+    "prism_ppt_us_25m_196507",
+    "prism_ppt_us_25m_196508",
+    "prism_ppt_us_25m_196509",
+    "prism_ppt_us_25m_196510",
+    "prism_ppt_us_25m_196511",
+    "prism_ppt_us_25m_196512",
+    
+    "prism_ppt_us_25m_1967",
+    "prism_ppt_us_25m_196701",
+    "prism_ppt_us_25m_196702",
+    "prism_ppt_us_25m_196703",
+    "prism_ppt_us_25m_196704",
+    "prism_ppt_us_25m_196705",
+    "prism_ppt_us_25m_196706",
+    "prism_ppt_us_25m_196707",
+    "prism_ppt_us_25m_196708",
+    "prism_ppt_us_25m_196709",
+    "prism_ppt_us_25m_196710",
+    "prism_ppt_us_25m_196711",
+    "prism_ppt_us_25m_196712",
+    
+    "prism_ppt_us_25m_196901",
+    "prism_ppt_us_25m_196902",
+    
+    "prism_ppt_us_25m_1970",
+    "prism_ppt_us_25m_197001",
+    "prism_ppt_us_25m_197002",
+    "prism_ppt_us_25m_197003",
+    "prism_ppt_us_25m_197004",
+    "prism_ppt_us_25m_197005",
+    "prism_ppt_us_25m_197006",
+    "prism_ppt_us_25m_197007",
+    "prism_ppt_us_25m_197008",
+    "prism_ppt_us_25m_197009",
+    "prism_ppt_us_25m_197010",
+    "prism_ppt_us_25m_197011",
+    "prism_ppt_us_25m_197012",
+    
+    "prism_tdmean_us_25m_201001",
+    "prism_tdmean_us_25m_201002",
+    
+    "prism_tmean_us_25m_202001_avg_30y",
+    "prism_tmean_us_25m_202002_avg_30y",
+    "prism_tmean_us_25m_202003_avg_30y",
+    "prism_tmean_us_25m_202004_avg_30y",
+    "prism_tmean_us_25m_202005_avg_30y",
+    "prism_tmean_us_25m_202006_avg_30y",
+    "prism_tmean_us_25m_2020_avg_30y",
+    
+    "prism_tmean_us_25m_20130601",
+    "prism_tmean_us_25m_20130602",
+    "prism_tmean_us_25m_20130603",
+    "prism_tmean_us_25m_20130604",
+    "prism_tmean_us_25m_20130605",
+    "prism_tmean_us_25m_20130606",
+    "prism_tmean_us_25m_20130607",
+    "prism_tmean_us_25m_20130608",
+    "prism_tmean_us_25m_20130609",
+    "prism_tmean_us_25m_20130610",
+    "prism_tmean_us_25m_20130611",
+    "prism_tmean_us_25m_20130612",
+    "prism_tmean_us_25m_20130613",
+    "prism_tmean_us_25m_20130614",
+    
+    "prism_tmean_us_25m_1965",
+    "prism_tmean_us_25m_196502",
+    "prism_tmean_us_25m_196503",
+    "prism_tmean_us_25m_196504",
+    "prism_tmean_us_25m_196505",
+    "prism_tmean_us_25m_196506",
+    "prism_tmean_us_25m_196507",
+    "prism_tmean_us_25m_196508",
+    "prism_tmean_us_25m_196509",
+    "prism_tmean_us_25m_196510",
+    "prism_tmean_us_25m_196511",
+    "prism_tmean_us_25m_196512",
+    
+    "prism_tmean_us_25m_198201",
+    "prism_tmean_us_25m_198301",
+    "prism_tmean_us_25m_198401",
+    "prism_tmean_us_25m_198501",
+    "prism_tmean_us_25m_198601",
+    "prism_tmean_us_25m_198701",
+    "prism_tmean_us_25m_198801",
+    "prism_tmean_us_25m_198901",
+    "prism_tmean_us_25m_199001",
+    "prism_tmean_us_25m_199101",
+    "prism_tmean_us_25m_199201",
+    "prism_tmean_us_25m_199301",
+    "prism_tmean_us_25m_199401",
+    "prism_tmean_us_25m_199501",
+    "prism_tmean_us_25m_199601",
+    "prism_tmean_us_25m_199701",
+    "prism_tmean_us_25m_199801",
+    "prism_tmean_us_25m_199901",
+    "prism_tmean_us_25m_200001",
+    "prism_tmean_us_25m_200101",
+    "prism_tmean_us_25m_200201",
+    "prism_tmean_us_25m_200301",
+    "prism_tmean_us_25m_200401",
+    "prism_tmean_us_25m_200501",
+    "prism_tmean_us_25m_200601",
+    "prism_tmean_us_25m_200701",
+    "prism_tmean_us_25m_200801",
+    "prism_tmean_us_25m_200901",
+    "prism_tmean_us_25m_201001",
+    "prism_tmean_us_25m_201101",
+    "prism_tmean_us_25m_201102",
+    "prism_tmean_us_25m_201201",
+    "prism_tmean_us_25m_201202",
+    "prism_tmean_us_25m_201301",
+    "prism_tmean_us_25m_201302",
+    "prism_tmean_us_25m_201401", 
+    
+    "prism_tmin_us_25m_202004_avg_30y",
+    "prism_vpdmax_us_25m_20100101",
+    "prism_vpdmin_us_25m_2010",
+    
+    "prism_tdmean_us_25m_202001_avg_30y",
+    "prism_tdmean_us_25m_202002_avg_30y",
+    "prism_tdmean_us_25m_202003_avg_30y",
+    "prism_tdmean_us_25m_2020_avg_30y",
+    
+    "prism_tdmean_us_30s_202009_avg_30y",
+    "prism_tdmean_us_30s_202010_avg_30y",
+    "prism_tdmean_us_30s_2020_avg_30y",
+    
+    "prism_ppt_us_25m_20200101_avg_30y",
+    "prism_ppt_us_25m_20200301_avg_30y",
+    
+    "prism_solclear_us_25m_202001_avg_30y",
+    "prism_solclear_us_25m_202002_avg_30y",
+    
+    "prism_ppt_us_25m_1971",
+    "prism_ppt_us_30s_19810101",
+    "prism_ppt_us_30s_2000", 
+    "prism_ppt_us_30s_20110101",
+    "prism_ppt_us_30s_2015",
+    "prism_tmean_us_25m_199601",
+    "prism_tmean_us_25m_201001", 
+    "prism_tmean_us_25m_201301",
+    "prism_tmean_us_30s_198201",
+    "prism_tmax_us_30s_2000",
+    "prism_tmean_us_30s_20130601",
+    "prism_tmean_us_30s_20130602",
+    "prism_tmean_us_30s_201401",
+    "prism_tmax_us_30s_2015"
   )
 
 # all_in helper ----------------
@@ -107,171 +166,179 @@ all_in <- function(x, y) {
 # prism_archive_subset() errors ------------------
 test_that("prism_archive_subset() errors correctly", {
   # missing resolution (now required for all files in webservice v2 migration)
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset("tmean", "daily", mon = 6), 
     "`resolution` must be specified for all temporal periods"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("tmean", "annual", years = 2013), 
     "`resolution` must be specified for all temporal periods"
-  ))
+  )
   
   # unsupported resolution
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset("tmean", "daily", resolution = '1m', minDate = "2013-06-07", maxDate = "2013-06-10"), 
     "'arg' should be one of.*4km.*800m"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("ppt", "daily", resolution = '400m', mon = 1, years = 1981:2011), 
     "'arg' should be one of.*4km.*800m"
-  ))
+  )
   
   # unsupported variables
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset("tmaxx", "annual", resolution = '800m'), 
     "'arg' should be one of"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("vpdmiin", "annual", resolution = '800m'), 
     "'arg' should be one of"
-  ))
+  )
   
   # unsupported temp_period
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset("tmean", "ann", resolution = '800m'), 
     "'arg' should be one of"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("tmean", "annual_normals", resolution = '800m'), 
     "'arg' should be one of"
-  ))
+  )
   # annual - unnecessary specifications
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset("tmean", "annual", mon = 1, resolution = '800m'),
     "No need to specify `mon` for 'annual' `temp_period`"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("tmean", "annual", dates = "2018-01-01", resolution = '800m'),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset(
       "tmean", "annual", minDate = "2018-01-01", maxDate = "2018-01-05", resolution = '800m'
     ),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
-  ))
+  )
 
   
   # monthly - unnecessary specifications
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset("tmean", "monthly", dates = "2018-01-01", resolution = '800m'),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset(
       "tmean", "monthly", minDate = "2018-01-01", maxDate = "2018-01-05", resolution = '800m'
     ),
     "`minDate`, `maxDate`, and/or `dates` should only be specified when `temp_period` is 'daily'"
-  ))
-  expect_warning(expect_no_error(
-    prism_archive_subset("tmean", "monthly", resolution = "800m"),
-    ## Now all subset require resolution; this now expects to work
-  ))
+  )
+
   
   # normals - unecessary/incomplete specifications
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset("tmean", "annual normals"),
     "`resolution` must be specified for all temporal periods"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("tmean", "monthly normals"),
     "`resolution` must be specified for all temporal periods"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("tmean", "annual normals", resolution = "4pm"),
     "'arg' should be one of.*4km.*800m"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("tmean", "monthly normals", resolution = "800mm"),
     "'arg' should be one of.*4km.*800m"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset(
       "tmean", "annual normals", resolution = "4km", years = 2015
     ),
     "No need to specify `years` or `mon` when subsetting 'annual normals'"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset(
       "tmean", "annual normals", resolution = "800m", mon = 1:12
     ),
     "No need to specify `years` or `mon` when subsetting 'annual normals'"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset(
       "tmean", "monthly normals", resolution = "4km", years = 2015
     ),
     "No need to specify `years` for 'monthly normals'"
-  ))
+  )
   
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset('solclear', "daily normals", resolution = '4km', 
                          mon = 1:2)
-  ))
+  )
   
   # daily unnecessary specifications
-  expect_no_error(
-    expect_warning(prism_archive_subset("ppt", "daily", resolution = "800m")),
-    ## Webservice v2 all subset require resolution; this now expects to work
-  )
-  expect_warning(expect_error(
+
+  expect_error(
     prism_archive_subset("tmin", "daily", years = 1999, dates = "1999-01-01", resolution = "800m"),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
-  ))
-  expect_warning(expect_error(
+  )
+  expect_error(
     prism_archive_subset("tmin", "daily", mon = 3, minDate = "1999-01-01", resolution = "800m"),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
-  ))
+  )
   
-  expect_warning(expect_error(
+  expect_error(
     prism_archive_subset("tmin", "daily normals", mon = 3, 
                          minDate = "1999-01-01", resolution = '4km'),
     "Only specify `years`/`mon` or `minDate`/`maxDate`/`dates`"
-  ))
+  )
 })
 
 # prism_archive_subset() with test folders -------------
 test_that("prism_archive_subset() works", {
-  expect_warning(expect_equal(
-    prism_archive_subset("ppt", "daily", resolution = "4km"),
-    prism_archive_subset("ppt", "daily", resolution = "4km", years = c(1981, 1991, 2011, 2012))
-  ))
-  expect_warning(expect_equal(
-    prism_archive_subset("ppt", "daily", resolution = "4km"),
-    prism_archive_subset("ppt", "daily", mon = 1, resolution = "4km")
-  ))
-  expect_warning(expect_equal(
-    prism_archive_subset("tmin", "daily", resolution = "4km"),
-    prism_archive_subset("tmin", "daily", mon = c(1,6), resolution = "4km")
-  ))
-  expect_warning(expect_equal(
-    prism_archive_subset("tmin", "daily", resolution = "4km"),
-    prism_archive_subset("tmin", "daily", years = c(1981, 2011), resolution = "4km")
-  ))
-  expect_warning(expect_equal(
-    prism_archive_subset("tmin", "daily", resolution = "4km"),
-    prism_archive_subset("tmin", "daily", years = 1981:2011, resolution = "4km")
-  ))
-  expect_warning(expect_true(all_in(
-    prism_archive_subset("tmin", "daily", resolution = "4km"),
-    c("PRISM_tmin_stable_4kmD2_19810101_bil", 
-      "PRISM_tmin_stable_4kmD2_20110615_bil")
-  )))
+  prism_set_dl_dir(tif_dl)
   
-  expect_warning(expect_identical(
+  expect_equal(
+    prism_archive_subset("ppt", "annual", resolution = "4km"),
+    prism_archive_subset("ppt", "annual", resolution = "4km", years = 2023:2025)
+  )
+  expect_equal(
+    prism_archive_subset('ppt', 'annual normals', resolution = '4km'),
+    "prism_ppt_us_25m_2020_avg_30y"
+  )
+  
+  prism_set_dl_dir(asc_dl)
+  expect_equal(
+    prism_archive_subset("tmean", "monthly", resolution = "4km"),
+    prism_archive_subset("tmean", "monthly", mon = 7, resolution = "4km")
+  )
+
+  prism_set_dl_dir(nc_dl)
+  expect_equal(
+    prism_archive_subset("tmin", "daily", resolution = "4km"),
+    prism_archive_subset("tmin", "daily", mon = 7, resolution = "4km")
+  )
+  
+  expect_equal(
+    prism_archive_subset("tmin", "daily", resolution = "4km"),
+    prism_archive_subset(
+      "tmin", 
+      "daily", 
+      minDate = c("2025-06-01"), 
+      maxDate = c('2025-08-31'), 
+      resolution = "4km"
+    )
+  )
+  
+  prism_set_dl_dir(bil_dl)
+  expect_equal(
+    prism_archive_subset('tmax', 'annual', resolution = '4km'),
+    prism_archive_subset('tmax', 'annual', years = 2020:2026, resolution = '4km')
+  )
+  
+  expect_identical(
     prism_archive_subset("tmin", "daily", years = 2020, resolution = "4km"), 
     character(0)
-  ))
+  )
 })
 
 # filter_folders annual -----------------
@@ -288,14 +355,14 @@ test_that("prism:::filter_folders annual", {
   )
   expect_true(all_in(
     filter_folders(folders, "ppt", "annual"),
-    c("PRISM_ppt_stable_4kmM2_1965_bil", "PRISM_ppt_stable_4kmM2_1967_bil",
-      "PRISM_ppt_stable_4kmM2_1970_bil", "PRISM_ppt_stable_4kmM2_1971_bil",
+    c("prism_ppt_us_25m_1965", "prism_ppt_us_25m_1967",
+      "prism_ppt_us_25m_1970", "prism_ppt_us_25m_1971",
       "prism_ppt_us_30s_2000", "prism_ppt_us_30s_2015")
   ))
   
   expect_true(all_in(
     filter_folders(folders, "ppt", "annual", years = c(1965, 1970)),
-    c("PRISM_ppt_stable_4kmM2_1965_bil", "PRISM_ppt_stable_4kmM2_1970_bil")
+    c("prism_ppt_us_25m_1965", "prism_ppt_us_25m_1970")
   ))
 })
 
@@ -304,19 +371,19 @@ test_that("prism:::filter_folders monthly", {
   expect_true(all_in(
     filter_folders(folders, "ppt", "monthly"),
     stringr::str_subset(folders, "_ppt") |> 
-      stringr::str_subset("_\\d{6}_bil")
+      stringr::str_subset("_\\d{6}$")
   ))
   
   expect_true(all_in(
     filter_folders(folders, "ppt", "monthly", years = c(1965, 1967), mon = 1:2),
-    c("PRISM_ppt_stable_4kmM2_196501_bil", "PRISM_ppt_stable_4kmM2_196502_bil",
-      "PRISM_ppt_stable_4kmM2_196701_bil", "PRISM_ppt_stable_4kmM2_196702_bil")
+    c("prism_ppt_us_25m_196501", "prism_ppt_us_25m_196502",
+      "prism_ppt_us_25m_196701", "prism_ppt_us_25m_196702")
   ))
   
   expect_true(all_in(
     filter_folders(folders, "ppt", "monthly", mon = 1),
-    c("PRISM_ppt_stable_4kmM2_196501_bil", "PRISM_ppt_stable_4kmM2_196701_bil",
-      "PRISM_ppt_stable_4kmM2_196901_bil", "PRISM_ppt_stable_4kmM2_197001_bil")
+    c("prism_ppt_us_25m_196501", "prism_ppt_us_25m_196701",
+      "prism_ppt_us_25m_196901", "prism_ppt_us_25m_197001")
   ))
   
   expect_length(filter_folders(folders, "ppt", "monthly", years = 1965), 12)
@@ -359,7 +426,7 @@ test_that("prism:::filter_folders annual", {
   
   expect_true(all_in(
     filter_folders(folders, "tmean", "daily", dates = tmp_days),
-    c(paste0("PRISM_tmean_stable_4kmD2_", tmp_days, "_bil"),'prism_tmean_us_30s_20130601')
+    c(paste0("prism_tmean_us_25m_", tmp_days),'prism_tmean_us_30s_20130601')
   ))
 })
 
@@ -381,13 +448,13 @@ test_that("prism:::filter_folders normals", {
   expect_true(all_in(
     filter_folders(folders, "tdmean", "monthly normals", resolution = "4km"),
     paste0(
-      "PRISM_tdmean_30yr_normal_4kmM2_", prism:::mon_to_string(1:3), "_bil"
+      "prism_tdmean_us_25m_2020", prism:::mon_to_string(1:3), "_avg_30y"
     )
   ))
   
   expect_true(all_in(
     filter_folders(folders, "tdmean", "annual normals", resolution = "4km"),
-    "PRISM_tdmean_30yr_normal_4kmM2_annual_bil"
+    "prism_tdmean_us_25m_2020_avg_30y"
   ))
   
   # 800m --------------
@@ -406,40 +473,39 @@ test_that("prism:::filter_folders normals", {
   expect_true(all_in(
     filter_folders(folders, "tdmean", "monthly normals", resolution = "800m"),
     paste0(
-      "PRISM_tdmean_30yr_normal_800mM2_", 
+      "prism_tdmean_us_30s_2020", 
       prism:::mon_to_string(9:10), 
-      "_bil"
+      "_avg_30y"
     )
   ))
   
   expect_true(all_in(
     filter_folders(folders, "tdmean", "annual normals", resolution = "800m"),
-    "PRISM_tdmean_30yr_normal_800mM2_annual_bil"
+    "prism_tdmean_us_30s_2020_avg_30y"
   ))
   
   expect_equal(
     filter_folders(folders, "solclear", "monthly normals", resolution = "4km", 
                    mon = 1:2),
-    c("PRISM_solclear_30yr_normal_4kmM3_01_bil",
-      "PRISM_solclear_30yr_normal_4kmM3_02_bil")
+    c("prism_solclear_us_25m_202001_avg_30y",
+      "prism_solclear_us_25m_202002_avg_30y")
   )
   
   # daily normals
   expect_equal(
     filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
-                   years = TRUE),
-    c("PRISM_ppt_30yr_normal_4kmD1_0101_bil", 
-      "PRISM_ppt_30yr_normal_4kmD1_0301_bil")
+                   years = FALSE),
+    c("prism_ppt_us_25m_20200101_avg_30y", "prism_ppt_us_25m_20200301_avg_30y")
   )
   expect_equal(
     filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
-                   years = TRUE),
+                   years = FALSE),
     filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
                    mon = 1:3)
   )
   expect_equal(
     filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
-                   years = TRUE),
+                   years = FALSE),
     filter_folders(folders, "ppt", "daily normals", resolution = "4km", 
                    dates = c("0101", "0301"))
   )

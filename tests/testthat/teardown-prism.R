@@ -1,35 +1,3 @@
-# Handle different working directories (project root vs tests/testthat)
-if (basename(getwd()) == "testthat") {
-  # Running from tests/testthat directory (e.g., via test_file())
-  dl_dir <- "prism_test"
-} else {
-  # Running from project root (e.g., interactive or R CMD check)
-  dl_dir <- file.path("tests", "testthat", "prism_test")
-}
-
-# need to unzip all the zip files, then delete the unzipped folder when exiting
-avail_ppt <- paste0(
-  "PRISM_ppt_stable_4kmD2_",
-  c("19810101", "19910101", "20110101", "20120101"),
-  "_bil"
-)
-avail_tmin <- paste0(
-  "PRISM_tmin_stable_4kmD2_",
-  c("19810101", "20110615"),
-  "_bil"
-)
-
-avail_tdmean <- paste0("PRISM_tdmean_stable_4kmM3_2005", 11:12, "_bil")
-avail_vpdmin <- "PRISM_vpdmin_30yr_normal_4kmM4_annual_bil"
-avail_daily_normal <- "PRISM_ppt_30yr_normal_4kmD1_0301_bil"
-
-all_avail <- c(avail_tmin, avail_ppt, avail_tdmean, avail_vpdmin,
-               avail_daily_normal)
-
-for (ff in all_avail) {
-  unlink(file.path(dl_dir, ff), recursive = TRUE)
-}
-
 # revert prism path to its original state
 orig_path <- getOption("prism.path.tmp")
 options("prism.path.tmp" = NULL)

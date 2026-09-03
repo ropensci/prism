@@ -399,7 +399,7 @@ pd_to_file <- function(pd) {
   fext <- pd
   # normals are only ever geotiff
   if (any(normals)) {
-    fext[normals] <- 'tif' 
+    fext[normals] <- '.tif' 
   } 
   
   if (any(!normals)) {
@@ -407,7 +407,7 @@ pd_to_file <- function(pd) {
   }
   
   pfile <- normalizePath(file.path(
-    prism_get_dl_dir(), pd, paste0(pd, ".", fext)
+    prism_get_dl_dir(), pd, paste0(pd, fext)
   ))
   
   pfile

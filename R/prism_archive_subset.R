@@ -224,12 +224,12 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     
     if (!is.null(dates)) {
       # if dates are specified, get specific dates
-      pattern <- paste0("_", dates)
+      pattern <- paste0("_","2020", dates)
     } else if (isTRUE(years)) {
-      pattern <- paste0("_", get_days_from_mon_ann(1:12, FALSE))
+      pattern <- paste0("_", "2020", get_days_from_mon_ann(1:12, FALSE))
     } else {
       # otherwise, get all days for the specified months
-      pattern <- paste0("_", get_days_from_mon_ann(mon, FALSE))
+      pattern <- paste0("_", "2020", get_days_from_mon_ann(mon, FALSE))
     }
   } else if (temp_period == "monthly normals") {
     # monthly normals
@@ -240,10 +240,10 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
     
     if (is.null(mon)) {
       # get all monthly
-      pattern <- paste0("_", mon_to_string(1:12))
+      pattern <- paste0("_", "2020", mon_to_string(1:12))
     } else {
       # get specified monthly
-      pattern <- paste0("_", mon_to_string(mon) )
+      pattern <- paste0("_", "2020", mon_to_string(mon) )
     }
     
   } else {

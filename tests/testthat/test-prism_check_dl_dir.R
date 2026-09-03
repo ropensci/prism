@@ -1,7 +1,7 @@
 # unable to test the interactive mode, but can check that it fails when not set
-# and not interactive, or works wehn set
+# and not interactive, or works when set
 
-orig_prism_path <- getOption("prism.path")
+orig_prism_path <- prism_get_dl_dir()
 teardown(options(prism.path = orig_prism_path))
 
 prism_set_dl_dir(tempdir())

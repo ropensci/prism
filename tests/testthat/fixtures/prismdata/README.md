@@ -1,0 +1,5 @@
+ppt - 2012-01-01 is corrupt/bad data in the bil file. (It was intentionally corrupted to test one of the functions.) this is in the corrupt folder
+
+
+See data-raw/ for code that takes full .bil data and trims it to only Boulder County
+so that the overall file is small enough to work with CRAN policies. These go in the asc/bil/nc/tif folders

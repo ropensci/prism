@@ -2,40 +2,76 @@
 cur_prism <- getOption("prism.path")
 options("prism.path.tmp" = cur_prism)
 
-# the dl directory is the test file directory
-# Handle different working directories (project root vs tests/testthat)
-if (basename(getwd()) == "testthat") {
-  # Running from tests/testthat directory (e.g., via test_file())
-  dl_dir <- "prism_test"
-} else {
-  # Running from project root (e.g., interactive or R CMD check)
-  dl_dir <- file.path("tests", "testthat", "prism_test")
+# Fixture PRISM archive ---------------------------------------------------
+
+fixture_dir <- testthat::test_path("fixtures")
+prism_fixture_dir <- file.path(tempdir(), "prismdata")
+
+# Start each test run with a clean temporary fixture archive.
+if (dir.exists(prism_fixture_dir)) {
+  unlink(prism_fixture_dir, recursive = TRUE, force = TRUE)
 }
-prism_set_dl_dir(dl_dir)
 
-# need to unzip all the zip files, then delete the unzipped folder when exiting
-avail_ppt <- paste0(
-  "PRISM_ppt_stable_4kmD2_",
-  c("19810101", "19910101", "20110101", "20120101"),
-  "_bil"
+dir.create(prism_fixture_dir, recursive = TRUE, showWarnings = FALSE)
+
+# Find all fixture ZIPs, e.g.
+# tests/testthat/fixtures/bil/prism_data.zip
+# tests/testthat/fixtures/asc/prism_data.zip
+# tests/testthat/fixtures/tif/prism_data.zip
+# tests/testthat/fixtures/nc/prism_data.zip
+zip_files <- list.files(
+  fixture_dir,
+  pattern = "\\.zip$",
+  recursive = TRUE,
+  full.names = TRUE
 )
-avail_tmin <- paste0(
-  "PRISM_tmin_stable_4kmD2_",
-  c("19810101", "20110615"),
-  "_bil"
-)
 
-avail_tdmean <- paste0("PRISM_tdmean_stable_4kmM3_2005", 11:12, "_bil")
-
-avail_vpdmin <- "PRISM_vpdmin_30yr_normal_4kmM4_annual_bil"
-avail_daily_normal <- "PRISM_ppt_30yr_normal_4kmD1_0301_bil"
-
-all_avail <- c(avail_tmin, avail_ppt, avail_tdmean, avail_vpdmin, 
-               avail_daily_normal)
-
-for (ff in all_avail) {
-  utils::unzip(
-    file.path(dl_dir, paste0(ff, ".zip")), 
-    exdir = file.path(dl_dir, ff)
+if (length(zip_files) == 0L) {
+  stop(
+    "No PRISM fixture ZIP files found under `",
+    fixture_dir,
+    "`.",
+    call. = FALSE
   )
 }
+
+for (zip_file in zip_files) {
+  format <- basename(dirname(zip_file))
+  
+  # Copy the ZIP into the temporary format-specific folder.
+  format_dir <- file.path(prism_fixture_dir, format)
+  
+  dir.create(format_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  zip_copy <- file.path(
+    format_dir,
+    basename(zip_file)
+  )
+  
+  if (!file.copy(zip_file, zip_copy, overwrite = TRUE)) {
+    stop(
+      "Could not copy PRISM fixture ZIP: `",
+      zip_file,
+      "`.",
+      call. = FALSE
+    )
+  }
+  
+  # Extract each ZIP into its matching format subdirectory.
+  format_dir <- file.path(format_dir, stringr::str_remove(basename(zip_file), ".zip"))
+  utils::unzip(
+    zipfile = zip_copy,
+    exdir = format_dir
+  )
+}
+
+# set default format/dl location so tests that assume it is set work. other 
+# tests will set/update it for testing the different formats
+prism_set_dl_dir(file.path(tempdir(), 'prismdata', 'tif'))
+prism_set_format('geotiff')
+
+bil_dl <- file.path(tempdir(), 'prismdata', 'bil')
+asc_dl <- file.path(tempdir(), 'prismdata', 'asc')
+nc_dl <- file.path(tempdir(), 'prismdata', 'nc')
+tif_dl <- file.path(tempdir(), 'prismdata', 'tif')
+corrupt_dl <- file.path(tempdir(), 'prismdata', 'corrupt')
