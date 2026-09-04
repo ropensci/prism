@@ -73,7 +73,7 @@ pd_plot_slice <- function(pd, location) {
   
   data <- as.data.frame(t(unlist(data)))
   data <- data[, -1, drop = FALSE]
-  data <- stack(data)
+  data <- utils::stack(data)
   colnames(data) <- c("data", "layer")
   data$date <- fully_specifiy_dates(meta_d)
   
