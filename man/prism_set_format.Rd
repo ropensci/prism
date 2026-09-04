@@ -10,7 +10,7 @@ prism_set_format(data_format)
 prism_get_format()
 }
 \arguments{
-\item{data_foramt}{One of 'geotiff', 'bil', 'asc', or 'nc'}
+\item{data_format}{One of 'geotiff', 'bil', 'asc', or 'nc'}
 }
 \value{
 Invisibly returns data_format if it is valid.

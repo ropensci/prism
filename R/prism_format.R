@@ -10,7 +10,7 @@ prism_formats <- c('geotiff', 'bil', 'asc', 'nc')
 #' users choose one format and stick with it. The package is not setup to 
 #' handle a PRISM data download directory that has multiple formats in it.  
 #' 
-#' @param data_foramt One of 'geotiff', 'bil', 'asc', or 'nc'
+#' @param data_format One of 'geotiff', 'bil', 'asc', or 'nc'
 #' 
 #' @return Invisibly returns data_format if it is valid.
 #' 
