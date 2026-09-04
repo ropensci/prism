@@ -96,18 +96,18 @@ pd_get_md <- function(pd) {
 
   out <- dplyr::bind_rows(out)
 
-  # update column names for normals to match those from other time periods
-  if (all(colnames(out) %in% names(normals_name_map()))) {
-    # rename columns
-    colnames(out) <- normals_name_map()[colnames(out)]
-    # add empty column
-    out[["PRISM_DATASET_VERSION"]] <- NA
-
-    message(
-      "Renaming variables for normals to match those for other temporal periods.\n",
-      "See details in ?pd_get_md."
-    )
-  }
+  # # update column names for normals to match those from other time periods
+  # if (all(colnames(out) %in% names(normals_name_map()))) {
+  #   # rename columns
+  #   colnames(out) <- normals_name_map()[colnames(out)]
+  #   # add empty column
+  #   out[["PRISM_DATASET_VERSION"]] <- NA
+  # 
+  #   message(
+  #     "Renaming variables for normals to match those for other temporal periods.\n",
+  #     "See details in ?pd_get_md."
+  #   )
+  # }
 
   out
 }
