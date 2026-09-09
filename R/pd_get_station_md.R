@@ -41,63 +41,182 @@ pd_get_station_md <- function(pd)
 {
   prism_check_dl_dir()
   
-  # remove tmean from folders
-  tmean <- stringr::str_detect(pd, "_tmean_")
-  if (any(tmean)) {
-    message("Removing tmean from specified `pd`.\n", 
-            "Station metadata does not exist for tmean.")
-    pd <- pd[!tmean]
+  if (!is.character(pd)) {
+    stop("`pd` must be a character vector of PRISM-data folder names.")
   }
   
-  # remove daily normals
-  dn <- pd_is_normal(pd)
-  if (any(dn)) {
-    message("Removing daily normals from `pd`.\n",
-            "Station metadata does not exist for daily normals.")
-    pd <- pd[!dn]
+  if (length(pd) == 0L) {
+    stop("`pd` must contain at least one PRISM-data folder name.")
   }
-
-  folders_to_get <- file.path(prism_get_dl_dir(), pd)
-  folders_to_get <- pd[dir.exists(folders_to_get)]
   
-  if (length(folders_to_get) == 0) {
+  # Keep only requested folders that currently exist. Continue as long as at
+  # least one requested PRISM-data folder is available locally.
+  pd_path <- file.path(prism_get_dl_dir(), pd)
+  folder_exists <- dir.exists(pd_path)
+  
+  if (!any(folder_exists)) {
     stop(
-      "None of the requested dates are available.\n", 
+      "None of the requested PRISM-data folders are available.\n",
       "  You must first download the data using `get_prism_*()`."
     )
   }
   
-  zz <- folders_to_get |> 
-    lapply(read_md_csv) |> 
-    dplyr::bind_rows()
-  
-  # check to make sure all pd show up in the meta data
-
-  if (any(!(pd %in% zz$prism_data))) {
+  if (any(!folder_exists)) {
+    missing <- pd[!folder_exists]
+    n_missing <- length(missing)
     
-    dd <- pd %in% zz$prism_data
-    if (!all(dd)) {
-      missing <- pd[!dd]
-      n <- length(missing)
-      msg <- paste0("Not all prism data exist in the returned metadata.\n",
-                    "  ", n, " data are missing:")
-      if (n > 10) {
-        msg <- paste0(msg, " (only the first 10 are printed)")
-        missing <- missing[1:10]
-      }
-      
-      msg <- paste0(msg, "\n  ", paste(missing, collapse = "\n  "), "\n\n  ",
-                    "Are you sure those data have been downloaded?")
-      warning(msg)
+    display_missing <- utils::head(missing, 10L)
+    msg <- paste0(
+      n_missing,
+      " requested PRISM-data folder",
+      if (n_missing == 1L) "" else "s",
+      " do not exist and will be skipped:\n  ",
+      paste(display_missing, collapse = "\n  ")
+    )
+    
+    if (n_missing > 10L) {
+      msg <- paste0(msg, "\n  ...")
     }
+    
+    warning(msg, call. = FALSE)
   }
- 
-  zz
+  
+  pd <- pd[folder_exists]
+  pd_path <- pd_path[folder_exists]
+  
+  # Determine whether each locally available folder actually contains the
+  # station metadata file named after its PRISM-data folder.
+  stn_csv <- file.path(pd_path, paste0(pd, ".stn.csv"))
+  has_stn_csv <- file.exists(stn_csv)
+  
+  # Derive metadata needed to index `stn_csv_matrix`. Replace only these
+  # helper names if the package uses different pd_get_* function names.
+  pd_info <- data.frame(
+    prism_data = pd,
+    time_step = pd_get_time_step(pd),
+    variable = pd_get_type(pd),
+    resolution = pd_get_resolution(pd),
+    data_class = pd_get_data_class(pd),
+    stringsAsFactors = FALSE
+  )
+  
+  # Verify that the parsed characteristics exist in the expectation matrix
+  # before indexing it. An NA expectation denotes an unsupported / untested
+  # combination and is not treated as an expected absence.
+  matrix_dims <- dimnames(stn_csv_matrix)
+  
+  in_matrix <- with(
+    pd_info,
+    time_step %in% matrix_dims$time_step &
+      variable %in% matrix_dims$variable &
+      resolution %in% matrix_dims$resolution &
+      data_type %in% matrix_dims$data_type
+  )
+  
+  expects_stn_csv <- rep(NA, length(pd))
+  
+  if (any(in_matrix)) {
+    ii <- which(in_matrix)
+    
+    expects_stn_csv[ii] <- stn_csv_matrix[cbind(
+      match(pd_info$time_step[ii], matrix_dims$time_step),
+      match(pd_info$variable[ii], matrix_dims$variable),
+      match(pd_info$resolution[ii], matrix_dims$resolution),
+      match(pd_info$data_type[ii], matrix_dims$data_type)
+    )]
+  }
+  
+  # A value that cannot be indexed or is NA in the matrix has no declared
+  # expectation. Warn separately so package-maintenance gaps are visible.
+  if (anyNA(expects_stn_csv)) {
+    unknown <- pd[is.na(expects_stn_csv)]
+    n_unknown <- length(unknown)
+    
+    display_unknown <- utils::head(unknown, 10L)
+    msg <- paste0(
+      "No station-CSV expectation is defined for ",
+      n_unknown,
+      " PRISM-data folder",
+      if (n_unknown == 1L) "" else "s",
+      ":\n  ",
+      paste(display_unknown, collapse = "\n  ")
+    )
+    
+    if (n_unknown > 10L) {
+      msg <- paste0(msg, "\n  ...")
+    }
+    
+    warning(msg, call. = FALSE)
+  }
+  
+  # The product has a station CSV even though the capability matrix says it
+  # should not. Still read it: the physical file is authoritative.
+  unexpected_found <- has_stn_csv & !is.na(expects_stn_csv) &
+    !expects_stn_csv
+  
+  if (any(unexpected_found)) {
+    found <- pd[unexpected_found]
+    n_found <- length(found)
+    
+    display_found <- utils::head(found, 10L)
+    msg <- paste0(
+      "Found a `.stn.csv` file for ",
+      n_found,
+      " PRISM-data folder",
+      if (n_found == 1L) "" else "s",
+      " where station metadata was not expected:\n  ",
+      paste(display_found, collapse = "\n  ")
+    )
+    
+    if (n_found > 10L) {
+      msg <- paste0(msg, "\n  ...")
+    }
+    
+    warning(msg, call. = FALSE)
+  }
+  
+  # The product capability matrix expects a station CSV, but the downloaded
+  # directory does not contain it. It cannot be read, so it is skipped.
+  expected_missing <- !has_stn_csv & !is.na(expects_stn_csv) &
+    expects_stn_csv
+  
+  if (any(expected_missing)) {
+    missing_stn <- pd[expected_missing]
+    n_missing_stn <- length(missing_stn)
+    
+    display_missing_stn <- utils::head(missing_stn, 10L)
+    msg <- paste0(
+      "Did not find an expected `.stn.csv` file for ",
+      n_missing_stn,
+      " PRISM-data folder",
+      if (n_missing_stn == 1L) "" else "s",
+      ":\n  ",
+      paste(display_missing_stn, collapse = "\n  "),
+      "\n\n  The PRISM-data folder may be incomplete. Try downloading ",
+      "the product again with `get_prism_*()`."
+    )
+    
+    if (n_missing_stn > 10L) {
+      msg <- paste0(msg, "\n  ...")
+    }
+    
+    warning(msg, call. = FALSE)
+  }
+  
+  # Read every station CSV that physically exists, including an unexpected
+  # one; do not attempt `read_md_csv()` for folders without the file.
+  pd_to_read <- pd[has_stn_csv]
+  
+  if (!length(pd_to_read)) {
+    return(data.frame())
+  }
+  
+  dplyr::bind_rows(lapply(pd_to_read, read_md_csv))
 }
 
 # there are 4 different ways the metadata csv files are formatted. This function
 # reads each of those different formats, and wrangles them into the same format
-# with a consisent set of header names
+# with a consistent set of header names
 # x should be a .bil file name
 read_md_csv <- function(x) {
   fn <- file.path(getOption("prism.path"), x, paste0(x, ".stn.csv"))
