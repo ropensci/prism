@@ -15,13 +15,12 @@ data.frame containing metadata for all specified prism data.
 \description{
 Retrieves prism metadata from the specified prism data. "prism data", i.e.,
 \code{pd} are the folder names returned by \code{\link[=prism_archive_ls]{prism_archive_ls()}} or
-\code{\link[=prism_archive_subset]{prism_archive_subset()}}. These functions get the name or date from these
-data, or convert these data to a file name. A warning is provided if the
-specified prism data do not exist in the archive.
+\code{\link[=prism_archive_subset]{prism_archive_subset()}}. A warning is provided if the specified prism data
+do not exist in the archive.
 }
 \details{
-The metadata includes the following variables from the .info.txt file for
-daily, monthly, and annual data:
+The metadata includes a subset of the the following variables from the
+.info.txt file for daily, monthly, and annual, time series and normals data:
 \itemize{
 \item PRISM_DATASET_FILENAME
 \item PRISM_DATASET_CREATE_DATE
@@ -29,6 +28,9 @@ daily, monthly, and annual data:
 \item PRISM_DATASET_VERSION
 \item PRISM_CODE_VERSION
 \item PRISM_DATASET_REMARKS
+\item PRISM_SOURCE_FILENAME
+\item PRISM_SOURCE_CREATE_DATE
+\item PRISM_DATASET_RELEASE_NUMBER
 }
 
 Additionally, two local variables are added identifying where the file is
@@ -38,19 +40,10 @@ located on the local system:
 \item folder_path
 }
 
-The annual and monthly normals data includes different keys in
-the .info.txt, so they are renamed to be the same as those found in the
-other temporal data. The keys/variables are renamed as follows:
-\itemize{
-\item PRISM_FILENAME --> PRISM_DATASET_FILENAME
-\item PRISM_CREATE_DATE --> PRISM_DATASET_CREATE_DATE
-\item PRISM_DATASET --> PRISM_DATASET_TYPE
-\item PRISM_VERSION --> PRISM_CODE_VERSION
-\item PRISM_REMARKS --> PRISM_DATASET_REMARKS
-}
-
-Additionally, the normals does not include PRISM_DATASET_VERSION, so that
-variable is added with \code{NA} values.
+Not all metadata includes all variables, so only the variables that are
+included in the specified \code{pd} are included in the returned data frame. If
+not all variables are found in all of the \code{pd}, \code{NAs} are introduced into
+the missing variables.
 }
 \examples{
 \dontrun{
