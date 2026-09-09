@@ -202,10 +202,6 @@ pd_get_date <- function(pd, legacy = FALSE) {
   
   # and now deal with legacy
   if (legacy) {
-    # change normals to ""
-    if (any(normals))
-      dates[normals] <- ""
-    
     # add "01" to monthly and "01-01" to daily
     ts <- pd_get_time_step(pd)
     annual <- ts == "annual"
@@ -215,6 +211,10 @@ pd_get_date <- function(pd, legacy = FALSE) {
     
     if (any(monthly))
       dates[monthly] <- paste0(dates[monthly], "-01")
+    
+    # change normals to ""
+    if (any(normals))
+      dates[normals] <- ""
   }
   
   dates
