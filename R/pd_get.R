@@ -282,14 +282,15 @@ pd_get_time_step <- function(pd) {
 #' @export
 #' @rdname pd_get
 pd_get_data_class <- function(pd) {
-  normals <- pd_is_normal(pd)
-  out <- rep("time series", length(pd))
-  
-  if (length(normals) > 1) {
-    out[normals] <- "normals"
+  if (!is.character(pd)) {
+    stop("`pd` must be a character vector.", call. = FALSE)
   }
   
-  out
+  ifelse(
+    pd_is_normal(pd),
+    "normals",
+    "time series"
+  )
 }
 
 pd_is_normal <- function(pd) {
