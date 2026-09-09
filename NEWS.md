@@ -14,6 +14,7 @@
 - added `pd_get_time_step()`
 - changed `pd_get_date()`. It now returns a date that matches the timestep of the prism data. Because the previous version added on months and days to monthly and annual data, that behviour can be preserved using the `legacy=TRUE` parameter, which is `FALSE` by default.
 - Updated `pd_get_md()` so that it returns all variables that are found in the .info.txt file and no longer changes any names found in those files. 
+- added `pd_get_data_class()` and `pd_get_resoultion()`
 
 # prism 0.3.0
 

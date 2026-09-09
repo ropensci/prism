@@ -5,7 +5,9 @@
 \alias{pd_get_date}
 \alias{pd_get_type}
 \alias{pd_get_time_step}
+\alias{pd_get_data_class}
 \alias{pd_to_file}
+\alias{pd_get_resolution}
 \title{Perform action on "prism data"}
 \usage{
 pd_get_name(pd)
@@ -16,7 +18,11 @@ pd_get_type(pd)
 
 pd_get_time_step(pd)
 
+pd_get_data_class(pd)
+
 pd_to_file(pd)
+
+pd_get_resolution(pd)
 }
 \arguments{
 \item{pd}{prism data character vector.}
@@ -32,11 +38,14 @@ names/dates.
 e.g., 'ppt'.
 
 \code{pd_get_time_step()} returns a character vector of time steps. One
-of: "daily", "monthly", "annual", "daily normals", "monthly normals",
-"annual normals".
+of: "daily", "monthly", "annual".
+
+\code{pd_get_data_class()} returns one of "normals" or "time series".
 
 \code{pd_to_file()} returns a character vector with the full path to the
 bil file.
+
+\code{pd_get_resolution()} returns one of "4km" or "800m".
 }
 \description{
 \code{pd_get_name()} extracts a long, human readable name from the prism
@@ -56,9 +65,13 @@ is returned.
 
 \code{pd_get_time_step()} parses the time step from the prism data.
 
+\code{pd_get_data_class()} parses data class from \code{pd}.
+
 \code{pd_to_file()} converts prism data to a fully specified file, i.e., the
 full path to the file in the prism archive. A warning is posted if the
 file does not exist in the local prism archive.
+
+\code{pd_get_resolution()} gets the resoultion from \code{pd}.
 }
 \details{
 "prism data", i.e., \code{pd} are the folder names returned by

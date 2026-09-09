@@ -246,8 +246,7 @@ pd_get_type <- function(pd) {
 #' @description `pd_get_time_step()` parses the time step from the prism data.
 #' 
 #' @return `pd_get_time_step()` returns a character vector of time steps. One 
-#' of: "daily", "monthly", "annual", "daily normals", "monthly normals", 
-#' "annual normals".
+#' of: "daily", "monthly", "annual".
 #' 
 #' @export
 #' @rdname pd_get
@@ -273,9 +272,24 @@ pd_get_time_step <- function(pd) {
     )
   }
   
-  ts_out[normals] <- paste(ts_out[normals], "normals")
-  
   ts_out
+}
+
+#' @description `pd_get_data_class()` parses data class from `pd`.
+#' 
+#' @return `pd_get_data_class()` returns one of "normals" or "time series".
+#' 
+#' @export
+#' @rdname pd_get
+pd_get_data_class <- function(pd) {
+  normals <- pd_is_normal(pd)
+  out <- rep("time series", length(pd))
+  
+  if (length(normals) > 1) {
+    out[normals] <- "normals"
+  }
+  
+  out
 }
 
 pd_is_normal <- function(pd) {
@@ -411,4 +425,43 @@ pd_to_file <- function(pd) {
   ))
   
   pfile
+}
+
+#' @description
+#' `pd_get_resolution()` gets the resoultion from `pd`. 
+#' 
+#' @return `pd_get_resolution()` returns one of "4km" or "800m".
+#' 
+#' @export
+#' @rdname pd_get
+pd_get_resolution <- function(pd) {
+  if (!is.character(pd)) {
+    stop("`pd` must be a character vector.", call. = FALSE)
+  }
+  
+  resolution_token <- stringr::str_match(
+    pd,
+    "_us_(25m|30s)_"
+  )[, 2L]
+  
+  resolution_lookup <- c(
+    `25m` = "4km",
+    `30s` = "800m"
+  )
+  
+  resolution <- unname(resolution_lookup[resolution_token])
+  
+  if (anyNA(resolution)) {
+    bad <- unique(pd[is.na(resolution)])
+    
+    stop(
+      "Could not determine PRISM resolution from folder name(s):\n  ",
+      paste(utils::head(bad, 10L), collapse = "\n  "),
+      "\n\nExpected a PRISM folder-name component such as ",
+      "`_us_25m_` (4km) or `_us_30s_` (800m).",
+      call. = FALSE
+    )
+  }
+  
+  resolution
 }
