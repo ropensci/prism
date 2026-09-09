@@ -1,0 +1,6 @@
+This code created by Perplexity. It is used to create stn_csv_matrix which is 
+used by pd_get_station_md() to understand if station metadata is expected or not
+
+1. run prism_test_matrix.R
+2. run make_stn_csv_matrix.R
+3. copy the output to define stn_csv_matrix
