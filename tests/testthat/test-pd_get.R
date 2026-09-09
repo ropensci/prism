@@ -1,4 +1,7 @@
 
+orig_format <- prism_get_format()
+teardown({prism_set_format(orig_format)})
+
 # Hard coded prism folder names rather than relying on those in the testing 
 # folders (for simplicity)
 tst_files <- c(
@@ -86,6 +89,13 @@ test_that("pd_to_file() works.", {
     tmp
   }
   
+  expected_ext <- c(
+    geotiff = "tif",
+    bil = "bil",
+    asc = "asc",
+    nc = "nc"
+  )
+  
   for (ff in c('bil', 'geotiff', 'asc', 'nc')) {
   
     prism_set_format(ff)
@@ -94,10 +104,9 @@ test_that("pd_to_file() works.", {
     
     expect_identical(tmp[,ncol(tmp) - 1], tst_files)
     
-    base_ext <- prism:::prism_format_file_ext() 
     expect_identical(
       tmp[!normals,ncol(tmp)], 
-      paste0(tst_files[!normals], base_ext)
+      paste0(tst_files[!normals], ".", expected_ext[[ff]])
     )
     
     # normals always use .tif
@@ -125,6 +134,29 @@ test_that("pd_to_file() works.", {
     tmp[1, ncol(tmp)], 
     paste0(tst_files[2], '.tif')
   )
+})
+
+test_that("pd_to_files(): bundled observed raster fixtures are readable", {
+  for (ff in c('bil', 'geotiff', 'asc', 'nc')) {
+    
+    prism_set_format(ff)
+    prism_set_dl_dir(file.path(
+      tempdir(), "prismdata", ifelse(ff == "geotiff", "tif", ff)
+    ))
+    
+    for (pd in prism_archive_ls()) {
+      file <- pd_to_file(pd)
+      expect_true(file.exists(file))
+      
+      r <- terra::rast(file)
+      
+      expect_s4_class(r, "SpatRaster")
+      expect_gt(terra::ncell(r), 0L)
+      expect_true(any(!is.na(terra::values(r, mat = FALSE))))
+    }
+    
+  }
+
 })
 
 exp <- c("daily", "monthly", "annual", "annual", "monthly", 
