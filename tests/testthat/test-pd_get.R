@@ -127,8 +127,8 @@ test_that("pd_to_file() works.", {
   )
 })
 
-exp <- c("daily", "monthly", "annual normals", "annual", "monthly", 
-         "monthly normals", "daily normals", "annual", "monthly", "daily", 
+exp <- c("daily", "monthly", "annual", "annual", "monthly", 
+         "monthly", "daily", "annual", "monthly", "daily", 
          "annual", "monthly", "daily")
 
 test_that("pd_get_time_step() works.", {
