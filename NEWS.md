@@ -15,6 +15,7 @@
 - changed `pd_get_date()`. It now returns a date that matches the timestep of the prism data. Because the previous version added on months and days to monthly and annual data, that behviour can be preserved using the `legacy=TRUE` parameter, which is `FALSE` by default.
 - Updated `pd_get_md()` so that it returns all variables that are found in the .info.txt file and no longer changes any names found in those files. 
 - added `pd_get_data_class()` and `pd_get_resoultion()`
+- Updated `pd_get_station_md()` to work with different formats and expected combinations of time step, type, data class, and resolution. Should affect output returned except that it no longer fails for certain data types, e.g., tmean, it returns an empty data frame since we don't expect there to be station meta data. #158
 
 # prism 0.3.0
 

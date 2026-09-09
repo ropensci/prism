@@ -1,3 +1,8 @@
+# asc folder should fail/return nothing
+# bil folder should fail/return nothing
+# nc should work
+# tif should fail
+
 
 # test works --------------------
 exp_cols <- c("date","prism_data", "type", "station", "name", "longitude", 
@@ -8,36 +13,67 @@ avail_files <- rbind(c("ppt", "1981-01-01"), c("ppt", "1991-01-01"),
                      c("tmin", "2011-06-15"))
 
 test_that("pd_get_station_md() works", {
-  for (i in seq_len(nrow(avail_files))) {
-    expect_warning(expect_s3_class(
-      x <- pd_get_station_md(prism_archive_subset(
-        avail_files[i, 1], 
-        "daily", 
-        dates = avail_files[i, 2],
-        resolution = '4km'
-      )),
-      "tbl_df"
-    ))
-    expect_gt(nrow(x), 0, label = avail_files[i,])
-    expect_true(all(colnames(x) %in% exp_cols))
-    expect_true(all(exp_cols %in% colnames(x)))
-  }
+  prism_set_dl_dir(md_dl)
+  pd <- prism_archive_ls()
   
-  expect_warning(expect_s3_class(
-    x <- pd_get_station_md(prism_archive_subset(
-      "tdmean", "monthly", years = 2005:2006, mon = 11:12, resolution = '4km'
-    )),
+  # checking this; if it fails you probably added or removed test data from the
+  # test_that/prismdata/md_only folder
+  expect_equal(length(pd), 4)
+
+  expect_s3_class(
+    x <- expect_message(pd_get_station_md(pd)),
     "tbl_df"
-  ))
+  )
+  expect_gt(nrow(x), 0)
+  expect_setequal(colnames(x), exp_cols)
   
-  expect_equal(nrow(x), 3242 + 3255)
+  
+  expect_s3_class(
+    y <- expect_no_message(pd_get_station_md(prism_archive_subset(
+      "soltrans", "monthly normals", resolution = '800m'
+    ))),
+    "tbl_df"
+  )
+  expect_setequal(colnames(y), exp_cols)
+  
+  expect_gt(nrow(x), nrow(y))
+  
+  # asc folder return nothing
+  prism_set_dl_dir(asc_dl)
+  expect_s3_class(
+    x <- expect_message(pd_get_station_md(prism_archive_ls())),
+    "tbl_df"
+  )
+  expect_equal(nrow(x), 0)
+  
+  # bil folder should return nothing
+  prism_set_dl_dir(bil_dl)
+  expect_s3_class(
+    x <- expect_message(pd_get_station_md(prism_archive_ls())),
+    "tbl_df"
+  )
+  expect_equal(nrow(x), 0)
+  
+  # nc should work
+  prism_set_dl_dir(nc_dl)
+  expect_s3_class(
+    x <- expect_no_message(pd_get_station_md(prism_archive_ls())),
+    "tbl_df"
+  )
+  expect_gt(nrow(x), 0)
+  
+  # tif should return nothing
+  prism_set_dl_dir(tif_dl)
+  expect_s3_class(
+    x <- expect_message(pd_get_station_md(prism_archive_ls())),
+    "tbl_df"
+  )
+  expect_equal(nrow(x), 0)
 })
 
 test_that("pd_get_station_md() fails correctly", {
-  expect_warning(
-    pd <- prism_archive_subset(
-      "ppt", "daily normals", resolution = "4km", mon = 3
-    )
-  )
-  expect_error(expect_warning(pd_get_station_md(pd)))
+  # we know we don't have todays data
+  expect_error(pd_get_station_md(
+    paste0("prism_tmax_us_25m_", format(Sys.Date(), "%Y%m%d"))
+  ))
 })

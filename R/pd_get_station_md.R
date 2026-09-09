@@ -110,7 +110,7 @@ pd_get_station_md <- function(pd)
     time_step %in% matrix_dims$time_step &
       variable %in% matrix_dims$variable &
       resolution %in% matrix_dims$resolution &
-      data_type %in% matrix_dims$data_type
+      data_class %in% matrix_dims$data_class
   )
   
   expects_stn_csv <- rep(NA, length(pd))
@@ -122,7 +122,7 @@ pd_get_station_md <- function(pd)
       match(pd_info$time_step[ii], matrix_dims$time_step),
       match(pd_info$variable[ii], matrix_dims$variable),
       match(pd_info$resolution[ii], matrix_dims$resolution),
-      match(pd_info$data_type[ii], matrix_dims$data_type)
+      match(pd_info$data_class[ii], matrix_dims$data_class)
     )]
   }
   
@@ -203,12 +203,36 @@ pd_get_station_md <- function(pd)
     warning(msg, call. = FALSE)
   }
   
-  # Read every station CSV that physically exists, including an unexpected
-  # one; do not attempt `read_md_csv()` for folders without the file.
+  expected_absent <- !has_stn_csv &
+    !is.na(expects_stn_csv) &
+    !expects_stn_csv
+  
+  if (any(expected_absent)) {
+    no_metadata <- pd[expected_absent]
+    n_no_metadata <- length(no_metadata)
+    
+    shown <- utils::head(no_metadata, 10L)
+    
+    msg <- paste0(
+      "Station metadata are not available for ",
+      n_no_metadata,
+      " requested PRISM-data folder",
+      if (n_no_metadata == 1L) "" else "s",
+      ":\n  ",
+      paste(shown, collapse = "\n  ")
+    )
+    
+    if (n_no_metadata > 10L) {
+      msg <- paste0(msg, "\n  ...")
+    }
+    
+    message(msg)
+  }
+  
   pd_to_read <- pd[has_stn_csv]
   
   if (!length(pd_to_read)) {
-    return(data.frame())
+    return(dplyr::tibble())
   }
   
   dplyr::bind_rows(lapply(pd_to_read, read_md_csv))
@@ -289,3 +313,28 @@ read_md_csv <- function(x) {
     dplyr::select(date, prism_data, type, station, name, longitude, 
                   latitude, elevation, network, stnid)
 }
+
+stn_csv_matrix <- 
+  structure(
+    c(FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, 
+      FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, 
+      TRUE, TRUE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 
+      NA, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, 
+      TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, 
+      TRUE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 
+      FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, 
+      FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, 
+      TRUE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 
+      FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, 
+      FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, FALSE, 
+      TRUE, FALSE, NA, FALSE, FALSE, NA, FALSE, FALSE, NA, TRUE, FALSE, 
+      NA, TRUE, FALSE), 
+    dim = c(time_step = 3L, variable = 11L, resolution = 2L, data_class = 2L), 
+    dimnames = list(
+      time_step = c("daily", "monthly", "annual"), 
+      variable = c("tmean", "tmin", "tmax", "tdmean", "ppt", "vpdmin", "vpdmax", 
+                   "solclear", "solslope", "soltotal", "soltrans"), 
+      resolution = c("4km", "800m"), 
+      data_class = c("time series", "normals")
+    )
+  )
