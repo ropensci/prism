@@ -9,6 +9,9 @@
 #'
 #' @param col the color pattern to use.  The default is heat, the other valid
 #'   option is "redblue".
+#'   
+#' @param draw Logical. Should the plot be drawn to the active graphics
+#'   device? Defaults to `TRUE`.
 #'
 #' @return Invisibly returns `gg` object of the image.
 #'
@@ -29,13 +32,16 @@
 #'
 #' # and plot it
 #' pd_image(pd)
+#' 
+#' # or don't draw to active graphics device
+#' p <- pd_image(pd, draw = FALSE)
 #' }
 #'
 #' @import ggplot2
 #'
 #' @export
 
-pd_image <- function(pd, col = "heat") {
+pd_image <- function(pd, col = "heat", draw = TRUE) {
   
   if (length(pd) > 1) {
     stop("You can only quick image one file at a time.")
@@ -46,6 +52,10 @@ pd_image <- function(pd, col = "heat") {
   }
   
   col <- match.arg(col, c("heat", "redblue"))
+  
+  if (length(draw) > 1 | is.null(draw) | !is.logical(draw)) {
+    stop("`draw` should be a single, non-null logical.")
+  }
 
   pname <- pd_get_name(pd)
   ptype <- pd_get_type(pd)
@@ -85,6 +95,9 @@ pd_image <- function(pd, col = "heat") {
     prPlot <- prPlot + scale_fill_gradient(low = "red", high = "blue")
   }
 
-  print(prPlot)
+  if (draw) {
+    print(prPlot)
+  }
+  
   invisible(prPlot)
 }

@@ -4,7 +4,7 @@
 \alias{pd_image}
 \title{Quick spatial image of prism data}
 \usage{
-pd_image(pd, col = "heat")
+pd_image(pd, col = "heat", draw = TRUE)
 }
 \arguments{
 \item{pd}{the name of a single file to be plotted, this is most
@@ -12,6 +12,9 @@ easily found through \code{\link[=prism_archive_ls]{prism_archive_ls()}} or \cod
 
 \item{col}{the color pattern to use.  The default is heat, the other valid
 option is "redblue".}
+
+\item{draw}{Logical. Should the plot be drawn to the active graphics
+device? Defaults to \code{TRUE}.}
 }
 \value{
 Invisibly returns \code{gg} object of the image.
@@ -35,6 +38,9 @@ pd <- prism_archive_subset("tmean", "daily", dates = "2013-06-05")
 
 # and plot it
 pd_image(pd)
+
+# or don't draw to active graphics device
+p <- pd_image(pd, draw = FALSE)
 }
 
 }
