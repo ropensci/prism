@@ -2,45 +2,24 @@
 orig_format <- prism_get_format()
 teardown({prism_set_format(orig_format)})
 
+tst_mat <- read.csv(
+  file.path(test_path(), "fixtures", "pd_get-test_matrix.csv")
+)
+
 # Hard coded prism folder names rather than relying on those in the testing 
 # folders (for simplicity)
-tst_files <- c(
-  "prism_ppt_us_25m_19670615", 
-  "prism_tmin_us_25m_202004", 
-  "prism_tmin_us_30s_2020_avg_30y", 
-  "prism_tmax_us_25m_2019", 
-  "prism_vpdmin_us_25m_196710", 
-  "prism_vpdmax_us_25m_202004_avg_30y",
-  "prism_ppt_us_25m_20200301_avg_30y",
-  "prism_ppt_us_30s_1981",
-  "prism_tmean_us_30s_200004", 
-  "prism_tmean_us_30s_20140603",
-  "prism_tmean_us_25m_1999",
-  "prism_tmean_us_25m_201001",
-  "prism_tmean_us_25m_20130113"
-)
+tst_files <- tst_mat$pd
 
-normals <- c(FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE, rep(FALSE, 6))
+# normals is used to subset multiple tests
+normals <- prism:::pd_is_normal(tst_files)
 
-
-exp <- c(
-  "Jun 15, 1967 - 4km resolution - Precipitation", 
-  "Apr 2020 - 4km resolution - Minimum temperature", 
-  "Annual 30-year normals - 800m resolution - Minimum temperature", 
-  "2019 - 4km resolution - Maximum temperature", 
-  "Oct 1967 - 4km resolution - Minimum vapor pressure deficit", 
-  "Apr 30-year normals - 4km resolution - Maximum vapor pressure deficit",
-  "Mar 01 30-year normals - 4km resolution - Precipitation",
-  "1981 - 800m resolution - Precipitation",
-  "Apr 2000 - 800m resolution - Mean temperature",
-  "Jun 03, 2014 - 800m resolution - Mean temperature",
-  "1999 - 4km resolution - Mean temperature",
-  "Jan 2010 - 4km resolution - Mean temperature",
-  "Jan 13, 2013 - 4km resolution - Mean temperature"
-)
-
+test_that("internal is_normal() works", {
+  expect_identical(normals, tst_mat$is_normal)
+})
 
 test_that("pd_get_name() works.", {
+  exp <- tst_mat$full_name
+  
   expect_identical(pd_get_name(tst_files), exp)
   expect_identical(pd_get_name(tst_files[normals]), exp[normals])
   expect_identical(pd_get_name(tst_files[!normals]), exp[!normals])
@@ -48,15 +27,10 @@ test_that("pd_get_name() works.", {
   expect_identical(pd_get_name(tst_files[3]), exp[3])
 })
 
-exp_legacy <- c("1967-06-15", "2020-04-01", "", "2019-01-01", "1967-10-01", 
-                "", "", "1981-01-01", "2000-04-01", "2014-06-03", "1999-01-01", 
-                "2010-01-01", "2013-01-13")
-
-exp <- c("1967-06-15", "2020-04", "1991-2020", "2019", "1967-10", 
-         "1991-2020-04", "1991-2020-03-01", "1981", "2000-04", "2014-06-03", 
-         "1999", "2010-01", "2013-01-13")
-
 test_that("pd_get_date() works.", {
+  exp <- tst_mat$date
+  exp_legacy <- tst_mat$date_legacy
+  
   expect_identical(pd_get_date(tst_files), exp)
   expect_identical(pd_get_date(tst_files, legacy = TRUE), exp_legacy)
   
@@ -66,10 +40,9 @@ test_that("pd_get_date() works.", {
   expect_identical(pd_get_date(tst_files[3]), exp[3])
 })
 
-exp <- c('ppt', 'tmin', 'tmin', 'tmax', 'vpdmin', 'vpdmax', 'ppt', 
-         'ppt', 'tmean', 'tmean', 'tmean', 'tmean', 'tmean')
-
 test_that("pd_get_type() works.", {
+  exp <- tst_mat$type
+  
   expect_identical(pd_get_type(tst_files), exp)
   expect_identical(pd_get_type(tst_files[normals]), exp[normals])
   expect_identical(pd_get_type(tst_files[!normals]), exp[!normals])
@@ -159,14 +132,32 @@ test_that("pd_to_files(): bundled observed raster fixtures are readable", {
 
 })
 
-exp <- c("daily", "monthly", "annual", "annual", "monthly", 
-         "monthly", "daily", "annual", "monthly", "daily", 
-         "annual", "monthly", "daily")
-
 test_that("pd_get_time_step() works.", {
+  exp <- tst_mat$time_step
+  
   expect_identical(pd_get_time_step(tst_files), exp)
   expect_identical(pd_get_time_step(tst_files[normals]), exp[normals])
   expect_identical(pd_get_time_step(tst_files[!normals]), exp[!normals])
   expect_identical(pd_get_time_step(tst_files[1]), exp[1])
   expect_identical(pd_get_time_step(tst_files[3]), exp[3])
+})
+
+test_that("pd_get_data_class() works.", {
+  exp <- tst_mat$data_class
+  
+  expect_identical(pd_get_data_class(tst_files), exp)
+  expect_identical(pd_get_data_class(tst_files[normals]), exp[normals])
+  expect_identical(pd_get_data_class(tst_files[!normals]), exp[!normals])
+  expect_identical(pd_get_data_class(tst_files[1]), exp[1])
+  expect_identical(pd_get_data_class(tst_files[3]), exp[3])
+})
+
+test_that("pd_get_resolution() works.", {
+  exp <- tst_mat$resolution
+  
+  expect_identical(pd_get_resolution(tst_files), exp)
+  expect_identical(pd_get_resolution(tst_files[normals]), exp[normals])
+  expect_identical(pd_get_resolution(tst_files[!normals]), exp[!normals])
+  expect_identical(pd_get_resolution(tst_files[1]), exp[1])
+  expect_identical(pd_get_resolution(tst_files[3]), exp[3])
 })

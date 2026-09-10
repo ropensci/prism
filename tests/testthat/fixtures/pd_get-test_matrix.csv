@@ -1,0 +1,14 @@
+pd,full_name,is_normal,date_legacy,date,type,time_step,data_class,resolution
+prism_ppt_us_25m_19670615,"Jun 15, 1967 - 4km resolution - Precipitation",FALSE,1967-06-15,1967-06-15,ppt,daily,time series,4km
+prism_tmin_us_25m_202004,Apr 2020 - 4km resolution - Minimum temperature,FALSE,2020-04-01,2020-04,tmin,monthly,time series,4km
+prism_tmin_us_30s_2020_avg_30y,Annual 30-year normals - 800m resolution - Minimum temperature,TRUE,,1991-2020,tmin,annual,normals,800m
+prism_tmax_us_25m_2019,2019 - 4km resolution - Maximum temperature,FALSE,2019-01-01,2019,tmax,annual,time series,4km
+prism_vpdmin_us_25m_196710,Oct 1967 - 4km resolution - Minimum vapor pressure deficit,FALSE,1967-10-01,1967-10,vpdmin,monthly,time series,4km
+prism_vpdmax_us_25m_202004_avg_30y,Apr 30-year normals - 4km resolution - Maximum vapor pressure deficit,TRUE,,1991-2020-04,vpdmax,monthly,normals,4km
+prism_ppt_us_25m_20200301_avg_30y,Mar 01 30-year normals - 4km resolution - Precipitation,TRUE,,1991-2020-03-01,ppt,daily,normals,4km
+prism_ppt_us_30s_1981,1981 - 800m resolution - Precipitation,FALSE,1981-01-01,1981,ppt,annual,time series,800m
+prism_tmean_us_30s_200004,Apr 2000 - 800m resolution - Mean temperature,FALSE,2000-04-01,2000-04,tmean,monthly,time series,800m
+prism_tmean_us_30s_20140603,"Jun 03, 2014 - 800m resolution - Mean temperature",FALSE,2014-06-03,2014-06-03,tmean,daily,time series,800m
+prism_tmean_us_25m_1999,1999 - 4km resolution - Mean temperature,FALSE,1999-01-01,1999,tmean,annual,time series,4km
+prism_tmean_us_25m_201001,Jan 2010 - 4km resolution - Mean temperature,FALSE,2010-01-01,2010-01,tmean,monthly,time series,4km
+prism_tmean_us_25m_20130113,"Jan 13, 2013 - 4km resolution - Mean temperature",FALSE,2013-01-13,2013-01-13,tmean,daily,time series,4km
