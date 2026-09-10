@@ -90,7 +90,8 @@ write_prism_fixture <- function(r, filename, format) {
       r,
       filename = filename,
       filetype = "AAIGrid",
-      overwrite = TRUE
+      overwrite = TRUE, 
+      NAflag = -9999
     ),
     
     tif = terra::writeRaster(
