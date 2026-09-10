@@ -306,7 +306,7 @@ read_md_csv <- function(x) {
   # select specific columns
   out_df |> 
     dplyr::mutate(
-      date = pd_get_date(x), 
+      date = pd_get_date(x, complete = FALSE), 
       type = pd_get_type(x),
       prism_data = x
     ) |> 

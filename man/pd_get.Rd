@@ -12,7 +12,7 @@
 \usage{
 pd_get_name(pd)
 
-pd_get_date(pd, legacy = FALSE)
+pd_get_date(pd, complete = TRUE)
 
 pd_get_type(pd)
 
@@ -27,8 +27,9 @@ pd_get_resolution(pd)
 \arguments{
 \item{pd}{prism data character vector.}
 
-\item{legacy}{Boolean. If \code{TRUE}, then maintains the convention in v0.30
-and earlier. See description for details.}
+\item{complete}{Boolean. If \code{TRUE}, then maintains the convention in v0.3.0
+and earlier. See description for details. \code{complete=TRUE} is deprecated
+and will be removed in a future release.}
 }
 \value{
 \code{pd_get_name()} and \code{pd_get_date()} return a character vector of
@@ -55,11 +56,11 @@ data.
 matches the timestep of the prism data. For annual data a year is returned,
 for monthly data year-month is returned, and for daily data year-month-day.
 For normals, the 30-year range is returned + the month and day, as
-approriate.
+appropriate.
 
-If \code{legacy = TRUE}, date is returned in yyyy-mm-dd format. For monthly data,
-dd is 01 and for annual data mm is also 01. For normals, an empty character
-is returned.
+If \code{complete = TRUE}, date is returned in "complete" yyyy-mm-dd format. For
+monthly data, dd is 01 and for annual data mm is also 01. For normals, an
+empty character is returned.
 
 \code{pd_get_type()} parses the variable from the prism data.
 
@@ -88,7 +89,7 @@ pd_get_name(pd)
 ## [1] "2000 - 4km resolution - Precipitation" "2001 - 4km resolution - Precipitation"
 ## [3] "2002 - 4km resolution - Precipitation"
 
-pd_get_date(pd)
+pd_get_date(pd, complete = FALSE)
 ## [1] "2000" "2001" "2002"
 
 pd_get_type(pd)

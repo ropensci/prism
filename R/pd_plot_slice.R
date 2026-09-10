@@ -61,7 +61,7 @@ pd_plot_slice <- function(pd, location) {
     )
   }
   
-  meta_d <- pd_get_date(pd)
+  meta_d <- pd_get_date(pd, complete = FALSE)
   meta_names <- pd_get_name(pd)[1]
   param_name <- strsplit(meta_names,"-")[[1]][3]
 

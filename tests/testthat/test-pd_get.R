@@ -31,13 +31,27 @@ test_that("pd_get_date() works.", {
   exp <- tst_mat$date
   exp_legacy <- tst_mat$date_legacy
   
-  expect_identical(pd_get_date(tst_files), exp)
-  expect_identical(pd_get_date(tst_files, legacy = TRUE), exp_legacy)
+  expect_identical(pd_get_date(tst_files, complete = FALSE), exp)
+  expect_identical(pd_get_date(tst_files, complete = TRUE), exp_legacy)
   
-  expect_identical(pd_get_date(tst_files[normals]), exp[normals])
-  expect_identical(pd_get_date(tst_files[!normals]), exp[!normals])
-  expect_identical(pd_get_date(tst_files[1]), exp[1])
-  expect_identical(pd_get_date(tst_files[3]), exp[3])
+  expect_identical(
+    pd_get_date(tst_files[normals], complete = FALSE), 
+    exp[normals]
+  )
+  expect_identical(
+    pd_get_date(tst_files[!normals], complete = FALSE), 
+    exp[!normals]
+  )
+  expect_identical(pd_get_date(tst_files[1], complete = FALSE), exp[1])
+  expect_identical(pd_get_date(tst_files[3], complete = FALSE), exp[3])
+  
+  expect_error(
+    pd_get_date(pd_get_date[tst_files[1]], complete = c(TRUE, FALSE))
+  )
+  expect_error(pd_get_date(pd_get_date[tst_files[1]], complete = 'false'))
+  expect_error(pd_get_date(pd_get_date[tst_files[1]], complete = NA))
+  expect_error(pd_get_date(pd_get_date[tst_files[1]], complete = NULL))
+  
 })
 
 test_that("pd_get_type() works.", {

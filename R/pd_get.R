@@ -22,7 +22,7 @@
 #' ## [1] "2000 - 4km resolution - Precipitation" "2001 - 4km resolution - Precipitation"
 #' ## [3] "2002 - 4km resolution - Precipitation"
 #' 
-#' pd_get_date(pd)
+#' pd_get_date(pd, complete = FALSE)
 #' ## [1] "2000" "2001" "2002"
 #' 
 #' pd_get_type(pd)
@@ -69,14 +69,14 @@ pd_get_name <- function(pd) {
   dates <- rep('', nrow(pd_parse))
   
   if (any(!normals)) {
-    dd <- pd_get_date(pd[!normals]) |>
+    dd <- pd_get_date(pd[!normals], complete = FALSE) |>
       format_prism_time()
     dates[!normals] <- dd
   }
   
   # normals date conversion
   if (any(normals)) {
-    dd_norm <- pd_get_date(pd[normals]) |>
+    dd_norm <- pd_get_date(pd[normals], complete = FALSE) |>
       format_prism_normals_time()
     
     dates[normals] <- dd_norm
@@ -160,26 +160,32 @@ format_prism_time <- function(x) {
   out
 }
 
-#' @param legacy Boolean. If `TRUE`, then maintains the convention in v0.30 
-#'   and earlier. See description for details.
+#' @param complete Boolean. If `TRUE`, then maintains the convention in v0.3.0 
+#'   and earlier. See description for details. `complete=TRUE` is deprecated
+#'   and will be removed in a future release.
 #'   
 #' @description 
 #' `pd_get_date()` extracts the date from the prism data. Returns a date that 
 #' matches the timestep of the prism data. For annual data a year is returned, 
 #' for monthly data year-month is returned, and for daily data year-month-day. 
 #' For normals, the 30-year range is returned + the month and day, as 
-#' approriate.
+#' appropriate.
 #' 
-#' If `legacy = TRUE`, date is returned in yyyy-mm-dd format. For monthly data, 
-#' dd is 01 and for annual data mm is also 01. For normals, an empty character 
-#' is returned.
+#' If `complete = TRUE`, date is returned in "complete" yyyy-mm-dd format. For 
+#' monthly data, dd is 01 and for annual data mm is also 01. For normals, an 
+#' empty character is returned.
 #' 
 #' @export
 #' @rdname pd_get
-pd_get_date <- function(pd, legacy = FALSE) {
-  if (legacy) {
-    message("`legacy=TRUE` maintains the behavior in v0.3.0 and earlier.", 
-    "\nThe legacy paramter will be removed in a future release.")
+pd_get_date <- function(pd, complete = TRUE) {
+  if (length(complete) > 1 | is.na(complete) | !is.logical(complete)) {
+    stop("`complete` should be a single, non-null, logical.")
+  }
+  
+  if (complete) {
+    message("`complete=TRUE` maintains the behavior in v0.3.0 and earlier.", 
+    "\nThe `complete=TRUE` is deprecated in this release.\n",
+    "Eventually, the `complete` argument will be removed.")
   }
   
   normals <- pd_is_normal(pd)
@@ -201,7 +207,7 @@ pd_get_date <- function(pd, legacy = FALSE) {
   dates[normals] <- paste0("1991-", dates[normals])
   
   # and now deal with legacy
-  if (legacy) {
+  if (complete) {
     # add "01" to monthly and "01-01" to daily
     ts <- pd_get_time_step(pd)
     annual <- ts == "annual"
