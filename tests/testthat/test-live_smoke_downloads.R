@@ -25,26 +25,18 @@ test_that("live PRISM observed and normals smoke test", {
   mm <- "ppt"
   nn <- "tmin"
   
-  get_prism_monthlys(
+  pd_observed <- get_prism_monthlys(
     type = mm,
     years = 2010,
     mon = 1,
     keepZip = FALSE
   )
   
-  get_prism_normals(
+  pd_normal <- get_prism_normals(
     type = nn,
     resolution = "4km",
     annual = TRUE,
     keepZip = FALSE
-  )
-  
-  pd_observed <- prism_archive_subset(
-    mm, temp_period = "monthly", resolution = "4km"
-  )
-  
-  pd_normal <- prism_archive_subset(
-    nn, "annual normals", resolution = "4km"
   )
   
   expect_length(pd_observed, 1L)

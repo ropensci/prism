@@ -18,6 +18,7 @@
 - Updated `pd_get_station_md()` to work with different formats and expected combinations of time step, type, data class, and resolution. Should affect output returned except that it no longer fails for certain data types, e.g., tmean, it returns an empty data frame since we don't expect there to be station meta data. #158
 - reviewed/updated all tests for the different formats (#152)
 - `pd_image()` gains `draw` argument. It defaults to `TRUE` to maintain existing behavior, but ensures that the automatic drawing can be disabled.
+- `get_prism_*()` functions all now invisibly return the folder names (`pd`) that were downloaded. (#161)
 
 # prism 0.3.0
 

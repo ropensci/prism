@@ -114,7 +114,7 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
   }
   
   if (returnName) {
-    return(fn)
+    return(stringr::str_remove(fn, ".zip"))
   }
 }
 

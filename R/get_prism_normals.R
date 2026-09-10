@@ -118,14 +118,23 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
                            ts_service = 'ftp_v2_normals_bil') 
   
   mpb <- txtProgressBar(min = 0, max =length(uris), style = 3)
- 
-  for(i in seq_along(uris)){
-    prism_webservice(uris[i],keepZip, service = 'ftp_v2_normals_bil' )
-    setTxtProgressBar(mpb, i)
+  
+  pd <- character(length(uris))
+  
+  for(i in seq_along(uris)) {
+    pd[i] <- prism_webservice(
+      uris[i],
+      keepZip, 
+      service = 'ftp_v2_normals_bil', 
+      returnName = TRUE
+    )
     
+    setTxtProgressBar(mpb, i)
   }
   
   close(mpb)
+  
+  invisible(pd)
 }
 
 get_days_from_mon_ann <- function(mon, annual) 

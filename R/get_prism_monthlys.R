@@ -96,12 +96,16 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   )
 
   ### Handle all data
+  pd <- character(length(uris))
+  
   if(length(uris) > 0){    
       for(i in seq_along(uris)){
-        prism_webservice(uris[i],keepZip)
+        pd[i] <- prism_webservice(uris[i], keepZip, returnName = TRUE)
         setTxtProgressBar(download_pb, i)
     }
   }
  
   close(download_pb)
+  
+  invisible(pd)
 }

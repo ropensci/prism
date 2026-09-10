@@ -88,8 +88,9 @@ days can be specified as a \code{Date} object, where the year is ignored or
 specified as characters in "mm-dd" or "mmdd" form.}
 }
 \value{
-Nothing is returned - an error will occur if download is not
-successful.
+Invisibly returns the folder names of the downloaded data. These can
+be directly used in any functions that require "PRISM data", i.e., \code{pd}.
+An error will occur if download is not successful.
 }
 \description{
 Download grid cell data from the
@@ -155,12 +156,15 @@ cloud transmittance are not available for daily normals.
 get_prism_annual(type = "tmean", years = 1990:2000, keepZip = FALSE)
 
 # Get annual precipitation for multiple years at 800m resolution
-get_prism_annual(
+pd <- get_prism_annual(
   type = "ppt", 
   years = 2020:2022, 
   resolution = "800m",
   keepZip = FALSE
 )
+
+> pd
+[1] "prism_ppt_us_30s_2020" "prism_ppt_us_30s_2021" "prism_ppt_us_30s_2022"
 
 # Get single year of annual temperature data at high resolution
 get_prism_annual(

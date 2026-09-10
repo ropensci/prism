@@ -46,20 +46,24 @@
 #' suitable for most applications. The 800m resolution provides higher spatial 
 #' detail but results in larger file sizes and longer download times.
 #' 
-#' @return Nothing is returned - an error will occur if download is not 
-#'   successful.
+#' @return Invisibly returns the folder names of the downloaded data. These can
+#'   be directly used in any functions that require "PRISM data", i.e., `pd`. 
+#'   An error will occur if download is not successful.
 #' 
 #' @examples \dontrun{
 #' # Get all annual average temperature data from 1990 to 2000 at default resolution
 #' get_prism_annual(type = "tmean", years = 1990:2000, keepZip = FALSE)
 #' 
 #' # Get annual precipitation for multiple years at 800m resolution
-#' get_prism_annual(
+#' pd <- get_prism_annual(
 #'   type = "ppt", 
 #'   years = 2020:2022, 
 #'   resolution = "800m",
 #'   keepZip = FALSE
 #' )
+#' 
+#' > pd
+#' [1] "prism_ppt_us_30s_2020" "prism_ppt_us_30s_2021" "prism_ppt_us_30s_2022"
 #' 
 #' # Get single year of annual temperature data at high resolution
 #' get_prism_annual(
@@ -119,10 +123,12 @@ get_prism_annual <- function(type, years, keepZip = TRUE, service = NULL,
   counter <- 0
   
   ### Handle all years
+  pd <- character(length(uris))
+  
   if(length(uris) > 0){    
     
     for(i in seq_along(uris)) {
-      prism_webservice(uris[i], keepZip)
+      pd[i] <- prism_webservice(uris[i], keepZip, returnName = TRUE)
       setTxtProgressBar(download_pb, i)
     }
   }
@@ -130,4 +136,6 @@ get_prism_annual <- function(type, years, keepZip = TRUE, service = NULL,
   counter <- length(uris) + 1
   
   close(download_pb)
+  
+  invisible(pd)
 }
