@@ -1,5 +1,12 @@
 # TODO: this should fail with the ppt 20120101 that is intentionally bad
 
+o_format <- prism_get_format()
+o_dir <- prism_get_dl_dir()
+teardown({
+  prism_set_dl_dir(o_dir)
+  prism_set_format(o_format)
+})
+
 test_that("`pd_image()` works", {
   
   for (ff in prism:::prism_formats) {
