@@ -49,47 +49,82 @@ pd_get_md <- function(pd) {
     paste0(pd, ".info.txt")
   ))
 
-  if (length(final_txt_full) == 0) {
-    stop("No files exist to obtain metadata from.")
+  missing_files <- !file.exists(final_txt_full)
+  
+  if (all(missing_files)) {
+    stop("No .info.txt files exist to obtain metadata from.", call. = FALSE)
   }
+  
+  if (any(missing_files)) {
+    warning(
+      "Could not find .info.txt file(s): ",
+      paste(final_txt_full[missing_files], collapse = ", "),
+      call. = FALSE
+    )
+  }
+  
+  final_txt_full <- final_txt_full[!missing_files]
+  pd <- pd[!missing_files]
+  
   out <- lapply(seq_along(final_txt_full), function(i) {
-    readin <- tryCatch(
-      utils::read.delim(
+    lines <- readLines(
+      final_txt_full[i],
+      warn = FALSE,
+      encoding = "UTF-8"
+    )
+    
+    lines <- lines[nzchar(lines)]
+    
+    if (!length(lines)) {
+      warning(
+        "The metadata file is empty: ",
         final_txt_full[i],
-        sep = "\n",
-        header = FALSE,
+        call. = FALSE
+      )
+      
+      return(data.frame(
+        file_path = final_txt_full[i],
+        folder_path = file.path(prism_get_dl_dir(), pd[i]),
         stringsAsFactors = FALSE
-      ),
-      error = function(e) {
-        warning(e)
-        warning(paste0(
-          "Problem opening ",
-          final_txt_full[i],
-          ". The folder may exist without the .info.text file inside it."
-        ))
-      }
+      ))
+    }
+    
+    fields <- stringr::str_split_fixed(lines, ": ", n = 2)
+    
+    if (any(!nzchar(fields[, 1])) || any(!nzchar(fields[, 2]))) {
+      warning(
+        "Some lines in ", final_txt_full[i],
+        " could not be parsed as `KEY: VALUE` metadata.",
+        call. = FALSE
+      )
+    }
+    
+    fields <- fields[nzchar(fields[, 1]), , drop = FALSE]
+    
+    values_by_name <- split(fields[, 2], fields[, 1])
+    
+    md <- vapply(
+      values_by_name,
+      paste,
+      collapse = ";\n",
+      FUN.VALUE = character(1)
     )
-    str_spl <- stringr::str_split(
-      as.character(readin[[1]]),
-      ": ",
-      n = 2,
-      simplify = TRUE
+    
+    out <- as.data.frame(
+      as.list(md),
+      stringsAsFactors = FALSE,
+      check.names = FALSE
     )
-
-    names_md <- str_spl[, 1]
-    data_md <- str_spl[, 2]
-    out <- matrix(data_md, nrow = 1)
-    out <- as.data.frame(out, stringsAsFactors = FALSE)
-    names(out) <- names_md
-
-    # add in two additional values (not found in .info.txt)
+    
     out$file_path <- final_txt_full[i]
     out$folder_path <- file.path(prism_get_dl_dir(), pd[i])
-
+    
     out
   })
-
+  
   out <- dplyr::bind_rows(out)
-
+  
   out
 }
+
+

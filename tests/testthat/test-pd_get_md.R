@@ -9,7 +9,8 @@ exp_cols <- c(
   "folder_path",
   "PRISM_SOURCE_FILENAME",
   "PRISM_SOURCE_CREATE_DATE",
-  "PRISM_DATASET_RELEASE_NUMBER"
+  "PRISM_DATASET_RELEASE_NUMBER",
+  "PRISM_DATASET_RELEASE_HISTORY"
 )
 
 test_that("pd_get_md() works", {
@@ -21,7 +22,7 @@ test_that("pd_get_md() works", {
     "data.frame"
   )
   expect_identical(dim(x), c(4L, 11L))
-  expect_setequal(colnames(x), exp_cols)
+  expect_setequal(colnames(x), exp_cols[1:11])
   
   prism_set_dl_dir(nc_dl)
   prism_set_format("nc")
@@ -32,7 +33,7 @@ test_that("pd_get_md() works", {
     "data.frame"
   )
   expect_identical(dim(x), c(1L, 11L))
-  expect_setequal(colnames(x), exp_cols)
+  expect_setequal(colnames(x), exp_cols[1:11])
   
   prism_set_dl_dir(bil_dl)
   prism_set_format("bil")
@@ -41,7 +42,7 @@ test_that("pd_get_md() works", {
     "data.frame"
   )
   expect_identical(dim(x), c(1L, 11L))
-  expect_setequal(colnames(x), exp_cols)
+  expect_setequal(colnames(x), exp_cols[1:11])
   
   prism_set_dl_dir(asc_dl)
   prism_set_format("asc")
@@ -50,7 +51,7 @@ test_that("pd_get_md() works", {
     "data.frame"
   )
   expect_identical(dim(x), c(1L, 11L))
-  expect_setequal(colnames(x), exp_cols)
+  expect_setequal(colnames(x), exp_cols[1:11])
   
   # test daily and monthly normals -------------
   prism_set_dl_dir(md_dl)
@@ -59,6 +60,6 @@ test_that("pd_get_md() works", {
     x <- pd_get_md(prism_archive_ls()),
     "data.frame"
   )
-  expect_identical(dim(x), c(2L, 8L))
+  expect_identical(dim(x), c(4L, 12L))
   expect_contains(exp_cols, colnames(x))
 })
