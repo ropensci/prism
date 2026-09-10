@@ -314,6 +314,8 @@ read_md_csv <- function(x) {
                   latitude, elevation, network, stnid)
 }
 
+# stn_csv_matrix[time_step, type, resolution, data_class]
+# created with data-raw/create_station_md_matrix/make_stn_csv.matrix.R
 stn_csv_matrix <- 
   structure(
     c(FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, 
