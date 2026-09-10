@@ -1,0 +1,51 @@
+name: Live PRISM smoke test
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: "0 6 13 * *"
+      timezone: "America/Denver"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-prism-smoke
+  cancel-in-progress: false
+
+jobs:
+  live-smoke:
+    name: Live PRISM download smoke test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      RUN_PRISM_LIVE_TESTS: "true"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install prism and dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            local::.
+          needs: |
+            test
+          working-directory: .
+
+      - name: Run live PRISM smoke test
+        shell: Rscript {0}
+        run: |
+          testthat::test_file(
+            "tests/testthat/test-live-smoke.R",
+            package = "prism",
+            reporter = testthat::SummaryReporter$new()
+          )
