@@ -1,8 +1,12 @@
 
 dl_folder <- file.path(tempdir(), "prism")
 cur_path <- prism_get_dl_dir()
+cur_format <- prism_get_format()
 setup({prism_set_dl_dir(dl_folder)})
-teardown({prism_set_dl_dir(cur_path)})
+teardown({
+  prism_set_dl_dir(cur_path)
+  prism_set_format(cur_format)
+})
 
 
 cat("\n\n***************************************")
@@ -16,106 +20,203 @@ skip_monthly <- TRUE
 skip_daily <- TRUE
 skip_daily_3 <- TRUE
 
+expect_observed_download <- function(pd, dl_dir, format, keep_zip, is_normal) {
+  if (is_normal) {
+    expected_ext <- c(
+      geotiff = "tif",
+      bil = "tif",
+      asc = "tif",
+      nc = "tif"
+    )
+  } else {
+    expected_ext <- c(
+      geotiff = "tif",
+      bil = "bil",
+      asc = "asc",
+      nc = "nc"
+    )
+  }
+  
+  expect_true(dir.exists(file.path(dl_dir, pd)))
+  
+  zip_path <- file.path(dl_dir, paste0(pd, ".zip"))
+  
+  if (keep_zip) {
+    expect_true(file.exists(zip_path))
+  } else {
+    expect_false(file.exists(zip_path))
+  }
+  
+  raster_file <- pd_to_file(pd)
+  
+  expect_true(file.exists(raster_file))
+  expect_identical(tools::file_ext(raster_file), expected_ext[[format]])
+  
+  r <- terra::rast(raster_file)
+  values <- terra::values(r, mat = FALSE)
+  
+  expect_s4_class(r, "SpatRaster")
+  expect_gt(terra::ncell(r), 0L)
+  expect_true(any(!is.na(values)))
+}
+
+
+formats <- c("geotiff", "bil", "asc", "nc")
+
 # Normals ---------------
 test_that("normals download", {
   skip_on_cran()
   skip_if(skip_normals)
   
-  get_prism_normals("tmean", resolution = "4km", annual = TRUE)
-  get_prism_normals("tmax", resolution = "4km", mon = 1)
-  get_prism_normals("tmin", resolution = "4km", mon = 2)
-  get_prism_normals("tdmean", resolution = "4km", mon = 6)
-  get_prism_normals("vpdmin", resolution = "4km", mon = 12)
-  get_prism_normals("vpdmax", resolution = "4km", mon = 9)
-  get_prism_normals("ppt", resolution = "800m", mon = 11)
-  get_prism_normals('solclear', '800m', mon = 1)
-  get_prism_normals('solslope', '800m', annual = TRUE)
-  get_prism_normals('soltotal', '800m', annual = TRUE)
-  get_prism_normals('soltrans', '800m', mon = 3:4)
-  get_prism_normals('ppt', '4km', NULL, FALSE, TRUE, c('0101', '0301'))
-  get_prism_normals('ppt', '4km', 2, FALSE, TRUE, TRUE)
-  get_prism_normals('tmean', '800m', NULL, FALSE, TRUE, as.Date('2000-07-04'))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_2020_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_2020_avg_30y")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmax_us_25m_202001_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmax_us_25m_202001_avg_30y")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmin_us_25m_202002_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmin_us_25m_202002_avg_30y")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tdmean_us_25m_202006_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tdmean_us_25m_202006_avg_30y")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmin_us_25m_202012_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmin_us_25m_202012_avg_30y")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_202009_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_202009_avg_30y")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_ppt_us_30s_202011_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_ppt_us_30s_202011_avg_30y")
-  ))
-  
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_solclear_us_25m_202001_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_solslope_us_25m_2020_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_soltotal_us_30s_2020_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_soltrans_us_30s_202003_avg_30y.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_soltrans_us_30s_202004_avg_30y.zip")
-  ))
-  
-  # daily normals
-  expect_true(all(dir.exists(
-    file.path(
-      dl_folder, 
-      paste0('prism_ppt_us_25m_202002',sprintf("%02d",1:29), '_avg_30y')
+  normal_cases <- list(
+    list(
+      args = list(
+        type = "tmean",
+        resolution = "4km",
+        mon = 1
+      ),
+      expected_pd = "prism_tmean_us_25m_202001_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "tmax",
+        resolution = "4km",
+        annual = TRUE
+      ),
+      expected_pd = "prism_tmax_us_25m_2020_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "tmin",
+        resolution = "4km",
+        mon = 2
+      ),
+      expected_pd = "prism_tmin_us_25m_202002_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "tdmean",
+        resolution = "4km",
+        mon = 6
+      ),
+      expected_pd = "prism_tdmean_us_25m_202006_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "vpdmin",
+        resolution = "4km",
+        mon = 12
+      ),
+      expected_pd = "prism_vpdmin_us_25m_202012_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "vpdmax",
+        resolution = "4km",
+        mon = 9
+      ),
+      expected_pd = "prism_vpdmax_us_25m_202009_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "ppt",
+        resolution = "800m",
+        mon = 11
+      ),
+      expected_pd = "prism_ppt_us_30s_202011_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "solclear",
+        resolution = "800m",
+        mon = 1
+      ),
+      expected_pd = "prism_solclear_us_30s_202001_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "solslope",
+        resolution = "800m",
+        annual = TRUE
+      ),
+      expected_pd = "prism_solslope_us_30s_2020_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "soltotal",
+        resolution = "800m",
+        annual = TRUE
+      ),
+      expected_pd = "prism_soltotal_us_30s_2020_avg_30y"
+    ),
+    list(
+      args = list(
+        type = "soltrans",
+        resolution = "800m",
+        mon = 3:4
+      ),
+      expected_pd = c(
+        "prism_soltrans_us_30s_202003_avg_30y",
+        "prism_soltrans_us_30s_202004_avg_30y"
+      )
+    ),
+    list(
+      args = list(
+        type = "ppt",
+        resolution = "4km",
+        mon = NULL,
+        annual = FALSE,
+        day = c('0101', '0301')
+      ),
+      expected_pd = c("prism_ppt_us_25m_20200101_avg_30y",
+                      "prism_ppt_us_25m_20200301_avg_30y")
+    ),
+    list(
+      args = list(
+        type = "ppt",
+        resolution = "4km",
+        mon = 2,
+        annual = FALSE,
+        day = TRUE
+      ),
+      expected_pd = c(paste0(
+        "prism_ppt_us_25m_202002", sprintf("%02d", 1:29), "_avg_30y"
+      ), "prism_ppt_us_25m_202002_avg_30y")
+    ),
+    list(
+      args = list(
+        type = "tmean",
+        resolution = "800m",
+        mon = NULL,
+        annual = FALSE,
+        day = as.Date('2000-07-04')
+      ),
+      expected_pd = "prism_tmean_us_25m_20200704_avg_30y"
     )
-  )))
-  expect_true(all(dir.exists(file.path(
-    dl_folder, 
-    c('prism_ppt_us_25m_20200201_avg_30y', 
-      'prism_ppt_us_25m_20200301_avg_30y')
-  ))))
-  expect_true(dir.exists(
-    file.path(dl_folder, 'prism_tmean_us_30s_20200704_avg_30y')
-  ))
+  )
+  
+  # add keepZip and format inside loop
+  for (i in seq_len(length(normal_cases))) {
+    case <- normal_cases[[i]]
+    
+    # set keep_zip and format
+    ff <- formats[(i%%4 + 1)]
+    case[["args"]][["keepZip"]] <- as.logical(i%%2)
+    
+    prism_set_format(ff)
+    pd <- do.call(get_prism_normals, case[["args"]])
+    expect_setequal(pd, case[["expected_pd"]])
+    
+    for (p in pd) {
+      expect_observed_download(
+        pd = p, 
+        dl_dir = prism_get_dl_dir(), 
+        format = prism_get_format(), 
+        keep_zip = case[["args"]][["keepZip"]],
+        is_normal = TRUE
+      )
+    }
+  }
 })
 
 # annual -----------------------
