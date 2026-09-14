@@ -268,7 +268,7 @@ find_prism_file <- function(base_file, pre81_months)
   # Look inside the folder to see if the .bil/.tif/.nc/.asc is there
   # Won't be able to check for all other files. Unlikely to matter.
   if (is.null(pre81_months)) {
-    ls_folder <- list.files(prism_get_dl_dir(), base_file)
+    ls_folder <- list.files(prism_get_dl_dir(), base_file, recursive = TRUE)
     found_file <- any(grepl(paste0("\\", prism_format_file_ext()), ls_folder))
   } else {
     # check for all the monthly data. If any of the monthly data do not exist

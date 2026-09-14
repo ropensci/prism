@@ -116,20 +116,29 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   uris <- gen_prism_url(uri_dates, type, resolution, service = service)
   
   download_pb <- txtProgressBar(min = 0, max = max(length(uris), 1), style = 3)
+  on.exit(close(download_pb), add = TRUE)
   
   pd <- character(length(uris))
   
-  if(length(uris) > 0){
-    for(i in seq_along(uris)){
-      pd[i] <- prism_webservice(uri = uris[i], keepZip, returnName = TRUE)
+  if (length(uris) > 0) {
+    for (i in seq_along(uris)) {
+      tmp_pd <- prism_webservice(
+        uri = uris[[i]], 
+        keepZip =  keepZip, 
+        returnName = TRUE
+      )
+      
+      if (!is.null(tmp_pd)) {
+        pd[[i]] <- tmp_pd
+      }
+      
       setTxtProgressBar(download_pb, i)
     }
   } else {
     setTxtProgressBar(download_pb, max(length(uris), 1))
   }
-
-  close(download_pb)
   
+  pd <- pd[nzchar(pd)]
   invisible(pd)
 }
 

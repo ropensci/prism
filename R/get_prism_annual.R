@@ -119,23 +119,29 @@ get_prism_annual <- function(type, years, keepZip = TRUE, service = NULL,
     max = length(uris),
     style = 3
   )
+  on.exit(close(download_pb), add = TRUE)
   
   counter <- 0
   
   ### Handle all years
   pd <- character(length(uris))
   
-  if(length(uris) > 0){    
+  if (length(uris) > 0) {    
     
-    for(i in seq_along(uris)) {
-      pd[i] <- prism_webservice(uris[i], keepZip, returnName = TRUE)
+    for (i in seq_along(uris)) {
+      tmp_pd <- prism_webservice(uris[i], keepZip = keepZip, returnName = TRUE)
+      
+      if (!is.null(tmp_pd)) {
+        pd[[i]] <- tmp_pd
+      }
+      
       setTxtProgressBar(download_pb, i)
     }
   }
   
   counter <- length(uris) + 1
   
-  close(download_pb)
+  pd <- pd[nzchar(pd)]
   
   invisible(pd)
 }

@@ -20,6 +20,7 @@
 - `pd_image()` gains `draw` argument. It defaults to `TRUE` to maintain existing behavior, but ensures that the automatic drawing can be disabled.
 - `get_prism_*()` functions all now invisibly return the folder names (`pd`) that were downloaded. (#161)
 - solslope and soltotal available in 800m and 4km daily, monthly, and annual time series data (#149)
+- Fixed bug that resulted in data not being skipped if it already existed. 
 
 # prism 0.3.0
 
