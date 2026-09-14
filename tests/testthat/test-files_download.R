@@ -17,6 +17,7 @@ cat("****************************************\n")
 skip_normals <- TRUE
 skip_annual <- TRUE
 skip_monthly <- TRUE
+skip_monthly_3 <- TRUE
 skip_daily <- TRUE
 skip_daily_3 <- TRUE
 
@@ -59,7 +60,6 @@ expect_observed_download <- function(pd, dl_dir, format, keep_zip, is_normal) {
   expect_gt(terra::ncell(r), 0L)
   expect_true(any(!is.na(values)))
 }
-
 
 formats <- c("geotiff", "bil", "asc", "nc")
 
@@ -191,7 +191,7 @@ test_that("normals download", {
         annual = FALSE,
         day = as.Date('2000-07-04')
       ),
-      expected_pd = "prism_tmean_us_25m_20200704_avg_30y"
+      expected_pd = "prism_tmean_us_30s_20200704_avg_30y"
     )
   )
   
@@ -220,229 +220,194 @@ test_that("normals download", {
 })
 
 # annual -----------------------
-
 test_that("annuals download", {
   skip_on_cran()
   skip_if(skip_annual)
   
-  get_prism_annual("tmean", years = 2010)
-  get_prism_annual("tmax",  years = 2011)
-  get_prism_annual("tmin",  years = 2012)
-  get_prism_annual("tdmean", years = 1944)
-  get_prism_annual("vpdmin", years = 1982)
-  get_prism_annual("vpdmax", years = 1933)
-  get_prism_annual("ppt", years = 1999)
+  annual_cases <- data.frame(
+    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt"),
+    year = c(2011, 2011, 2012, 1944, 1982, 1933, 1999),
+    resolution = c(rep("4km", 6), "800m"),
+    expected_pd = c("prism_tmean_us_25m_2011", "prism_tmax_us_25m_2011", 
+                    "prism_tmin_us_25m_2012", "prism_tdmean_us_25m_1944",
+                    "prism_vpdmin_us_25m_1982", "prism_vpdmax_us_25m_1933",
+                    "prism_ppt_us_30s_1999")
+  )
   
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_2010.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_2010")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmax_us_25m_2011.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmax_us_25m_2011")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmin_us_25m_2012.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmin_us_25m_2012")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tdmean_us_25m_1944.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tdmean_us_25m_1944")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmin_us_25m_1982.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmin_us_25m_1982")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_1933.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_1933")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_ppt_us_25m_1999.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_ppt_us_25m_1999")
-  ))
+  for (i in seq_len(nrow(annual_cases))) {
+    
+    keepZip <- as.logical(i%%2)
+    ff <- formats[[(i%%4 + 1)]]
+    prism_set_format(ff)
+    
+    pd <- get_prism_annual(
+      type = annual_cases[["type"]][[i]],
+      years = annual_cases[["year"]][[i]],
+      resolution = annual_cases[["resolution"]][[i]],
+      keepZip = keepZip
+    )
+    
+    expect_setequal(pd, annual_cases[["expected_pd"]][[i]])
+    
+    expect_observed_download(
+      pd = pd,
+      dl_dir = prism_get_dl_dir(),
+      format = ff,
+      keep_zip = keepZip,
+      is_normal = FALSE
+    )
+  }
 })
 
 # monthly ----------------------
-
 test_that("monthlys download", {
   skip_on_cran()
   skip_if(skip_monthly)
   
-  get_prism_monthlys("tmean", years = 2010, mon = 1)
-  get_prism_monthlys("tmax", years = 1983, mon = 12)
-  get_prism_monthlys("tmin", years = 2015, mon = 9)
-  get_prism_monthlys("tdmean", years = 2000, mon = 3)
-  get_prism_monthlys("vpdmin", years = 2002, mon = 6)
-  get_prism_monthlys("vpdmax", years = 1970, mon = 1)
-  get_prism_monthlys("ppt", years = 1925, mon = 3)
+  monthly_cases <- data.frame(
+    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt"),
+    year = c(2010, 1983, 2015, 2000, 2002, 1970, 1925),
+    month = c(1, 12, 9, 3, 6, 1, 3),
+    resolution = c(rep("4km", 3), "800m", rep("4km", 3)),
+    expected_pd = c("prism_tmean_us_25m_201001", "prism_tmax_us_25m_198312", 
+                    "prism_tmin_us_25m_201509", "prism_tdmean_us_30s_200003",
+                    "prism_vpdmin_us_25m_200206", "prism_vpdmax_us_25m_197001",
+                    "prism_ppt_us_25m_192503")
+  )
   
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_201001.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_201001")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmax_us_25m_198312.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_201001")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmin_us_25m_201509.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_201001")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tdmean_us_25m_200003.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_201001")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmin_us_25m_200206.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_201001")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_197001.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_197001")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_ppt_us_25m_192503.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_ppt_us_25m_192503")
-  ))
+  for (i in seq_len(nrow(monthly_cases))) {
+    
+    keepZip <- as.logical(i%%2)
+    ff <- formats[[(i%%4 + 1)]]
+    prism_set_format(ff)
+    
+    pd <- get_prism_monthlys(
+      type = monthly_cases[["type"]][[i]],
+      years = monthly_cases[["year"]][[i]],
+      mon = monthly_cases[["month"]][[i]],
+      resolution = monthly_cases[["resolution"]][[i]],
+      keepZip = keepZip
+    )
+    
+    expect_setequal(pd, monthly_cases[["expected_pd"]][[i]])
+    
+    expect_observed_download(
+      pd = pd,
+      dl_dir = prism_get_dl_dir(),
+      format = ff,
+      keep_zip = keepZip,
+      is_normal = FALSE
+    )
+  }
+})
+
+# monthly 3 ----------------------
+test_that("monthly works with multiple months", {
+  skip_on_cran()
+  skip_if(skip_monthly_3)
   
   # three consecutive --------------
   # Download three months to make sure that the middle month is downloaded.
-  get_prism_monthlys(type = "tmean", mon = 2:4, year = 2014, keepZip = FALSE)
-  for (i in 2:4) {
-    expect_true(dir.exists(file.path(
-      dl_folder, 
-      paste0("prism_tmean_us_25m_2014", prism:::mon_to_string(i), "")
-    )))
+  prism_set_format("geotiff")
+  pd <- get_prism_monthlys(
+    type = "tmean", mon = 2:4, year = 2012, keepZip = FALSE
+  )
+  
+  expect_setequal(pd, paste0("prism_tmean_us_25m_2012", sprintf("%02d", 2:4)))
+  
+  for (i in 1:3) {
+    expect_observed_download(
+      pd = pd[i],
+      dl_dir = prism_get_dl_dir(),
+      format = "geotiff",
+      keep_zip = FALSE,
+      is_normal = FALSE
+    )
   }
 })
 
 # daily ------------------------
-
 test_that("daily download", {
   skip_on_cran()
   skip_if(skip_daily)
   
-  get_prism_dailys("tmean", dates = "1981-01-01")
-  get_prism_dailys("tmax", dates = "1985-02-20")
-  get_prism_dailys("tmin", dates = "1991-06-01")
-  get_prism_dailys("tdmean", dates = "1997-09-27")
-  get_prism_dailys("vpdmax", dates = "2006-12-31")
-  get_prism_dailys("vpdmin", dates = "2012-01-01")
-  get_prism_dailys("ppt", dates = "2015-11-05")
+  daily_cases <- data.frame(
+    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt"),
+    date = c("1981-01-01", "1985-02-20", "1991-06-01", "1997-09-27", 
+             "2006-12-31", "2012-01-01", "2015-11-05"),
+    resolution = c("800m", rep("4km", 6)),
+    expected_pd = c("prism_tmean_us_30s_19810101", "prism_tmax_us_25m_19850220", 
+                    "prism_tmin_us_25m_19910601", "prism_tdmean_us_25m_19970927",
+                    "prism_vpdmin_us_25m_20061231", 
+                    "prism_vpdmax_us_25m_20120101","prism_ppt_us_25m_20151105")
+  )
   
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_19810101.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmean_us_25m_19810101")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmax_us_25m_19850220.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmax_us_25m_19850220")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tmin_us_25m_19910601.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tmin_us_25m_19910601")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_tdmean_us_25m_19970927.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_tdmean_us_25m_19970927")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_20061231.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmax_us_25m_20061231")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_vpdmin_us_25m_20120101.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_vpdmin_us_25m_20120101")
-  ))
-  
-  expect_true(file.exists(
-    file.path(dl_folder, "prism_ppt_us_25m_20151105.zip")
-  ))
-  expect_true(dir.exists(
-    file.path(dl_folder, "prism_ppt_us_25m_20151105")
-  ))
+  for (i in seq_len(nrow(daily_cases))) {
+    
+    keepZip <- as.logical(i%%2)
+    ff <- formats[[(i%%4 + 1)]]
+    prism_set_format(ff)
+    
+    pd <- get_prism_dailys(
+      type = daily_cases[["type"]][[i]],
+      dates = daily_cases[["date"]][[i]],
+      resolution = daily_cases[["resolution"]][[i]],
+      keepZip = keepZip
+    )
+    
+    expect_setequal(pd, daily_cases[["expected_pd"]][[i]])
+    
+    expect_observed_download(
+      pd = pd,
+      dl_dir = prism_get_dl_dir(),
+      format = ff,
+      keep_zip = keepZip,
+      is_normal = FALSE
+    )
+  }
 })
 
 # daily 3 in row ------------------
 test_that("daily gets 3 in a row", {
   # Day = 13 to make sure months and days don't get confused.
   # Download three days to make sure that the middle day is downloaded.
-  # Stable
   skip_on_cran()
   skip_if(skip_daily_3)
+  prism_set_format("geotiff")
   
-  get_prism_dailys(type = "tmean", minDate = "2014-01-13", 
-                   maxDate = "2014-01-15",
-                   keepZip = FALSE)
-  get_prism_dailys(type = "ppt", minDate = "2000-06-13", maxDate = "2000-06-15",
-                   keepZip = FALSE)
+  daily_cases <- data.frame(
+    type = c("tmean", "ppt"),
+    minDate = c("2014-01-13", "2000-06-13"),
+    maxDate = c("2014-01-15", "2000-06-15")
+  )
   
-  for (i in 13:15) {
-    expect_true(dir.exists(
-      file.path(dl_folder, paste0("prism_ppt_us_25m_200006",i ,""))
-    ))
+  expected_pd <- list(
+    paste0("prism_tmean_us_25m_201401", sprintf("%02d", 13:15)),
+    paste0("prism_ppt_us_25m_200006", sprintf("%02d", 13:15))
+  )
+  
+  stopifnot(nrow(daily_cases) == length(expected_pd))
+  
+  for (i in seq_len(nrow(daily_cases))) {
+  
+    pd <- get_prism_dailys(
+      type = daily_cases[["type"]][[i]], 
+      minDate = daily_cases[["minDate"]][[i]], 
+      maxDate = daily_cases[["maxDate"]][[i]],
+      keepZip = FALSE
+    )
     
-    expect_true(dir.exists(
-      file.path(dl_folder, paste0("prism_tmean_us_25m_201401", i,""))
-    ))
+    expect_setequal(pd, expected_pd[[i]])
+    
+    for (p in pd) {
+      expect_observed_download(
+        pd = p,
+        dl_dir = prism_get_dl_dir(),
+        format = "geotiff",
+        keep_zip = FALSE,
+        is_normal = FALSE
+      )
+    }
   }
 })
 
