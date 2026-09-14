@@ -6,9 +6,9 @@ test_that("get_prism_normals() errors correctly", {
   )
   
   expect_error(
-    get_prism_dailys('soltotal', '2010-01-01', '2010-01-02')
+    get_prism_dailys('solclear', '2010-01-01', '2010-01-02')
   )
-  expect_error(get_prism_monthlys("solslope", mon = 1))
+  expect_error(get_prism_monthlys("soltrans", mon = 1))
 
   ## Resolution errors (web services v2)
   expect_error(

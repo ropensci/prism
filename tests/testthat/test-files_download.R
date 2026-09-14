@@ -225,13 +225,15 @@ test_that("annuals download", {
   skip_if(skip_annual)
   
   annual_cases <- data.frame(
-    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt"),
-    year = c(2011, 2011, 2012, 1944, 1982, 1933, 1999),
-    resolution = c(rep("4km", 6), "800m"),
+    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt", 
+             "solslope", "soltotal"),
+    year = c(2011, 2011, 2012, 1944, 1982, 1933, 1999, 2024, 1997),
+    resolution = c(rep("4km", 6), "800m", "800m", "4km"),
     expected_pd = c("prism_tmean_us_25m_2011", "prism_tmax_us_25m_2011", 
                     "prism_tmin_us_25m_2012", "prism_tdmean_us_25m_1944",
                     "prism_vpdmin_us_25m_1982", "prism_vpdmax_us_25m_1933",
-                    "prism_ppt_us_30s_1999")
+                    "prism_ppt_us_30s_1999", "prism_solslope_us_30s_2024",
+                    "prism_soltotal_us_25m_1997")
   )
   
   for (i in seq_len(nrow(annual_cases))) {
@@ -265,14 +267,16 @@ test_that("monthlys download", {
   skip_if(skip_monthly)
   
   monthly_cases <- data.frame(
-    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt"),
-    year = c(2010, 1983, 2015, 2000, 2002, 1970, 1925),
-    month = c(1, 12, 9, 3, 6, 1, 3),
-    resolution = c(rep("4km", 3), "800m", rep("4km", 3)),
+    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt",
+             "solslope", "soltotal"),
+    year = c(2010, 1983, 2015, 2000, 2002, 1970, 1925, 1995, 2008),
+    month = c(1, 12, 9, 3, 6, 1, 3, 10, 11),
+    resolution = c(rep("4km", 3), "800m", rep("4km", 4), "800m"),
     expected_pd = c("prism_tmean_us_25m_201001", "prism_tmax_us_25m_198312", 
                     "prism_tmin_us_25m_201509", "prism_tdmean_us_30s_200003",
                     "prism_vpdmin_us_25m_200206", "prism_vpdmax_us_25m_197001",
-                    "prism_ppt_us_25m_192503")
+                    "prism_ppt_us_25m_192503", "prism_solslope_us_25m_199510",
+                    "prism_soltotal_us_30s_200811")
   )
   
   for (i in seq_len(nrow(monthly_cases))) {
@@ -332,14 +336,18 @@ test_that("daily download", {
   skip_if(skip_daily)
   
   daily_cases <- data.frame(
-    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt"),
+    type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt",
+             "solslope", "soltotal"),
     date = c("1981-01-01", "1985-02-20", "1991-06-01", "1997-09-27", 
-             "2006-12-31", "2012-01-01", "2015-11-05"),
-    resolution = c("800m", rep("4km", 6)),
+             "2006-12-31", "2012-01-01", "2015-11-05", "2019-12-25",
+             "2021-10-31"),
+    resolution = c("800m", rep("4km", 7), "800m"),
     expected_pd = c("prism_tmean_us_30s_19810101", "prism_tmax_us_25m_19850220", 
                     "prism_tmin_us_25m_19910601", "prism_tdmean_us_25m_19970927",
                     "prism_vpdmin_us_25m_20061231", 
-                    "prism_vpdmax_us_25m_20120101","prism_ppt_us_25m_20151105")
+                    "prism_vpdmax_us_25m_20120101","prism_ppt_us_25m_20151105",
+                    "prism_solslope_us_25m_20191225", 
+                    "prism_soltotal_us_30s_20211031")
   )
   
   for (i in seq_len(nrow(daily_cases))) {

@@ -111,8 +111,8 @@ Data are available in 4 different temporal scales as mentioned above. At each te
 | *vpdmin*    |   X    |    X    |   X  |
 | *vpdmax*    |   X    |    X    |   X  |
 | *solclear*  |        |         |      |
-| *solslope*  |        |         |      |
-| *soltotal*  |        |         |      |
+| *solslope*  |   X    |    X    |   X  |
+| *soltotal*  |   X    |    X    |   X  |
 | *soltrans*  |        |         |      |
 
 ## Downloading data

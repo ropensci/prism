@@ -467,10 +467,11 @@ gen_dates <- function(minDate, maxDate, dates){
 #' @noRd
 prism_vars <- function(normals = FALSE)
 {
-  x <- c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean")
+  x <- c("ppt", "tmean", "tmin", "tmax", "vpdmin", "vpdmax", "tdmean",
+         "solslope", "soltotal")
   
   if (isTRUE(normals)) {
-    x <- c(x, "solclear", "solslope", "soltotal", "soltrans")
+    x <- c(x, "solclear", "soltrans")
   }
   
   x
@@ -480,11 +481,11 @@ prism_vars <- function(normals = FALSE)
 prism_var_names <- function(normals = FALSE) {
   x <- c("Precipitation", "Mean temperature", "Minimum temperature", 
          "Maximum temperature", "Minimum vapor pressure deficit",
-         "Maximum vapor pressure deficit", "Mean dew point temperature")
+         "Maximum vapor pressure deficit", "Mean dew point temperature",
+         "Solar radiation (sloped)", "Solar radiation (total)")
   
   if (isTRUE(normals)) {
-    x <- c(x, "Solar radiation (clear sky)", "Solar radiation (sloped)", 
-              "Solar radiation (total)", "Cloud transmittance")
+    x <- c(x, "Solar radiation (clear sky)", "Cloud transmittance")
   }
   
   names(x) <- prism_vars(normals = normals)
