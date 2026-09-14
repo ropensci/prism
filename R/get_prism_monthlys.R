@@ -102,7 +102,7 @@ get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
   if (length(uris) > 0) {    
       
     for (i in seq_along(uris)) {
-        tmp_pd <- prism_webservice(uris[i], keepZip, returnName = TRUE)
+        tmp_pd <- prism_webservice(uris[i], keepZip = keepZip, returnName = TRUE)
         
         if (!is.null(tmp_pd)) {
           pd[[i]] <- tmp_pd

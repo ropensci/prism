@@ -22,14 +22,13 @@ mon_to_string <- function(month)
   return(out)
 }
 
-prism_not_downloaded <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
+prism_not_downloaded <- function(zipfiles, lgl = FALSE)
 {
   file_bases <- stringr::str_remove(zipfiles, '.zip')
   which_downloaded <- vapply(
     file_bases, 
     find_prism_file, 
     FUN.VALUE = logical(1),
-    pre81_months = pre81_months
   )
   
   if(lgl){
@@ -216,7 +215,7 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
   return(urls)
 }
 
-prism_not_downloaded_as_v1 <- function(zipfiles, lgl = FALSE, pre81_months = NULL)
+prism_not_downloaded_as_v1 <- function(zipfiles, lgl = FALSE)
 {
   file_bases <- stringr::str_remove(zipfiles, '.zip')
   
@@ -251,8 +250,7 @@ prism_not_downloaded_as_v1 <- function(zipfiles, lgl = FALSE, pre81_months = NUL
   which_downloaded <- vapply(
     v1_file_bases,
     find_prism_file,
-    FUN.VALUE = logical(1),
-    pre81_months = pre81_months
+    FUN.VALUE = logical(1)
   )
   
   if(lgl){
@@ -263,106 +261,14 @@ prism_not_downloaded_as_v1 <- function(zipfiles, lgl = FALSE, pre81_months = NUL
 }
 
 # return TRUE if all file(s) are found for the specified base_file
-find_prism_file <- function(base_file, pre81_months)
+find_prism_file <- function(base_file)
 {
   # Look inside the folder to see if the .bil/.tif/.nc/.asc is there
   # Won't be able to check for all other files. Unlikely to matter.
-  if (is.null(pre81_months)) {
-    ls_folder <- list.files(prism_get_dl_dir(), base_file, recursive = TRUE)
-    found_file <- any(grepl(paste0("\\", prism_format_file_ext()), ls_folder))
-  } else {
-    # check for all the monthly data. If any of the monthly data do not exist
-    # will need to download the entire file again.
-    # pre81_months can be vector of months, or "". "" represents the annual data
-    annual <- pre81_months[pre81_months == ""]
-    monthly <- pre81_months[pre81_months != ""]
-    all_months <- c()
-    if (length(annual) > 0)
-      all_months <- c(all_months, "")
-    if (length(monthly) > 0)
-      all_months <- c(all_months, mon_to_string(monthly))
-    
-    found_file <- TRUE
-    for (m in all_months) {
-      ls_folder <- gsub(pattern = "_all", replacement = m, x = base_file)
-      ls_folder <- list.files(file.path(getOption("prism.path"), ls_folder))
-      found_file <- found_file & 
-        any(grepl(paste0("\\", prism_format_file_ext()), ls_folder))
-    }
-  }
+  ls_folder <- list.files(prism_get_dl_dir(), base_file, recursive = TRUE)
+  found_file <- any(grepl(paste0("\\", prism_format_file_ext()), ls_folder))
   
   found_file
-}
-
-#' Process pre 1980 files
-#' @description Files that come prior to 1980 come in one huge zip.  This will 
-#'   cause them to mimic all post 1980 downloads
-#'   
-#' @param pfile the name of the file, should include "all", that is unzipped
-#' 
-#' @param name a vector of names of files that you want to save.
-#' 
-#' @details This should match all other files post 1980
-#' 
-#' @examples \dontrun{
-#' process_zip(
-#'   'PRISM_tmean_stable_4kmM2_1980_all',
-#'   'PRISM_tmean_stable_4kmM2_198001'
-#' )
-#' 
-#' process_zip(
-#'   'PRISM_tmean_stable_4kmM2_1980_all',
-#'   c('PRISM_tmean_stable_4kmM2_198001',
-#'   'PRISM_tmean_stable_4kmM2_198002')
-#' )
-#' }
-#' 
-#' @noRd
-process_zip <- function(pfile, name) 
-{
-  tmpwd <- list.files(file.path(prism_get_dl_dir(), pfile))
-  
-  # Remove all.xml file
-  file.remove(file.path(
-    prism_get_dl_dir(), 
-    pfile, 
-    grep("all", tmpwd, value = TRUE)
-  ))
-  
-  # Get new list of files after removing all.xml
-  tmpwd <- list.files(file.path(prism_get_dl_dir(), pfile))
-  
-  fstrip <- strsplit(tmpwd, "\\.")
-  fstrip <- unlist(lapply(fstrip, function(x) return(x[1])))
-  unames <- unique(fstrip)
-  unames <- unames[unames %in% name]
-  for(j in seq_along(unames)){
-    newdir <- file.path(prism_get_dl_dir(), unames[j])
-    tryCatch(
-      dir.create(newdir), 
-      error = function(e) e,
-      warning = function(w) {
-        warning(paste(newdir, "already exists. Overwriting existing data."))
-      }
-    )
-    
-    f2copy <- grep(unames[j], tmpwd, value = TRUE)
-    
-    file.copy(
-      from = file.path(prism_get_dl_dir(), pfile, f2copy),
-      to = file.path(newdir, f2copy)
-    )
-    
-    file.remove(file.path(prism_get_dl_dir(), pfile, f2copy))
-    # We lose all our metadata, so we need to rewrite it
-  }
-  # Remove all files so the directory can be created.
-  # Update file list
-  tmpwd <- list.files(file.path(prism_get_dl_dir(), pfile))
-  ## Now loop delete them all
-  file.remove(file.path(prism_get_dl_dir(), pfile, tmpwd))
-  
-  unlink(file.path(prism_get_dl_dir(), pfile), recursive = TRUE)
 }
 
 #' Checks to see if the dates (days) specified are within the available Prism 

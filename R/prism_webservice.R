@@ -29,7 +29,7 @@
 #' @noRd
 
 prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE, 
-                             pre81_months = NULL, service = 'web_service_v2')
+                             service = 'web_service_v2')
 {
   ## Get file name
   x <- httr::HEAD(uri)
@@ -51,10 +51,10 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     stop("Invalid service type. Must be 'web_service_v1' or 'ftp_v2_normals_bil'.")
   }
   
-  if (length(prism_not_downloaded(fn, pre81_months = pre81_months)) == 0) {
+  if (length(prism_not_downloaded(fn)) == 0) {
     message("\n", fn, " already exists. Skipping downloading.")
     return(NULL)
-  } else if (length(prism_not_downloaded_as_v1(fn, pre81_months = pre81_months)) == 0) {
+  } else if (length(prism_not_downloaded_as_v1(fn)) == 0) {
     message("\n", fn, " is a webservice v2 request that already exists as v1 file. Skipping downloading. (Delete original webservice v1 file if you want to update).")
     return(NULL)
   } else {

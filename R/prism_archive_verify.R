@@ -53,7 +53,7 @@ prism_archive_verify <- function(type, temp_period, years = NULL, mon = NULL,
     mpb <- txtProgressBar(min = 0, max =length(dl_url), style = 3)
     
     for(i in seq_along(dl_url)){
-      prism_webservice(dl_url[i], keepZip)
+      prism_webservice(dl_url[i], keepZip = keepZip)
       setTxtProgressBar(mpb, i)
     }
     
