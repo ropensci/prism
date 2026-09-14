@@ -51,7 +51,7 @@
 #' 
 #' @export
 get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,  
-                              keepZip = TRUE, day = NULL)
+                              keepZip = prism_get_keepZip(), day = NULL)
 {
   ### parameter and error handling
   prism_check_dl_dir()

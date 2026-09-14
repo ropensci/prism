@@ -17,7 +17,9 @@
 #' @param years a valid numeric year, or vector of years, to download data for. 
 #'   
 #' @param keepZip if `TRUE`, leave the downloaded zip files in your 
-#'   'prism.path', if `FALSE`, they will be deleted.
+#'   'prism.path', if `FALSE`, they will be deleted. Defaults to the value set
+#'   by [prism_get_keepZip()]. See [prism_set_keepZip()] to change the default
+#'   behavior. 
 #'   
 #' @param service Either `NULL` (default) or a URL provided by PRISM staff
 #'   for subscription-based service. Example:
@@ -85,8 +87,8 @@
 #' @rdname get_prism_data
 #' 
 #' @export
-get_prism_annual <- function(type, years, keepZip = TRUE, service = NULL,
-                             resolution = "4km")
+get_prism_annual <- function(type, years, keepZip = prism_get_keepZip(), 
+                             service = NULL, resolution = "4km")
 {
   ### parameter and error handling
   

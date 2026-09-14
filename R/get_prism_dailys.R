@@ -88,7 +88,7 @@
 #'
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, 
-                             dates = NULL, keepZip = TRUE, 
+                             dates = NULL, keepZip = prism_get_keepZip(), 
                              service = NULL, resolution = "4km")
 {
   prism_check_dl_dir()

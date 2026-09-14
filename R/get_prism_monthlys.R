@@ -43,7 +43,8 @@
 #' @rdname get_prism_data
 #' 
 #' @export
-get_prism_monthlys <- function(type, years, mon = 1:12, keepZip = TRUE,
+get_prism_monthlys <- function(type, years, mon = 1:12, 
+                               keepZip = prism_get_keepZip(),
                                service = NULL, resolution = "4km")
 {
   ### parameter and error handling

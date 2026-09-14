@@ -11,7 +11,7 @@
 get_prism_annual(
   type,
   years,
-  keepZip = TRUE,
+  keepZip = prism_get_keepZip(),
   service = NULL,
   resolution = "4km"
 )
@@ -21,7 +21,7 @@ get_prism_dailys(
   minDate = NULL,
   maxDate = NULL,
   dates = NULL,
-  keepZip = TRUE,
+  keepZip = prism_get_keepZip(),
   service = NULL,
   resolution = "4km"
 )
@@ -30,7 +30,7 @@ get_prism_monthlys(
   type,
   years,
   mon = 1:12,
-  keepZip = TRUE,
+  keepZip = prism_get_keepZip(),
   service = NULL,
   resolution = "4km"
 )
@@ -40,7 +40,7 @@ get_prism_normals(
   resolution,
   mon = NULL,
   annual = FALSE,
-  keepZip = TRUE,
+  keepZip = prism_get_keepZip(),
   day = NULL
 )
 }
@@ -53,7 +53,9 @@ get_prism_normals(
 \item{years}{a valid numeric year, or vector of years, to download data for.}
 
 \item{keepZip}{if \code{TRUE}, leave the downloaded zip files in your
-'prism.path', if \code{FALSE}, they will be deleted.}
+'prism.path', if \code{FALSE}, they will be deleted. Defaults to the value set
+by \code{\link[=prism_get_keepZip]{prism_get_keepZip()}}. See \code{\link[=prism_set_keepZip]{prism_set_keepZip()}} to change the default
+behavior.}
 
 \item{service}{Either \code{NULL} (default) or a URL provided by PRISM staff
 for subscription-based service. Example:

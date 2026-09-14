@@ -11,7 +11,7 @@
 - replaced all use of raster:: with terra:: Package no longer depends on raster. 
 - message posts indicating 30-year normals are only available in geotiff format
   - updated pd_to_file() to account for this
-- no longer guarantee backwards compatibility with pre 2025 API.
+- no longer guarantee compatible with pre 2025 API.
 - added `pd_get_time_step()`
 - changed `pd_get_date()`. It now returns a date that matches the timestep of the prism data. Because the previous version added on months and days to monthly and annual data, that behavior can be preserved using the `complete=TRUE` parameter, which is `TRUE` by default.
 - Updated `pd_get_md()` so that it returns all variables that are found in the .info.txt file and no longer changes any names found in those files. 
@@ -22,6 +22,7 @@
 - `get_prism_*()` functions all now invisibly return the folder names (`pd`) that were downloaded. (#161)
 - solslope and soltotal available in 800m and 4km daily, monthly, and annual time series data (#149)
 - Fixed bug that resulted in data not being skipped if it already existed. 
+- added `prism_set_keepZip()` and `prism_get_keepZip()`. Changed the default assignment in all the calls to `get_prism_*()` to use this function. Now the user can easily change the default behavior for all downloads. The package defaults to `TRUE` to maintain previous default behavior. (#163)
 
 # prism 0.3.0
 

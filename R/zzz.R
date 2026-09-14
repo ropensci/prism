@@ -10,4 +10,5 @@
   )
   
   options(prism.format = "bil")
+  options(prism.keepZip = TRUE)
 }
