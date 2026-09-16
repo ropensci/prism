@@ -1,99 +1,27 @@
-#' Clean the prism data by removing early and provisional data
+#' (Defunct) Clean the prism data by removing early and provisional data
 #' 
-#' `prism_archive_clean()` 'cleans' the prism download data by removing early 
-#' and/or provisional data if newer (provisional or stable) data also exist 
-#' for the same variable and temporal period. Stable data are newer than 
-#' provisional data that are newer than early data; only the newest data are
-#' kept when the "clean" is performed.
-#' 
-#' `prism_archive_clean()` prompts the user to verify the folders that should be
-#' removed when R is running in interactive mode. Otherwise, all data that are 
-#' identified to be older than the newest available data are removed. 
-#' 
-#' Daily data are considered "early" for the current month. The previous six 
-#' months are provisional data. After six months data are considered stable. 
-#' Thus early data only exist for daily data, while there can be monthly (and 
-#' presumably yearly) provisional data. 
-#' 
-#' @inheritParams prism_archive_subset
-#' 
-#' @return Invisibly returns vector of all deleted folders.
-#' 
-#' @examples \dontrun{
-#' # delete any provisional annual precipitation data from 2000-2023
-#' # del_files will containg any deleted files
-#' del_files <- prism_archive_clean('ppt', 'annual', 2000:2023, resolution = "4km")
-#' }
+#' `prism_archive_clean()` is defunct. PRISM download identifiers no
+#' longer distinguish early, provisional, and stable data, so the
+#' function can no longer identify redundant archived datasets.
+#'
+#' Use [prism_archive_check_versions()] to identify locally archived
+#' daily and monthly grids for which PRISM has published a newer release.
+#' Use [prism_archive_update()] to redownload available updates.
 #' 
 #' @export
 
-prism_archive_clean <- function(type, temp_period, years = NULL, mon = NULL, 
-                                minDate = NULL, maxDate = NULL, dates = NULL,
-                                resolution = NULL) {
-  prism_check_dl_dir()
-  
-  pd <- prism_archive_subset(type, temp_period, years = years, mon = mon, 
-                             minDate = minDate, maxDate = maxDate, dates = dates,
-                             resolution = resolution)
-  
-  # identify folders for removal ----------------
-  # find any folders with "early"
-  early <- pd[stringr::str_detect(pd, "_early_")]
-  delete <- c()
-  if (length(early) > 0) {
-    # replace _early_ with _provisional_ and _stable_ and see if those folders
-    # exist. if so, delete early version
-    prov <- stringr::str_replace(early, "_early_", "_provisional_")
-    stable <- stringr::str_replace(early, "_early_", "_stable_")
-    
-    delete <- early[file.exists(file.path(prism_get_dl_dir(), prov))]
-    delete2 <- early[file.exists(file.path(prism_get_dl_dir(), stable))]
-    delete <- unique(c(delete, delete2))
-  }
-  
-  # now find provisional and see if they have stable versions
-  prov <- pd[stringr::str_detect(pd, "_provisional_")]
-  delete2 <- c()
-  if (length(prov) > 0) {
-    stable <- stringr::str_replace(prov, "_provisional_", "_stable_")
-    
-    delete2 <- prov[file.exists(file.path(prism_get_dl_dir(), stable))]
-  }
-  
-  delete <- unique(c(delete, delete2))
-  
-  # return if nothing to delete
-  if (length(delete) == 0) {
-    return(invisible(NULL))
-  }
-  
-  # otherwise, continue to remove the early/provisional folders
-  # prompt user to accept -----------------------
-  delete <- folders_to_remove(delete)
-  
-  # remove --------------------------------------
-  
-  del_paths <- file.path(prism_get_dl_dir(), delete)
-  unlink(del_paths, recursive = TRUE)
-  
-  # post warning regarding any folders that were supposed to be deleted, but
-  # could not be removed
-  
-  del_i <- dir.exists(del_paths)
-  no_delete <- delete[del_i]
-  delete <- delete[!del_i]
-  if (length(no_delete) > 0) {
-    warning(
-      paste0(
-        "Unable to remove the following folders. Check permissions.",
-        paste("\n  -", no_delete, collapse = "\n  - ")
-      )
-    )
-  }
-  
-  invisible(delete)
+prism_archive_clean <- function(...) {
+  stop(
+    "`prism_archive_clean()` is defunct because PRISM no longer provides ",
+    "early, provisional, and stable dataset names. ",
+    "Use `prism_archive_check_versions()` to identify available updates ",
+    "and `prism_archive_update()` to download them.",
+    call. = FALSE
+  )
 }
 
+# TODO: remove this later. Leaving in case we can reuse for 
+# prism_archive_update()
 # determines which folders to remove based on UI
 folders_to_remove <- function(x) {
   if (interactive()) {

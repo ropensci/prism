@@ -23,6 +23,8 @@
 - solslope and soltotal available in 800m and 4km daily, monthly, and annual time series data (#149)
 - Fixed bug that resulted in data not being skipped if it already existed. 
 - added `prism_set_keepZip()` and `prism_get_keepZip()`. Changed the default assignment in all the calls to `get_prism_*()` to use this function. Now the user can easily change the default behavior for all downloads. The package defaults to `TRUE` to maintain previous default behavior. (#163)
+- `prism_archive_clean()` is now defunct because PRISM no longer uses early, provisional, and stable identifiers. (#150)
+
 
 # prism 0.3.0
 

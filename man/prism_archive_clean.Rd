@@ -2,71 +2,17 @@
 % Please edit documentation in R/prism_archive_clean.R
 \name{prism_archive_clean}
 \alias{prism_archive_clean}
-\title{Clean the prism data by removing early and provisional data}
+\title{(Defunct) Clean the prism data by removing early and provisional data}
 \usage{
-prism_archive_clean(
-  type,
-  temp_period,
-  years = NULL,
-  mon = NULL,
-  minDate = NULL,
-  maxDate = NULL,
-  dates = NULL,
-  resolution = NULL
-)
-}
-\arguments{
-\item{type}{The type of data you want to subset. Must be "ppt", "tmean",
-"tmin", "tmax", "tdmean", "vpdmin", "vpdmax", "solclear", "solslope",
-"soltotal", or "soltrans".}
-
-\item{temp_period}{The temporal period to subset. Must be "annual",
-"monthly", "daily", "monthly normals", or "annual normals".}
-
-\item{years}{Valid numeric year, or vector of years.}
-
-\item{mon}{Valid numeric month, or vector of months.}
-
-\item{minDate}{Date to start subsetting daily data. Must be specified in
-a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
-
-\item{maxDate}{Date to end subsetting daily data.  Must be specified in
-a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
-
-\item{dates}{A vector of daily dates to subset. Must be specified in
-a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
-
-\item{resolution}{The spatial resolution of the data, must be either "4km" or
-"800m". Required for all temporal periods.}
-}
-\value{
-Invisibly returns vector of all deleted folders.
+prism_archive_clean(...)
 }
 \description{
-\code{prism_archive_clean()} 'cleans' the prism download data by removing early
-and/or provisional data if newer (provisional or stable) data also exist
-for the same variable and temporal period. Stable data are newer than
-provisional data that are newer than early data; only the newest data are
-kept when the "clean" is performed.
+\code{prism_archive_clean()} is defunct. PRISM download identifiers no
+longer distinguish early, provisional, and stable data, so the
+function can no longer identify redundant archived datasets.
 }
 \details{
-\code{prism_archive_clean()} prompts the user to verify the folders that should be
-removed when R is running in interactive mode. Otherwise, all data that are
-identified to be older than the newest available data are removed.
-
-Daily data are considered "early" for the current month. The previous six
-months are provisional data. After six months data are considered stable.
-Thus early data only exist for daily data, while there can be monthly (and
-presumably yearly) provisional data.
-}
-\examples{
-\dontrun{
-# delete any provisional annual precipitation data from 2000-2023
-# del_files will containg any deleted files
-del_files <- prism_archive_clean('ppt', 'annual', 2000:2023, resolution = "4km")
-}
-
+Use \code{\link[=prism_archive_check_versions]{prism_archive_check_versions()}} to identify locally archived
+daily and monthly grids for which PRISM has published a newer release.
+Use \code{\link[=prism_archive_update]{prism_archive_update()}} to redownload available updates.
 }
