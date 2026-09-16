@@ -8,7 +8,14 @@
     "See ?prism_set_format for more details.\n",
     "This will be changed to GeoTiff in the next release."
   )
+}
+
+.onLoad <- function(libname, pkgname) {
+  if (is.null(getOption("prism.format"))) {
+    options(prism.format = "bil")
+  }
   
-  options(prism.format = "bil")
-  options(prism.keepZip = TRUE)
+  if (is.null(getOption("prism.keepZip"))) {
+    options(prism.keepZip = TRUE)
+  }
 }
