@@ -5,27 +5,34 @@
 \title{Subsets PRISM folders on the disk}
 \usage{
 prism_archive_subset(
-  type,
-  temp_period,
+  type = NULL,
+  time_step = NULL,
   years = NULL,
   mon = NULL,
   minDate = NULL,
   maxDate = NULL,
   dates = NULL,
-  resolution = NULL
+  resolution = NULL,
+  data_class = NULL,
+  temp_period = NULL
 )
 }
 \arguments{
 \item{type}{The type of data you want to subset. Must be "ppt", "tmean",
 "tmin", "tmax", "tdmean", "vpdmin", "vpdmax", "solclear", "solslope",
-"soltotal", or "soltrans".}
+"soltotal", or "soltrans". If \code{NULL}, all temporal periods are included.}
 
-\item{temp_period}{The temporal period to subset. Must be "annual",
-"monthly", "daily", "monthly normals", or "annual normals".}
+\item{time_step}{The temporal period to subset. Must be "annual",
+"monthly", or "daily". If \code{NULL}, all temporal periods are included.
+Previous versions also accepted "daily normals, "monthly normals", or
+"annual normals". These options are now deprecated in favor of using
+\code{data_class} = "normals" argument.}
 
-\item{years}{Valid numeric year, or vector of years.}
+\item{years}{Valid numeric year, or vector of years. If \code{NULL}, all years are
+included.}
 
-\item{mon}{Valid numeric month, or vector of months.}
+\item{mon}{Valid numeric month, or vector of months. If \code{NULL}, all months
+are included.}
 
 \item{minDate}{Date to start subsetting daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
@@ -37,10 +44,17 @@ character or \link[base:Date]{base::Date} class.}
 
 \item{dates}{A vector of daily dates to subset. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
+character or \link[base:Date]{base::Date} class. Do not combine with \code{minDate} or
+\code{maxDate}.}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km" or
-"800m". Required for all temporal periods.}
+"800m". If \code{NULL}, all resolutions are included.}
+
+\item{data_class}{Character vector of PRISM data classes to include:
+\code{"time series"} and/or \code{"normals"}. If \code{NULL}, both data classes are
+included.}
+
+\item{temp_period}{Deprecated. Use \code{time_step} instead.}
 }
 \value{
 A character vector of the folders that meet the type and temporal
@@ -48,59 +62,61 @@ period specified. \code{character(0)} is returned if no folders are found that
 meet the specifications.
 }
 \description{
-\code{prism_archive_subset()} subsets the PRISM folders stored on disk by type,
-temporal period, and date. It looks through all of the PRISM data that have
-been downloaded in the prism archive (\code{\link[=prism_get_dl_dir]{prism_get_dl_dir()}}) and returns the
-subset based on the specified \code{type}, \code{temp_period}, and dates.
+\code{prism_archive_subset()} returns PRISM dataset identifiers (\code{pd}) from the
+current PRISM download directory that match the requested filters.
 }
 \details{
-\code{temp_period} must be specified so the function can distinguish between
-wanting annual data or wanting monthly data for a specified year. For example
-\code{prism_archive_subset("tmean", "annual", years = 2012)} would provide only
-one folder: the annual average temperature for 2012. However,
-\code{prism_archive_subset("tmean", "monthly", years = 2012)} would provide 12
-folders: each monthly tmean folder for 2012.
+\code{time_step} specifies the temporal time step: \code{"annual"}, \code{"monthly"},
+or \code{"daily"}. Use \code{data_class} to distinguish ordinary PRISM time-series
+products from 30-year normals.
 
-\code{temp_period}, \code{years}, and \code{mon} can be combined in various different ways
-to obtain different groupings of data. \code{years}, \code{mon}, and the daily
-specifiers (\code{minDate}/\code{maxDate} or \code{dates}) are optional. Not specifying any
-of those would result in getting all annual, monthly, or daily data.
-
-\code{minDate}/\code{maxDate} or \code{dates} should only be specified for a \code{temp_period}
-of "daily". Additionally, only \code{dates}, or \code{minDate} and \code{maxDate}, should be
-specified, but all three should not be specified. Nor should the daily
-arguments be combined with \code{years} and/or \code{mon}. For example, if daily
-folders are desired, then specify \code{years} and/or \code{mon} to get all days for
-those years and months \strong{or} specify the specific dates using
-\code{minDate}/\code{maxDate} or \code{dates}
+For backwards compatibility, \code{"annual normals"}, \code{"monthly normals"}, and
+\code{"daily normals"} are accepted as deprecated \code{temp_period} values. Use
+\code{temp_period = "annual"}, \code{"monthly"}, or \code{"daily"} together with
+\code{data_class = "normals"} instead.
 }
 \examples{
 \dontrun{
-# get all annual tmin
-prism_archive_subset("tmin", "annual")
-# get only 2000-2015 annual tmin at 800m resolution
-prism_archive_subset("tmin", "annual", years = 2000:2015, resolution = "800m")
+# All archived PRISM datasets.
+prism_archive_subset()
 
-# get monthly precipitation for 2000-2010
-prism_archive_subset("ppt", "monthly", years = 2000:2010)
-# get only June-August monthly precip data for 2000-2010 at 4km resolution
-prism_archive_subset("ppt", "monthly", years = 2000:2010, mon = 6:8, resolution = "4km")
+# All archived time-series datasets.
+prism_archive_subset(data_class = "time series")
 
-# get all daily tmax for July-August in 2010
-prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8)
-# get 800m daily tmax for July-August in 2010
-prism_archive_subset("tmax", "daily", years = 2010, mon = 7:8, resolution = "800m")
-# same as:
+# All archived monthly precipitation time-series grids.
 prism_archive_subset(
-  "tmax", 
-  "daily", 
-  minDate = "2010-07-01", 
-  maxDate = "2010-08-31",
-  resolution = "800m"
+  type = "ppt",
+  temp_period = "monthly",
+  data_class = "time series"
 )
 
-# get the 4km 30-year average precip for January and February
-prism_archive_subset("ppt", "monthly normals", mon = 1:2, resolution = "4km")
+# All archived January-February 4 km precipitation normals.
+prism_archive_subset(
+  type = "ppt",
+  temp_period = "monthly",
+  mon = 1:2,
+  resolution = "4km",
+  data_class = "normals"
+)
+
+# All archived 800 m daily maximum-temperature grids for July-August 2010.
+prism_archive_subset(
+  type = "tmax",
+  temp_period = "daily",
+  years = 2010,
+  mon = 7:8,
+  resolution = "800m",
+  data_class = "time series"
+)
+
+# A specific range of daily time-series precipitation grids.
+prism_archive_subset(
+  type = "ppt",
+  temp_period = "daily",
+  minDate = "2010-07-01",
+  maxDate = "2010-08-31",
+  data_class = "time series"
+)
 }
 
 }

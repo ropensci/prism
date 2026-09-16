@@ -20,14 +20,15 @@ prism_archive_verify(
 \arguments{
 \item{type}{The type of data you want to subset. Must be "ppt", "tmean",
 "tmin", "tmax", "tdmean", "vpdmin", "vpdmax", "solclear", "solslope",
-"soltotal", or "soltrans".}
+"soltotal", or "soltrans". If \code{NULL}, all temporal periods are included.}
 
-\item{temp_period}{The temporal period to subset. Must be "annual",
-"monthly", "daily", "monthly normals", or "annual normals".}
+\item{temp_period}{Deprecated. Use \code{time_step} instead.}
 
-\item{years}{Valid numeric year, or vector of years.}
+\item{years}{Valid numeric year, or vector of years. If \code{NULL}, all years are
+included.}
 
-\item{mon}{Valid numeric month, or vector of months.}
+\item{mon}{Valid numeric month, or vector of months. If \code{NULL}, all months
+are included.}
 
 \item{minDate}{Date to start subsetting daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
@@ -39,10 +40,11 @@ character or \link[base:Date]{base::Date} class.}
 
 \item{dates}{A vector of daily dates to subset. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
-character or \link[base:Date]{base::Date} class.}
+character or \link[base:Date]{base::Date} class. Do not combine with \code{minDate} or
+\code{maxDate}.}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km" or
-"800m". Required for all temporal periods.}
+"800m". If \code{NULL}, all resolutions are included.}
 
 \item{download_corrupt}{If \code{TRUE}, then any unreadable prism data are
 automatically re-downloaded.}
