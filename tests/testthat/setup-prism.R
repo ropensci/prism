@@ -1,3 +1,5 @@
+library(httptest)
+
 # get current prism path, store it, so it can be reverted after tests
 cur_prism <- getOption("prism.path")
 options("prism.path.tmp" = cur_prism)

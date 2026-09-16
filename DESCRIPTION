@@ -14,7 +14,7 @@ Authors@R: c(
     role = c("ctb","cre"),comment = c(ORCID = "0000-0002-8625-6386"))
     )
 License: MIT + file LICENSE
-Imports:
+Imports: 
     dplyr,
     ggplot2,
     httr,
@@ -23,8 +23,9 @@ Imports:
     terra,
     utils
 VignetteBuilder: knitr
-Suggests:
+Suggests: 
     covr,
+    httptest,
     knitr,
     rmarkdown,
     testthat (>= 2.1.0)
