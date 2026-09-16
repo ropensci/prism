@@ -28,7 +28,7 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE)
   which_downloaded <- vapply(
     file_bases, 
     find_prism_file, 
-    FUN.VALUE = logical(1),
+    FUN.VALUE = logical(1)
   )
   
   if(lgl){
