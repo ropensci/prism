@@ -51,6 +51,36 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     stop("Invalid service type. Must be 'web_service_v1' or 'ftp_v2_normals_bil'.")
   }
   
+  # NEW: catch a missing/unparseable filename before it's mistaken for
+  # "already downloaded" -- this happens when the server returns a 200
+  # status but an error page instead of the requested file (e.g. an
+  # invalid format parameter).
+  if (length(fn) == 0 || is.na(fn) || !nzchar(fn)) {
+    resp <- httr::GET(uri)
+    content_type <- httr::http_type(resp)
+    
+    if (identical(content_type, "text/html")) {
+      body_text <- httr::content(resp, as = "text", encoding = "UTF-8")
+      warning(
+        "PRISM web service returned an error page instead of a file for:\n", uri,
+        "\nServer response: ", trimws(body_text),
+        "\nYou can try this url in a web browser to see if it works.",
+        "\nAnd if you feel like it's an issue with the package, please file a bug:",
+        "\nhttps://github.com/ropensci/prism/issues",
+        call. = FALSE
+      )
+      return(NULL)
+    }
+    
+    warning(
+      "Could not determine the downloaded filename from the PRISM web ",
+      "service response for:\n", uri, 
+      "\n(Content-Disposition header was missing or unparseable.)",
+      call. = FALSE
+    )
+    return(NULL)
+  }
+  
   if (length(prism_not_downloaded(fn)) == 0 & !overwrite) {
     message("\n", fn, " already exists. Skipping downloading.")
     return(NULL)
