@@ -2,7 +2,7 @@
 #'
 #' PRISM continually revises recent monthly and daily grids as more station
 #' data becomes available. Each local file's release number is stored in its
-#' `.bil.aux.xml`/header metadata as `PRISM_DATASET_RELEASE_NUMBER`. This
+#' .info.txt file as the `PRISM_DATASET_RELEASE_NUMBER`. This
 #' function compares that number against the release/grid count reported by
 #' the PRISM release-date web service and flags files that have a newer
 #' release available online.
@@ -10,7 +10,8 @@
 #' Monthly data is considered "final" once `PRISM_DATASET_RELEASE_NUMBER >= 7`
 #' and daily data once it is `>= 8`; those files are not queried online (they
 #' are marked `"current"` directly). Everything below that threshold is
-#' checked against the web service.
+#' checked against the web service. If the local file matches the latest 
+#' available, it is also marked `"current"`.
 #'
 #' The release-date web service only supports monthly and daily time steps.
 #' Annual time series and normals have no release-date endpoint, so rows
@@ -18,28 +19,17 @@
 #' they are marked `"not_supported"` regardless of their release number,
 #' since we have no way to confirm whether a newer version exists.
 #'
-#' The web service uses two different date-key formats depending on the
-#' PRISM `time_step`:
-#' \itemize{
-#'   \item monthly: `services.nacse.org/.../<type>/<YYYYMM>[/<YYYYMM>]` --
-#'     one response row per *month*.
-#'   \item daily: `services.nacse.org/.../<type>/<YYYYMMDD>[/<YYYYMMDD>]` --
-#'     one response row per *day*.
-#' }
-#' Both support a date range as two path segments, so this function batches
-#' all flagged files for a given `(type, resolution, time_step)` combination
-#' into a single request spanning their min/max date.
-#'
 #' @param pd A `pd` object as returned by [prism_archive_ls()] or
 #'   [prism_archive_subset()]. If `NULL` (the default), the full local
 #'   archive is used, i.e. `pd_check_versions()` is equivalent to
 #'   `pd_check_versions(prism_archive_ls())`.
+#'   
 #' @param quiet If `FALSE` (default), prints a message summarizing how many
 #'   files were queried against the web service.
 #'
-#' @return A data frame (the same one produced by `parse_archive_pd()`, with
-#'   `pd` and `release_number` columns added) plus a `status` column with one
-#'   of `"current"`, `"update_available"`, `"not_supported"`, or
+#' @return A data frame containing all the checked `pd`, some parsed information
+#'   about the pd, e.g., `data_class`, `time_step`, etc. plus a `status` column 
+#'   with one of `"current"`, `"update_available"`, `"not_supported"`, or
 #'   `"check_failed"` for every row in `pd`.
 #'
 #' @examples
@@ -51,6 +41,7 @@
 #' pd <- prism_archive_subset("tmax", "monthly", years = 2015:2020)
 #' status_df <- pd_check_versions(pd)
 #' }
+#' 
 #' @export
 pd_check_versions <- function(pd = NULL, quiet = FALSE) {
 
@@ -227,23 +218,23 @@ prism_release_date_query <- function(type, resolution, time_step,
   httr::stop_for_status(resp, task = "query PRISM release-date service")
   
   txt <- httr::content(resp, as = "text", encoding = "UTF-8")
-  lines <- strsplit(txt, "\n")[[1]]
-  lines <- lines[nzchar(trimws(lines))]
-
-  if (length(txt) == 0) {
-    stop("Empty response from PRISM release-date service: ", url, call. = FALSE)
+  
+  tokens <- strsplit(trimws(txt), "\\s+")[[1]]
+  
+  if (length(tokens) == 0 || length(tokens) %% 5 != 0) {
+    stop("Unexpected response format from PRISM release-date service: ", url,
+         call. = FALSE)
   }
-
-  fields <- strsplit(txt, "\\s+")
-
+  
+  m <- matrix(tokens, ncol = 5, byrow = TRUE)
   key_fmt <- if (time_step == "monthly") "%Y%m" else "%Y%m%d"
-
+  
   data.frame(
-    release_date    = vapply(fields, `[`, character(1), 1),
-    completion_date = vapply(fields, `[`, character(1), 2),
-    type            = vapply(fields, `[`, character(1), 3),
-    grid_count      = as.integer(vapply(fields, `[`, character(1), 4)),
-    url             = vapply(fields, `[`, character(1), 5),
+    release_date    = m[, 1],
+    completion_date = m[, 2],
+    type            = m[, 3],
+    grid_count      = as.integer(m[, 4]),
+    url             = m[, 5],
     stringsAsFactors = FALSE
   ) |>
     transform(date_key = format(as.Date(release_date), key_fmt))

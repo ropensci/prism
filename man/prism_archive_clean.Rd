@@ -12,7 +12,7 @@ longer distinguish early, provisional, and stable data, so the
 function can no longer identify redundant archived datasets.
 }
 \details{
-Use \code{\link[=prism_archive_check_versions]{prism_archive_check_versions()}} to identify locally archived
+Use \code{\link[=pd_check_versions]{pd_check_versions()}} to identify locally archived
 daily and monthly grids for which PRISM has published a newer release.
 Use \code{\link[=prism_archive_update]{prism_archive_update()}} to redownload available updates.
 }

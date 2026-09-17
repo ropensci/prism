@@ -4,7 +4,7 @@
 #' longer distinguish early, provisional, and stable data, so the
 #' function can no longer identify redundant archived datasets.
 #'
-#' Use [prism_archive_check_versions()] to identify locally archived
+#' Use [pd_check_versions()] to identify locally archived
 #' daily and monthly grids for which PRISM has published a newer release.
 #' Use [prism_archive_update()] to redownload available updates.
 #' 
