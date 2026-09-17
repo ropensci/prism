@@ -265,10 +265,13 @@ find_prism_file <- function(base_file)
 {
   # Look inside the folder to see if the .bil/.tif/.nc/.asc is there
   # Won't be able to check for all other files. Unlikely to matter.
-  ls_folder <- list.files(prism_get_dl_dir(), base_file, recursive = TRUE)
-  found_file <- any(grepl(paste0("\\", prism_format_file_ext()), ls_folder))
+  ext <- prism_format_file_ext()
+  pattern <- paste0("^", base_file, gsub("\\.", "\\\\.", ext), "$")
+  ls_folder <- list.files(
+    prism_get_dl_dir(), pattern = pattern, recursive = TRUE
+  )
   
-  found_file
+  length(ls_folder) > 0
 }
 
 #' Checks to see if the dates (days) specified are within the available Prism 
