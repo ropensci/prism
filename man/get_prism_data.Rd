@@ -13,7 +13,8 @@ get_prism_annual(
   years,
   keepZip = prism_get_keepZip(),
   service = NULL,
-  resolution = "4km"
+  resolution = "4km",
+  overwrite = FALSE
 )
 
 get_prism_dailys(
@@ -23,7 +24,8 @@ get_prism_dailys(
   dates = NULL,
   keepZip = prism_get_keepZip(),
   service = NULL,
-  resolution = "4km"
+  resolution = "4km",
+  overwrite = FALSE
 )
 
 get_prism_monthlys(
@@ -32,7 +34,8 @@ get_prism_monthlys(
   mon = 1:12,
   keepZip = prism_get_keepZip(),
   service = NULL,
-  resolution = "4km"
+  resolution = "4km",
+  overwrite = FALSE
 )
 
 get_prism_normals(
@@ -41,7 +44,8 @@ get_prism_normals(
   mon = NULL,
   annual = FALSE,
   keepZip = prism_get_keepZip(),
-  day = NULL
+  day = NULL,
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -66,6 +70,11 @@ the specified resolution.}
 
 \item{resolution}{The spatial resolution of the data, must be either "4km"
 or "800m".}
+
+\item{overwrite}{Logical. Skip downloading PRISM data that already
+exists when \code{overwrite = FALSE}. If \code{TRUE}, then download data and
+overwrite data that exists. Useful for updating daily/monthly data to the
+newest available data.}
 
 \item{minDate}{Date to start downloading daily data. Must be specified in
 a valid iso-8601 (e.g. YYYY-MM-DD) format. May be provided as either a
