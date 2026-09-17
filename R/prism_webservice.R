@@ -29,7 +29,7 @@
 #' @noRd
 
 prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE, 
-                             ts_service = 'web_service_v2')
+                             ts_service = 'web_service_v2', overwrite = FALSE)
 {
   ## Get file name
   x <- httr::HEAD(uri)
@@ -41,7 +41,7 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     return(NULL)
   }
   
-  if (ts_service == 'web_service_v2'){
+  if (ts_service == 'web_service_v2') {
     fn <- x$headers[["content-disposition"]]
     fn <- regmatches(fn, regexpr('\\"[a-zA-Z0-9_\\.]+', fn))
     fn <- substr(fn, 2, nchar((fn)))
@@ -51,15 +51,15 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     stop("Invalid service type. Must be 'web_service_v1' or 'ftp_v2_normals_bil'.")
   }
   
-  if (length(prism_not_downloaded(fn)) == 0) {
+  if (length(prism_not_downloaded(fn)) == 0 & !overwrite) {
     message("\n", fn, " already exists. Skipping downloading.")
     return(NULL)
-  } else if (length(prism_not_downloaded_as_v1(fn)) == 0) {
+  } else if (length(prism_not_downloaded_as_v1(fn)) == 0 & !overwrite) {
     message("\n", fn, " is a webservice v2 request that already exists as v1 file. Skipping downloading. (Delete original webservice v1 file if you want to update).")
     return(NULL)
   } else {
   
-    outFile <- paste(options("prism.path"), fn, sep="/")
+    outFile <- file.path(prism_get_dl_dir(), fn)
     
     tryNumber <- 1
     downloaded <- FALSE
