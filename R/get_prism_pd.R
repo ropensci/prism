@@ -21,7 +21,7 @@ get_prism_pd <- function(pd, keepZip = prism_get_keepZip(), service = NULL,
 {
   prism_check_dl_dir()
   
-  if (!is.character(pd) | length(pd) == 0) {
+  if (!is.character(pd) || length(pd) == 0) {
     stop("`pd` should be a character vector.")
   }
   
