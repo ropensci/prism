@@ -89,7 +89,8 @@
 #' @export
 get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL, 
                              dates = NULL, keepZip = prism_get_keepZip(), 
-                             service = NULL, resolution = "4km")
+                             service = NULL, resolution = "4km",
+                             overwrite = FALSE)
 {
   prism_check_dl_dir()
 
@@ -105,6 +106,10 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   }
   if (!resolution %in% c("4km", "800m")) {
     stop("'resolution' must be '4km' or '800m'. See ?get_prism_dailys for details.")
+  }
+  
+  if (!is.logical(overwrite) | length(overwrite) != 1) {
+    stop("`overwrite` should be a single logical value.")
   }
   
   ## Get years
@@ -125,7 +130,8 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
       tmp_pd <- prism_webservice(
         uri = uris[[i]], 
         keepZip =  keepZip, 
-        returnName = TRUE
+        returnName = TRUE,
+        overwrite = FALSE
       )
       
       if (!is.null(tmp_pd)) {

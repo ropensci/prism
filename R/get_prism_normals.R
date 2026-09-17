@@ -51,7 +51,8 @@
 #' 
 #' @export
 get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,  
-                              keepZip = prism_get_keepZip(), day = NULL)
+                              keepZip = prism_get_keepZip(), day = NULL,
+                              overwrite = FALSE)
 {
   ### parameter and error handling
   prism_check_dl_dir()
@@ -76,6 +77,10 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
     stop(
       "Clear sky, sloped, and total solar radiation are only available in 800m."
     )
+  }
+  
+  if (!is.logical(overwrite) | length(overwrite) != 1) {
+    stop("`overwrite` should be a single logical value.")
   }
   
   if (prism_get_format() != "geotiff") {
@@ -127,7 +132,8 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
       uris[i],
       keepZip = keepZip, 
       ts_service = 'ftp_v2_normals_bil', 
-      returnName = TRUE
+      returnName = TRUE,
+      overwrite = overwrite
     )
     
     if (!is.null(tmp_pd)) {

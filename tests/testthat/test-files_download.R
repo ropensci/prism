@@ -1,8 +1,10 @@
 
-dl_folder <- file.path(tempdir(), "prism")
 cur_path <- prism_get_dl_dir()
 cur_format <- prism_get_format()
-setup({prism_set_dl_dir(dl_folder)})
+
+dl_folder <- file.path(tempdir(), "prism")
+prism_set_dl_dir(dl_folder)
+
 teardown({
   prism_set_dl_dir(cur_path)
   prism_set_format(cur_format)
@@ -18,7 +20,7 @@ skip_normals <- TRUE
 skip_annual <- TRUE
 skip_monthly <- TRUE
 skip_monthly_3 <- TRUE
-skip_daily <- TRUE
+skip_daily <- FALSE
 skip_daily_3 <- TRUE
 
 expect_observed_download <- function(pd, dl_dir, format, keep_zip, is_normal) {
@@ -217,6 +219,22 @@ test_that("normals download", {
       )
     }
   }
+  
+  # check that the overwrite parameter is working
+  pd <- normal_cases[[1]][["expected_pd"]]
+  result <- evaluate_promise(
+    get_prism_pd(pd, overwrite = FALSE)
+  )
+  
+  expect_equal(result$result, character(0))
+  expect_length(result$messages, 1)
+  expect_true(all(grepl(
+    "already exists\\. Skipping downloading\\.", 
+    result$messages)
+  ))
+  
+  result <- get_prism_pd(pd, overwrite = TRUE)
+  expect_equal(result, pd)
 })
 
 # annual -----------------------
@@ -259,6 +277,22 @@ test_that("annuals download", {
       is_normal = FALSE
     )
   }
+  
+  # check that the overwrite parameter is working
+  pd <- annual_cases[["expected_pd"]][[1]]
+  result <- evaluate_promise(
+    get_prism_pd(pd, overwrite = FALSE)
+  )
+  
+  expect_equal(result$result, character(0))
+  expect_length(result$messages, 1)
+  expect_true(all(grepl(
+    "already exists\\. Skipping downloading\\.", 
+    result$messages)
+  ))
+  
+  result <- get_prism_pd(pd, overwrite = TRUE)
+  expect_equal(result, pd)
 })
 
 # monthly ----------------------
@@ -303,6 +337,21 @@ test_that("monthlys download", {
       is_normal = FALSE
     )
   }
+  
+  pd <- monthly_cases[["expected_pd"]][[1]]
+  result <- evaluate_promise(
+    get_prism_pd(pd, overwrite = FALSE)
+  )
+  
+  expect_equal(result$result, character(0))
+  expect_length(result$messages, 1)
+  expect_true(all(grepl(
+    "already exists\\. Skipping downloading\\.", 
+    result$messages)
+  ))
+  
+  result <- get_prism_pd(pd, overwrite = TRUE)
+  expect_equal(result, pd)
 })
 
 # monthly 3 ----------------------
@@ -338,11 +387,11 @@ test_that("daily download", {
   daily_cases <- data.frame(
     type = c("tmean", "tmax", "tmin", "tdmean", "vpdmin", "vpdmax", "ppt",
              "solslope", "soltotal"),
-    date = c("1981-01-01", "1985-02-20", "1991-06-01", "1997-09-27", 
+    date = c("1981-01-01", "1985-02-21", "1991-06-01", "1997-09-27", 
              "2006-12-31", "2012-01-01", "2015-11-05", "2019-12-25",
              "2021-10-31"),
     resolution = c("800m", rep("4km", 7), "800m"),
-    expected_pd = c("prism_tmean_us_30s_19810101", "prism_tmax_us_25m_19850220", 
+    expected_pd = c("prism_tmean_us_30s_19810101", "prism_tmax_us_25m_19850221", 
                     "prism_tmin_us_25m_19910601", "prism_tdmean_us_25m_19970927",
                     "prism_vpdmin_us_25m_20061231", 
                     "prism_vpdmax_us_25m_20120101","prism_ppt_us_25m_20151105",
@@ -373,6 +422,22 @@ test_that("daily download", {
       is_normal = FALSE
     )
   }
+  
+  # check that get_prism_pd overwrite works as expected
+  pd <- daily_cases[["expected_pd"]][[1]]
+  result <- evaluate_promise(
+    get_prism_pd(pd, overwrite = FALSE)
+  )
+  
+  expect_equal(result$result, character(0))
+  expect_length(result$messages, 1)
+  expect_true(all(grepl(
+    "already exists\\. Skipping downloading\\.", 
+    result$messages)
+  ))
+  
+  result <- get_prism_pd(pd, overwrite = TRUE)
+  expect_equal(result, pd)
 })
 
 # daily 3 in row ------------------

@@ -31,6 +31,11 @@
 #' @param resolution Character string specifying spatial resolution. One of 
 #'   "4km" or "800m". Default is "4km". Note that "400m" resolution is planned 
 #'   but not yet available from the PRISM web service.
+#'   
+#' @param overwrite Logical. Skip downloading PRISM data that already 
+#'   exists when `overwrite = FALSE`. If `TRUE`, then download data and 
+#'   overwrite data that exists. Useful for updating daily/monthly data to the 
+#'   newest available data. 
 #'
 #' @details 
 #' A valid download directory must exist before downloading any prism data. This
@@ -88,7 +93,8 @@
 #' 
 #' @export
 get_prism_annual <- function(type, years, keepZip = prism_get_keepZip(), 
-                             service = NULL, resolution = "4km")
+                             service = NULL, resolution = "4km", 
+                             overwrite = FALSE)
 {
   ### parameter and error handling
   
@@ -112,6 +118,10 @@ get_prism_annual <- function(type, years, keepZip = prism_get_keepZip(),
     stop("'resolution' must be '4km' or '800m'. See ?get_prism_annual for details.")
   }
   
+  if (!is.logical(overwrite) | length(overwrite) != 1) {
+    stop("`overwrite` should be a single logical value.")
+  }
+  
   uris <- vector()
   
   uris <- gen_prism_url(years, type, resolution, service = service)
@@ -131,7 +141,12 @@ get_prism_annual <- function(type, years, keepZip = prism_get_keepZip(),
   if (length(uris) > 0) {    
     
     for (i in seq_along(uris)) {
-      tmp_pd <- prism_webservice(uris[i], keepZip = keepZip, returnName = TRUE)
+      tmp_pd <- prism_webservice(
+        uris[i], 
+        keepZip = keepZip, 
+        returnName = TRUE,
+        overwrite = overwrite
+      )
       
       if (!is.null(tmp_pd)) {
         pd[[i]] <- tmp_pd

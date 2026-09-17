@@ -44,8 +44,8 @@
 #' 
 #' @export
 get_prism_monthlys <- function(type, years, mon = 1:12, 
-                               keepZip = prism_get_keepZip(),
-                               service = NULL, resolution = "4km")
+                               keepZip = prism_get_keepZip(), service = NULL, 
+                               resolution = "4km", overwrite = FALSE)
 {
   ### parameter and error handling
   prism_check_dl_dir()
@@ -77,6 +77,10 @@ get_prism_monthlys <- function(type, years, mon = 1:12,
     stop("'resolution' must be '4km' or '800m'. See ?get_prism_monthlys for details.")
   }
   
+  if (!is.logical(overwrite) | length(overwrite) != 1) {
+    stop("`overwrite` should be a single logical value.")
+  }
+  
   uris <- vector()
 
   if (length(years)) {
@@ -103,7 +107,12 @@ get_prism_monthlys <- function(type, years, mon = 1:12,
   if (length(uris) > 0) {    
       
     for (i in seq_along(uris)) {
-        tmp_pd <- prism_webservice(uris[i], keepZip = keepZip, returnName = TRUE)
+        tmp_pd <- prism_webservice(
+          uris[i], 
+          keepZip = keepZip, 
+          returnName = TRUE,
+          overwrite = overwrite
+        )
         
         if (!is.null(tmp_pd)) {
           pd[[i]] <- tmp_pd

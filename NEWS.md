@@ -31,6 +31,7 @@
   - `temp_period` or `time_step` should not included "normals". They can for now but that's deprecated and user should be using `data_class`
 - added `pd_check_versions()` (#150)
 - added `get_prism_pd()` (#150)
+- added `overwrite` argument to all `get_prism_*()` functions. (#167)
 
 
 # prism 0.3.0

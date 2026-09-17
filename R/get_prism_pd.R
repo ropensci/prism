@@ -25,6 +25,10 @@ get_prism_pd <- function(pd, keepZip = prism_get_keepZip(), service = NULL,
     stop("`pd` should be a character vector.")
   }
   
+  if (!is.logical(overwrite) | length(overwrite) != 1) {
+    stop("`overwrite` should be a single logical value.")
+  }
+  
   verify_pd(pd)
   
   pd_parse <- parse_archive_pd(pd) |>
