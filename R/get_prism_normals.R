@@ -126,7 +126,7 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
     tmp_pd <- prism_webservice(
       uris[i],
       keepZip = keepZip, 
-      service = 'ftp_v2_normals_bil', 
+      ts_service = 'ftp_v2_normals_bil', 
       returnName = TRUE
     )
     

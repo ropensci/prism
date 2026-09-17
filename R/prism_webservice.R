@@ -29,7 +29,7 @@
 #' @noRd
 
 prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE, 
-                             service = 'web_service_v2')
+                             ts_service = 'web_service_v2')
 {
   ## Get file name
   x <- httr::HEAD(uri)
@@ -41,11 +41,11 @@ prism_webservice <- function(uri, keepZip = FALSE, returnName = FALSE,
     return(NULL)
   }
   
-  if (service == 'web_service_v2'){
+  if (ts_service == 'web_service_v2'){
     fn <- x$headers[["content-disposition"]]
     fn <- regmatches(fn, regexpr('\\"[a-zA-Z0-9_\\.]+', fn))
     fn <- substr(fn, 2, nchar((fn)))
-  } else if (service == 'ftp_v2_normals_bil') {
+  } else if (ts_service == 'ftp_v2_normals_bil') {
     fn <- basename(uri)
   } else {
     stop("Invalid service type. Must be 'web_service_v1' or 'ftp_v2_normals_bil'.")
