@@ -93,5 +93,9 @@ test_that("pd_check_versions() works on mock and sparse data", {
   })
   
   expect_equal(dim(x), c(9, 11))
-  expect_equal(x$release_number, c(seq(8, 2, -1), 2, 2))
+  expect_equal(x$release_number, c(8, 7, 6, 5, 3, 2, 2, 2, 2))
+  expect_equal(
+    x$status, 
+    c('current', rep('update_available', 6), rep('current', 2))
+  )
 })
