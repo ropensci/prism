@@ -17,7 +17,12 @@ test_that("get_prism_normals() errors correctly", {
   )
   
    expect_error(
-    get_prism_monthlys(type = "ppt", years = 2023, mon = 6, resolution = "400m"),
+    get_prism_monthlys(
+      type = "ppt", 
+      years = 2023, 
+      mon = 6, 
+      resolution = "400m"
+    ),
     "'resolution' must be '4km' or '800m'"
   )
   
@@ -28,12 +33,18 @@ test_that("get_prism_normals() errors correctly", {
   
   # NEW: Test invalid resolution types
   expect_error(
-    get_prism_dailys(type = "ppt", dates = "2013-06-01", resolution = 4),  # numeric instead of character
+    # numeric instead of character
+    get_prism_dailys(type = "ppt", dates = "2013-06-01", resolution = 4),  
     "'resolution' must be '4km' or '800m'"
   )
   
   expect_error(
-    get_prism_monthlys(type = "tmean", years = 2023, mon = 1, resolution = NULL),
+    get_prism_monthlys(
+      type = "tmean", 
+      years = 2023, 
+      mon = 1, 
+      resolution = NULL
+    ),
     "'resolution' must be '4km' or '800m'"
   )
   
