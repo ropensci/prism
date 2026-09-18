@@ -118,6 +118,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   type <- match.arg(type, prism_vars())
 
   uri_dates <- gsub(pattern = "-",replacement = "",dates)
+  warn_recent_dates(uri_dates)
   uris <- gen_prism_url(uri_dates, type, resolution, service = service)
   
   download_pb <- txtProgressBar(min = 0, max = max(length(uris), 1), style = 3)
@@ -148,5 +149,31 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
   invisible(pd)
 }
 
-
+#' Warn if requested dates are recent enough that PRISM releases may not
+#' yet be finalized
+#'
+#' @param dates Character vector of dates already formatted for
+#'   [gen_prism_url()] -- either `YYYYMM` (monthly) or `YYYYMMDD` (daily).
+#' @param months_threshold Numeric; how many months back from today counts
+#'   as "recent enough to warn about." Default `7`.
+#'
+#' @noRd
+warn_recent_dates <- function(dates, months_threshold = 7) {
+  
+  cutoff <- seq(Sys.Date(), by = paste0("-", months_threshold, " months"),
+                length.out = 2)[2]
+  
+  parsed <- ifelse(nchar(dates) == 6, paste0(dates, "01"), dates)
+  parsed <- as.Date(parsed, format = "%Y%m%d")
+  
+  if (any(parsed >= cutoff, na.rm = TRUE)) {
+    message(
+      "You're downloading data that is within ", months_threshold,
+      " months of today; you may need to update these data in the ",
+      "future as PRISM grids are finalized. See `?prism_archive_update()`"
+    )
+  }
+  
+  invisible(NULL)
+}
 

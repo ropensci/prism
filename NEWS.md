@@ -33,7 +33,7 @@
 - added `get_prism_pd()` (#150)
 - added `overwrite` argument to all `get_prism_*()` functions. (#167)
 - added `prism_archive_update()` (#150)
-
+- messages now post in `get_prism_monthlys()` and `get_prism_datilys()` if requested data are within 7 months of today, indicating you may need to update data in the future. (#150)
 
 # prism 0.3.0
 

@@ -52,20 +52,20 @@ get_prism_monthlys <- function(type, years, mon = 1:12,
   type <- match.arg(type, prism_vars())
  
   ### Check mon
-  if(!is.numeric(mon)) {
+  if (!is.numeric(mon) || length(mon) == 0) {
     stop("You must enter a numeric month between 1 and 12")
   }
   
-  if(any(mon < 1 | mon > 12)) {
+  if (any(mon < 1 | mon > 12)) {
     stop("You must enter a month between 1 and 12")
   }
   
   ### Check year
-  if(!is.numeric(years)){
+  if (!is.numeric(years) || length(years) == 0) {
     stop("You must enter a numeric year from 1895 onwards.")
   }
   
-  if(any(years < 1895)){
+  if (any(years < 1895)) {
     stop("You must enter a year from 1895 onwards.")
   }
   
@@ -83,16 +83,16 @@ get_prism_monthlys <- function(type, years, mon = 1:12,
   
   uris <- vector()
 
-  if (length(years)) {
-    uri_dates <- apply(
-      expand.grid(years, mon_to_string(mon)),
-      1,
-      function(x) {paste(x[1], x[2], sep="")}
-    )
-
-    # uris_post81 <- gen_prism_url(uri_dates_post81, type, service)
-    uris <- gen_prism_url(uri_dates, type, resolution, service = service)
-  }
+  uri_dates <- apply(
+    expand.grid(years, mon_to_string(mon)),
+    1,
+    function(x) {paste(x[1], x[2], sep="")}
+  )
+  
+  warn_recent_dates(uri_dates)
+  
+  uris <- gen_prism_url(uri_dates, type, resolution, service = service)
+  
     
   download_pb <- txtProgressBar(
     min = 0,

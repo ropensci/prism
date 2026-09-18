@@ -47,3 +47,34 @@ test_that("get_prism_normals() errors correctly", {
     "Clear sky, sloped, and total solar radiation are only available in 800m."
   )
 })
+
+test_that("warn_recent_dates() messages appropriately", {
+  date_as_char <- function(n_days) {
+    as.character(Sys.Date() - n_days) |>
+      stringr::str_remove_all("-")
+  }
+  
+  d1 <- date_as_char(7)
+  d2 <- date_as_char(35)
+  d3 <- date_as_char(270)
+  d4 <- date_as_char(450)
+  
+  # daily
+  expect_message(warn_recent_dates(d1))
+  expect_message(warn_recent_dates(d2))
+  expect_null(warn_recent_dates(d3))
+  expect_null(warn_recent_dates(d4))
+  expect_message(warn_recent_dates(d4, months_threshold = 24))
+  
+  # monthly
+  d1 <- substr(d1, 1, 6) 
+  d2 <- substr(d2, 1, 6) 
+  d3 <- substr(d3, 1, 6) 
+  d4 <- substr(d4, 1, 6) 
+  
+  expect_message(warn_recent_dates(d1))
+  expect_message(warn_recent_dates(d2))
+  expect_null(warn_recent_dates(d3))
+  expect_null(warn_recent_dates(d4))
+  expect_message(warn_recent_dates(d4, months_threshold = 24))
+})
