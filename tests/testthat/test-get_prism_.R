@@ -1,3 +1,9 @@
+orig_dl <- prism_get_dl_dir()
+orig_ff <- prism_get_format()
+teardown({
+  prism_set_dl_dir(orig_dl)
+  prism_set_format(orig_ff)
+})
 
 # Check errors
 test_that("get_prism_normals() errors correctly", {
@@ -57,6 +63,23 @@ test_that("get_prism_normals() errors correctly", {
     get_prism_normals(type = "soltrans", mon = 4, resolution = '4km'),
     "Clear sky, sloped, and total solar radiation are only available in 800m."
   )
+})
+
+test_that("skips downloading data that's already been downloaded", {
+  prism_set_format("geotiff")
+  prism_set_dl_dir(tif_dl)
+  
+  res <- evaluate_promise(get_prism_annual("ppt", 2023:2025))
+  expect_length(res$messages, 3)
+  expect_equal(res$result, character(0))
+  
+  expect_message(get_prism_normals("ppt", "4km", annual = TRUE))
+  
+  prism_set_format("nc")
+  prism_set_dl_dir(nc_dl)
+  res <- evaluate_promise(get_prism_dailys("tmin", dates = "2025-07-04"))
+  expect_length(res$messages, 1)
+  expect_equal(res$result, character(0))
 })
 
 test_that("warn_recent_dates() messages appropriately", {
