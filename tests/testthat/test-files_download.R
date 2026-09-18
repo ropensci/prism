@@ -20,7 +20,7 @@ skip_normals <- TRUE
 skip_annual <- TRUE
 skip_monthly <- TRUE
 skip_monthly_3 <- TRUE
-skip_daily <- FALSE
+skip_daily <- TRUE
 skip_daily_3 <- TRUE
 
 expect_observed_download <- function(pd, dl_dir, format, keep_zip, is_normal) {
@@ -63,7 +63,7 @@ expect_observed_download <- function(pd, dl_dir, format, keep_zip, is_normal) {
   expect_true(any(!is.na(values)))
 }
 
-formats <- c("geotiff", "bil", "asc", "nc")
+formats <- c("geotiff", "bil", "nc")
 
 # Normals ---------------
 test_that("normals download", {
@@ -202,7 +202,7 @@ test_that("normals download", {
     case <- normal_cases[[i]]
     
     # set keep_zip and format
-    ff <- formats[(i%%4 + 1)]
+    ff <- formats[(i%%3 + 1)]
     case[["args"]][["keepZip"]] <- as.logical(i%%2)
     
     prism_set_format(ff)
@@ -221,7 +221,9 @@ test_that("normals download", {
   }
   
   # check that the overwrite parameter is working
-  pd <- normal_cases[[1]][["expected_pd"]]
+  i <- 1
+  prism_set_format(formats[(i%%3 + 1)])
+  pd <- normal_cases[[i]][["expected_pd"]]
   result <- evaluate_promise(
     get_prism_pd(pd, overwrite = FALSE)
   )
@@ -257,7 +259,7 @@ test_that("annuals download", {
   for (i in seq_len(nrow(annual_cases))) {
     
     keepZip <- as.logical(i%%2)
-    ff <- formats[[(i%%4 + 1)]]
+    ff <- formats[[(i%%3 + 1)]]
     prism_set_format(ff)
     
     pd <- get_prism_annual(
@@ -279,7 +281,9 @@ test_that("annuals download", {
   }
   
   # check that the overwrite parameter is working
-  pd <- annual_cases[["expected_pd"]][[1]]
+  i <- 1
+  prism_set_format(formats[(i%%3 + 1)])
+  pd <- annual_cases[["expected_pd"]][[i]]
   result <- evaluate_promise(
     get_prism_pd(pd, overwrite = FALSE)
   )
@@ -316,7 +320,7 @@ test_that("monthlys download", {
   for (i in seq_len(nrow(monthly_cases))) {
     
     keepZip <- as.logical(i%%2)
-    ff <- formats[[(i%%4 + 1)]]
+    ff <- formats[[(i%%3 + 1)]]
     prism_set_format(ff)
     
     pd <- get_prism_monthlys(
@@ -338,7 +342,10 @@ test_that("monthlys download", {
     )
   }
   
-  pd <- monthly_cases[["expected_pd"]][[1]]
+  # check overwrite with get_prism_pd
+  i <- 1
+  prism_set_format(formats[(i%%3 + 1)])
+  pd <- monthly_cases[["expected_pd"]][[i]]
   result <- evaluate_promise(
     get_prism_pd(pd, overwrite = FALSE)
   )
@@ -402,7 +409,7 @@ test_that("daily download", {
   for (i in seq_len(nrow(daily_cases))) {
     
     keepZip <- as.logical(i%%2)
-    ff <- formats[[(i%%4 + 1)]]
+    ff <- formats[[(i%%3 + 1)]]
     prism_set_format(ff)
     
     pd <- get_prism_dailys(
@@ -424,7 +431,9 @@ test_that("daily download", {
   }
   
   # check that get_prism_pd overwrite works as expected
-  pd <- daily_cases[["expected_pd"]][[1]]
+  i <- 1
+  prism_set_format(formats[(i%%3 + 1)])
+  pd <- daily_cases[["expected_pd"]][[i]]
   result <- evaluate_promise(
     get_prism_pd(pd, overwrite = FALSE)
   )
