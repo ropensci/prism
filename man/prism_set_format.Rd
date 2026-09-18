@@ -10,14 +10,14 @@ prism_set_format(data_format)
 prism_get_format()
 }
 \arguments{
-\item{data_format}{One of 'geotiff', 'bil', 'asc', or 'nc'}
+\item{data_format}{One of 'geotiff', 'bil', or 'nc'}
 }
 \value{
 Invisibly returns data_format if it is valid.
 }
 \description{
 The PRISM web service provides PRISM grids in Cloud Optimized GeoTIFF
-(geotiff), bil, ASCII Grid (asc), and netCDF (nc) format.
+(geotiff), bil, and netCDF (nc) format.
 \code{prism_set_format()} lets the user specify the format that will be used by
 the package, while \code{prism_get_format()} returns the format currently being
 used. GeoTIFF is the default used by the package. It is recommended that

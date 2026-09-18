@@ -16,7 +16,6 @@ library(maps)
 
 # download data
 bil_dir <- file.path("data-raw/prism/bil")
-asc_dir <- file.path("data-raw/prism/asc")
 nc_dir <- file.path("data-raw/prism/nc")
 tif_dir <- file.path("data-raw/prism/tif")
 dl_dir <- file.path("data-raw/prism")
@@ -24,9 +23,6 @@ dl_dir <- file.path("data-raw/prism")
 prism_set_dl_dir(bil_dir)
 prism_set_format('bil')
 get_prism_annual("tmax", 2025)
-
-prism_set_dl_dir(asc_dir)
-prism_set_format('asc')
 get_prism_monthlys('tmean', 2025, 7)
 
 prism_set_dl_dir(nc_dir)

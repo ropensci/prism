@@ -1,16 +1,16 @@
-prism_formats <- c('geotiff', 'bil', 'asc', 'nc')
+prism_formats <- c('geotiff', 'bil', 'nc')
 
 #' Set/get the PRISM grid download format
 #' 
 #' The PRISM web service provides PRISM grids in Cloud Optimized GeoTIFF 
-#' (geotiff), bil, ASCII Grid (asc), and netCDF (nc) format. 
+#' (geotiff), bil, and netCDF (nc) format. 
 #' `prism_set_format()` lets the user specify the format that will be used by 
 #' the package, while `prism_get_format()` returns the format currently being 
 #' used. GeoTIFF is the default used by the package. It is recommended that 
 #' users choose one format and stick with it. The package is not setup to 
 #' handle a PRISM data download directory that has multiple formats in it.  
 #' 
-#' @param data_format One of 'geotiff', 'bil', 'asc', or 'nc'
+#' @param data_format One of 'geotiff', 'bil', or 'nc'
 #' 
 #' @return Invisibly returns data_format if it is valid.
 #' 
@@ -33,7 +33,7 @@ prism_get_format <- function()
 # it uses geotiff insead of tif
 prism_format_file_ext <- function()
 {
-  fext <- c('geotiff' = '.tif', 'bil' = '.bil', 'asc' = '.asc', 'nc' = '.nc')
+  fext <- c('geotiff' = '.tif', 'bil' = '.bil', 'nc' = '.nc')
   
   unname(fext[prism_get_format()])
 }

@@ -5,7 +5,7 @@
       <citeinfo>
         <origin>PRISM Group at Oregon State University</origin>
         <pubdate>20260118</pubdate>
-        <title>United States Monthly Average Daily Mean Temperature, July 2025 (4km; ASCII Grid)</title>
+        <title>United States Monthly Average Daily Mean Temperature, July 2025 (4km; BIL)</title>
         <geoform>raster digital data</geoform>
         <pubinfo>
           <pubplace>Corvallis, OR, USA</pubplace>
@@ -71,7 +71,7 @@
           <citeinfo>
             <origin>PRISM Group</origin>
             <pubdate>20260118</pubdate>
-            <title>United States Monthly Average Daily Mean Temperature, July 2025 (4km; ASCII Grid)</title>
+            <title>United States Monthly Average Daily Mean Temperature, July 2025 (4km; BIL)</title>
           </citeinfo>
         </srccite>
         <typesrc>digital file</typesrc>
@@ -128,7 +128,7 @@
         </enttypds>
       </enttyp>
       <attr>
-        <attrlabl>Monthly average daily mean temperature (ASCII Grid format)</attrlabl>
+        <attrlabl>Monthly average daily mean temperature (BIL format)</attrlabl>
         <attrdef>Spatially gridded monthly average daily mean temperature values</attrdef>
         <attrdefs>PRISM Group</attrdefs>
         <attrdomv>
