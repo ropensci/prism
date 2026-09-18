@@ -13,7 +13,7 @@
 #' get_prism_pd(pd, overwrite = TRUE)
 #' }
 #' 
-#' #' @rdname get_prism_data
+#' @rdname get_prism_data
 #'
 #' @export
 get_prism_pd <- function(pd, keepZip = prism_get_keepZip(), service = NULL,

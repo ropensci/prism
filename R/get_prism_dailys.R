@@ -153,7 +153,7 @@ get_prism_dailys <- function(type, minDate = NULL, maxDate =  NULL,
 #' yet be finalized
 #'
 #' @param dates Character vector of dates already formatted for
-#'   [gen_prism_url()] -- either `YYYYMM` (monthly) or `YYYYMMDD` (daily).
+#'   gen_prism_url() -- either `YYYYMM` (monthly) or `YYYYMMDD` (daily).
 #' @param months_threshold Numeric; how many months back from today counts
 #'   as "recent enough to warn about." Default `7`.
 #'

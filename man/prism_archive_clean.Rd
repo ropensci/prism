@@ -6,6 +6,9 @@
 \usage{
 prism_archive_clean(...)
 }
+\arguments{
+\item{...}{Anything passed to defunct function.}
+}
 \description{
 \code{prism_archive_clean()} is defunct. PRISM download identifiers no
 longer distinguish early, provisional, and stable data, so the

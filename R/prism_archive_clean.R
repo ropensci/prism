@@ -8,6 +8,8 @@
 #' daily and monthly grids for which PRISM has published a newer release.
 #' Use [prism_archive_update()] to redownload available updates.
 #' 
+#' @param ... Anything passed to defunct function.
+#' 
 #' @export
 
 prism_archive_clean <- function(...) {

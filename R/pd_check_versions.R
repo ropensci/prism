@@ -229,13 +229,15 @@ prism_release_date_query <- function(type, resolution, time_step,
   m <- matrix(tokens, ncol = 5, byrow = TRUE)
   key_fmt <- if (time_step == "monthly") "%Y%m" else "%Y%m%d"
   
-  data.frame(
+  out <- data.frame(
     release_date    = m[, 1],
     completion_date = m[, 2],
-    type            = m[, 3],
+    type            = m[, 3], 
     grid_count      = as.integer(m[, 4]),
     url             = m[, 5],
     stringsAsFactors = FALSE
-  ) |>
-    transform(date_key = format(as.Date(release_date), key_fmt))
+  ) 
+  out[["date_key"]] <- format(as.Date(out[["release_date"]]), key_fmt)
+  
+  out
 }
