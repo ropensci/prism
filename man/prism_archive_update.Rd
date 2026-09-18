@@ -41,5 +41,4 @@ pd <- prism_archive_subset(type = "ppt")
 prism_archive_update(pd)
 }
 
-  
 }

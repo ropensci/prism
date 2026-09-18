@@ -1,3 +1,7 @@
+# necessary for testing this function using local_mocked_bindings()
+interactive <- NULL
+select.list <- NULL
+
 #' Update stale files in a PRISM archive
 #'
 #' `prism_archive_update()` checks release status via [pd_check_versions()] and 
@@ -30,6 +34,7 @@
 #' prism_archive_update(pd)
 #' }
 #' 
+#' @importFrom utils select.list
 #'   
 #' @export
 prism_archive_update <- function(pd = NULL, keepZip = prism_get_keepZip(), quiet = FALSE) {
@@ -55,7 +60,7 @@ prism_archive_update <- function(pd = NULL, keepZip = prism_get_keepZip(), quiet
   
   if (interactive()) {
     choices <- c("All", "None", outdated)
-    selection <- utils::select.list(
+    selection <- select.list(
       choices,
       multiple = TRUE,
       graphics = FALSE,

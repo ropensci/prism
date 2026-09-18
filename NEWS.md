@@ -32,6 +32,7 @@
 - added `pd_check_versions()` (#150)
 - added `get_prism_pd()` (#150)
 - added `overwrite` argument to all `get_prism_*()` functions. (#167)
+- added `prism_archive_update()` (#150)
 
 
 # prism 0.3.0
