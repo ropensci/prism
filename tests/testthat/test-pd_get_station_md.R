@@ -27,10 +27,22 @@ test_that("pd_get_station_md() works", {
   expect_setequal(colnames(x), exp_cols)
   
   
+  legacy_pd <- expect_warning(
+    prism_archive_subset(
+      "soltrans", "monthly normals", resolution = "800m"
+    ),
+    '`time_step = "monthly normals"` is deprecated. Use `time_step = "monthly", data_class = "normals"` instead.'
+  )
+  updated_pd <- expect_no_warning(
+    prism_archive_subset(
+      "soltrans", "monthly", data_class = "normals", resolution = "800m"
+    )
+  )
+  
+  expect_identical(legacy_pd, updated_pd)
+  
   expect_s3_class(
-    y <- expect_no_message(pd_get_station_md(prism_archive_subset(
-      "soltrans", "monthly normals", resolution = '800m'
-    ))),
+    y <- pd_get_station_md(updated_pd),
     "tbl_df"
   )
   expect_setequal(colnames(y), exp_cols)

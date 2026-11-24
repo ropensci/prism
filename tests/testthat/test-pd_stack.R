@@ -23,21 +23,29 @@ test_that("pd_stack() works", {
   expect_equal(dim(x)[3], length(dd))
   expect_setequal(names(x), dd)
   
-  # 1 year
-  mm <- prism_archive_subset(
-    "ppt", "annual normals", resolution = '4km'
+  # 1 year - verify both the legacy and updated normals API
+  legacy_mm <- expect_warning(
+    prism_archive_subset("ppt", "annual normals", resolution = "4km"),
+    '`time_step = "annual normals"` is deprecated. Use `time_step = "annual", data_class = "normals"` instead.'
+  )
+  updated_mm <- expect_no_warning(
+    prism_archive_subset(
+      "ppt", "annual", data_class = "normals", resolution = "4km"
+    )
   )
   
-  expect_s4_class(x <- pd_stack(mm), "SpatRaster")
-  expect_equal(dim(x)[3], length(mm))
-  expect_setequal(names(x), mm)
+  expect_identical(legacy_mm, updated_mm)
+  
+  expect_s4_class(x <- pd_stack(updated_mm), "SpatRaster")
+  expect_equal(dim(x)[3], length(updated_mm))
+  expect_setequal(names(x), updated_mm)
   
   expect_gt(terra::ncell(x), 0L)
   expect_true(all(terra::res(x) > 0))
   expect_true(nchar(terra::crs(x)) > 0L)
   
   # combo month and days
-  cc <- c(dd, mm)
+  cc <- c(dd, updated_mm)
   expect_s4_class(x <- pd_stack(cc), "SpatRaster")
   expect_equal(dim(x)[3], length(cc))
   expect_setequal(names(x), cc)
