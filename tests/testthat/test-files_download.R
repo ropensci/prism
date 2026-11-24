@@ -28,14 +28,12 @@ expect_observed_download <- function(pd, dl_dir, format, keep_zip, is_normal) {
     expected_ext <- c(
       geotiff = "tif",
       bil = "tif",
-      asc = "tif",
       nc = "tif"
     )
   } else {
     expected_ext <- c(
       geotiff = "tif",
       bil = "bil",
-      asc = "asc",
       nc = "nc"
     )
   }

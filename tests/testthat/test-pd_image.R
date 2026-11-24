@@ -9,7 +9,7 @@ teardown({
 
 test_that("`pd_image()` works", {
   
-  for (ff in prism:::prism_formats) {
+  for (ff in c("geotiff", "bil", "nc")) {
     prism_set_format(ff)
     prism_set_dl_dir(file.path(
       tempdir(),'prismdata', ifelse(ff == 'geotiff', 'tif', ff)

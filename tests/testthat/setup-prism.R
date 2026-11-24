@@ -17,10 +17,9 @@ if (dir.exists(prism_fixture_dir)) {
 dir.create(prism_fixture_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Find all fixture ZIPs, e.g.
-# tests/testthat/fixtures/bil/prism_data.zip
-# tests/testthat/fixtures/asc/prism_data.zip
-# tests/testthat/fixtures/tif/prism_data.zip
-# tests/testthat/fixtures/nc/prism_data.zip
+# tests/testthat/fixtures/prismdata/bil/prism_data.zip
+# tests/testthat/fixtures/prismdata/tif/prism_data.zip
+# tests/testthat/fixtures/prismdata/nc/prism_data.zip
 zip_files <- list.files(
   fixture_dir,
   pattern = "\\.zip$",
@@ -73,7 +72,6 @@ prism_set_dl_dir(file.path(tempdir(), 'prismdata', 'tif'))
 prism_set_format('geotiff')
 
 bil_dl <- file.path(tempdir(), 'prismdata', 'bil')
-asc_dl <- file.path(tempdir(), 'prismdata', 'asc')
 nc_dl <- file.path(tempdir(), 'prismdata', 'nc')
 tif_dl <- file.path(tempdir(), 'prismdata', 'tif')
 corrupt_dl <- file.path(tempdir(), 'prismdata', 'corrupt')

@@ -8,7 +8,7 @@ library(prism)
 library(maps)
 
 # bil - annual tmax
-# asci - monthly tmean
+# bil - monthly tmean
 # nc - daily tmin
 # geotiff - annual precip * 3
 # geotiff - 30-year normal annual precip
@@ -112,7 +112,7 @@ write_prism_fixture <- function(r, filename, format) {
 
 all_avail <- stringr::str_remove(all_avail, ".zip")
 
-for (ff in all_avail[4:7]) {
+for (ff in all_avail) {
   message("Cropping: ", ff)
   
   fext <- stringr::str_remove(ff, "/.*$")
@@ -157,7 +157,7 @@ for (ff in all_avail[4:7]) {
 orig_wd <- getwd()
 on.exit(setwd(orig_wd))
 
-for (ff in all_avail[2:7]) {
+for (ff in all_avail) {
   fext <- stringr::str_remove(ff, "/.*$")
   tmp_folder <- stringr::str_remove(ff, ".*/")
   

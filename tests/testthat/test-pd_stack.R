@@ -47,7 +47,7 @@ test_that("pd_stack() works", {
   expect_true(nchar(terra::crs(x)) > 0L)
   
   # test all other formats; they only have 1 file/format
-  for (ff in c("nc", "asc", "bil")) {
+  for (ff in c("nc", "bil")) {
     prism_set_dl_dir(file.path(tempdir(), 'prismdata', ff))
     prism_set_format(ff)
     

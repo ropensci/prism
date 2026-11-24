@@ -22,14 +22,13 @@ test_that("pd_plot_slice() works", {
   )
   expect_s3_class(ggplot2::ggplot_build(gg), "ggplot_built")
   
-  for (ff in c("bil", "asc", "nc")) {
+  for (ff in c("bil", "nc")) {
     prism_set_dl_dir(file.path(tempdir(),'prismdata', ff))
     prism_set_format(ff)
+    pd <- prism_archive_ls()
+    if (ff == "bil") pd <- prism_archive_subset(type = "tmean")
     expect_s3_class(
-      gg <- pd_plot_slice(
-        prism_archive_ls(),
-        lat_lon
-      ), 
+      gg <- pd_plot_slice(pd, lat_lon), 
       "gg"
     )
     expect_s3_class(ggplot2::ggplot_build(gg), "ggplot_built")

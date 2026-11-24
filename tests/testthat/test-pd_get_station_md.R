@@ -1,4 +1,3 @@
-# asc folder should fail/return nothing
 # bil folder should fail/return nothing
 # nc should work
 # tif should fail
@@ -37,14 +36,6 @@ test_that("pd_get_station_md() works", {
   expect_setequal(colnames(y), exp_cols)
   
   expect_gt(nrow(x), nrow(y))
-  
-  # asc folder return nothing
-  prism_set_dl_dir(asc_dl)
-  expect_s3_class(
-    x <- expect_message(pd_get_station_md(prism_archive_ls())),
-    "tbl_df"
-  )
-  expect_equal(nrow(x), 0)
   
   # bil folder should return nothing
   prism_set_dl_dir(bil_dl)

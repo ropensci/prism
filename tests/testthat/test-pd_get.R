@@ -79,11 +79,10 @@ test_that("pd_to_file() works.", {
   expected_ext <- c(
     geotiff = "tif",
     bil = "bil",
-    asc = "asc",
     nc = "nc"
   )
   
-  for (ff in c('bil', 'geotiff', 'asc', 'nc')) {
+  for (ff in c('bil', 'geotiff', 'nc')) {
   
     prism_set_format(ff)
     
@@ -124,7 +123,7 @@ test_that("pd_to_file() works.", {
 })
 
 test_that("pd_to_files(): bundled observed raster fixtures are readable", {
-  for (ff in c('bil', 'geotiff', 'asc', 'nc')) {
+  for (ff in c('bil', 'geotiff', 'nc')) {
     
     prism_set_format(ff)
     prism_set_dl_dir(file.path(

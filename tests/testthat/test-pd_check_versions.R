@@ -63,15 +63,12 @@ test_that("pd_check_versions works on test pd", {
   expect_equal(unique(x$status), "not_supported")
   
   # monthly data
-  prism_set_dl_dir(asc_dl)
+  prism_set_dl_dir(bil_dl)
   
-  expect_message(expect_equal(
-    x <- pd_check_versions(),
-    pd_check_versions(prism_archive_subset(type = "tmean"))
-  ))
+  expect_message(x <- pd_check_versions())
   
-  expect_equal(dim(x), c(1, 11))
-  expect_equal(unique(x$status), "current")
+  expect_equal(dim(x), c(2, 11))
+  expect_setequal(unique(x$status), c("current", "not_supported"))
   
   # daily data
   prism_set_dl_dir(nc_dl)

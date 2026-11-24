@@ -200,7 +200,7 @@ test_that("prism_archive_subset() works", {
     prism_archive_subset("ppt", time_step = "annual")
   )
   
-  prism_set_dl_dir(asc_dl)
+  prism_set_dl_dir(bil_dl)
   expect_equal(
     prism_archive_subset("tmean", "monthly", resolution = "4km"),
     prism_archive_subset("tmean", "monthly", mon = 7, resolution = "4km")
