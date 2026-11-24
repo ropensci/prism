@@ -15,8 +15,19 @@ prism_get_keepZip()
 \value{
 \code{prism_get_keepZip()} returns the current value of \code{keepZip}.
 \code{prism_set_keepZip()} invisibly returns the value if it is successfully set.
+An interactive \code{no} response returns the current value unchanged; \code{cancel}
+stops the call.
 }
 \description{
-The PRISM data are downloaded as zip files and then unzipped. All of the
-[get_prism_\emph{()\verb{](get_prism_data) functions have a logical argument that  controls this for each download. These functions let the user set/change the  default behavior rather than change it in every call to }get_prism_}()\verb{. The package default is }TRUE` to maintain previous, default behavior.
+The PRISM data are downloaded as zip files and then unzipped. All PRISM
+download functions have a logical argument that controls this for each
+download. The user can set/change the default behavior rather than change it
+in every call. The package default is \code{TRUE} to maintain previous behavior.
+Use \code{\link[=prism_archive_save_config]{prism_archive_save_config()}} to save the current default in the selected
+archive so it is restored when the archive is selected again. If a changed
+setting conflicts with the active archive's saved configuration, the change
+warns. Interactive sessions can answer \code{yes} to change this session only,
+\code{no} to leave the current setting unchanged, or \code{cancel} to abort the call.
+Non-interactive calls warn and proceed. Save the configuration again to
+persist a changed setting.
 }

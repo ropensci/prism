@@ -13,7 +13,8 @@ prism_get_format()
 \item{data_format}{One of 'geotiff', 'bil', or 'nc'}
 }
 \value{
-Invisibly returns data_format if it is valid.
+Invisibly returns the selected format. An interactive \code{no} response
+returns the current format unchanged; \code{cancel} stops the call.
 }
 \description{
 The PRISM web service provides PRISM grids in Cloud Optimized GeoTIFF
@@ -23,4 +24,11 @@ the package, while \code{prism_get_format()} returns the format currently being
 used. GeoTIFF is the default used by the package. It is recommended that
 users choose one format and stick with it. The package is not setup to
 handle a PRISM data download directory that has multiple formats in it.
+Use \code{\link[=prism_archive_save_config]{prism_archive_save_config()}} to save the current format in the selected
+archive so it is restored when the archive is selected again. If a changed
+format conflicts with the active archive's saved configuration, the change
+warns. Interactive sessions can answer \code{yes} to change this session only,
+\code{no} to leave the current format unchanged, or \code{cancel} to abort the call.
+Non-interactive calls warn and proceed. Save the configuration again to
+persist a changed format.
 }

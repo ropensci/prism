@@ -13,7 +13,7 @@ prism_get_dl_dir()
 prism_check_dl_dir()
 }
 \arguments{
-\item{path}{The path that prism data will be unzipped into.}
+\item{path}{The path that prism data will be saved into.}
 
 \item{create}{Boolean that determines if the \code{path} will be created if it
 does not already exist.}
@@ -24,6 +24,9 @@ Invisibly returns \code{path}
 \description{
 \code{prism_set_dl_dir()} sets the directory that downloaded prism data will be
 saved to. The prism download directory is saved in the "prism.path" option.
+If the directory contains a \code{prism_archive.config} file created by
+\code{\link[=prism_archive_save_config]{prism_archive_save_config()}}, its saved format and \code{keepZip} settings are
+loaded. If no config file exists, the current settings are unchanged.
 
 \code{prism_get_dl_dir()} gets the folder that prism data will be saved to. It is
 a wrapper around \code{getOption("prism.path")} so the user does not have to

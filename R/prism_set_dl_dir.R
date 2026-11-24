@@ -2,8 +2,11 @@
 #' 
 #' `prism_set_dl_dir()` sets the directory that downloaded prism data will be 
 #' saved to. The prism download directory is saved in the "prism.path" option.
+#' If the directory contains a `prism_archive.config` file created by
+#' [prism_archive_save_config()], its saved format and `keepZip` settings are
+#' loaded. If no config file exists, the current settings are unchanged.
 #' 
-#' @param path The path that prism data will be unzipped into.
+#' @param path The path that prism data will be saved into.
 #' 
 #' @param create Boolean that determines if the `path` will be created if it 
 #'   does not already exist.
@@ -30,9 +33,24 @@ prism_set_dl_dir <- function(path, create = TRUE)
     }
   }
   
+  archive_config <- prism_archive_read_config(path)
   prism_dl_dir_check_for_v1(path)
   
-  options(prism.path = path)
+  if (is.null(archive_config)) {
+    options(prism.path = path)
+  } else {
+    options(
+      prism.path = path,
+      prism.format = archive_config$format,
+      prism.keepZip = archive_config$keepZip
+    )
+    message(
+      "Loaded PRISM archive configuration from ",
+      file.path(path, "prism_archive.config"),
+      " (format = '", archive_config$format,
+      "', keepZip = ", archive_config$keepZip, ")"
+    )
+  }
   invisible(path)
 }
 
