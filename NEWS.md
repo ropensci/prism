@@ -34,6 +34,7 @@
 - added `overwrite` argument to all `get_prism_*()` functions. (#167)
 - added `prism_archive_update()` (#150)
 - messages now post in `get_prism_monthlys()` and `get_prism_datilys()` if requested data are within 7 months of today, indicating you may need to update data in the future. (#150)
+- added `prism_archive_migrate_v1()`. This searches the prism dl folder, and for any folders that appera to be from the v1 api (pre-September 2025) prompts the user to updated to the new format and remove the old format. (#164)
 
 # prism 0.3.0
 

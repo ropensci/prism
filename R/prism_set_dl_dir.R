@@ -124,19 +124,13 @@ prism_check_dl_dir <- function()
 }
 
 prism_dl_dir_check_for_v1 <- function(user_path) {
-  ff <- list.dirs(user_path)
-  
-  if(any(c(
-    grepl('PRISM', ff),
-    grepl('stable', ff),
-    grepl('4kmD2', ff),
-    grepl('4kmM3', ff)
-  ))) {
+  legacy <- prism_find_v1_folders(user_path)
+
+  if (length(legacy) > 0) {
     warning(paste(
-      "The specified PRISM download directory appears to have data from the pre September 2025 API.",
-      "We recommend either starting a new download directory for the new API and/or",
-      "deleting and redownloading all data from the new API.",
+      "The specified PRISM download directory contains data from the pre September 2025 API.",
+      "Call prism_archive_migrate_v1() to review and migrate it to the current API.",
       sep = '\n'
-    ))
+    ), call. = FALSE)
   }
 }
