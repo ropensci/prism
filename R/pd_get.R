@@ -234,18 +234,14 @@ pd_get_date <- function(pd, complete = TRUE) {
 #' @export
 #' @rdname pd_get
 pd_get_type <- function(pd) {
-  
   vapply(pd, function(x) {
-    web_service_version <- ifelse(grepl("PRISM", x), "v1", "v2")
-    if (web_service_version == 'v1'){
-      p <- stringr::str_remove(x, "PRISM_")
-      p <- stringr::str_split(p, "_", simplify = TRUE)
-      return(p[,1])
+    parts <- strsplit(x, "_", fixed = TRUE)[[1]]
+
+    if (length(parts) < 5 || parts[[1]] != "prism") {
+      stop("Invalid PRISM data name: ", x, call. = FALSE)
     }
-    if (web_service_version == 'v2'){
-      parts <- strsplit(x, "_")[[1]]
-      return(parts[2])
-    }
+
+    parts[[2]]
   }, character(1), USE.NAMES = FALSE)
 }
 
@@ -301,104 +297,6 @@ pd_get_data_class <- function(pd) {
 
 pd_is_normal <- function(pd) {
   stringr::str_detect(pd, 'avg_30y')
-}
-
-#' name parse
-#' @description parse the directory name into relevant metadata (name or date)
-#' 
-#' @param p a prism file directory or bil file
-#' 
-#' @param returnDate TRUE or FALSE. If TRUE, an ISO date is returned. By default
-#'   years will come back with YYYY-01-01 and months as YYYY-MM-01
-#'   
-#' @return a properly parsed string of human readable names
-#' @noRd
-
-pr_parse <- function(p,returnDate = FALSE){
-  ## Get webservice version of file
-  web_service_version = ifelse(p[1]=='PRISM', 'v1', 'v2')
-  ## Extract the climate variable
-  type <- p[2]
-  ## Extract the date the data is for
-  normals <- FALSE
-  
-  if(grepl("normal",paste(p,collapse=""))){
-    if(grepl("annual",paste(p,collapse=""))) {
-      mon <- "Annual"
-    } else {
-      # monthly or daily
-      mon <- p[length(p) - 1]
-      
-      if (grepl("^\\d{2}$", mon)) {
-        # monthly
-        mon <- month.abb[as.numeric(mon)]
-      } else if (grepl("^\\d{4}$", mon)) {
-        # daily
-        m <- substr(mon, 1, 2)  # First two characters
-        d <- substr(mon, nchar(mon) - 1, nchar(mon))
-        
-        mon <- paste(month.name[as.numeric(m)], as.numeric(d))
-      } else {
-        # error
-        stop("Cannot correctly parse the pd name.")
-      }
-      
-    }
-    ds <- paste(mon,"30-year normals",sep=" ")
-    normals <- TRUE
-  } else {
-   
-    d <- ifelse(web_service_version=='v1', p[length(p)-1], p[length(p)])
-    yr <- substr(d,1,4)
-    mon <- substr(d,5,6)
-    day <- substr(d,7,8)
-    
-    ## Get resolution
-    ### Create date string
-    ds <- ifelse(
-      !is.na(month.abb[as.numeric(mon)]),
-      paste(month.abb[as.numeric(mon)],day,yr,sep=" "),
-      paste(yr,sep=" ")
-    )
-  }
-  
-  if (web_service_version == 'v1'){
-    ures <- ifelse(
-      grepl("4km",paste(p,collapse="")),
-      "4km resolution",
-      "800m resolution"
-    )
-  } else {
-    ures <- ifelse(
-      grepl("25m",paste(p,collapse="")),
-      "4km resolution",
-      ifelse(
-        grepl("30s",paste(p,collapse="")),
-        "800m resolution",
-        "400m resolution"
-      )
-    )
-  }
-  
-  type <- unname(prism_var_names(normals = normals)[type])
-
-  md_string <- paste(ds,ures,type,sep = " - ")
-  if(!returnDate){
-    out <- md_string
-  } else {
-    if (normals) {
-      out <- ""
-    } else {
-      out <- paste(
-        yr, 
-        ifelse(nchar(mon) > 0, mon, "01"), 
-        ifelse(nchar(day) > 0, day, "01"), 
-        sep = "-"
-      )
-    }
-  }
-  
-  out
 }
 
 #' @description 

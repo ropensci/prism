@@ -53,7 +53,11 @@ prism_archive_verify <- function(type, temp_period, years = NULL, mon = NULL,
     mpb <- txtProgressBar(min = 0, max =length(dl_url), style = 3)
     
     for(i in seq_along(dl_url)){
-      prism_webservice(dl_url[i], keepZip = keepZip)
+      prism_webservice(
+        dl_url[i],
+        keepZip = keepZip,
+        normals = grepl("avg_30y", dl_files[i])
+      )
       setTxtProgressBar(mpb, i)
     }
     
@@ -83,35 +87,7 @@ folder_to_url <- function(pd, resolution = "4km") {
   
   for (i in seq_along(pd)) {
     folder <- pd[i]
-    web_service_version <- ifelse(grepl("PRISM", folder), "v1", "v2")
-    
-    if (web_service_version == "v1") {
-      # Parse webservice v1 folder names
-      parts <- stringr::str_split(folder, "_", simplify = TRUE)
-      
-      if (parts[3] == "30yr") {
-        # Normals - use FTP service
-        var_type <- parts[2]
-        resolution_part <- stringr::str_remove(parts[5], "M[0-9]")
-        time_part <- parts[6]
-        
-        # Convert annual to "14" for normals
-        if (time_part == "annual") {
-          time_part <- "14"
-        }
-        
-        urls <- c(urls, gen_prism_url(time_part, var_type, resolution, 
-                                      service = "ftp_v2_normals_bil"))
-      } else {
-        # Non-normals - use webservice v2
-        var_type <- parts[2]
-        date_part <- parts[5]
-        
-        urls <- c(urls, gen_prism_url(date_part, var_type, resolution))
-      }
-    } else {
-      # Parse webservice v2 folder names
-      parts <- stringr::str_split(folder, "_", simplify = TRUE)
+    parts <- stringr::str_split(folder, "_", simplify = TRUE)
       var_type <- parts[2]
       date_part <- parts[5]
       
@@ -124,23 +100,13 @@ folder_to_url <- function(pd, resolution = "4km") {
         file_resolution <- resolution  # fallback to provided resolution
       }
       
-      if (grepl('avg', folder)) {
-        service_part <- 'ftp_v2_normals_bil'
-        date_part <- substring(date_part, 5) 
+      if (grepl("avg", folder)) {
+        date_part <- substring(date_part, 5)
+        if (identical(date_part, "")) date_part <- "14"
+        urls <- c(urls, gen_prism_normals_url(date_part, var_type, file_resolution))
+      } else {
+        urls <- c(urls, gen_prism_url(date_part, var_type, file_resolution))
       }
-      else(
-        service_part <- 'web_service_v2'
-      )
-      
-      urls <- c(
-        urls, 
-        gen_prism_url(
-          date_part, 
-          var_type, 
-          file_resolution, 
-          ts_service = service_part
-      ))
-    }
   }
   
   urls

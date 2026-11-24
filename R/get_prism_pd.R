@@ -34,20 +34,23 @@ get_prism_pd <- function(pd, keepZip = prism_get_keepZip(), service = NULL,
   pd_parse <- parse_archive_pd(pd) |>
     parse_pd_df_for_url()
   
-  group_key <- paste(pd_parse[["type"]], pd_parse[["resolution"]], 
-                     pd_parse[["ts_service"]], sep = "|")
-  groups <- split(seq_len(nrow(pd_parse)), group_key)
-  
+  normals <- pd_parse[["data_class"]] == "normals"
   uris <- character(nrow(pd_parse))
   
-  for (idx in groups) {
-    first <- idx[1]
-    uris[idx] <- gen_prism_url(
-      dates      = pd_parse[["date"]][idx],
-      type       = pd_parse[["type"]][first],
-      resolution = pd_parse[["resolution"]][first],
-      ts_service = pd_parse[["ts_service"]][first]
-    )
+  for (i in seq_len(nrow(pd_parse))) {
+    if (normals[[i]]) {
+      uris[[i]] <- gen_prism_normals_url(
+        pd_parse[["date"]][[i]],
+        pd_parse[["type"]][[i]],
+        pd_parse[["resolution"]][[i]]
+      )
+    } else {
+      uris[[i]] <- gen_prism_url(
+        pd_parse[["date"]][[i]],
+        pd_parse[["type"]][[i]],
+        pd_parse[["resolution"]][[i]]
+      )
+    }
   }
     
   download_pb <- txtProgressBar(
@@ -66,10 +69,10 @@ get_prism_pd <- function(pd, keepZip = prism_get_keepZip(), service = NULL,
     
     for (i in seq_along(uris)) {
       tmp_pd <- prism_webservice(
-        uris[[i]], 
-        keepZip = keepZip, 
-        returnName = TRUE, 
-        ts_service = pd_parse[["ts_service"]][[i]],
+        uris[[i]],
+        keepZip = keepZip,
+        returnName = TRUE,
+        normals = normals[[i]],
         overwrite = overwrite
       )
       
@@ -124,17 +127,6 @@ verify_pd <- function(pd) {
 # assumes df in form returned by parse_archive_pd()
 parse_pd_df_for_url <- function(df) 
 {
-  # add ts_service row
-  df[["ts_service"]] <- ifelse(
-    df[["data_class"]] == "normals", 
-    "ftp_v2_normals_bil",
-    ifelse(
-      df[["data_class"]] == "time series", 
-      "web_service_v2", 
-      NA_character_
-    )
-  )
-  
   # update dates row to be in format expected by gen_prism_url:
   normals_rows <- df[["data_class"]] == "normals"
   

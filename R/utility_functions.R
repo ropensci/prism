@@ -56,8 +56,8 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE)
 #'   "us" (CONUS), "ak" (Alaska), "hi" (Hawaii), "pr" (Puerto Rico).
 #'   Default is "us". Note: Only CONUS currently available.
 #' @param format Optional character string specifying output format. One of:
-#'   "nc" (netCDF), "asc" (ASCII Grid), "bil" (BIL format), "cog" (Cloud 
-#'   Optimized GeoTIFF). Default is obtained from `prism_get_format()`.
+#'   "nc" (netCDF) or "bil" (BIL format). GeoTIFF is the default and uses
+#'   `prism_get_format()`.
 #' @param dataset_type Character string specifying dataset type. One of:
 #'   "an" (all networks, default) or "lt" (long-term networks). Only applies
 #'   to monthly 800m data.
@@ -98,10 +98,9 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE)
 #' @seealso \code{\link{get_prism_dailys}} for downloading daily PRISM data
 #'
 #' @noRd
-gen_prism_url <- function(dates, type, resolution = "4km", region = "us", 
-                          format = prism_get_format(), dataset_type = "an", 
-                          service = NULL,
-                          ts_service = "web_service_v2") {
+gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
+                          format = prism_get_format(), dataset_type = "an",
+                          service = NULL) {
   
   # Input validation
   if (missing(dates) || missing(type)) {
@@ -151,119 +150,58 @@ gen_prism_url <- function(dates, type, resolution = "4km", region = "us",
     warning("Only CONUS ('us') region is currently available. Other regions not yet implemented.")
   }
   
-  if (ts_service == "web_service_v2") {
-    
-    ## Base URL
-    if (is.null(service)) {
-      base_url <- "https://services.nacse.org/prism/data/get"
-    } else {
-      base_url <- service
-    }
-    
-    # Generate URLs for each date
-    urls <- paste(base_url, region, resolution, type, dates, sep = "/")
-    
-    # Add dataset type if LT (long-term)
-    if (dataset_type == "lt") {
-      urls <- paste0(urls, "/lt")
-    }
-    
-    # Add format parameter (COG is default so no parameter needed)
-    if (format != "geotiff") {
-      urls <- paste0(urls, "?format=", format)
-    }
-    
+  base_url <- if (is.null(service)) {
+    "https://services.nacse.org/prism/data/get"
+  } else {
+    service
   }
-  
-  if (ts_service == "ftp_v2_normals_bil") {
-    
-    # Function to get version available in Normals_bil FTP (this logic may be required to future proof against
-    # changes in the normals versions in normals_bil folder). May deprecate once we shift to COG?
-    get_current_version <- function(base_url, region, time_scale, resolution, type, 
-                                    date_str) {
-      
-      # Build directory URL
-      dir_url <- paste(base_url, region, resolution, type, time_scale, sep = "/")
-      
-      # Recode Annual date_str
-      date_str = ifelse(date_str == '14', '', date_str)
-      
-      rmap <- c('4km' = '25m', '800m' = '30s', '400m' = '15s')
-      
-      ff <- paste('prism', type, region, rmap[resolution], 
-                   paste0('2020', date_str), 'avg', '30y.zip', 
-                   sep = '_')
-      
-      return(paste(dir_url, ff, sep = '/'))
-    }
-    
-    ## Base URL
-    base_url <- 'https://data.prism.oregonstate.edu/normals'
-    
-    # Generate URLs for each date
-    urls <- sapply(dates, function(date_str) {
-      time_scale <- ifelse(nchar(date_str) == 2, 'monthly', 'daily')
-      get_current_version(base_url, region, time_scale, resolution, type, date_str)
-    }) |> unname()
-    
-    # Remove any NULL entries
-    urls <- urls[!sapply(urls, is.null)]
-    
-    return(urls)
+
+  urls <- paste(base_url, region, resolution, type, dates, sep = "/")
+
+  if (dataset_type == "lt") {
+    urls <- paste0(urls, "/lt")
   }
-  
-  return(urls)
+
+  if (format != "geotiff") {
+    urls <- paste0(urls, "?format=", format)
+  }
+
+  urls
 }
 
-prism_not_downloaded_as_v1 <- function(zipfiles, lgl = FALSE)
-{
-  file_bases <- stringr::str_remove(zipfiles, '.zip')
-  
-  v1_file_bases <- vapply(file_bases, function(x) {
-    web_service_version <- ifelse(grepl("PRISM", x), "v1", "v2")
-    
-    if (web_service_version == 'v1') {
-      return(x)
-    }
-    
-    if (web_service_version == 'v2') {
-      ## get v1 regex
-      parts <- strsplit(x, "_")[[1]]
-      var <- parts[2]       
-      region <- parts[3]     
-      resolution <- parts[4] 
-      date <- parts[5]      
-      res_map <- c("25m" = "4km", "4km" = "4km", "800m" = "800m")
-      v1_resolution <- res_map[resolution]
-      v1_regex <- paste0("PRISM_", var, "_stable_", v1_resolution, "..", "_", date, "_bil")
-      
-      ## get v1 file if possible
-      v1_fn = list.files(getOption("prism.path"), pattern = v1_regex)
-      if (length(v1_fn) > 0) {
-        return(v1_fn[1])
-      } else {
-        return(v1_regex)
-      }
-    }
-  }, character(1), USE.NAMES = FALSE)
-  
-  which_downloaded <- vapply(
-    v1_file_bases,
-    find_prism_file,
-    FUN.VALUE = logical(1)
-  )
-  
-  if(lgl){
-    return(!which_downloaded)
-  } else {
-    return(zipfiles[!which_downloaded])    
+#' Generate URLs for 30-year PRISM normals
+#' @noRd
+gen_prism_normals_url <- function(dates, type, resolution = "4km", region = "us") {
+  if (missing(dates) || missing(type)) {
+    stop("Both 'dates' and 'type' arguments are required")
   }
+
+  valid_resolutions <- c("800m", "4km")
+  if (!resolution %in% valid_resolutions) {
+    stop("'resolution' must be one of: ", paste(valid_resolutions, collapse = ", "))
+  }
+
+  base_url <- "https://data.prism.oregonstate.edu/normals"
+  rmap <- c("4km" = "25m", "800m" = "30s")
+
+  vapply(dates, function(date) {
+    time_scale <- if (nchar(date) == 2) "monthly" else "daily"
+    date_str <- if (identical(date, "14")) "" else date
+
+    filename <- paste(
+      "prism", type, region, rmap[[resolution]],
+      paste0("2020", date_str), "avg", "30y.zip",
+      sep = "_"
+    )
+
+    paste(base_url, region, resolution, type, time_scale, filename, sep = "/")
+  }, character(1), USE.NAMES = FALSE)
 }
 
 # return TRUE if all file(s) are found for the specified base_file
 find_prism_file <- function(base_file)
 {
-  # Look inside the folder to see if the .bil/.tif/.nc/.asc is there
+  # Look inside the folder for the selected output format.
   # Won't be able to check for all other files. Unlikely to matter.
   ext <- prism_format_file_ext()
   pattern <- paste0("^", base_file, gsub("\\.", "\\\\.", ext), "$")

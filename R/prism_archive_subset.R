@@ -261,13 +261,11 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
   # filter by resolution if specified (applies to all temporal periods now)
   if (!is.null(resolution)) {
     if (resolution == "800m") {
-      # For webservice v2: look for "30s", for webservice v1: look for "800m" 
       type_folders <- type_folders |>
-        stringr::str_subset("(30s|800m)")
+        stringr::str_subset("30s")
     } else if (resolution == "4km") {
-      # For webservice v2: look for "25m", for webservice v1: look for "4km"
       type_folders <- type_folders |>
-        stringr::str_subset("(25m|4km)")
+        stringr::str_subset("25m")
     }
   }
   
@@ -391,12 +389,7 @@ filter_folders <- function(folders, type, temp_period = NULL, years = NULL,
 # the folder name. This filters based on that number
 filter_folders_by_n <- function(folders, n)
 {
-  web_service_version = ifelse(
-    grepl('PRISM',folders),
-    'v1','v2'
-  )
-  pattern <- paste0("_", "\\d{", n, "}", ifelse(web_service_version == 'v1', "_", "$")
-  )
+  pattern <- paste0("_", "\\d{", n, "}", "$")
   stringr::str_subset(folders, pattern)
 }
 

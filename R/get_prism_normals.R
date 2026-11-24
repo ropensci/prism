@@ -119,8 +119,7 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
     }
   }
  
-  uris <- gen_prism_url(call_mon, type, resolution,
-                           ts_service = 'ftp_v2_normals_bil') 
+  uris <- gen_prism_normals_url(call_mon, type, resolution)
   
   mpb <- txtProgressBar(min = 0, max =length(uris), style = 3)
   on.exit(close(mpb), add = TRUE)
@@ -130,8 +129,8 @@ get_prism_normals <- function(type, resolution, mon = NULL, annual = FALSE,
   for (i in seq_along(uris)) {
     tmp_pd <- prism_webservice(
       uris[i],
-      keepZip = keepZip, 
-      ts_service = 'ftp_v2_normals_bil', 
+      keepZip = keepZip,
+      normals = TRUE,
       returnName = TRUE,
       overwrite = overwrite
     )
