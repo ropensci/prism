@@ -1,42 +1,63 @@
 # prism (development version)
 
-- deleted `check` parameter from `get_prism_dailys()`. Deprecated in 0.2.1.
-- deleted `keep_pre81_months` parameter from `get_prism_annual()` and `get_prism_monthlys()`. Deprecated in 0.3.0
-  - removed all internal passing of this argument (#168)
-- deleted `prism_md()`, `prism_image()`, `get_prism_station_md()`, `prism_slice()`, `prism_stack()`, `del_early_prov()`, `ls_prism_data()`, `check_corrupt()`, `path_check()`, `prism_check()`. Deprecated in 0.2.0.
-- removed dependency on magrittr package; now depends on R >= 4.1.0. replaced %>% with |>.
-- adding new download formats (#131)
-  - added `prism_set_format()` and `prism_get_format()`
-  - updated `pd_to_file()`
-  - kept BIL as the default for compatibility with previous versions; GeoTIFF is recommended for its smaller storage footprint and is planned as the default in a future release
-- replaced all use of raster:: with terra:: Package no longer depends on raster. 
-- message posts indicating 30-year normals are only available in geotiff format
-  - updated pd_to_file() to account for this
-- no longer guarantee compatible with pre 2025 API.
-- added `pd_get_time_step()`
-- changed `pd_get_date()`. It now returns a date that matches the timestep of the prism data. Because the previous version added on months and days to monthly and annual data, that behavior can be preserved using the `complete=TRUE` parameter, which is `TRUE` by default.
-- Updated `pd_get_md()` so that it returns all variables that are found in the .info.txt file and no longer changes any names found in those files. 
-- added `pd_get_data_class()` and `pd_get_resoultion()`
-- Updated `pd_get_station_md()` to work with different formats and expected combinations of time step, type, data class, and resolution. Should affect output returned except that it no longer fails for certain data types, e.g., tmean, it returns an empty data frame since we don't expect there to be station meta data. #158
-- reviewed/updated all tests for the different formats (#152)
-- `pd_image()` gains `draw` argument. It defaults to `TRUE` to maintain existing behavior, but ensures that the automatic drawing can be disabled.
-- `get_prism_*()` functions all now invisibly return the folder names (`pd`) that were downloaded. (#161)
-- solslope and soltotal available in 800m and 4km daily, monthly, and annual time series data (#149)
+This is a rather large update to bring the prism package up-to-date with the Oregon State PRISM API changes over the last few years. The biggest changes, that are expanded on more below are: 
+
+- Data can now be downloaded in GeoTiff and NetCDF format, in addition to the previously supported bil format. 
+- The package no longer works with the older (pre September 2025) API/data format. 
+- Users can now set their preferences for format, and treatment of zip files once/archive and have it persist over R sessions. 
+
+## Breaking changes
+
+- **The package is no longer compatible with the pre 2025 prism API.** All `pd_*()` functions assume that all data are in the new folder name format. 
+- Removed parameters that were deprecated in previous releases (#168)
+  - Removed `check` parameter from `get_prism_dailys()`. Deprecated in 0.2.1.
+  - Removed `keep_pre81_months` parameter from `get_prism_annual()` and `get_prism_monthlys()`. Deprecated in 0.3.0.
+- Removed user functions that were deprecated in previous releases (#168)
+  - Removed `prism_md()`, `prism_image()`, `get_prism_station_md()`, `prism_slice()`, `prism_stack()`, `del_early_prov()`, `ls_prism_data()`, `check_corrupt()`, `path_check()`, `prism_check()`. Deprecated in 0.2.0.
+- `prism_archive_clean()` is now defunct because PRISM no longer uses early, provisional, and stable identifiers. (#150) See addition of `prism_archive_check_versions()` and `prism_archive_update()` below.
+- Updated `pd_get_md()` so that it returns all variables that are found in the .info.txt file and no longer changes any names found in those files. If this is used programmatically, this could change the size and names of the data frame.
+
+## Non-breaking user side changes
+
+- PRISM data can now be downloaded in GeoTiff or NetCDF format, in addition to the previous format (bil) (#131)
+  - It is recomended to pick one format, and stick with that format for the entire prism data archive. The package is not built to work with different formats within the same archive.
+  - Kept bil as the default format for compatibility with previous versions; GeoTIFF is recommended for its smaller storage footprint and is planned as the default in a future release.
+  - Added `prism_set_format()` and `prism_get_format()` to set and check the format. 
+  - Updated `pd_*()` functions to work with all formats. 
+  - 30-year normals are only available in GeoTiff format. A message posts indicating this if you are using a different format and ask for 30-year normals. 
+- Updates to the `get_prism_*()` functions
+  - They all now invisibly return the folder names (`pd`) that were downloaded. This should make it easier to download data and then immediately use it in the `pd_*()` functions. (#161)
+  - Added `overwrite` argument to all `get_prism_*()` functions. When `TRUE` the existing data are overwritten. Useful for updating to more recently available data; see more below. (#167)
+  - Added `get_prism_pd()`, which allows users to download based on folder name, i.e., `pd`, rather than using the `get_prism_dailys/monthlys/annual()`. Useful when you already know the `pd`, like when updating to the newest available version. 
+- solslope and soltotal can now be downloaded in 800m and 4km daily, monthly, and annual time series data (#149)
+- Added `prism_set_keepZip()` and `prism_get_keepZip()`. Changed the default assignment in all the calls to `get_prism_*()` to use this function. Now the user can easily change the default behavior for all downloads. The package defaults to `TRUE` to maintain previous default behavior. (#163)
+- The time step and data class, i.e., normals vs. time series, were disentangled. This mostly affects  `prism_archive_subset()`. Instead of using `temp_period = "monthly normals"` users should now use `time_step = "monthly", data_class = "normals"`. (#162)
+  - Added `data_class` argument `prism_archive_subset()`
+  - Switched from `temp_period` to `time_step` and deprecated `temp_period` parameter. 
+  - `temp_period` or `time_step` should not included "normals". They can for now but that's deprecated and user should be using `data_class`.
+  - Also added several new `pd_get_*()` functions to support this change. 
+- New `pd_*()` functions: `pd_get_time_step()`, `pd_get_data_class()` and `pd_get_resoultion()`
+- Modified existing `pd_*()` functions
+  - `pd_get_date()` now returns a date that matches the timestep of the prism data. The previous version added on months and days to monthly and annual data. That behavior is preserved by default using the `complete=TRUE` parameter, but users should switch to using `complete=FALSE`, which will be the default in a future release.
+  - Updated `pd_get_station_md()` to work with different formats and expected combinations of time step, type, data class, and resolution. This should not affect output returned except that it no longer fails for certain data types, e.g., tmean, it returns an empty data frame since we don't expect there to be station meta data. (#158)
+  - `pd_image()` gains the `draw` argument. It defaults to `TRUE` to maintain existing behavior, but ensures that the automatic drawing can be disabled.
+
+### Archive Maintenance Improvements
+
+- PRISM no longer uses early, provisional, and stable identifiers, but there are still up to 6 releases of the data from the most recent (yesterday) until it is finalized. (#150)
+  - Messages now post in `get_prism_monthlys()` and `get_prism_datilys()` if requested data are within 7 months of today, indicating you may need to update data in the future. 
+  - New function: `pd_check_versions()`. For any/all `pd` in the archive, check what version it is and returns the status of the data. A status of "update_available" lets the user know that there is more recent data availalbe.
+  - New function: `get_prism_pd()`. This allows for easier downloading of data if you know the folder name, i.e., `pd`, rather that using `get_prism_annuals/dailys/monthlys()`.
+  - New function: `prism_archive_update()`. This wraps `pd_check_versions()` and `get_prism_pd()` to update data in the archive that have updates available.
+- The configuration (download format, and defualt value of `keepZip`) can be saved so that the user does not have to reset them at the beginning of every R session. Added `prism_archive_save_config()`. This function creates a configuration file that is saved in the currently specified prism archive. Then, when you use that archive in a different session, it will load the format and `keepZip` options that were previously set so you don't have to keep making those same calls over and over. 
+- If an archive contains any of the pre-September 2025 prism data, the `prism_archive_migrate_v1()` function can be used to update to the new prism data format. This searches the prism archive, and for any folders that appear to be from the v1 api (pre-September 2025) prompts the user to updated to the new format and remove the old format. This probably would have been more useful in the 0.3.0 release. (#164)
+
+## Non-breaking internal changes
+
+- Removed dependency on magrittr package; now depends on R >= 4.1.0. replaced %>% with |> throughout.
+- Switched from `raster` package to `terra` package throughout the package. Package no longer depends on `raster`. 
+- Reviewed & updated all tests for the different download formats (#152)
 - Fixed bug that resulted in data not being skipped if it already existed. 
-- added `prism_set_keepZip()` and `prism_get_keepZip()`. Changed the default assignment in all the calls to `get_prism_*()` to use this function. Now the user can easily change the default behavior for all downloads. The package defaults to `TRUE` to maintain previous default behavior. (#163)
-- `prism_archive_clean()` is now defunct because PRISM no longer uses early, provisional, and stable identifiers. (#150)
-- updated `prism_archive_subset()` to disentangle timestep and data class (#162)
-  - added `data_class` argument
-  - switched from `temp_period` to `time_step`
-  - `temp_period` is deprecated
-  - `temp_period` or `time_step` should not included "normals". They can for now but that's deprecated and user should be using `data_class`
-- added `pd_check_versions()` (#150)
-- added `get_prism_pd()` (#150)
-- added `overwrite` argument to all `get_prism_*()` functions. (#167)
-- added `prism_archive_update()` (#150)
-- messages now post in `get_prism_monthlys()` and `get_prism_datilys()` if requested data are within 7 months of today, indicating you may need to update data in the future. (#150)
-- added `prism_archive_migrate_v1()`. This searches the prism dl folder, and for any folders that appera to be from the v1 api (pre-September 2025) prompts the user to updated to the new format and remove the old format. (#164)
-- added `prism_archive_save_config()`. This function creates a configuration file that is saved in the currently specified prism archive. Then, when you use that archive in a different session, it will load the format and keepZip options that were previously set so you don't have to keep making those same calls over and over. 
 
 # prism 0.3.0
 
