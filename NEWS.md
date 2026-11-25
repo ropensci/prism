@@ -8,6 +8,7 @@
 - adding new download formats (#131)
   - added `prism_set_format()` and `prism_get_format()`
   - updated `pd_to_file()`
+  - kept BIL as the default for compatibility with previous versions; GeoTIFF is recommended for its smaller storage footprint and is planned as the default in a future release
 - replaced all use of raster:: with terra:: Package no longer depends on raster. 
 - message posts indicating 30-year normals are only available in geotiff format
   - updated pd_to_file() to account for this

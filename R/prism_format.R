@@ -6,8 +6,11 @@ prism_formats <- c('geotiff', 'bil', 'nc')
 #' (geotiff), bil, and netCDF (nc) format. 
 #' `prism_set_format()` lets the user specify the format that will be used by 
 #' the package, while `prism_get_format()` returns the format currently being 
-#' used. GeoTIFF is the default used by the package. It is recommended that 
-#' users choose one format and stick with it. The package is not setup to 
+#' used. BIL is the default to maintain compatibility with previous package
+#' versions. GeoTIFF is recommended for new archives because it is generally
+#' more storage-efficient and is the format used for 30-year normals. A future
+#' release is planned to make GeoTIFF the default. Users should choose one
+#' format and stick with it; the package is not set up to
 #' handle a PRISM data download directory that has multiple formats in it.
 #' Use [prism_archive_save_config()] to save the current format in the selected
 #' archive so it is restored when the archive is selected again. If a changed

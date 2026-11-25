@@ -55,9 +55,9 @@ prism_not_downloaded <- function(zipfiles, lgl = FALSE)
 #' @param region Character string specifying the geographic region. One of:
 #'   "us" (CONUS), "ak" (Alaska), "hi" (Hawaii), "pr" (Puerto Rico).
 #'   Default is "us". Note: Only CONUS currently available.
-#' @param format Optional character string specifying output format. One of:
-#'   "nc" (netCDF) or "bil" (BIL format). GeoTIFF is the default and uses
-#'   `prism_get_format()`.
+#' @param format Optional character string specifying output format: "geotiff"
+#'   (Cloud Optimized GeoTIFF), "bil" (BIL format), or "nc" (netCDF). Defaults
+#'   to `prism_get_format()`, which is BIL unless changed by the user.
 #' @param dataset_type Character string specifying dataset type. One of:
 #'   "an" (all networks, default) or "lt" (long-term networks). Only applies
 #'   to monthly 800m data.
