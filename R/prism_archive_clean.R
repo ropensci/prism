@@ -16,7 +16,7 @@ prism_archive_clean <- function(...) {
   stop(
     "`prism_archive_clean()` is defunct because PRISM no longer provides ",
     "early, provisional, and stable dataset names. ",
-    "Use `prism_archive_check_versions()` to identify available updates ",
+    "Use `pd_check_versions()` to identify available updates ",
     "and `prism_archive_update()` to download them.",
     call. = FALSE
   )
