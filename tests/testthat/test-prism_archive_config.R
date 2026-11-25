@@ -25,6 +25,70 @@ test_that("archive config saves and restores format and keepZip", {
   expect_false(prism_get_keepZip())
 })
 
+test_that("archive setup creates and configures a new archive", {
+  archive <- tempfile("prism-new-archive-")
+
+  suppressMessages(
+    prism_archive_setup(archive, format = "nc", keepZip = FALSE)
+  )
+
+  expect_true(dir.exists(archive))
+  expect_equal(prism_get_dl_dir(), archive)
+  expect_equal(prism_get_format(), "nc")
+  expect_false(prism_get_keepZip())
+
+  saved_config <- read.dcf(file.path(archive, "prism_archive.config"))
+  expect_equal(unname(saved_config[1L, "format"]), "nc")
+  expect_equal(unname(saved_config[1L, "keepZip"]), "FALSE")
+})
+
+test_that("archive setup prompts for all settings when called interactively", {
+  archive <- tempfile("prism-interactive-archive-")
+  responses <- c(archive, "1", "2")
+
+  local_mocked_bindings(
+    interactive = function() TRUE,
+    prism_archive_setup_readline = function(prompt) {
+      response <- responses[[1L]]
+      responses <<- responses[-1L]
+      response
+    }
+  )
+
+  suppressMessages(prism_archive_setup())
+
+  expect_length(responses, 0L)
+  expect_equal(prism_get_dl_dir(), archive)
+  expect_equal(prism_get_format(), "geotiff")
+  expect_false(prism_get_keepZip())
+})
+
+test_that("archive setup requires a path when called non-interactively", {
+  local_mocked_bindings(interactive = function() FALSE)
+
+  expect_error(
+    prism_archive_setup(),
+    "path.*required unless called without arguments"
+  )
+})
+
+test_that("archive setup refuses to reuse a non-empty directory", {
+  archive <- tempfile("prism-existing-archive-")
+  dir.create(archive)
+  writeLines("existing file", file.path(archive, "data.txt"))
+
+  current_archive <- tempfile("prism-current-")
+  dir.create(current_archive)
+  prism_set_dl_dir(current_archive)
+  prism_set_format("bil")
+  prism_set_keepZip(TRUE)
+
+  expect_error(prism_archive_setup(archive), "directory is not empty")
+  expect_equal(prism_get_dl_dir(), current_archive)
+  expect_equal(prism_get_format(), "bil")
+  expect_true(prism_get_keepZip())
+})
+
 test_that("setting changes warn and do not update saved config", {
   skip_if(interactive())
 

@@ -4,7 +4,7 @@ This is a rather large update to bring the prism package up-to-date with the Ore
 
 - Data can now be downloaded in GeoTiff and NetCDF format, in addition to the previously supported bil format. 
 - The package no longer works with the older (pre September 2025) API/data format. 
-- Users can now set their preferences for format, and treatment of zip files once/archive and have it persist over R sessions. 
+- Users can now set their preferences for format, and treatment of zip files once per archive and have it persist over R sessions. 
 
 ## Breaking changes
 
@@ -50,6 +50,7 @@ This is a rather large update to bring the prism package up-to-date with the Ore
   - New function: `get_prism_pd()`. This allows for easier downloading of data if you know the folder name, i.e., `pd`, rather that using `get_prism_annuals/dailys/monthlys()`.
   - New function: `prism_archive_update()`. This wraps `pd_check_versions()` and `get_prism_pd()` to update data in the archive that have updates available.
 - The configuration (download format, and defualt value of `keepZip`) can be saved so that the user does not have to reset them at the beginning of every R session. Added `prism_archive_save_config()`. This function creates a configuration file that is saved in the currently specified prism archive. Then, when you use that archive in a different session, it will load the format and `keepZip` options that were previously set so you don't have to keep making those same calls over and over. 
+- Added `prism_archive_setup()` to create and configure a new, empty archive in one call.
 - If an archive contains any of the pre-September 2025 prism data, the `prism_archive_migrate_v1()` function can be used to update to the new prism data format. This searches the prism archive, and for any folders that appear to be from the v1 api (pre-September 2025) prompts the user to updated to the new format and remove the old format. This probably would have been more useful in the 0.3.0 release. (#164)
 
 ## Non-breaking internal changes

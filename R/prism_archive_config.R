@@ -51,6 +51,132 @@ prism_archive_save_config <- function() {
   invisible(config_file)
 }
 
+#' Set up a new PRISM archive
+#'
+#' Create or initialize an empty directory as a new PRISM archive, set its
+#' download format and `keepZip` behavior, and save those settings in
+#' `prism_archive.config`. When called without arguments in an interactive
+#' session, prompts for the archive path, download format, and `keepZip`
+#' setting. Otherwise, the format and `keepZip` defaults are the values
+#' currently set in the R session. Use the existing directory and setting
+#' functions to change an archive that already contains files.
+#'
+#' @param path The path to the new archive directory. It is created if it does
+#'   not exist; an existing directory must be empty. When all arguments are
+#'   omitted in an interactive session, you will be prompted for the path.
+#' @param format Download format: `"geotiff"`, `"bil"`, or `"nc"`. Defaults to
+#'   the current session format, or is prompted for when all arguments are
+#'   omitted in an interactive session.
+#' @param keepZip Logical. Keep downloaded ZIP files by default. Defaults to
+#'   the current session setting, or is prompted for when all arguments are
+#'   omitted in an interactive session.
+#'
+#' @return Invisibly returns the path to the new archive.
+#'
+#' @examples
+#' \dontrun{
+#' prism_archive_setup()
+#' prism_archive_setup("~/prism-data", format = "geotiff", keepZip = TRUE)
+#' }
+#'
+#' @seealso [prism_set_dl_dir()], [prism_set_format()],
+#'   [prism_set_keepZip()], [prism_archive_save_config()]
+#'
+#' @export
+prism_archive_setup <- function(
+    path,
+    format = prism_get_format(),
+    keepZip = prism_get_keepZip()) {
+  if (missing(path) && missing(format) && missing(keepZip) &&
+      interactive()) {
+    path <- trimws(
+      prism_archive_setup_readline("Enter the path for the new PRISM archive: ")
+    )
+    if (!nzchar(path)) {
+      stop("No archive path was entered.", call. = FALSE)
+    }
+
+    cat(
+      "Choose a download format:\n",
+      "  1 = geotiff\n",
+      "  2 = bil\n",
+      "  3 = nc\n",
+      sep = ""
+    )
+    repeat {
+      format_choice <- trimws(
+        prism_archive_setup_readline("Enter 1, 2, or 3: ")
+      )
+      if (format_choice %in% c("1", "2", "3")) {
+        format <- prism_formats[as.integer(format_choice)]
+        break
+      }
+      cat("Invalid choice. Please enter 1, 2, or 3.\n")
+    }
+
+    cat(
+      "Keep downloaded ZIP files?\n",
+      "  1 = yes\n",
+      "  2 = no\n",
+      sep = ""
+    )
+    repeat {
+      keep_zip_choice <- trimws(
+        prism_archive_setup_readline("Enter 1 or 2: ")
+      )
+      if (keep_zip_choice %in% c("1", "2")) {
+        keepZip <- identical(keep_zip_choice, "1")
+        break
+      }
+      cat("Invalid choice. Please enter 1 or 2.\n")
+    }
+  }
+
+  if (missing(path)) {
+    stop(
+      "`path` is required unless called without arguments ",
+      "in an interactive session.",
+      call. = FALSE
+    )
+  }
+  if (!is.character(path) || length(path) != 1L || is.na(path) ||
+      !nzchar(path)) {
+    stop("`path` must be a single, non-empty path.", call. = FALSE)
+  }
+  path <- path.expand(path)
+
+  if (file.exists(path) && !dir.exists(path)) {
+    stop("The archive path exists and is not a directory: ", path,
+         call. = FALSE)
+  }
+  if (dir.exists(path) &&
+      length(list.files(path, all.files = TRUE, no.. = TRUE)) > 0L) {
+    stop(
+      "The archive directory is not empty: ", path,
+      ". `prism_archive_setup()` is for new archives; use the existing ",
+      "directory and setting functions to manage an existing archive.",
+      call. = FALSE
+    )
+  }
+
+  format <- match.arg(format, prism_formats)
+  if (!is.logical(keepZip) || length(keepZip) != 1L || is.na(keepZip)) {
+    stop("`keepZip` should be a single, non-missing logical value.",
+         call. = FALSE)
+  }
+
+  prism_set_dl_dir(path)
+  prism_set_format(format)
+  prism_set_keepZip(keepZip)
+  prism_archive_save_config()
+
+  invisible(path)
+}
+
+prism_archive_setup_readline <- function(prompt) {
+  readline(prompt)
+}
+
 prism_archive_read_config <- function(path) {
   config_file <- file.path(path, "prism_archive.config")
   if (!file.exists(config_file)) {
