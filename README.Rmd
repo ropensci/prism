@@ -55,9 +55,10 @@ install_github("ropensci/prism")
 
 The overall work flow in the prism package is (links go to details on this page):
 
-1. [Set the download directory](#downloading-data), i.e., the folder on your computer that prism data will be saved to: `prism_set_dl_dir()`. This is now referred to as the "prism archive". 
+1. [Set the PRISM data download directory](#downloading-data), i.e., the folder on your computer that prism data will be saved to, the format you want to save the data in, and the default treatment of the download zip files. This is now referred to as the "prism archive". `prism_acrhive_setup()` guides through setting all 3 parameters.
 2. [Download prism data to the archive:](#download-30-year-normal-data) `get_prism_*()`. Each folder, or variable, timestep, day/month/year is stored in a single folder in the archive and referred to as prism data (`pd`). 
 3. [Interact with the prism archive:](#interact-with-the-archive-and-prism-data) `prism_archive_*()`. Or interact with the prism data: `pd_*()`. 
+4. [Update/maintain the prism archive:](#maintain-the-archive) `pd_check_versions()`, `prism_archive_update()`.
 
 The remainder of this README provides examples following this work flow.
 
@@ -83,7 +84,7 @@ Data are available in 4 different temporal scales as mentioned above. At each te
 
 **Normals (4km or 800m resolution) based on 1991-2020 average:**
 
-<span style="color:red; font-weight:bold;">Important:</span>. Normals are only available in GeoTiff format, while all other data are available in GeoTiff, nc, asci, or bil format. `get_prism_normals()` functions only download the data in GeoTiff format. All other functions *should* work with all formats. 
+<span style="color:red; font-weight:bold;">Important:</span>. Normals are only available in GeoTiff format, while all other data are available in GeoTiff, NetCDF, or bil format. `get_prism_normals()` functions only download the data in GeoTiff format. All other functions *should* work with all formats. 
 
 | Variable    | Annual | Monthly | Daily |
 |:------------|:-------|:--------|:-----|
@@ -119,10 +120,23 @@ Data are available in 4 different temporal scales as mentioned above. At each te
 
 Before downloading any data, set the directory that the prism data will be saved to:
 
-```{r prism setup}
+```{r prism setup, eval=FALSE}
+library(prism)
+prism_archive_setup(path = "~/prismtmp", format = "geotiff", keepZip = FALSE)
+
+# or you can set each in seperate commands
+prism_set_dl_dir("~/prismtmp")
+prism_set_format("geotiff")
+prism_set_keepZip(FALSE)
+```
+
+Then next time you work with the archive, set the download directory, and the other parameters will be loaded from the configuration file.
+```{r prism setup2}
 library(prism)
 prism_set_dl_dir("~/prismtmp")
 ```
+
+`prism_archive_setup()` can be called with no arguments, and the user will be prompted to interactively set the download directory, format, and keepZip.
 
 This is now referred to as the "prism archive". The `prism_archive_*()` functions allow the user to search through the archive. The prism archive contains "prism data". The prism data are referred to by their folder names, even though the "real" data are the .bil, .txt, and other files that exist in the folder. The prism data (`pd`) can be accessed using the `pd_*()` functions. 
 
@@ -182,7 +196,7 @@ You can view all the prism data you have downloaded with a simple command: `pris
 prism_archive_ls()
 ```
 
-While prism functions use this folder format, other files may need an absolute path (e.g. the `raster` package). The `pd_to_file()` function conveniently returns the absolute path.  Alternatively, you may want to see what the normal name for the product is (not the file name), and we can get that with the `pd_get_name()` function.
+While prism functions use this folder format, other files may need an absolute path. The `pd_to_file()` function conveniently returns the absolute path.  Alternatively, you may want to see what the normal name for the product is (not the file name), and we can get that with the `pd_get_name()` function.
 
 ```{r moreListing, out.lines=5}
 ## Truncated to keep file list short
@@ -191,18 +205,21 @@ pd_to_file(prism_archive_ls()[1:10])
 pd_get_name(prism_archive_ls()[1:10])
 ```
 
+See `?pd_get` for getting other information from the `pd`, like date, time step, resolution, and variable.  You can also use `pd_get()` to get all of this information at once.
+
 Finally, `prism_archive_subset()` is a convenient way to search for specific parameters, time steps, days, months, years, or ranges of days, months, years. **Note that resolution must be specified for all archive subset operations.**
 
 ```{r}
-# we know we have downloaded June 2013 daily data, so lets search for those 
-prism_archive_subset("tmean", "daily", mon = 6, resolution = "4km")
+# See what monthly 30-year normal mean temperature data are available 
+prism_archive_subset("tmean", "monthly", resolution = "4km", data_class = "normals")
 
 # or we can look for days between June 7 and June 10
 prism_archive_subset(
   "tmean", "daily", 
   minDate = "2013-06-07", 
   maxDate = "2013-06-10",
-  resolution = "4km"
+  resolution = "4km", 
+  data_class = "time series"
 )
 ```
 
@@ -218,7 +235,7 @@ ppt2002 <- prism_archive_subset(
 pd_image(ppt2002)
 ```
 
-It is easy to load the prism data with the raster package. This time we will look at the difference in precipitation between 2011 and 2002. Conveniently, we already downloaded these data. We just need to grab them out of our archive.
+It is easy to load the prism data with the terra package. This time we will look at the difference in precipitation between 2011 and 2002. Conveniently, we already downloaded these data. We just need to grab them out of our archive.
 
 ```{r raster_math,fig.height=5,fig.width=7}
 library(terra)
@@ -307,3 +324,23 @@ leaflet() |>
 ```
 
 [![leaflet example figure](vignettes/leaflet_example.png)
+
+## Maintain the Archive
+
+PRISM data are updated up to eight times after they are first reported and available. Therefore, when downloading recent data, it is necessary to update those data in the future as they become final. 
+
+The `get_prism_dailys()` and `get_prism_monthlys()` functions will download the most recent version of the data, but if you have already downloaded a previous version, you will need to update your archive. The `pd_check_versions()` function will check for updates to your prism data and return a list of prism data that have updates available. The `prism_archive_update()` functions will message the user if the requested data are within 6 months of today: 
+
+```{r see_recent_message, eval=TRUE}
+get_prism_dailys(type = 'tmin', dates = format(Sys.Date() - 3, "%Y-%m-%d")))
+```
+
+`pd_check_versions()` will return a list of prism data that have updates available and report if the available data matches the downloaded data. 
+```{r check_versions, eval=TRUE}
+prism_archive_subset("tmin", "daily", resolution = "4km") |>
+  pd_check_versions()
+```
+
+`prism_archive_update()` will download the most recent version of the data and overwrite the previous version. 
+
+Finally, if you still have any PRISM data from the pre-September 2025 API, you can use `prism_archive_clean()` to remove those data from your archive.  This function is now defunct because PRISM no longer provides early, provisional, and stable dataset names. Use `pd_check_versions()` to identify available updates and `prism_archive_migrate_v1()` to download the data in the new format.
